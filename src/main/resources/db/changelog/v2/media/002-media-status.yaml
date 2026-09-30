@@ -1,0 +1,9 @@
+# ACTIVE or HIDDEN: a hidden gallery photo stays for the back office but leaves the public site.
+databaseChangeLog:
+  - changeSet:
+      id: v2-media-status
+      author: ams-travel-v2
+      changes:
+        - addColumn: {schemaName: media, tableName: media_items, columns: [{column: {name: status, type: varchar(20), defaultValue: ACTIVE, constraints: {nullable: false}}}]}
+      rollback:
+        - dropColumn: {schemaName: media, tableName: media_items, columnName: status}

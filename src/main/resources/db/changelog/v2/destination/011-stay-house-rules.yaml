@@ -1,0 +1,57 @@
+# What a guest checks before booking a stay, beyond its rooms: the house rules,
+# breakfast and parking, the ways to pay and the languages spoken, how to reach
+# the property on Telegram, WhatsApp or Facebook, and the licence it trades under.
+databaseChangeLog:
+  - changeSet:
+      id: v2-destination-stay-house-rules
+      author: ams-travel-v2
+      changes:
+        - addColumn:
+            schemaName: destination
+            tableName: destination_stays
+            columns:
+              - column: {name: check_in_until, type: time}
+              - column: {name: check_out_from, type: time}
+              - column: {name: min_check_in_age, type: int}
+              - column: {name: children_allowed, type: boolean, defaultValueBoolean: true, constraints: {nullable: false}}
+              - column: {name: pets_policy, type: varchar(20)}
+              - column: {name: smoking_policy, type: varchar(20)}
+              - column: {name: parties_allowed, type: boolean, defaultValueBoolean: false, constraints: {nullable: false}}
+              - column: {name: quiet_hours, type: varchar(20)}
+              - column: {name: breakfast_option, type: varchar(20)}
+              - column: {name: breakfast_types, type: "${type.json}"}
+              - column: {name: breakfast_price, type: "decimal(12,2)"}
+              - column: {name: parking_option, type: varchar(20)}
+              - column: {name: parking_price, type: "decimal(12,2)"}
+              - column: {name: payment_methods, type: "${type.json}"}
+              - column: {name: languages_spoken, type: "${type.json}"}
+              - column: {name: telegram, type: varchar(100)}
+              - column: {name: whatsapp, type: varchar(50)}
+              - column: {name: facebook_url, type: varchar(512)}
+              - column: {name: license_number, type: varchar(100)}
+              - column: {name: year_opened, type: int}
+      rollback:
+        - dropColumn:
+            schemaName: destination
+            tableName: destination_stays
+            columns:
+              - column: {name: check_in_until}
+              - column: {name: check_out_from}
+              - column: {name: min_check_in_age}
+              - column: {name: children_allowed}
+              - column: {name: pets_policy}
+              - column: {name: smoking_policy}
+              - column: {name: parties_allowed}
+              - column: {name: quiet_hours}
+              - column: {name: breakfast_option}
+              - column: {name: breakfast_types}
+              - column: {name: breakfast_price}
+              - column: {name: parking_option}
+              - column: {name: parking_price}
+              - column: {name: payment_methods}
+              - column: {name: languages_spoken}
+              - column: {name: telegram}
+              - column: {name: whatsapp}
+              - column: {name: facebook_url}
+              - column: {name: license_number}
+              - column: {name: year_opened}

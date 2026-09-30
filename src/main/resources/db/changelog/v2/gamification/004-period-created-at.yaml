@@ -1,0 +1,13 @@
+# When a badge period was made, so its list sorts newest first like the others.
+databaseChangeLog:
+  - changeSet:
+      id: v2-gamification-period-created-at
+      author: ams-travel-v2
+      # Skipped on a fresh database: 007 dropped badge_periods.
+      preConditions:
+        - onFail: MARK_RAN
+        - tableExists: {schemaName: gamification, tableName: badge_periods}
+      changes:
+        - addColumn: {schemaName: gamification, tableName: badge_periods, columns: [{column: {name: created_at, type: timestamptz, defaultValueComputed: now(), constraints: {nullable: false}}}]}
+      rollback:
+        - dropColumn: {schemaName: gamification, tableName: badge_periods, columnName: created_at}

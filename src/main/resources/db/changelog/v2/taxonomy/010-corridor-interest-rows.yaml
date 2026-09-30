@@ -1,0 +1,49 @@
+# The Tourism Corridors shelf's five interests, one for each corridor, for a
+# catalogue seeded before corridors had interests.
+#
+# A fresh database gets them from the seed files (`interests.json`, and each
+# corridor's `interests` in `corridors.json`). This is for one whose corridors
+# were already seeded: it adds the interests no row has taken the slug of, and
+# links each corridor to its own. On a fresh database it would run before the
+# seed, which then sees interests and seeds none, so it waits for the corridors.
+databaseChangeLog:
+  - changeSet:
+      id: v2-taxonomy-corridor-interest-rows
+      author: ams-travel-v2
+      dbms: postgresql
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 1
+            sql: SELECT CASE WHEN (SELECT COUNT(*) FROM taxonomy.corridors) > 0 THEN 1 ELSE 0 END
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              INSERT INTO taxonomy.interests (name, slug, description, icon_key, group_name)
+              VALUES
+                ('Khmer Civilization', 'khmer-civilization', 'Trails through the royal capitals of the Khmer empire, from Angkor to the Chaktomuk river junction.', 'temple', 'Tourism Corridors'),
+                ('Mekong Civilization', 'mekong-civilization', 'Journeys on the Tonle Sap and the Mekong: floating villages, river islands and the dolphins upriver.', 'waves', 'Tourism Corridors'),
+                ('Coastal Discovery', 'coastal-discovery', 'Road trips down the gulf coast, from the pepper farms and crab markets to the islands.', 'sun', 'Tourism Corridors'),
+                ('Mountain Adventure', 'mountain-adventure', 'Routes into the Cardamom Mountains: rainforest, waterfalls and the Bokor plateau.', 'mountain', 'Tourism Corridors'),
+                ('Khmer Culinary', 'khmer-culinary', 'Food trails to cook, taste and shop the Khmer table, from the market to the farm.', 'utensils', 'Tourism Corridors')
+              ON CONFLICT (slug) DO NOTHING;
+
+              INSERT INTO taxonomy.corridor_interests (corridor_id, interest_id)
+              SELECT c.id, i.id
+              FROM (VALUES
+                ('khmer-civilization-trail', 'khmer-civilization'),
+                ('mekong-civilization', 'mekong-civilization'),
+                ('coastal-paradise-route', 'coastal-discovery'),
+                ('cardamom-peaks-explorer', 'mountain-adventure'),
+                ('khmer-culinary', 'khmer-culinary')
+              ) AS v (corridor, interest)
+              JOIN taxonomy.corridors c ON c.slug = v.corridor
+              JOIN taxonomy.interests i ON i.slug = v.interest AND i.group_name = 'Tourism Corridors'
+              ON CONFLICT DO NOTHING;
+      rollback:
+        - sql:
+            sql: >
+              DELETE FROM taxonomy.interests
+              WHERE group_name = 'Tourism Corridors'
+                AND slug IN ('khmer-civilization', 'mekong-civilization', 'coastal-discovery', 'mountain-adventure', 'khmer-culinary');

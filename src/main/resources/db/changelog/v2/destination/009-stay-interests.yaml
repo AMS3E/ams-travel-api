@@ -1,0 +1,27 @@
+# A stay's interests, as a food listing has them.
+#
+# Explore's Stays shelf is made of interests (Resorts, Homestay, Eco Lodge…).
+# A stay chosen under one of them is listed on that interest's page, next to
+# the destinations about it.
+databaseChangeLog:
+  - changeSet:
+      id: v2-destination-stay-interests
+      author: ams-travel-v2
+      changes:
+        - createTable:
+            schemaName: destination
+            tableName: destination_stay_interests
+            columns:
+              - column: {name: stay_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: interest_id, type: uuid, constraints: {nullable: false}}
+        - addPrimaryKey: {schemaName: destination, tableName: destination_stay_interests, columnNames: "stay_id, interest_id", constraintName: destination_stay_interests_pkey}
+        - createIndex:
+            schemaName: destination
+            tableName: destination_stay_interests
+            indexName: idx_destination_stay_interests_interest
+            columns:
+              - column: {name: interest_id}
+        - addForeignKeyConstraint: {baseTableSchemaName: destination, baseTableName: destination_stay_interests, baseColumnNames: stay_id, constraintName: fk_destination_stay_interests_stay, referencedTableSchemaName: destination, referencedTableName: destination_stays, referencedColumnNames: id, onDelete: CASCADE}
+        - addForeignKeyConstraint: {baseTableSchemaName: destination, baseTableName: destination_stay_interests, baseColumnNames: interest_id, constraintName: fk_destination_stay_interests_interest, referencedTableSchemaName: taxonomy, referencedTableName: interests, referencedColumnNames: id, onDelete: CASCADE}
+      rollback:
+        - dropTable: {schemaName: destination, tableName: destination_stay_interests}

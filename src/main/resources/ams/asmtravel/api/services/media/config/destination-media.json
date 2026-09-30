@@ -1,0 +1,1005 @@
+[
+  {
+    "destinationSlug": "angkor-wat",
+    "media": [
+      {
+        "image": "angkor-wat-2.jpg",
+        "caption": "The central towers of Angkor Wat seen from the causeway",
+        "sortOrder": 1,
+        "cover": false
+      },
+      {
+        "image": "angkor-wat.jpg",
+        "caption": "Angkor Wat catching first light across the moat",
+        "sortOrder": 2,
+        "cover": true
+      }
+    ]
+  },
+  {
+    "destinationSlug": "bayon-temple",
+    "media": [
+      {
+        "image": "bayon-temple.jpg",
+        "caption": "Face towers rising from the terraces of the Bayon",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "bayon-temple-2.jpg",
+        "caption": "Bas-relief of the marching Khmer army in the Bayon's outer gallery",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "ta-prohm",
+    "media": [
+      {
+        "image": "ta-prohm.jpg",
+        "caption": "Roots gripping the gallery walls at Ta Prohm",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "ta-prohm-2.jpg",
+        "caption": "A root-covered doorway inside Ta Prohm",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "banteay-srei",
+    "media": [
+      {
+        "image": "banteay-srei.jpg",
+        "caption": "Central and southern sanctuaries at Banteay Srei",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "banteay-srei-2.jpg",
+        "caption": "Carved pediment at Banteay Srei showing Indra on his elephant",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "koh-ker",
+    "media": [
+      {
+        "image": "koh-ker.jpg",
+        "caption": "The seven tiers of Prasat Thom seen along the approach",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "koh-ker-2.jpg",
+        "caption": "Prasat Bram, one of the brick temples in the Koh Ker group",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "sambor-prei-kuk",
+    "media": [
+      {
+        "image": "sambor-prei-kuk.jpg",
+        "caption": "Pre-Angkorian brick towers at Sambor Prei Kuk",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "sambor-prei-kuk-2.jpg",
+        "caption": "A brick sanctuary standing in the forest at Sambor Prei Kuk",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "royal-palace",
+    "media": [
+      {
+        "image": "royal-palace.jpg",
+        "caption": "Golden roofline of the Chanchhaya Pavilion",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "royal-palace-2.jpg",
+        "caption": "The Silver Pagoda inside the Royal Palace grounds",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "national-museum",
+    "media": [
+      {
+        "image": "national-museum.jpg",
+        "caption": "Terracotta facade of the National Museum",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "national-museum-2.jpg",
+        "caption": "The museum's inner courtyard and garden",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "preah-vihear-temple",
+    "media": [
+      {
+        "image": "preah-vihear-temple.jpg",
+        "caption": "The temple laid out along its cliff-top axis",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "preah-vihear-temple-2.jpg",
+        "caption": "Stone stairway climbing through Preah Vihear",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "spean-praptos",
+    "media": [
+      {
+        "image": "koh-ker.jpg",
+        "caption": "Laterite blockwork in the Koh Ker temple group",
+        "sortOrder": 1,
+        "cover": false
+      },
+      {
+        "image": "koh-ker-2.jpg",
+        "caption": "Corbelled Angkorian stonework at Prasat Bram",
+        "sortOrder": 2,
+        "cover": true
+      }
+    ]
+  },
+  {
+    "destinationSlug": "angkorian-royal-road",
+    "media": [
+      {
+        "image": "preah-vihear-temple.jpg",
+        "caption": "The processional axis laid out along the Dangrek ridge",
+        "sortOrder": 1,
+        "cover": false
+      },
+      {
+        "image": "koh-ker.jpg",
+        "caption": "Laterite construction of the kind used along the royal roads",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "preah-khan-kompong-svay",
+    "media": [
+      {
+        "image": "ta-prohm-2.jpg",
+        "caption": "Roots gripping an unrestored Angkorian gallery wall",
+        "sortOrder": 1,
+        "cover": false
+      },
+      {
+        "image": "sambor-prei-kuk-2.jpg",
+        "caption": "A sanctuary tower standing alone in the forest",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "bou-sra-waterfall",
+    "media": [
+      {
+        "image": "bou-sra-waterfall.jpg",
+        "caption": "The main tier of Bou Sra in full flow",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "bou-sra-waterfall-2.jpg",
+        "caption": "Visitors on the rocks above the upper tier",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "elephant-valley-project",
+    "media": [
+      {
+        "image": "elephant-valley-project.jpg",
+        "caption": "The forested valley the sanctuary sits above",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "elephant-valley-project-2.jpg",
+        "caption": "The entrance gate to the Elephant Valley Project near Sen Monorom",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "yeak-laom-lake",
+    "media": [
+      {
+        "image": "yeak-laom-lake.jpg",
+        "caption": "The full circle of the crater lake seen from the shore",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "yeak-laom-lake-2.jpg",
+        "caption": "Yeak Laom from above, forest closing the rim",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "tonle-sap-floating-village",
+    "media": [
+      {
+        "image": "tonle-sap-floating-village.jpg",
+        "caption": "Houses floating in a channel of the Tonle Sap",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "tonle-sap-floating-village-2.jpg",
+        "caption": "The floating school serving the village",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "battambang-bamboo-train",
+    "media": [
+      {
+        "image": "battambang-bamboo-train.jpg",
+        "caption": "A norry loaded and moving down the single track",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "battambang-bamboo-train-2.jpg",
+        "caption": "The bamboo train station outside Battambang",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "mekong-discovery-trail",
+    "media": [
+      {
+        "image": "mekong-discovery-trail.jpg",
+        "caption": "The bamboo bridge being rebuilt after the floods",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "mekong-discovery-trail-2.jpg",
+        "caption": "Nokor Bachey pagoda on the trail at Kampong Cham",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "phnom-kulen",
+    "media": [
+      {
+        "image": "phnom-kulen.jpg",
+        "caption": "The Kulen falls dropping into their pool",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "phnom-kulen-2.jpg",
+        "caption": "The reclining Buddha shrine at the summit of Phnom Kulen",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "bokor-mountain",
+    "media": [
+      {
+        "image": "bokor-mountain.jpg",
+        "caption": "Ridges and coastline seen from Bokor Hill Station",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "bokor-mountain-2.jpg",
+        "caption": "The abandoned colonial church on Bokor Mountain",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "koh-rong",
+    "media": [
+      {
+        "image": "koh-rong.jpg",
+        "caption": "The channel between the islands off Koh Rong",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "koh-rong-2.jpg",
+        "caption": "White sand and shallow turquoise water on the archipelago",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "song-saa-private-island",
+    "media": [
+      {
+        "image": "song-saa-private-island.jpg",
+        "caption": "Empty sand along Saracen Bay",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "song-saa-private-island-2.jpg",
+        "caption": "Rocky islets at the north end of the bay",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "otres-beach",
+    "media": [
+      {
+        "image": "otres-beach.jpg",
+        "caption": "The open stretch of sand at Otres",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "otres-beach-2.jpg",
+        "caption": "Palms leaning over the water at Otres Beach",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "kep-crab-market",
+    "media": [
+      {
+        "image": "kep-crab-market.jpg",
+        "caption": "The crab market building standing out over the water",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "kep-crab-market-2.jpg",
+        "caption": "Seafood laid out at the Kep market stalls",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "kampot-riverfront",
+    "media": [
+      {
+        "image": "kampot-riverfront.jpg",
+        "caption": "The river turning gold in front of the Bokor ridge",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "kampot-riverfront-2.jpg",
+        "caption": "Fishing boats moored along the Kampot river",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "kampot-pepper-farm",
+    "media": [
+      {
+        "image": "kampot-pepper-farm.jpg",
+        "caption": "Rows of pepper poles under their shade netting",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "kampot-pepper-farm-2.jpg",
+        "caption": "Green peppercorns ripening on the vine",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "virachey-national-park",
+    "media": [
+      {
+        "image": "ratanakiri-forest.jpg",
+        "caption": "Forest closing over a hill trail in Ratanakiri",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "elephant-valley-project.jpg",
+        "caption": "Highland forest of the kind the park protects",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "romanear-waterfall",
+    "media": [
+      {
+        "image": "bou-sra-waterfall.jpg",
+        "caption": "A Mondulkiri waterfall dropping through the forest",
+        "sortOrder": 1,
+        "cover": false
+      },
+      {
+        "image": "elephant-valley-project.jpg",
+        "caption": "Forested hills rolling away across Mondulkiri",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "sesan-srepok-confluence",
+    "media": [
+      {
+        "image": "mekong-discovery-trail.jpg",
+        "caption": "The braided river channel in the north-east",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "ratanakiri-forest.jpg",
+        "caption": "Riverine forest upstream in Ratanakiri",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "mondulkiri-coffee-highlands",
+    "media": [
+      {
+        "image": "elephant-valley-project.jpg",
+        "caption": "The plateau country the coffee is grown on",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "elephant-valley-project-2.jpg",
+        "caption": "Forest edge above Sen Monorom",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "prek-toal-bird-sanctuary",
+    "media": [
+      {
+        "image": "tonle-sap-floating-village.jpg",
+        "caption": "Open water and flooded forest on the Tonle Sap",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "tonle-sap-floating-village-2.jpg",
+        "caption": "A floating building on the lake",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "kampong-phluk",
+    "media": [
+      {
+        "image": "tonle-sap-floating-village-2.jpg",
+        "caption": "Stilted houses above the dry-season floodplain",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "tonle-sap-floating-village.jpg",
+        "caption": "The flooded forest behind the village",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "kampong-khleang",
+    "media": [
+      {
+        "image": "tonle-sap-floating-village.jpg",
+        "caption": "Houses on pontoons at the lake edge",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "tonle-sap-floating-village-2.jpg",
+        "caption": "A stilted building over the floodplain",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "koh-trong",
+    "media": [
+      {
+        "image": "mekong-discovery-trail.jpg",
+        "caption": "The Mekong channel between bank and island",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "mekong-discovery-trail-2.jpg",
+        "caption": "River-country pagoda architecture",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "kampi-dolphin-pool",
+    "media": [
+      {
+        "image": "mekong-discovery-trail.jpg",
+        "caption": "The Mekong above Kratie",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "mekong-discovery-trail-2.jpg",
+        "caption": "River bank country near Kratie",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "kirirom-national-park",
+    "media": [
+      {
+        "image": "bokor-mountain.jpg",
+        "caption": "Plateau country in the southern ranges",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "cardamom-rainforest.jpg",
+        "caption": "Forest on the Cardamom side of the range",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "phnom-sampeau",
+    "media": [
+      {
+        "image": "battambang-town.jpg",
+        "caption": "The plain around Battambang seen from above",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "battambang-bamboo-train-2.jpg",
+        "caption": "Rice country outside Battambang",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "phnom-chhnork-cave",
+    "media": [
+      {
+        "image": "kampot-riverfront.jpg",
+        "caption": "Limestone hills behind the Kampot river plain",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "sambor-prei-kuk-2.jpg",
+        "caption": "Pre-Angkorian brickwork of the same period",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "tatai-waterfall",
+    "media": [
+      {
+        "image": "cardamom-rainforest.jpg",
+        "caption": "The Cardamom rainforest along the river",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "kampot-riverfront-2.jpg",
+        "caption": "River boats of the kind used on the Tatai",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "cardamom-mountains",
+    "media": [
+      {
+        "image": "cardamom-rainforest.jpg",
+        "caption": "Rainforest along a Cardamom river",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "bokor-mountain.jpg",
+        "caption": "The high plateau at the eastern end of the range",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "koh-rong-sanloem",
+    "media": [
+      {
+        "image": "song-saa-private-island.jpg",
+        "caption": "The long curve of Saracen Bay",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "song-saa-private-island-2.jpg",
+        "caption": "Rocky islets at the north end of the bay",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "koh-tang",
+    "media": [
+      {
+        "image": "koh-rong.jpg",
+        "caption": "Open gulf water off an offshore island",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "song-saa-private-island-2.jpg",
+        "caption": "Rock and reef at an island headland",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "peam-krasop-mangrove",
+    "media": [
+      {
+        "image": "cardamom-rainforest.jpg",
+        "caption": "Dense forest along a tidal channel",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "kampot-riverfront-2.jpg",
+        "caption": "Small boats of the kind used in the estuary",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "ream-national-park",
+    "media": [
+      {
+        "image": "otres-beach-2.jpg",
+        "caption": "Shoreline in Preah Sihanouk",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "koh-rong.jpg",
+        "caption": "Offshore islands within the park boundary",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "phnom-penh-riverside",
+    "media": [
+      {
+        "image": "phnom-penh-riverside.jpg",
+        "caption": "The riverside promenade in the late afternoon",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "royal-palace.jpg",
+        "caption": "The palace roofline behind the quay",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "central-market",
+    "media": [
+      {
+        "image": "phnom-penh-riverside.jpg",
+        "caption": "The streets of central Phnom Penh",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "kep-crab-market-2.jpg",
+        "caption": "Market stalls of the kind that fill the arms",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "russian-market",
+    "media": [
+      {
+        "image": "kep-crab-market-2.jpg",
+        "caption": "Produce laid out on market stalls",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "phnom-penh-riverside.jpg",
+        "caption": "The southern quarters of the city",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "siem-reap-night-market",
+    "media": [
+      {
+        "image": "siem-reap-street.jpg",
+        "caption": "Siem Reap street life in the evening",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "kep-crab-market-2.jpg",
+        "caption": "Market stalls after dark",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "sora-sky-bar",
+    "media": [
+      {
+        "image": "phnom-penh-riverside.jpg",
+        "caption": "The riverfront the bar looks out over",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "royal-palace.jpg",
+        "caption": "The palace quarter from above",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "phnom-penh-coffee-quarter",
+    "media": [
+      {
+        "image": "phnom-penh-riverside.jpg",
+        "caption": "Shophouse frontages in the central quarters",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "elephant-valley-project.jpg",
+        "caption": "The Mondulkiri plateau much of the coffee comes from",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "battambang-art-quarter",
+    "media": [
+      {
+        "image": "battambang-town.jpg",
+        "caption": "The town spread out along the Sangker",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "battambang-bamboo-train-2.jpg",
+        "caption": "Battambang's older railway architecture",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "num-banh-chok-markets",
+    "media": [
+      {
+        "image": "kep-crab-market-2.jpg",
+        "caption": "Market stalls with fresh produce",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "siem-reap-street.jpg",
+        "caption": "A Siem Reap street in the early morning",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "khmer-cooking-class-siem-reap",
+    "media": [
+      {
+        "image": "siem-reap-street.jpg",
+        "caption": "Siem Reap street life",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "kep-crab-market-2.jpg",
+        "caption": "The market produce a class starts from",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "kampong-speu-palm-sugar",
+    "media": [
+      {
+        "image": "kampot-pepper-farm.jpg",
+        "caption": "Smallholder farmland in southern Cambodia",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "kampot-pepper-farm-2.jpg",
+        "caption": "Farm crops grown for market",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "malis-phnom-penh",
+    "media": [
+      {
+        "image": "royal-palace.jpg",
+        "caption": "The central Phnom Penh quarter",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "phnom-penh-riverside.jpg",
+        "caption": "Streets near the boulevard",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "chi-phat",
+    "media": [
+      {
+        "image": "cardamom-rainforest.jpg",
+        "caption": "The Cardamom forest the village sits inside",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "kampot-riverfront-2.jpg",
+        "caption": "River boats of the kind used to reach the village",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "banteay-chhmar-community",
+    "media": [
+      {
+        "image": "ta-prohm.jpg",
+        "caption": "Forest growing through an unrestored Angkorian gallery",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "bayon-temple-2.jpg",
+        "caption": "Bas-relief carving of the same period and style",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "koh-dach-silk-island",
+    "media": [
+      {
+        "image": "mekong-discovery-trail.jpg",
+        "caption": "The Mekong channel beside the island",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "mekong-discovery-trail-2.jpg",
+        "caption": "Riverside village architecture near the capital",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "destinationSlug": "angkor-golf-resort",
+    "media": [
+      {
+        "image": "siem-reap-street.jpg",
+        "caption": "The country roads around Siem Reap",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "battambang-town.jpg",
+        "caption": "Open plain country of the kind the course sits on",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  }
+]

@@ -1,0 +1,105 @@
+# One table for every stored picture: the four galleries (destination, stay, food, review) become media_items.
+databaseChangeLog:
+  - changeSet:
+      id: v2-media-items
+      author: ams-travel-v2
+      changes:
+        - sql:
+            sql: CREATE SCHEMA IF NOT EXISTS media
+        - createTable:
+            schemaName: media
+            tableName: media_items
+            columns:
+              - column: {name: id, type: uuid, defaultValueComputed: "${fn.uuid}", constraints: {primaryKey: true, primaryKeyName: media_items_pkey, nullable: false}}
+              - column: {name: owner_type, type: varchar(30), constraints: {nullable: false}}
+              - column: {name: owner_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: media_key, type: varchar(512), constraints: {nullable: false}}
+              - column: {name: media_type, type: varchar(30), defaultValue: IMAGE, constraints: {nullable: false}}
+              - column: {name: caption, type: varchar(255)}
+              - column: {name: sort_order, type: int, defaultValueNumeric: 0, constraints: {nullable: false}}
+              - column: {name: is_cover, type: boolean, defaultValueBoolean: false, constraints: {nullable: false}}
+              - column: {name: created_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+        - createIndex:
+            schemaName: media
+            tableName: media_items
+            indexName: idx_media_items_owner
+            columns:
+              - column: {name: owner_type}
+              - column: {name: owner_id}
+        - sql:
+            splitStatements: true
+            sql: |
+              INSERT INTO media.media_items (id, owner_type, owner_id, media_key, media_type, caption, sort_order, is_cover, created_at)
+                SELECT id, 'DESTINATION', destination_id, media_key, media_type, caption, sort_order, is_cover, created_at FROM destination.destination_media;
+              INSERT INTO media.media_items (id, owner_type, owner_id, media_key, media_type, caption, sort_order, is_cover, created_at)
+                SELECT id, 'STAY', stay_id, media_key, media_type, caption, sort_order, is_cover, created_at FROM destination.destination_stay_media;
+              INSERT INTO media.media_items (id, owner_type, owner_id, media_key, media_type, caption, sort_order, is_cover, created_at)
+                SELECT id, 'FOOD', food_id, media_key, media_type, caption, sort_order, is_cover, created_at FROM destination.destination_food_media;
+              INSERT INTO media.media_items (id, owner_type, owner_id, media_key, media_type, caption, sort_order, is_cover, created_at)
+                SELECT id, 'REVIEW', review_id, photo_key, 'IMAGE', NULL, sort_order, FALSE, created_at FROM engagement.review_photos;
+        - dropTable: {schemaName: destination, tableName: destination_media}
+        - dropTable: {schemaName: destination, tableName: destination_stay_media}
+        - dropTable: {schemaName: destination, tableName: destination_food_media}
+        - dropTable: {schemaName: engagement, tableName: review_photos}
+      rollback:
+        - createTable:
+            schemaName: destination
+            tableName: destination_media
+            columns:
+              - column: {name: id, type: uuid, defaultValueComputed: "${fn.uuid}", constraints: {primaryKey: true, primaryKeyName: destination_media_pkey, nullable: false}}
+              - column: {name: destination_id, type: uuid, constraints: {nullable: false, foreignKeyName: fk_destination_media_destination, references: destination.destinations(id), deleteCascade: true}}
+              - column: {name: media_key, type: varchar(512), constraints: {nullable: false}}
+              - column: {name: media_type, type: varchar(30), defaultValue: IMAGE, constraints: {nullable: false}}
+              - column: {name: caption, type: varchar(255)}
+              - column: {name: sort_order, type: int, defaultValueNumeric: 0, constraints: {nullable: false}}
+              - column: {name: is_cover, type: boolean, defaultValueBoolean: false, constraints: {nullable: false}}
+              - column: {name: created_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+        - createIndex: {schemaName: destination, tableName: destination_media, indexName: idx_destination_media_destination, columns: [{column: {name: destination_id}}]}
+        - createTable:
+            schemaName: destination
+            tableName: destination_stay_media
+            columns:
+              - column: {name: id, type: uuid, defaultValueComputed: "${fn.uuid}", constraints: {primaryKey: true, primaryKeyName: destination_stay_media_pkey, nullable: false}}
+              - column: {name: stay_id, type: uuid, constraints: {nullable: false, foreignKeyName: fk_destination_stay_media_stay, references: destination.destination_stays(id), deleteCascade: true}}
+              - column: {name: media_key, type: varchar(512), constraints: {nullable: false}}
+              - column: {name: media_type, type: varchar(30), defaultValue: IMAGE, constraints: {nullable: false}}
+              - column: {name: caption, type: varchar(255)}
+              - column: {name: sort_order, type: int, defaultValueNumeric: 0, constraints: {nullable: false}}
+              - column: {name: is_cover, type: boolean, defaultValueBoolean: false, constraints: {nullable: false}}
+              - column: {name: created_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+        - createIndex: {schemaName: destination, tableName: destination_stay_media, indexName: idx_destination_stay_media_stay, columns: [{column: {name: stay_id}}]}
+        - createTable:
+            schemaName: destination
+            tableName: destination_food_media
+            columns:
+              - column: {name: id, type: uuid, defaultValueComputed: "${fn.uuid}", constraints: {primaryKey: true, primaryKeyName: destination_food_media_pkey, nullable: false}}
+              - column: {name: food_id, type: uuid, constraints: {nullable: false, foreignKeyName: fk_destination_food_media_food, references: destination.destination_foods(id), deleteCascade: true}}
+              - column: {name: media_key, type: varchar(512), constraints: {nullable: false}}
+              - column: {name: media_type, type: varchar(30), defaultValue: IMAGE, constraints: {nullable: false}}
+              - column: {name: caption, type: varchar(255)}
+              - column: {name: sort_order, type: int, defaultValueNumeric: 0, constraints: {nullable: false}}
+              - column: {name: is_cover, type: boolean, defaultValueBoolean: false, constraints: {nullable: false}}
+              - column: {name: created_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+        - createIndex: {schemaName: destination, tableName: destination_food_media, indexName: idx_destination_food_media_food, columns: [{column: {name: food_id}}]}
+        - createTable:
+            schemaName: engagement
+            tableName: review_photos
+            columns:
+              - column: {name: id, type: uuid, defaultValueComputed: "${fn.uuid}", constraints: {primaryKey: true, primaryKeyName: review_photos_pkey, nullable: false}}
+              - column: {name: review_id, type: uuid, constraints: {nullable: false, foreignKeyName: fk_review_photos_review, references: engagement.reviews(id), deleteCascade: true}}
+              - column: {name: photo_key, type: varchar(512), constraints: {nullable: false}}
+              - column: {name: sort_order, type: int, defaultValueNumeric: 0, constraints: {nullable: false}}
+              - column: {name: created_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+        - createIndex: {schemaName: engagement, tableName: review_photos, indexName: idx_review_photos_review, columns: [{column: {name: review_id}}]}
+        - sql:
+            splitStatements: true
+            sql: |
+              INSERT INTO destination.destination_media (id, destination_id, media_key, media_type, caption, sort_order, is_cover, created_at)
+                SELECT id, owner_id, media_key, media_type, caption, sort_order, is_cover, created_at FROM media.media_items WHERE owner_type = 'DESTINATION';
+              INSERT INTO destination.destination_stay_media (id, stay_id, media_key, media_type, caption, sort_order, is_cover, created_at)
+                SELECT id, owner_id, media_key, media_type, caption, sort_order, is_cover, created_at FROM media.media_items WHERE owner_type = 'STAY';
+              INSERT INTO destination.destination_food_media (id, food_id, media_key, media_type, caption, sort_order, is_cover, created_at)
+                SELECT id, owner_id, media_key, media_type, caption, sort_order, is_cover, created_at FROM media.media_items WHERE owner_type = 'FOOD';
+              INSERT INTO engagement.review_photos (id, review_id, photo_key, sort_order, created_at)
+                SELECT id, owner_id, media_key, sort_order, created_at FROM media.media_items WHERE owner_type = 'REVIEW';
+              DROP SCHEMA media CASCADE;

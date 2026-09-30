@@ -1,0 +1,67 @@
+[
+  {
+    "slug": "khmer-civilization-trail",
+    "name": "Khmer Civilization",
+    "shortDescription": "The ancient capitals in sequence, from Angkor to the Chaktomuk river junction.",
+    "description": "The ancient capitals in sequence, from Angkor to the Chaktomuk river junction.",
+    "image": "angkor-wat-2.jpg",
+    "estimatedBudgetMin": 220,
+    "estimatedBudgetMax": 450,
+    "featured": true,
+    "interests": [
+      "khmer-civilization"
+    ]
+  },
+  {
+    "slug": "mekong-civilization",
+    "name": "Mekong Civilization",
+    "shortDescription": "Floating villages, a silk island, river dolphins and the community trail upriver.",
+    "description": "Life on the water from the Tonle Sap to the Mekong — floating villages, a silk island, river dolphins and the community trail upriver.",
+    "image": "tonle-sap-floating-village.jpg",
+    "estimatedBudgetMin": 200,
+    "estimatedBudgetMax": 380,
+    "featured": true,
+    "interests": [
+      "mekong-civilization"
+    ]
+  },
+  {
+    "slug": "coastal-paradise-route",
+    "name": "Coastal Discovery",
+    "shortDescription": "Pepper country, crab markets, and the gulf islands in one coastal run.",
+    "description": "Pepper country, crab markets, and the gulf islands in one coastal run.",
+    "image": "koh-rong-2.jpg",
+    "estimatedBudgetMin": 160,
+    "estimatedBudgetMax": 340,
+    "featured": true,
+    "interests": [
+      "coastal-discovery"
+    ]
+  },
+  {
+    "slug": "cardamom-peaks-explorer",
+    "name": "Mountain Adventure",
+    "shortDescription": "From the capital into the Cardamom rainforest, ending on the Bokor plateau.",
+    "description": "From the capital into the Cardamom rainforest, ending on the Bokor plateau.",
+    "image": "bokor-mountain.jpg",
+    "estimatedBudgetMin": 120,
+    "estimatedBudgetMax": 240,
+    "featured": true,
+    "interests": [
+      "mountain-adventure"
+    ]
+  },
+  {
+    "slug": "khmer-culinary",
+    "name": "Khmer Culinary",
+    "shortDescription": "Cook, taste and shop from Siem Reap to the pepper coast.",
+    "description": "Cook, taste and shop from Siem Reap to the pepper coast — a cooking class, noodle markets, a Phnom Penh kitchen, palm sugar, Kampot pepper and the Kep crab market.",
+    "image": "kampot-pepper-farm.jpg",
+    "estimatedBudgetMin": 250,
+    "estimatedBudgetMax": 480,
+    "featured": true,
+    "interests": [
+      "khmer-culinary"
+    ]
+  }
+]

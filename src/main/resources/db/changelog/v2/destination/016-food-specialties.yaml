@@ -1,0 +1,19 @@
+# What only one kind of place to eat has — a café's coffee, beans and milk, a
+# bar's drinks and nights, a bakery's bakes, how a stall cooks, what kind of
+# market it is, how a restaurant serves — as slugs from FoodSpecialties.
+databaseChangeLog:
+  - changeSet:
+      id: v2-destination-food-specialties
+      author: ams-travel-v2
+      changes:
+        - addColumn:
+            schemaName: destination
+            tableName: destination_foods
+            columns:
+              - column: {name: specialties, type: "${type.json}"}
+      rollback:
+        - dropColumn:
+            schemaName: destination
+            tableName: destination_foods
+            columns:
+              - column: {name: specialties}

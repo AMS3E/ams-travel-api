@@ -1,0 +1,50 @@
+# A request names its listing by type and id, keeps the listing's name, and records when it went live and came off.
+# Statuses follow the new workflow: PENDING is PENDING_REVIEW, an approval (which published) is PUBLISHED,
+# and requests sent back or withdrawn are DRAFT again.
+databaseChangeLog:
+  - changeSet:
+      id: v2-publishing-workflow
+      author: ams-travel-v2
+      changes:
+        - renameColumn: {schemaName: publishing, tableName: publish_requests, oldColumnName: listing_type, newColumnName: target_type, columnDataType: varchar(20)}
+        - addColumn:
+            schemaName: publishing
+            tableName: publish_requests
+            columns:
+              - column: {name: target_id, type: uuid}
+              - column: {name: target_name, type: varchar(255)}
+              - column: {name: published_at, type: TIMESTAMP WITH TIME ZONE}
+              - column: {name: unpublished_at, type: TIMESTAMP WITH TIME ZONE}
+        - sql:
+            splitStatements: true
+            sql: |
+              UPDATE publishing.publish_requests SET target_id = COALESCE(destination_id, stay_id, food_id);
+              UPDATE publishing.publish_requests r SET target_name =
+                COALESCE((SELECT d.name FROM destination.destinations d WHERE d.id = r.destination_id),
+                         (SELECT s.name FROM destination.destination_stays s WHERE s.id = r.stay_id),
+                         (SELECT f.name FROM destination.destination_foods f WHERE f.id = r.food_id), 'Listing');
+              UPDATE publishing.publish_requests SET status = 'PENDING_REVIEW' WHERE status = 'PENDING';
+              UPDATE publishing.publish_requests SET status = 'PUBLISHED', published_at = reviewed_at WHERE status = 'APPROVED';
+              UPDATE publishing.publish_requests SET status = 'DRAFT' WHERE status IN ('CHANGES_REQUESTED', 'WITHDRAWN');
+        - addNotNullConstraint: {schemaName: publishing, tableName: publish_requests, columnName: target_id, columnDataType: uuid}
+        - addNotNullConstraint: {schemaName: publishing, tableName: publish_requests, columnName: target_name, columnDataType: varchar(255)}
+        - dropDefaultValue: {schemaName: publishing, tableName: publish_requests, columnName: target_type}
+        - addDefaultValue: {schemaName: publishing, tableName: publish_requests, columnName: status, defaultValue: PENDING_REVIEW}
+        - sql:
+            sql: ALTER TABLE publishing.publish_requests DROP CONSTRAINT ck_publish_requests_one_listing
+        - dropColumn: {schemaName: publishing, tableName: publish_requests, columnName: destination_id}
+        - dropColumn: {schemaName: publishing, tableName: publish_requests, columnName: stay_id}
+        - dropColumn: {schemaName: publishing, tableName: publish_requests, columnName: food_id}
+        - createIndex:
+            schemaName: publishing
+            tableName: publish_requests
+            indexName: idx_publish_requests_target
+            columns:
+              - column: {name: target_type}
+              - column: {name: target_id}
+      # The listing columns cannot be rebuilt from a bare id without knowing its type: restore from a backup instead.
+      rollback:
+        - dropIndex: {schemaName: publishing, tableName: publish_requests, indexName: idx_publish_requests_target}
+        - dropColumn: {schemaName: publishing, tableName: publish_requests, columnName: unpublished_at}
+        - dropColumn: {schemaName: publishing, tableName: publish_requests, columnName: published_at}
+        - dropColumn: {schemaName: publishing, tableName: publish_requests, columnName: target_name}

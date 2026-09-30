@@ -1,0 +1,24 @@
+# Who wrote a category, a tag, an interest.
+#
+# The lists say "Created by" as every other list in the dashboard does, so each
+# row carries the account that made it — null for the ones the seed wrote, and
+# null again when that account is deleted, because a category outlives whoever
+# typed it.
+databaseChangeLog:
+  - changeSet:
+      id: v2-taxonomy-created-by
+      author: ams-travel-v2
+      changes:
+        - addColumn: {schemaName: taxonomy, tableName: categories, columns: [{column: {name: created_by, type: uuid}}]}
+        - addColumn: {schemaName: taxonomy, tableName: tags, columns: [{column: {name: created_by, type: uuid}}]}
+        - addColumn: {schemaName: taxonomy, tableName: interests, columns: [{column: {name: created_by, type: uuid}}]}
+        - addForeignKeyConstraint: {baseTableSchemaName: taxonomy, baseTableName: categories, baseColumnNames: created_by, constraintName: fk_categories_created_by, referencedTableSchemaName: auth, referencedTableName: users, referencedColumnNames: id, onDelete: SET NULL}
+        - addForeignKeyConstraint: {baseTableSchemaName: taxonomy, baseTableName: tags, baseColumnNames: created_by, constraintName: fk_tags_created_by, referencedTableSchemaName: auth, referencedTableName: users, referencedColumnNames: id, onDelete: SET NULL}
+        - addForeignKeyConstraint: {baseTableSchemaName: taxonomy, baseTableName: interests, baseColumnNames: created_by, constraintName: fk_interests_created_by, referencedTableSchemaName: auth, referencedTableName: users, referencedColumnNames: id, onDelete: SET NULL}
+      rollback:
+        - dropForeignKeyConstraint: {baseTableSchemaName: taxonomy, baseTableName: categories, constraintName: fk_categories_created_by}
+        - dropForeignKeyConstraint: {baseTableSchemaName: taxonomy, baseTableName: tags, constraintName: fk_tags_created_by}
+        - dropForeignKeyConstraint: {baseTableSchemaName: taxonomy, baseTableName: interests, constraintName: fk_interests_created_by}
+        - dropColumn: {schemaName: taxonomy, tableName: categories, columnName: created_by}
+        - dropColumn: {schemaName: taxonomy, tableName: tags, columnName: created_by}
+        - dropColumn: {schemaName: taxonomy, tableName: interests, columnName: created_by}

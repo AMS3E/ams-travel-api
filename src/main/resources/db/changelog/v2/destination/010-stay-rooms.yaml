@@ -1,0 +1,53 @@
+# The rooms a stay offers.
+#
+# A hotel is chosen by its rooms: who a room sleeps, in which beds, what it has
+# and what a night costs. Beds are counts per bed type, so a guest can look for
+# a king bed and the form can say how many people a room sleeps. The cheapest
+# room on sale is the stay's "from" price.
+databaseChangeLog:
+  - changeSet:
+      id: v2-destination-stay-rooms
+      author: ams-travel-v2
+      changes:
+        - createTable:
+            schemaName: destination
+            tableName: destination_stay_rooms
+            columns:
+              - column: {name: id, type: uuid, defaultValueComputed: "${fn.uuid}", constraints: {primaryKey: true, primaryKeyName: destination_stay_rooms_pkey, nullable: false}}
+              - column: {name: stay_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: name, type: varchar(150), constraints: {nullable: false}}
+              - column: {name: room_type, type: varchar(30), constraints: {nullable: false}}
+              - column: {name: room_count, type: int, defaultValueNumeric: 1, constraints: {nullable: false}}
+              - column: {name: single_beds, type: int, defaultValueNumeric: 0, constraints: {nullable: false}}
+              - column: {name: double_beds, type: int, defaultValueNumeric: 0, constraints: {nullable: false}}
+              - column: {name: queen_beds, type: int, defaultValueNumeric: 0, constraints: {nullable: false}}
+              - column: {name: king_beds, type: int, defaultValueNumeric: 0, constraints: {nullable: false}}
+              - column: {name: bunk_beds, type: int, defaultValueNumeric: 0, constraints: {nullable: false}}
+              - column: {name: sofa_beds, type: int, defaultValueNumeric: 0, constraints: {nullable: false}}
+              - column: {name: futon_beds, type: int, defaultValueNumeric: 0, constraints: {nullable: false}}
+              - column: {name: max_adults, type: int, defaultValueNumeric: 2, constraints: {nullable: false}}
+              - column: {name: max_children, type: int, defaultValueNumeric: 0, constraints: {nullable: false}}
+              - column: {name: size_sqm, type: "decimal(6,1)"}
+              - column: {name: room_view, type: varchar(30)}
+              - column: {name: bathroom, type: varchar(20), defaultValue: PRIVATE, constraints: {nullable: false}}
+              - column: {name: amenities, type: "${type.json}", constraints: {nullable: false}}
+              - column: {name: smoking_allowed, type: boolean, defaultValueBoolean: false, constraints: {nullable: false}}
+              - column: {name: price_per_night, type: "decimal(12,2)"}
+              - column: {name: breakfast_included, type: boolean, defaultValueBoolean: false, constraints: {nullable: false}}
+              - column: {name: free_cancellation_days, type: int}
+              - column: {name: description, type: text}
+              - column: {name: photo_keys, type: "${type.json}", constraints: {nullable: false}}
+              - column: {name: sort_order, type: int, defaultValueNumeric: 0, constraints: {nullable: false}}
+              - column: {name: is_active, type: boolean, defaultValueBoolean: true, constraints: {nullable: false}}
+              - column: {name: created_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+              - column: {name: updated_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+        - createIndex:
+            schemaName: destination
+            tableName: destination_stay_rooms
+            indexName: idx_destination_stay_rooms_stay
+            columns:
+              - column: {name: stay_id}
+              - column: {name: sort_order}
+        - addForeignKeyConstraint: {baseTableSchemaName: destination, baseTableName: destination_stay_rooms, baseColumnNames: stay_id, constraintName: fk_destination_stay_rooms_stay, referencedTableSchemaName: destination, referencedTableName: destination_stays, referencedColumnNames: id, onDelete: CASCADE}
+      rollback:
+        - dropTable: {schemaName: destination, tableName: destination_stay_rooms}

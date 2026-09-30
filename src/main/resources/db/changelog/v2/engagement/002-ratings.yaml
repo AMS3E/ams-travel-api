@@ -1,0 +1,42 @@
+# Stars get their own table: one rating per person per place, with or without a review.
+# Existing review stars are copied across before the reviews' own column goes.
+databaseChangeLog:
+  - changeSet:
+      id: v2-engagement-ratings
+      author: ams-travel-v2
+      changes:
+        - createTable:
+            schemaName: engagement
+            tableName: ratings
+            columns:
+              - column: {name: id, type: uuid, defaultValueComputed: "${fn.uuid}", constraints: {primaryKey: true, primaryKeyName: ratings_pkey, nullable: false}}
+              - column: {name: user_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: target_type, type: varchar(30), constraints: {nullable: false}}
+              - column: {name: target_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: stars, type: smallint, constraints: {nullable: false}}
+              - column: {name: created_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+              - column: {name: updated_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+        - addUniqueConstraint:
+            schemaName: engagement
+            tableName: ratings
+            columnNames: user_id, target_type, target_id
+            constraintName: uk_ratings_user_target
+        - createIndex:
+            schemaName: engagement
+            tableName: ratings
+            indexName: idx_ratings_target
+            columns:
+              - column: {name: target_type}
+              - column: {name: target_id}
+        - sql:
+            sql: >
+              INSERT INTO engagement.ratings (user_id, target_type, target_id, stars, created_at, updated_at)
+              SELECT user_id, target_type, target_id, rating, created_at, updated_at FROM engagement.reviews
+        - dropColumn: {schemaName: engagement, tableName: reviews, columnName: rating}
+      rollback:
+        - addColumn: {schemaName: engagement, tableName: reviews, columns: [{column: {name: rating, type: smallint}}]}
+        - sql:
+            sql: >
+              UPDATE engagement.reviews r SET rating = (SELECT g.stars FROM engagement.ratings g
+              WHERE g.user_id = r.user_id AND g.target_type = r.target_type AND g.target_id = r.target_id)
+        - dropTable: {schemaName: engagement, tableName: ratings}

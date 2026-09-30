@@ -1,0 +1,25 @@
+# The seeded calendar in today's terms (HIGH_SEASON, GREEN_SEASON, a status). A season already there,
+# as on a database seeded before, is left as it is. The test run replays these statements.
+databaseChangeLog:
+  - changeSet:
+      id: v2-gamification-season-rows
+      author: ams-travel-v2
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              INSERT INTO gamification.seasons (id, name, kind, starts_on, ends_on, is_active, status, created_at, updated_at)
+              SELECT ${fn.uuid}, 'High season 2025/26', 'HIGH_SEASON', DATE '2025-11-01', DATE '2026-04-30', TRUE, 'UPCOMING', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+              WHERE NOT EXISTS (SELECT 1 FROM gamification.seasons WHERE starts_on = DATE '2025-11-01');
+              INSERT INTO gamification.seasons (id, name, kind, starts_on, ends_on, is_active, status, created_at, updated_at)
+              SELECT ${fn.uuid}, 'Green season 2026', 'GREEN_SEASON', DATE '2026-05-01', DATE '2026-10-31', TRUE, 'UPCOMING', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+              WHERE NOT EXISTS (SELECT 1 FROM gamification.seasons WHERE starts_on = DATE '2026-05-01');
+              INSERT INTO gamification.seasons (id, name, kind, starts_on, ends_on, is_active, status, created_at, updated_at)
+              SELECT ${fn.uuid}, 'High season 2026/27', 'HIGH_SEASON', DATE '2026-11-01', DATE '2027-04-30', TRUE, 'UPCOMING', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+              WHERE NOT EXISTS (SELECT 1 FROM gamification.seasons WHERE starts_on = DATE '2026-11-01');
+              INSERT INTO gamification.seasons (id, name, kind, starts_on, ends_on, is_active, status, created_at, updated_at)
+              SELECT ${fn.uuid}, 'Green season 2027', 'GREEN_SEASON', DATE '2027-05-01', DATE '2027-10-31', TRUE, 'UPCOMING', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+              WHERE NOT EXISTS (SELECT 1 FROM gamification.seasons WHERE starts_on = DATE '2027-05-01');
+      rollback:
+        - sql:
+            sql: SELECT 1

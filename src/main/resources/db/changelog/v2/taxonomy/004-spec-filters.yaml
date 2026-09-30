@@ -1,0 +1,98 @@
+# The filter chips, exactly as the tourism-region spec names them.
+#
+# Three of them are one thing in the spec where the catalogue had two parts:
+# Birding (was Bird), Pepper Rice Wine (was Pepper + Rice Wine) and Golf Spa
+# (was Golf + Spa). The parts stay in the vocabulary — other regions use Bird,
+# and places still carry Pepper — but the chip a region offers is the whole.
+#
+# A fresh database gets this from the seed files; this is for the one already
+# filled, and does nothing when there are no regions yet.
+databaseChangeLog:
+  - changeSet:
+      id: v2-taxonomy-spec-filters
+      author: ams-travel-v2
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 1
+            sql: SELECT CASE WHEN count(*) > 0 THEN 1 ELSE 0 END FROM taxonomy.regions WHERE kind = 'TOURISM'
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              -- The three chips the spec names as one thing.
+              INSERT INTO taxonomy.tags (id, name, slug, is_active)
+              SELECT * FROM (VALUES
+                (${fn.uuid}, 'Birding', 'birding', true),
+                (${fn.uuid}, 'Pepper Rice Wine', 'pepper-rice-wine', true),
+                (${fn.uuid}, 'Golf Spa', 'golf-spa', true)) AS t(id, name, slug, is_active)
+              WHERE NOT EXISTS (SELECT 1 FROM taxonomy.tags existing WHERE existing.slug = t.slug);
+
+              INSERT INTO destination.destination_tags (destination_id, tag_id)
+              SELECT DISTINCT dt.destination_id, whole.id
+              FROM destination.destination_tags dt
+              JOIN taxonomy.tags part ON part.id = dt.tag_id
+              CROSS JOIN taxonomy.tags whole
+              WHERE whole.slug = 'birding' AND part.slug IN ('bird')
+                AND NOT EXISTS (SELECT 1 FROM destination.destination_tags already
+                  WHERE already.destination_id = dt.destination_id AND already.tag_id = whole.id);
+              INSERT INTO destination.destination_tags (destination_id, tag_id)
+              SELECT DISTINCT dt.destination_id, whole.id
+              FROM destination.destination_tags dt
+              JOIN taxonomy.tags part ON part.id = dt.tag_id
+              CROSS JOIN taxonomy.tags whole
+              WHERE whole.slug = 'pepper-rice-wine' AND part.slug IN ('pepper', 'rice-wine')
+                AND NOT EXISTS (SELECT 1 FROM destination.destination_tags already
+                  WHERE already.destination_id = dt.destination_id AND already.tag_id = whole.id);
+              INSERT INTO destination.destination_tags (destination_id, tag_id)
+              SELECT DISTINCT dt.destination_id, whole.id
+              FROM destination.destination_tags dt
+              JOIN taxonomy.tags part ON part.id = dt.tag_id
+              CROSS JOIN taxonomy.tags whole
+              WHERE whole.slug = 'golf-spa' AND part.slug IN ('golf', 'spa')
+                AND NOT EXISTS (SELECT 1 FROM destination.destination_tags already
+                  WHERE already.destination_id = dt.destination_id AND already.tag_id = whole.id);
+
+              -- Each region offers exactly the filters the spec lists.
+              DELETE FROM taxonomy.region_tags WHERE region_id IN
+                (SELECT id FROM taxonomy.regions WHERE kind = 'TOURISM');
+              INSERT INTO taxonomy.region_tags (region_id, tag_id)
+              SELECT r.id, t.id FROM taxonomy.regions r JOIN taxonomy.tags t
+                ON t.slug IN ('unesco')
+              WHERE r.code = 'ANCIENT-CAPITALS';
+              INSERT INTO taxonomy.region_tags (region_id, tag_id)
+              SELECT r.id, t.id FROM taxonomy.regions r JOIN taxonomy.tags t
+                ON t.slug IN ('tribe', 'forest', 'elephant', 'camping', 'birding', 'sesan', 'srepok')
+              WHERE r.code = 'NORTHEASTERN';
+              INSERT INTO taxonomy.region_tags (region_id, tag_id)
+              SELECT r.id, t.id FROM taxonomy.regions r JOIN taxonomy.tags t
+                ON t.slug IN ('boat', 'bird', 'fishing', 'lotus', 'rice', 'island', 'wetland', 'festival')
+              WHERE r.code = 'MEKONG-TONLE-SAP';
+              INSERT INTO taxonomy.region_tags (region_id, tag_id)
+              SELECT r.id, t.id FROM taxonomy.regions r JOIN taxonomy.tags t
+                ON t.slug IN ('hiking', 'sunrise', 'sunset', 'camping', 'trail', 'peak', 'landscape')
+              WHERE r.code = 'MOUNTAIN-WATERFALL';
+              INSERT INTO taxonomy.region_tags (region_id, tag_id)
+              SELECT r.id, t.id FROM taxonomy.regions r JOIN taxonomy.tags t
+                ON t.slug IN ('beach', 'island', 'luxury-resort', 'diving', 'kayak')
+              WHERE r.code = 'COASTAL-ISLAND';
+              INSERT INTO taxonomy.region_tags (region_id, tag_id)
+              SELECT r.id, t.id FROM taxonomy.regions r JOIN taxonomy.tags t
+                ON t.slug IN ('cafe', 'nightlife', 'shopping', 'music', 'food', 'architecture')
+              WHERE r.code = 'URBAN-LIFESTYLE';
+              INSERT INTO taxonomy.region_tags (region_id, tag_id)
+              SELECT r.id, t.id FROM taxonomy.regions r JOIN taxonomy.tags t
+                ON t.slug IN ('khmer-curry', 'fish-amok', 'num-banh-chok', 'pepper-rice-wine', 'palm-sugar')
+              WHERE r.code = 'KHMER-CULINARY';
+              INSERT INTO taxonomy.region_tags (region_id, tag_id)
+              SELECT r.id, t.id FROM taxonomy.regions r JOIN taxonomy.tags t
+                ON t.slug IN ('homestay', 'community', 'cycling', 'farm', 'local-food', 'fishing')
+              WHERE r.code = 'ECO-COMMUNITY';
+              INSERT INTO taxonomy.region_tags (region_id, tag_id)
+              SELECT r.id, t.id FROM taxonomy.regions r JOIN taxonomy.tags t
+                ON t.slug IN ('luxury', 'five-stars', 'private', 'exclusive', 'helicopter', 'golf-spa')
+              WHERE r.code = 'LUXURY-TOURISM';
+      rollback:
+        - sql:
+            sql: |
+              DELETE FROM taxonomy.tags WHERE slug IN ('birding', 'pepper-rice-wine', 'golf-spa');

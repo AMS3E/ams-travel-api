@@ -1,0 +1,27 @@
+# A tourism corridor's interests, as a stay and a food listing have them.
+#
+# Explore's Tourism Corridors shelf is made of interests (Temple Trails,
+# River Journeys…). A corridor chosen under one of them is listed on that
+# interest's page.
+databaseChangeLog:
+  - changeSet:
+      id: v2-taxonomy-corridor-interests
+      author: ams-travel-v2
+      changes:
+        - createTable:
+            schemaName: taxonomy
+            tableName: corridor_interests
+            columns:
+              - column: {name: corridor_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: interest_id, type: uuid, constraints: {nullable: false}}
+        - addPrimaryKey: {schemaName: taxonomy, tableName: corridor_interests, columnNames: "corridor_id, interest_id", constraintName: corridor_interests_pkey}
+        - createIndex:
+            schemaName: taxonomy
+            tableName: corridor_interests
+            indexName: idx_corridor_interests_interest
+            columns:
+              - column: {name: interest_id}
+        - addForeignKeyConstraint: {baseTableSchemaName: taxonomy, baseTableName: corridor_interests, baseColumnNames: corridor_id, constraintName: fk_corridor_interests_corridor, referencedTableSchemaName: taxonomy, referencedTableName: corridors, referencedColumnNames: id, onDelete: CASCADE}
+        - addForeignKeyConstraint: {baseTableSchemaName: taxonomy, baseTableName: corridor_interests, baseColumnNames: interest_id, constraintName: fk_corridor_interests_interest, referencedTableSchemaName: taxonomy, referencedTableName: interests, referencedColumnNames: id, onDelete: CASCADE}
+      rollback:
+        - dropTable: {schemaName: taxonomy, tableName: corridor_interests}

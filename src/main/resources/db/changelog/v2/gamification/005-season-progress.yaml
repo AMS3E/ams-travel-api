@@ -1,0 +1,55 @@
+# Seasons get a lifecycle (UPCOMING, ACTIVE, COMPLETED; one ACTIVE at a time) and their types are named
+# HIGH_SEASON / GREEN_SEASON; each person gets a row of totals per season. Old rows are never removed.
+databaseChangeLog:
+  - changeSet:
+      id: v2-gamification-season-progress
+      author: ams-travel-v2
+      changes:
+        - addColumn:
+            schemaName: gamification
+            tableName: seasons
+            columns:
+              - column: {name: status, type: varchar(20), defaultValue: UPCOMING, constraints: {nullable: false}}
+        - sql:
+            splitStatements: true
+            sql: |
+              UPDATE gamification.seasons SET status = 'COMPLETED' WHERE ends_on < CURRENT_DATE;
+              UPDATE gamification.seasons SET status = 'ACTIVE'
+                WHERE is_active = TRUE AND starts_on <= CURRENT_DATE AND ends_on >= CURRENT_DATE;
+              UPDATE gamification.seasons SET kind = 'HIGH_SEASON' WHERE kind = 'HIGH';
+              UPDATE gamification.seasons SET kind = 'GREEN_SEASON' WHERE kind = 'GREEN';
+        - createTable:
+            schemaName: gamification
+            tableName: user_season_progress
+            columns:
+              - column: {name: id, type: uuid, constraints: {primaryKey: true, primaryKeyName: user_season_progress_pkey, nullable: false}}
+              - column: {name: user_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: season_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: points, type: int, defaultValueNumeric: 0, constraints: {nullable: false}}
+              - column: {name: rating_count, type: int, defaultValueNumeric: 0, constraints: {nullable: false}}
+              - column: {name: review_count, type: int, defaultValueNumeric: 0, constraints: {nullable: false}}
+              - column: {name: unique_rated_target_count, type: int, defaultValueNumeric: 0, constraints: {nullable: false}}
+              - column: {name: unique_reviewed_target_count, type: int, defaultValueNumeric: 0, constraints: {nullable: false}}
+              - column: {name: started_at, type: TIMESTAMP WITH TIME ZONE, constraints: {nullable: false}}
+              - column: {name: updated_at, type: TIMESTAMP WITH TIME ZONE, constraints: {nullable: false}}
+        - addUniqueConstraint:
+            schemaName: gamification
+            tableName: user_season_progress
+            columnNames: user_id, season_id
+            constraintName: uk_user_season_progress
+        - addForeignKeyConstraint:
+            baseTableSchemaName: gamification
+            baseTableName: user_season_progress
+            baseColumnNames: season_id
+            constraintName: fk_user_season_progress_season
+            referencedTableSchemaName: gamification
+            referencedTableName: seasons
+            referencedColumnNames: id
+      rollback:
+        - sql:
+            splitStatements: true
+            sql: |
+              UPDATE gamification.seasons SET kind = 'HIGH' WHERE kind = 'HIGH_SEASON';
+              UPDATE gamification.seasons SET kind = 'GREEN' WHERE kind = 'GREEN_SEASON';
+        - dropTable: {schemaName: gamification, tableName: user_season_progress}
+        - dropColumn: {schemaName: gamification, tableName: seasons, columnName: status}

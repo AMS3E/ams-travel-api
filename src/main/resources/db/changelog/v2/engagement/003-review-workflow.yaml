@@ -1,0 +1,30 @@
+# Reviews get a moderation workflow (PENDING, PUBLISHED, HIDDEN, REJECTED, DELETED) and
+# ratings a status, so deleting either keeps it on record. What was VISIBLE is PUBLISHED.
+databaseChangeLog:
+  - changeSet:
+      id: v2-engagement-review-workflow
+      author: ams-travel-v2
+      changes:
+        - addColumn:
+            schemaName: engagement
+            tableName: reviews
+            columns:
+              - column: {name: moderated_by, type: uuid}
+              - column: {name: moderated_at, type: TIMESTAMP WITH TIME ZONE}
+              - column: {name: moderation_note, type: varchar(500)}
+        - sql:
+            sql: UPDATE engagement.reviews SET status = 'PUBLISHED' WHERE status = 'VISIBLE'
+        - addDefaultValue: {schemaName: engagement, tableName: reviews, columnName: status, defaultValue: PUBLISHED}
+        - addColumn:
+            schemaName: engagement
+            tableName: ratings
+            columns:
+              - column: {name: status, type: varchar(20), defaultValue: ACTIVE, constraints: {nullable: false}}
+      rollback:
+        - dropColumn: {schemaName: engagement, tableName: ratings, columnName: status}
+        - sql:
+            sql: UPDATE engagement.reviews SET status = 'VISIBLE' WHERE status = 'PUBLISHED'
+        - addDefaultValue: {schemaName: engagement, tableName: reviews, columnName: status, defaultValue: VISIBLE}
+        - dropColumn: {schemaName: engagement, tableName: reviews, columnName: moderation_note}
+        - dropColumn: {schemaName: engagement, tableName: reviews, columnName: moderated_at}
+        - dropColumn: {schemaName: engagement, tableName: reviews, columnName: moderated_by}

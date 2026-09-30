@@ -1,0 +1,16 @@
+# Who wrote a province.
+#
+# The list says "Created by" as the categories, tags and interests beside it do,
+# so each row carries the account that made it — null for the 25 the seed wrote,
+# and null again when that account is deleted, because a province outlives
+# whoever typed it.
+databaseChangeLog:
+  - changeSet:
+      id: v2-taxonomy-province-created-by
+      author: ams-travel-v2
+      changes:
+        - addColumn: {schemaName: taxonomy, tableName: provinces, columns: [{column: {name: created_by, type: uuid}}]}
+        - addForeignKeyConstraint: {baseTableSchemaName: taxonomy, baseTableName: provinces, baseColumnNames: created_by, constraintName: fk_provinces_created_by, referencedTableSchemaName: auth, referencedTableName: users, referencedColumnNames: id, onDelete: SET NULL}
+      rollback:
+        - dropForeignKeyConstraint: {baseTableSchemaName: taxonomy, baseTableName: provinces, constraintName: fk_provinces_created_by}
+        - dropColumn: {schemaName: taxonomy, tableName: provinces, columnName: created_by}

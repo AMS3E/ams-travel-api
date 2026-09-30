@@ -1,0 +1,63 @@
+# The keys that cross from one schema into another, added once every table
+# exists. What happens on delete, in short:
+#   - a person's own rows go with them; browse events and audit rows stay with
+#     no person, and publish requests they made or reviewed refuse the delete;
+#   - a destination's links, stops, badges and requests go with it;
+#   - a province with destinations cannot be deleted; a category, tag or
+#     interest takes its links along; a deleted partner leaves its listings.
+databaseChangeLog:
+  - changeSet:
+      id: v2-cross-schema-foreign-keys
+      author: ams-travel-v2
+      changes:
+        # auth
+        - addForeignKeyConstraint: {baseTableSchemaName: auth, baseTableName: user_preferences, baseColumnNames: preferred_region_id, constraintName: fk_user_preferences_region, referencedTableSchemaName: taxonomy, referencedTableName: regions, referencedColumnNames: id, onDelete: SET NULL}
+
+        # partner
+        - addForeignKeyConstraint: {baseTableSchemaName: partner, baseTableName: partner_users, baseColumnNames: user_id, constraintName: fk_partner_users_user, referencedTableSchemaName: auth, referencedTableName: users, referencedColumnNames: id, onDelete: CASCADE}
+
+        # destination
+        - addForeignKeyConstraint: {baseTableSchemaName: destination, baseTableName: destinations, baseColumnNames: province_id, constraintName: fk_destinations_province, referencedTableSchemaName: taxonomy, referencedTableName: provinces, referencedColumnNames: id, onDelete: RESTRICT}
+        - addForeignKeyConstraint: {baseTableSchemaName: destination, baseTableName: destinations, baseColumnNames: created_by, constraintName: fk_destinations_created_by, referencedTableSchemaName: auth, referencedTableName: users, referencedColumnNames: id, onDelete: SET NULL}
+        - addForeignKeyConstraint: {baseTableSchemaName: destination, baseTableName: destination_stays, baseColumnNames: partner_id, constraintName: fk_destination_stays_partner, referencedTableSchemaName: partner, referencedTableName: partners, referencedColumnNames: id, onDelete: SET NULL}
+        - addForeignKeyConstraint: {baseTableSchemaName: destination, baseTableName: destination_foods, baseColumnNames: partner_id, constraintName: fk_destination_foods_partner, referencedTableSchemaName: partner, referencedTableName: partners, referencedColumnNames: id, onDelete: SET NULL}
+        - addForeignKeyConstraint: {baseTableSchemaName: destination, baseTableName: destination_foods, baseColumnNames: created_by, constraintName: fk_destination_foods_created_by, referencedTableSchemaName: auth, referencedTableName: users, referencedColumnNames: id, onDelete: SET NULL}
+        - addForeignKeyConstraint: {baseTableSchemaName: destination, baseTableName: destination_categories, baseColumnNames: category_id, constraintName: fk_destination_categories_category, referencedTableSchemaName: taxonomy, referencedTableName: categories, referencedColumnNames: id, onDelete: CASCADE}
+        - addForeignKeyConstraint: {baseTableSchemaName: destination, baseTableName: destination_tags, baseColumnNames: tag_id, constraintName: fk_destination_tags_tag, referencedTableSchemaName: taxonomy, referencedTableName: tags, referencedColumnNames: id, onDelete: CASCADE}
+        - addForeignKeyConstraint: {baseTableSchemaName: destination, baseTableName: destination_interests, baseColumnNames: interest_id, constraintName: fk_destination_interests_interest, referencedTableSchemaName: taxonomy, referencedTableName: interests, referencedColumnNames: id, onDelete: CASCADE}
+        - addForeignKeyConstraint: {baseTableSchemaName: destination, baseTableName: corridor_destinations, baseColumnNames: corridor_id, constraintName: fk_corridor_destinations_corridor, referencedTableSchemaName: taxonomy, referencedTableName: corridors, referencedColumnNames: id, onDelete: CASCADE}
+        - addForeignKeyConstraint: {baseTableSchemaName: destination, baseTableName: destination_food_categories, baseColumnNames: category_id, constraintName: fk_destination_food_categories_category, referencedTableSchemaName: taxonomy, referencedTableName: categories, referencedColumnNames: id, onDelete: CASCADE}
+        - addForeignKeyConstraint: {baseTableSchemaName: destination, baseTableName: destination_food_tags, baseColumnNames: tag_id, constraintName: fk_destination_food_tags_tag, referencedTableSchemaName: taxonomy, referencedTableName: tags, referencedColumnNames: id, onDelete: CASCADE}
+        - addForeignKeyConstraint: {baseTableSchemaName: destination, baseTableName: destination_food_interests, baseColumnNames: interest_id, constraintName: fk_destination_food_interests_interest, referencedTableSchemaName: taxonomy, referencedTableName: interests, referencedColumnNames: id, onDelete: CASCADE}
+
+        # publishing
+        - addForeignKeyConstraint: {baseTableSchemaName: publishing, baseTableName: publish_requests, baseColumnNames: destination_id, constraintName: fk_publish_requests_destination, referencedTableSchemaName: destination, referencedTableName: destinations, referencedColumnNames: id, onDelete: CASCADE}
+        - addForeignKeyConstraint: {baseTableSchemaName: publishing, baseTableName: publish_requests, baseColumnNames: requested_by, constraintName: fk_publish_requests_requested_by, referencedTableSchemaName: auth, referencedTableName: users, referencedColumnNames: id, onDelete: RESTRICT}
+        - addForeignKeyConstraint: {baseTableSchemaName: publishing, baseTableName: publish_requests, baseColumnNames: reviewer_id, constraintName: fk_publish_requests_reviewer, referencedTableSchemaName: auth, referencedTableName: users, referencedColumnNames: id, onDelete: RESTRICT}
+
+        # engagement
+        - addForeignKeyConstraint: {baseTableSchemaName: engagement, baseTableName: reviews, baseColumnNames: user_id, constraintName: fk_reviews_user, referencedTableSchemaName: auth, referencedTableName: users, referencedColumnNames: id, onDelete: CASCADE}
+        - addForeignKeyConstraint: {baseTableSchemaName: engagement, baseTableName: favorites, baseColumnNames: user_id, constraintName: fk_favorites_user, referencedTableSchemaName: auth, referencedTableName: users, referencedColumnNames: id, onDelete: CASCADE}
+        - addForeignKeyConstraint: {baseTableSchemaName: engagement, baseTableName: browse_events, baseColumnNames: user_id, constraintName: fk_browse_events_user, referencedTableSchemaName: auth, referencedTableName: users, referencedColumnNames: id, onDelete: SET NULL}
+        - addForeignKeyConstraint: {baseTableSchemaName: engagement, baseTableName: digital_stamps, baseColumnNames: user_id, constraintName: fk_digital_stamps_user, referencedTableSchemaName: auth, referencedTableName: users, referencedColumnNames: id, onDelete: CASCADE}
+
+        # gamification
+        - addForeignKeyConstraint: {baseTableSchemaName: gamification, baseTableName: user_badge_progress, baseColumnNames: user_id, constraintName: fk_user_badge_progress_user, referencedTableSchemaName: auth, referencedTableName: users, referencedColumnNames: id, onDelete: CASCADE}
+        - addForeignKeyConstraint: {baseTableSchemaName: gamification, baseTableName: user_badges, baseColumnNames: user_id, constraintName: fk_user_badges_user, referencedTableSchemaName: auth, referencedTableName: users, referencedColumnNames: id, onDelete: CASCADE}
+        - addForeignKeyConstraint: {baseTableSchemaName: gamification, baseTableName: badge_history, baseColumnNames: user_id, constraintName: fk_badge_history_user, referencedTableSchemaName: auth, referencedTableName: users, referencedColumnNames: id, onDelete: CASCADE}
+        - addForeignKeyConstraint: {baseTableSchemaName: gamification, baseTableName: destination_badges, baseColumnNames: destination_id, constraintName: fk_destination_badges_destination, referencedTableSchemaName: destination, referencedTableName: destinations, referencedColumnNames: id, onDelete: CASCADE}
+
+        # system
+        - addForeignKeyConstraint: {baseTableSchemaName: system, baseTableName: notifications, baseColumnNames: user_id, constraintName: fk_notifications_user, referencedTableSchemaName: auth, referencedTableName: users, referencedColumnNames: id, onDelete: CASCADE}
+        - addForeignKeyConstraint: {baseTableSchemaName: system, baseTableName: audit_logs, baseColumnNames: user_id, constraintName: fk_audit_logs_user, referencedTableSchemaName: auth, referencedTableName: users, referencedColumnNames: id, onDelete: SET NULL}
+
+        # verification (publishing schema): a decision outlives nothing it is about, but
+        # a person who decided cannot be deleted while it stands.
+        - addForeignKeyConstraint: {baseTableSchemaName: publishing, baseTableName: destination_verifications, baseColumnNames: destination_id, constraintName: fk_destination_verifications_destination, referencedTableSchemaName: destination, referencedTableName: destinations, referencedColumnNames: id, onDelete: CASCADE}
+        - addForeignKeyConstraint: {baseTableSchemaName: publishing, baseTableName: destination_verifications, baseColumnNames: decided_by, constraintName: fk_destination_verifications_decided_by, referencedTableSchemaName: auth, referencedTableName: users, referencedColumnNames: id, onDelete: RESTRICT}
+
+        # history
+        - addForeignKeyConstraint: {baseTableSchemaName: history, baseTableName: destination_history, baseColumnNames: destination_id, constraintName: fk_destination_history_destination, referencedTableSchemaName: destination, referencedTableName: destinations, referencedColumnNames: id, onDelete: CASCADE}
+        - addForeignKeyConstraint: {baseTableSchemaName: history, baseTableName: destination_monarchs, baseColumnNames: destination_id, constraintName: fk_destination_monarchs_destination, referencedTableSchemaName: destination, referencedTableName: destinations, referencedColumnNames: id, onDelete: CASCADE}
+        - addForeignKeyConstraint: {baseTableSchemaName: history, baseTableName: destination_architecture_styles, baseColumnNames: destination_id, constraintName: fk_destination_architecture_styles_destination, referencedTableSchemaName: destination, referencedTableName: destinations, referencedColumnNames: id, onDelete: CASCADE}
+        - addForeignKeyConstraint: {baseTableSchemaName: history, baseTableName: destination_religions, baseColumnNames: destination_id, constraintName: fk_destination_religions_destination, referencedTableSchemaName: destination, referencedTableName: destinations, referencedColumnNames: id, onDelete: CASCADE}

@@ -1,0 +1,177 @@
+# auth: the people who use AMS Travel, and a mirror of what Keycloak says they
+# may do. Keycloak stays the source of truth for accounts and roles; these rows
+# are written on sign-in so the rest of the database can point at a person.
+databaseChangeLog:
+  - changeSet:
+      id: v2-auth-tables
+      author: ams-travel-v2
+      changes:
+        - createTable:
+            schemaName: auth
+            tableName: users
+            columns:
+              - column: {name: id, type: uuid, defaultValueComputed: "${fn.uuid}", constraints: {primaryKey: true, primaryKeyName: users_pkey, nullable: false}}
+              # The Keycloak account the row was first created from. Empty for a
+              # row made in the dashboard before its account existed.
+              - column: {name: keycloak_id, type: uuid, constraints: {unique: true, uniqueConstraintName: uk_users_keycloak_id}}
+              - column: {name: email, type: varchar(255), constraints: {nullable: false, unique: true, uniqueConstraintName: uk_users_email}}
+              - column: {name: full_name, type: varchar(255), constraints: {nullable: false}}
+              - column: {name: avatar_key, type: varchar(512)}
+              - column: {name: phone, type: varchar(50)}
+              - column: {name: status, type: varchar(30), defaultValue: ACTIVE, constraints: {nullable: false}}
+              - column: {name: last_login_at, type: TIMESTAMP WITH TIME ZONE}
+              - column: {name: created_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+              - column: {name: updated_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+
+        # One row per account that signs in as this person: provider is the
+        # realm (amstravel for customers, amsadmin for staff), provider_user_id
+        # the token's subject. A staff member who also books as a customer has
+        # two identities and one user.
+        - createTable:
+            schemaName: auth
+            tableName: auth_identities
+            columns:
+              - column: {name: id, type: uuid, defaultValueComputed: "${fn.uuid}", constraints: {primaryKey: true, primaryKeyName: auth_identities_pkey, nullable: false}}
+              - column: {name: user_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: provider, type: varchar(50), constraints: {nullable: false}}
+              - column: {name: provider_user_id, type: varchar(255), constraints: {nullable: false}}
+              - column: {name: created_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+        - addUniqueConstraint:
+            schemaName: auth
+            tableName: auth_identities
+            columnNames: provider, provider_user_id
+            constraintName: uk_auth_identities_provider_subject
+        - createIndex:
+            schemaName: auth
+            tableName: auth_identities
+            indexName: idx_auth_identities_user
+            columns:
+              - column: {name: user_id}
+        - addForeignKeyConstraint:
+            baseTableSchemaName: auth
+            baseTableName: auth_identities
+            baseColumnNames: user_id
+            constraintName: fk_auth_identities_user
+            referencedTableSchemaName: auth
+            referencedTableName: users
+            referencedColumnNames: id
+            onDelete: CASCADE
+
+        # One row per person, keyed by the person. preferred_region_id points
+        # at taxonomy.regions; that key is added with the other cross-schema ones.
+        - createTable:
+            schemaName: auth
+            tableName: user_preferences
+            columns:
+              - column: {name: user_id, type: uuid, constraints: {primaryKey: true, primaryKeyName: user_preferences_pkey, nullable: false}}
+              - column: {name: preferred_language, type: varchar(10), defaultValue: en, constraints: {nullable: false}}
+              - column: {name: preferred_currency, type: varchar(10), defaultValue: USD, constraints: {nullable: false}}
+              - column: {name: preferred_region_id, type: uuid}
+              - column: {name: notification_email, type: boolean, defaultValueBoolean: true, constraints: {nullable: false}}
+              - column: {name: notification_push, type: boolean, defaultValueBoolean: true, constraints: {nullable: false}}
+              - column: {name: theme, type: varchar(20), defaultValue: SYSTEM, constraints: {nullable: false}}
+              - column: {name: updated_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+        - addForeignKeyConstraint:
+            baseTableSchemaName: auth
+            baseTableName: user_preferences
+            baseColumnNames: user_id
+            constraintName: fk_user_preferences_user
+            referencedTableSchemaName: auth
+            referencedTableName: users
+            referencedColumnNames: id
+            onDelete: CASCADE
+
+        - createTable:
+            schemaName: auth
+            tableName: roles
+            columns:
+              - column: {name: id, type: uuid, defaultValueComputed: "${fn.uuid}", constraints: {primaryKey: true, primaryKeyName: roles_pkey, nullable: false}}
+              - column: {name: code, type: varchar(50), constraints: {nullable: false, unique: true, uniqueConstraintName: uk_roles_code}}
+              - column: {name: name, type: varchar(100), constraints: {nullable: false}}
+              - column: {name: description, type: text}
+              - column: {name: created_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+
+        - createTable:
+            schemaName: auth
+            tableName: permissions
+            columns:
+              - column: {name: id, type: uuid, defaultValueComputed: "${fn.uuid}", constraints: {primaryKey: true, primaryKeyName: permissions_pkey, nullable: false}}
+              - column: {name: code, type: varchar(100), constraints: {nullable: false, unique: true, uniqueConstraintName: uk_permissions_code}}
+              - column: {name: name, type: varchar(150), constraints: {nullable: false}}
+              - column: {name: description, type: text}
+
+        - createTable:
+            schemaName: auth
+            tableName: role_permissions
+            columns:
+              - column: {name: role_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: permission_id, type: uuid, constraints: {nullable: false}}
+        - addPrimaryKey:
+            schemaName: auth
+            tableName: role_permissions
+            columnNames: role_id, permission_id
+            constraintName: role_permissions_pkey
+        - addForeignKeyConstraint:
+            baseTableSchemaName: auth
+            baseTableName: role_permissions
+            baseColumnNames: role_id
+            constraintName: fk_role_permissions_role
+            referencedTableSchemaName: auth
+            referencedTableName: roles
+            referencedColumnNames: id
+            onDelete: CASCADE
+        - addForeignKeyConstraint:
+            baseTableSchemaName: auth
+            baseTableName: role_permissions
+            baseColumnNames: permission_id
+            constraintName: fk_role_permissions_permission
+            referencedTableSchemaName: auth
+            referencedTableName: permissions
+            referencedColumnNames: id
+            onDelete: CASCADE
+
+        - createTable:
+            schemaName: auth
+            tableName: user_roles
+            columns:
+              - column: {name: user_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: role_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: assigned_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+        - addPrimaryKey:
+            schemaName: auth
+            tableName: user_roles
+            columnNames: user_id, role_id
+            constraintName: user_roles_pkey
+        - createIndex:
+            schemaName: auth
+            tableName: user_roles
+            indexName: idx_user_roles_role
+            columns:
+              - column: {name: role_id}
+        - addForeignKeyConstraint:
+            baseTableSchemaName: auth
+            baseTableName: user_roles
+            baseColumnNames: user_id
+            constraintName: fk_user_roles_user
+            referencedTableSchemaName: auth
+            referencedTableName: users
+            referencedColumnNames: id
+            onDelete: CASCADE
+        # A role in use cannot be dropped out from under the people holding it.
+        - addForeignKeyConstraint:
+            baseTableSchemaName: auth
+            baseTableName: user_roles
+            baseColumnNames: role_id
+            constraintName: fk_user_roles_role
+            referencedTableSchemaName: auth
+            referencedTableName: roles
+            referencedColumnNames: id
+            onDelete: RESTRICT
+      rollback:
+        - dropTable: {schemaName: auth, tableName: user_roles}
+        - dropTable: {schemaName: auth, tableName: role_permissions}
+        - dropTable: {schemaName: auth, tableName: permissions}
+        - dropTable: {schemaName: auth, tableName: roles}
+        - dropTable: {schemaName: auth, tableName: user_preferences}
+        - dropTable: {schemaName: auth, tableName: auth_identities}
+        - dropTable: {schemaName: auth, tableName: users}

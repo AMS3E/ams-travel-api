@@ -1,0 +1,61 @@
+# What a stay needs to read like a property listing.
+#
+# A food listing already carries a description, opening hours, a phone number, a
+# website and a gallery; a stay carried none of them, which is why its page is
+# thinner than a restaurant's. These are the fields a guest decides on: what the
+# place is, when they can arrive and must leave, how to reach it, and what it
+# looks like beyond one cover photograph.
+databaseChangeLog:
+  - changeSet:
+      id: v2-destination-stay-details
+      author: ams-travel-v2
+      changes:
+        - addColumn:
+            schemaName: destination
+            tableName: destination_stays
+            columns:
+              # One line for a card, the long copy for the page.
+              - column: {name: short_description, type: varchar(500)}
+              - column: {name: description, type: text}
+              # Local time, as the property states it; no date is involved.
+              - column: {name: check_in_from, type: time}
+              - column: {name: check_out_until, type: time}
+              - column: {name: phone, type: varchar(50)}
+              - column: {name: website, type: varchar(512)}
+
+        # The same shape as a food listing's gallery, for the same reason.
+        - createTable:
+            schemaName: destination
+            tableName: destination_stay_media
+            columns:
+              - column: {name: id, type: uuid, defaultValueComputed: "${fn.uuid}", constraints: {primaryKey: true, primaryKeyName: destination_stay_media_pkey, nullable: false}}
+              - column: {name: stay_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: media_key, type: varchar(512), constraints: {nullable: false}}
+              - column: {name: media_type, type: varchar(30), defaultValue: IMAGE, constraints: {nullable: false}}
+              - column: {name: caption, type: varchar(255)}
+              - column: {name: sort_order, type: int, defaultValueNumeric: 0, constraints: {nullable: false}}
+              - column: {name: is_cover, type: boolean, defaultValueBoolean: false, constraints: {nullable: false}}
+              - column: {name: created_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+        - createIndex:
+            schemaName: destination
+            tableName: destination_stay_media
+            indexName: idx_destination_stay_media_stay
+            columns:
+              - column: {name: stay_id}
+        - addForeignKeyConstraint:
+            baseTableSchemaName: destination
+            baseTableName: destination_stay_media
+            baseColumnNames: stay_id
+            constraintName: fk_destination_stay_media_stay
+            referencedTableSchemaName: destination
+            referencedTableName: destination_stays
+            referencedColumnNames: id
+            onDelete: CASCADE
+      rollback:
+        - dropTable: {schemaName: destination, tableName: destination_stay_media}
+        - dropColumn: {schemaName: destination, tableName: destination_stays, columnName: short_description}
+        - dropColumn: {schemaName: destination, tableName: destination_stays, columnName: description}
+        - dropColumn: {schemaName: destination, tableName: destination_stays, columnName: check_in_from}
+        - dropColumn: {schemaName: destination, tableName: destination_stays, columnName: check_out_until}
+        - dropColumn: {schemaName: destination, tableName: destination_stays, columnName: phone}
+        - dropColumn: {schemaName: destination, tableName: destination_stays, columnName: website}

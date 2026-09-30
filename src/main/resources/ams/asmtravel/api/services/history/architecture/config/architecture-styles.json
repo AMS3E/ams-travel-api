@@ -1,0 +1,62 @@
+[
+  {
+    "slug": "angkor-wat-style",
+    "name": "Angkor Wat Style",
+    "periodSlug": "angkor-period"
+  },
+  {
+    "slug": "bakheng-style",
+    "name": "Bakheng Style",
+    "periodSlug": "angkor-period"
+  },
+  {
+    "slug": "banteay-srei-style",
+    "name": "Banteay Srei Style",
+    "periodSlug": "angkor-period"
+  },
+  {
+    "slug": "baphuon-style",
+    "name": "Baphuon Style",
+    "periodSlug": "angkor-period"
+  },
+  {
+    "slug": "bayon-style",
+    "name": "Bayon Style",
+    "periodSlug": "angkor-period"
+  },
+  {
+    "slug": "khleang-style",
+    "name": "Khleang Style",
+    "periodSlug": "angkor-period"
+  },
+  {
+    "slug": "khmer-colonial-revival",
+    "name": "Khmer–Colonial Revival",
+    "periodSlug": "post-angkor-period"
+  },
+  {
+    "slug": "koh-ker-style",
+    "name": "Koh Ker Style",
+    "periodSlug": "angkor-period"
+  },
+  {
+    "slug": "kulen-style",
+    "name": "Kulen Style",
+    "periodSlug": "angkor-period"
+  },
+  {
+    "slug": "post-angkorian-style",
+    "name": "Post-Angkorian Style",
+    "periodSlug": "post-angkor-period"
+  },
+  {
+    "slug": "preah-ko-style",
+    "name": "Preah Ko Style",
+    "periodSlug": "angkor-period"
+  },
+  {
+    "slug": "sambor-prei-kuk-style",
+    "name": "Sambor Prei Kuk Style",
+    "periodSlug": "pre-angkor-period"
+  }
+]

@@ -1,0 +1,71 @@
+spring:
+  datasource:
+    # H2 has no inet; the audit log's ip_address column is declared as one, so
+    # give H2 a type by that name before Hibernate builds the tables.
+    url: jdbc:h2:mem:ams_travel;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;INIT=CREATE DOMAIN IF NOT EXISTS INET AS VARCHAR(45)
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    # As the application runs: no session held open across a request, so what a
+    # request reads after a write in another transaction is what was committed.
+    open-in-view: false
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      # The tables live in eight schemas (auth, destination, …); create them too.
+      hibernate.hbm2ddl.create_namespaces: true
+      # As the application: collections load in batches.
+      hibernate.default_batch_fetch_size: 100
+
+  liquibase:
+    enabled: false
+
+  # As the application: errors are problem documents.
+  mvc:
+    problemdetails:
+      enabled: true
+
+
+# Route calculation is off unless a test switches it on with a mocked client:
+# no test ever calls Google.
+google:
+  maps:
+    api-key: ""
+
+# Tests never call a real routing server: where a route is wanted, the clients are mocks.
+osm:
+  routing:
+    url: ""
+
+# The catalogue seeder is startup infrastructure, not a test fixture. Tests
+# build the state they assert on, so keep it out of the H2 context.
+app:
+  cache:
+    enabled: false
+  keycloak:
+    admin:
+      # No Keycloak listens during a test run, so the people endpoints answer
+      # 503 instead of dialling one. The authorization rules in front of them
+      # are what those tests assert on.
+      enabled: false
+  cors:
+    allowed-origin-patterns: http://localhost:3000
+    allowed-methods: GET,POST,PUT,PATCH,DELETE,OPTIONS
+    allowed-headers: "*"
+    allow-credentials: true
+  seed:
+    catalog: false
+
+media:
+  bucket: test-images
+  base-uri: http://localhost:8080/api/v1/media/files
+  max-file-size: 2MB
+  # No MinIO listens during a test run, and the startup runner that lays out
+  # the folders would spend every context boot failing to reach one.
+  prepare-folders: false
+  minio:
+    endpoint: http://localhost:9000
+    access-key: test-access-key
+    secret-key: test-secret-key

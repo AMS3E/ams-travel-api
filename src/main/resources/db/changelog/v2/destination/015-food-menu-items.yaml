@@ -1,0 +1,42 @@
+# The dishes a food listing serves.
+#
+# A place to eat is chosen by its menu: what the dish is, what is in it, how
+# spicy it is and what it costs — with its Khmer name to point at when ordering.
+# The cheapest dish on the menu is the listing's "from" price.
+databaseChangeLog:
+  - changeSet:
+      id: v2-destination-food-menu-items
+      author: ams-travel-v2
+      changes:
+        - createTable:
+            schemaName: destination
+            tableName: destination_food_menu_items
+            columns:
+              - column: {name: id, type: uuid, defaultValueComputed: "${fn.uuid}", constraints: {primaryKey: true, primaryKeyName: destination_food_menu_items_pkey, nullable: false}}
+              - column: {name: food_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: name, type: varchar(150), constraints: {nullable: false}}
+              - column: {name: local_name, type: varchar(150)}
+              - column: {name: pronunciation, type: varchar(150)}
+              - column: {name: course, type: varchar(20), defaultValue: MAIN, constraints: {nullable: false}}
+              - column: {name: description, type: text}
+              - column: {name: price, type: "decimal(12,2)"}
+              - column: {name: portion, type: varchar(60)}
+              - column: {name: serves, type: int, defaultValueNumeric: 1, constraints: {nullable: false}}
+              - column: {name: spice_level, type: int, defaultValueNumeric: 0, constraints: {nullable: false}}
+              - column: {name: labels, type: "${type.json}", constraints: {nullable: false}}
+              - column: {name: photo_keys, type: "${type.json}", constraints: {nullable: false}}
+              - column: {name: is_signature, type: boolean, defaultValueBoolean: false, constraints: {nullable: false}}
+              - column: {name: sort_order, type: int, defaultValueNumeric: 0, constraints: {nullable: false}}
+              - column: {name: is_active, type: boolean, defaultValueBoolean: true, constraints: {nullable: false}}
+              - column: {name: created_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+              - column: {name: updated_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+        - createIndex:
+            schemaName: destination
+            tableName: destination_food_menu_items
+            indexName: idx_destination_food_menu_items_food
+            columns:
+              - column: {name: food_id}
+              - column: {name: sort_order}
+        - addForeignKeyConstraint: {baseTableSchemaName: destination, baseTableName: destination_food_menu_items, baseColumnNames: food_id, constraintName: fk_destination_food_menu_items_food, referencedTableSchemaName: destination, referencedTableName: destination_foods, referencedColumnNames: id, onDelete: CASCADE}
+      rollback:
+        - dropTable: {schemaName: destination, tableName: destination_food_menu_items}

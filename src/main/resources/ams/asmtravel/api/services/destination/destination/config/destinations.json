@@ -1,0 +1,1797 @@
+[
+  {
+    "slug": "angkor-wat",
+    "name": "Angkor Wat",
+    "shortDescription": "The world's largest religious monument and Cambodia's national symbol.",
+    "address": "Angkor Wat, Siem Reap",
+    "latitude": 13.4125,
+    "longitude": 103.867,
+    "image": "angkor-wat.jpg",
+    "featured": true,
+    "provinceSlug": "siem-reap",
+    "categorySlugs": [
+      "ancient-cities",
+      "temples"
+    ],
+    "tagSlugs": [
+      "architecture-style",
+      "century",
+      "historical-period",
+      "king",
+      "religion",
+      "unesco"
+    ],
+    "interestSlugs": [
+      "historical-sites"
+    ],
+    "architectureStyleSlugs": [
+      "angkor-wat-style"
+    ],
+    "religionSlugs": [
+      "buddhism",
+      "hinduism"
+    ],
+    "historicalPeriodSlugs": [
+      "angkor-period"
+    ],
+    "centuries": [
+      12
+    ]
+  },
+  {
+    "slug": "bayon-temple",
+    "name": "Bayon Temple",
+    "shortDescription": "Two hundred serene stone faces at the exact center of Angkor Thom.",
+    "description": "Stand in the middle at noon and every direction is watching you back.",
+    "address": "Angkor Thom, Siem Reap",
+    "latitude": 13.4413,
+    "longitude": 103.859,
+    "image": "bayon-temple.jpg",
+    "featured": true,
+    "provinceSlug": "siem-reap",
+    "categorySlugs": [
+      "ancient-cities",
+      "temples"
+    ],
+    "tagSlugs": [
+      "architecture-style",
+      "century",
+      "historical-period",
+      "king",
+      "religion"
+    ],
+    "interestSlugs": [
+      "historical-sites"
+    ],
+    "architectureStyleSlugs": [
+      "bayon-style"
+    ],
+    "religionSlugs": [
+      "buddhism",
+      "hinduism"
+    ],
+    "historicalPeriodSlugs": [
+      "angkor-period"
+    ],
+    "centuries": [
+      12
+    ]
+  },
+  {
+    "slug": "ta-prohm",
+    "name": "Ta Prohm",
+    "shortDescription": "A monastery left in the grip of silk-cotton roots, deliberately unrestored.",
+    "description": "The one temple where the forest was allowed to keep its claim.",
+    "address": "Ta Prohm, Angkor Archaeological Park, Siem Reap",
+    "latitude": 13.4348,
+    "longitude": 103.8891,
+    "image": "ta-prohm.jpg",
+    "featured": true,
+    "provinceSlug": "siem-reap",
+    "categorySlugs": [
+      "temples",
+      "archaeological-sites"
+    ],
+    "tagSlugs": [
+      "architecture-style",
+      "century",
+      "historical-period",
+      "king",
+      "religion"
+    ],
+    "interestSlugs": [
+      "historical-sites"
+    ],
+    "architectureStyleSlugs": [
+      "bayon-style"
+    ],
+    "religionSlugs": [
+      "buddhism"
+    ],
+    "historicalPeriodSlugs": [
+      "angkor-period"
+    ],
+    "centuries": [
+      12
+    ]
+  },
+  {
+    "slug": "banteay-srei",
+    "name": "Banteay Srei",
+    "shortDescription": "Pink sandstone cut so finely the carvings still read a thousand years on.",
+    "description": "The finest stone carving in Cambodia, on the smallest scale.",
+    "address": "Banteay Srei, Siem Reap",
+    "latitude": 13.5989,
+    "longitude": 103.9634,
+    "image": "banteay-srei.jpg",
+    "featured": false,
+    "provinceSlug": "siem-reap",
+    "categorySlugs": [
+      "temples"
+    ],
+    "tagSlugs": [
+      "architecture-style",
+      "century",
+      "historical-period",
+      "king",
+      "religion",
+      "unesco"
+    ],
+    "interestSlugs": [
+      "historical-sites"
+    ],
+    "architectureStyleSlugs": [
+      "banteay-srei-style"
+    ],
+    "religionSlugs": [
+      "hinduism"
+    ],
+    "historicalPeriodSlugs": [
+      "angkor-period"
+    ],
+    "centuries": [
+      10
+    ]
+  },
+  {
+    "slug": "koh-ker",
+    "name": "Koh Ker",
+    "shortDescription": "A capital for only twenty years, and a seven-tier pyramid to prove it.",
+    "description": "An empire's short-lived experiment, alone in the forest.",
+    "address": "Koh Ker, Preah Vihear",
+    "latitude": 13.7833,
+    "longitude": 104.5333,
+    "image": "koh-ker.jpg",
+    "featured": false,
+    "provinceSlug": "preah-vihear",
+    "categorySlugs": [
+      "ancient-cities",
+      "temples",
+      "archaeological-sites"
+    ],
+    "tagSlugs": [
+      "architecture-style",
+      "century",
+      "historical-period",
+      "king",
+      "religion",
+      "unesco"
+    ],
+    "interestSlugs": [
+      "historical-sites"
+    ],
+    "architectureStyleSlugs": [
+      "koh-ker-style"
+    ],
+    "religionSlugs": [
+      "hinduism"
+    ],
+    "historicalPeriodSlugs": [
+      "angkor-period"
+    ],
+    "centuries": [
+      10
+    ]
+  },
+  {
+    "slug": "sambor-prei-kuk",
+    "name": "Sambor Prei Kuk",
+    "shortDescription": "Pre-Angkorian brick towers of Ishanapura, older than Angkor by three centuries.",
+    "description": "Where Khmer temple architecture first found its shape.",
+    "address": "Sambor Prei Kuk, Kampong Thom",
+    "latitude": 12.872,
+    "longitude": 105.04,
+    "image": "sambor-prei-kuk.jpg",
+    "featured": false,
+    "provinceSlug": "kampong-thom",
+    "categorySlugs": [
+      "ancient-cities",
+      "temples",
+      "archaeological-sites"
+    ],
+    "tagSlugs": [
+      "architecture-style",
+      "century",
+      "historical-period",
+      "king",
+      "religion",
+      "unesco"
+    ],
+    "interestSlugs": [
+      "historical-sites"
+    ],
+    "architectureStyleSlugs": [
+      "sambor-prei-kuk-style"
+    ],
+    "religionSlugs": [
+      "hinduism"
+    ],
+    "historicalPeriodSlugs": [
+      "pre-angkor-period"
+    ],
+    "centuries": [
+      7
+    ]
+  },
+  {
+    "slug": "royal-palace",
+    "name": "Royal Palace",
+    "shortDescription": "The working residence of the monarchy, and the Silver Pagoda beside it.",
+    "description": "The clearest line from the Angkorian court to today.",
+    "address": "Samdach Sothearos Blvd, Phnom Penh",
+    "latitude": 11.5637,
+    "longitude": 104.9314,
+    "image": "royal-palace.jpg",
+    "featured": false,
+    "provinceSlug": "phnom-penh",
+    "categorySlugs": [
+      "ancient-cities"
+    ],
+    "tagSlugs": [
+      "architecture-style",
+      "century",
+      "historical-period",
+      "king",
+      "religion"
+    ],
+    "interestSlugs": [
+      "historical-sites"
+    ],
+    "architectureStyleSlugs": [
+      "post-angkorian-style"
+    ],
+    "religionSlugs": [
+      "buddhism"
+    ],
+    "historicalPeriodSlugs": [
+      "post-angkor-period"
+    ],
+    "centuries": [
+      19
+    ]
+  },
+  {
+    "slug": "national-museum",
+    "name": "National Museum",
+    "shortDescription": "The largest collection of Khmer sculpture, held in a terracotta pavilion.",
+    "description": "See the statues here first — the temples make more sense afterwards.",
+    "address": "Preah Ang Eng St, Phnom Penh",
+    "latitude": 11.5651,
+    "longitude": 104.9289,
+    "image": "national-museum.jpg",
+    "featured": false,
+    "provinceSlug": "phnom-penh",
+    "categorySlugs": [
+      "museums"
+    ],
+    "tagSlugs": [
+      "architecture-style",
+      "century",
+      "historical-period",
+      "king"
+    ],
+    "interestSlugs": [
+      "culture"
+    ],
+    "architectureStyleSlugs": [
+      "khmer-colonial-revival"
+    ],
+    "historicalPeriodSlugs": [
+      "post-angkor-period"
+    ],
+    "centuries": [
+      20
+    ]
+  },
+  {
+    "slug": "preah-vihear-temple",
+    "name": "Preah Vihear Temple",
+    "shortDescription": "A temple laid along an 800-metre axis on the cliff edge of the Dangrek range.",
+    "description": "The approach is the point — climb it slowly.",
+    "address": "Preah Vihear Temple, Preah Vihear",
+    "latitude": 14.3933,
+    "longitude": 104.68,
+    "image": "preah-vihear-temple.jpg",
+    "featured": true,
+    "provinceSlug": "preah-vihear",
+    "categorySlugs": [
+      "temples"
+    ],
+    "tagSlugs": [
+      "architecture-style",
+      "century",
+      "historical-period",
+      "king",
+      "religion",
+      "unesco"
+    ],
+    "interestSlugs": [
+      "historical-sites"
+    ],
+    "architectureStyleSlugs": [
+      "baphuon-style",
+      "khleang-style",
+      "koh-ker-style"
+    ],
+    "religionSlugs": [
+      "hinduism"
+    ],
+    "historicalPeriodSlugs": [
+      "angkor-period"
+    ],
+    "centuries": [
+      9,
+      11,
+      12
+    ]
+  },
+  {
+    "slug": "spean-praptos",
+    "name": "Spean Praptos",
+    "shortDescription": "The longest surviving Angkorian corbel-arch bridge, still carrying traffic after eight hundred years.",
+    "description": "Eight centuries of laterite, and lorries still cross it.",
+    "address": "Kampong Kdei, Chikreng District, Siem Reap",
+    "latitude": 13.1183,
+    "longitude": 104.1019,
+    "image": "koh-ker-2.jpg",
+    "featured": false,
+    "provinceSlug": "siem-reap",
+    "categorySlugs": [
+      "archaeological-sites",
+      "ancient-roads",
+      "bridges"
+    ],
+    "tagSlugs": [
+      "architecture-style",
+      "century",
+      "historical-period",
+      "king"
+    ],
+    "interestSlugs": [
+      "historical-sites"
+    ],
+    "architectureStyleSlugs": [
+      "bayon-style"
+    ],
+    "historicalPeriodSlugs": [
+      "angkor-period"
+    ],
+    "centuries": [
+      12
+    ]
+  },
+  {
+    "slug": "angkorian-royal-road",
+    "name": "Angkorian Royal Road",
+    "shortDescription": "The 225 km highway east from Angkor to Bakan, with its bridges, fire houses, and hospital chapels.",
+    "description": "An empire is easiest to read from its roads.",
+    "address": "Angkor – Preah Khan of Kompong Svay route, Preah Vihear",
+    "latitude": 13.6194,
+    "longitude": 104.3417,
+    "image": "preah-vihear-temple-2.jpg",
+    "featured": false,
+    "provinceSlug": "preah-vihear",
+    "categorySlugs": [
+      "archaeological-sites",
+      "ancient-roads",
+      "bridges",
+      "hospitals"
+    ],
+    "tagSlugs": [
+      "architecture-style",
+      "century",
+      "historical-period",
+      "king",
+      "religion",
+      "unesco"
+    ],
+    "interestSlugs": [
+      "historical-sites"
+    ],
+    "architectureStyleSlugs": [
+      "bayon-style"
+    ],
+    "religionSlugs": [
+      "buddhism"
+    ],
+    "historicalPeriodSlugs": [
+      "angkor-period"
+    ],
+    "centuries": [
+      11,
+      12
+    ]
+  },
+  {
+    "slug": "preah-khan-kompong-svay",
+    "name": "Preah Khan of Kompong Svay",
+    "shortDescription": "The largest temple enclosure the Khmer empire ever walled, with one of its best-preserved hospital chapels.",
+    "description": "Five kilometres of moat, and almost nobody there.",
+    "address": "Bakan, Sangkum Thmey District, Preah Vihear",
+    "latitude": 13.4372,
+    "longitude": 104.9925,
+    "image": "ta-prohm.jpg",
+    "featured": false,
+    "provinceSlug": "preah-vihear",
+    "categorySlugs": [
+      "ancient-cities",
+      "temples",
+      "archaeological-sites",
+      "hospitals"
+    ],
+    "tagSlugs": [
+      "architecture-style",
+      "century",
+      "historical-period",
+      "king",
+      "religion"
+    ],
+    "interestSlugs": [
+      "historical-sites"
+    ],
+    "architectureStyleSlugs": [
+      "baphuon-style",
+      "bayon-style"
+    ],
+    "religionSlugs": [
+      "buddhism",
+      "hinduism"
+    ],
+    "historicalPeriodSlugs": [
+      "angkor-period"
+    ],
+    "centuries": [
+      11,
+      12
+    ]
+  },
+  {
+    "slug": "bou-sra-waterfall",
+    "name": "Bou Sra Waterfall",
+    "shortDescription": "Cambodia's most powerful two-tier waterfall, deep in Bunong country.",
+    "description": "Come in the wet season and you will hear it before you see it.",
+    "address": "Pech Chreada District, Mondulkiri",
+    "latitude": 12.4333,
+    "longitude": 107.2167,
+    "image": "bou-sra-waterfall.jpg",
+    "featured": true,
+    "provinceSlug": "mondulkiri",
+    "categorySlugs": [
+      "forest",
+      "waterfalls",
+      "adventure"
+    ],
+    "tagSlugs": [
+      "camping",
+      "forest"
+    ],
+    "interestSlugs": [
+      "waterfalls"
+    ]
+  },
+  {
+    "slug": "elephant-valley-project",
+    "name": "Elephant Valley Project",
+    "shortDescription": "A sanctuary where retired working elephants are walked, not ridden.",
+    "description": "Watching, not riding — the visit is on the elephants' terms.",
+    "address": "Sen Monorom, Mondulkiri",
+    "latitude": 12.45,
+    "longitude": 107.19,
+    "image": "elephant-valley-project.jpg",
+    "featured": false,
+    "provinceSlug": "mondulkiri",
+    "categorySlugs": [
+      "indigenous-culture",
+      "forest",
+      "wildlife",
+      "village",
+      "eco-lodge",
+      "local-guide"
+    ],
+    "tagSlugs": [
+      "community",
+      "elephant",
+      "forest",
+      "tribe"
+    ],
+    "interestSlugs": [
+      "wildlife"
+    ]
+  },
+  {
+    "slug": "yeak-laom-lake",
+    "name": "Yeak Laom Crater Lake",
+    "shortDescription": "A near-perfect volcanic crater lake, managed by the local Tampuan community.",
+    "description": "Swim at midday when the water goes glass-flat and green.",
+    "address": "Yeak Laom, Banlung, Ratanakiri",
+    "latitude": 13.7167,
+    "longitude": 107.0167,
+    "image": "yeak-laom-lake.jpg",
+    "featured": false,
+    "provinceSlug": "ratanakiri",
+    "categorySlugs": [
+      "indigenous-culture",
+      "volcano-lake",
+      "forest",
+      "sacred-mountain",
+      "village",
+      "craft",
+      "local-guide"
+    ],
+    "tagSlugs": [
+      "bird",
+      "birding",
+      "community",
+      "forest",
+      "tribe"
+    ],
+    "interestSlugs": [
+      "culture"
+    ]
+  },
+  {
+    "slug": "tonle-sap-floating-village",
+    "name": "Kampong Phluk Floating Village",
+    "shortDescription": "Stilt houses standing ten metres above the dry season lake bed.",
+    "description": "Go at the end of the wet season, when the flooded forest is navigable.",
+    "address": "Kampong Phluk, Siem Reap",
+    "latitude": 13.1667,
+    "longitude": 104.0333,
+    "image": "tonle-sap-floating-village.jpg",
+    "featured": false,
+    "provinceSlug": "siem-reap",
+    "categorySlugs": [
+      "floating-village",
+      "fishing",
+      "community",
+      "boat-trip",
+      "sunset",
+      "village",
+      "bird-watching",
+      "local-guide"
+    ],
+    "tagSlugs": [
+      "bird",
+      "birding",
+      "boat",
+      "community",
+      "fishing",
+      "wetland"
+    ],
+    "interestSlugs": [
+      "floating-village"
+    ]
+  },
+  {
+    "slug": "battambang-bamboo-train",
+    "name": "Bamboo Train",
+    "shortDescription": "A bamboo platform on rail wheels, run along a single warped track.",
+    "description": "Improvised transport that outlived the railway it borrowed.",
+    "address": "O Dambang, Battambang",
+    "latitude": 13.0957,
+    "longitude": 103.2022,
+    "image": "battambang-bamboo-train.jpg",
+    "featured": false,
+    "provinceSlug": "battambang",
+    "categorySlugs": [
+      "rice",
+      "community"
+    ],
+    "tagSlugs": [
+      "landscape",
+      "rice"
+    ],
+    "interestSlugs": [
+      "culture"
+    ]
+  },
+  {
+    "slug": "mekong-discovery-trail",
+    "name": "Mekong Discovery Trail",
+    "shortDescription": "A river-bank cycling route through rubber plantations and island villages.",
+    "description": "Ride it in sections — the ferries are half the pleasure.",
+    "address": "Kampong Cham riverfront, Kampong Cham",
+    "latitude": 11.9925,
+    "longitude": 105.4638,
+    "image": "mekong-discovery-trail.jpg",
+    "featured": false,
+    "provinceSlug": "kampong-cham",
+    "categorySlugs": [
+      "fishing",
+      "river-island",
+      "rice",
+      "community",
+      "boat-trip",
+      "homestay",
+      "village",
+      "agriculture",
+      "bird-watching",
+      "local-guide"
+    ],
+    "tagSlugs": [
+      "boat",
+      "community",
+      "cycling",
+      "fishing",
+      "homestay",
+      "island",
+      "rice"
+    ],
+    "interestSlugs": [
+      "homestay"
+    ]
+  },
+  {
+    "slug": "phnom-kulen",
+    "name": "Phnom Kulen",
+    "shortDescription": "The sacred mountain where the Khmer Empire was declared in 802 CE.",
+    "description": "The riverbed carvings above the falls are the reason to climb.",
+    "address": "Phnom Kulen National Park, Siem Reap",
+    "latitude": 13.5772,
+    "longitude": 104.0367,
+    "image": "phnom-kulen.jpg",
+    "featured": false,
+    "provinceSlug": "siem-reap",
+    "categorySlugs": [
+      "ancient-cities",
+      "archaeological-sites",
+      "waterfalls",
+      "sacred-mountain",
+      "mountain",
+      "national-parks"
+    ],
+    "tagSlugs": [
+      "forest",
+      "hiking",
+      "landscape",
+      "trail"
+    ],
+    "interestSlugs": [
+      "waterfalls"
+    ],
+    "architectureStyleSlugs": [
+      "kulen-style"
+    ],
+    "religionSlugs": [
+      "buddhism",
+      "hinduism"
+    ]
+  },
+  {
+    "slug": "bokor-mountain",
+    "name": "Bokor Mountain",
+    "shortDescription": "A cool hill station plateau with abandoned colonial buildings in the mist.",
+    "description": "Drive up in the afternoon and watch the cloud arrive.",
+    "address": "Preah Monivong Bokor National Park, Kampot",
+    "latitude": 10.63,
+    "longitude": 104.03,
+    "image": "bokor-mountain.jpg",
+    "featured": true,
+    "provinceSlug": "kampot",
+    "categorySlugs": [
+      "mountain",
+      "national-parks",
+      "cycling",
+      "viewpoint",
+      "photography",
+      "luxury-hotel"
+    ],
+    "tagSlugs": [
+      "landscape",
+      "luxury",
+      "peak",
+      "sunset"
+    ],
+    "interestSlugs": [
+      "national-parks"
+    ]
+  },
+  {
+    "slug": "koh-rong",
+    "name": "Koh Rong",
+    "shortDescription": "Long white beaches, bioluminescent water, and very little tarmac.",
+    "description": "Swim after dark on the east coast — the plankton light up.",
+    "address": "Koh Rong, Preah Sihanouk",
+    "latitude": 10.72,
+    "longitude": 103.26,
+    "image": "koh-rong.jpg",
+    "featured": true,
+    "provinceSlug": "preah-sihanouk",
+    "categorySlugs": [
+      "beach",
+      "island",
+      "diving",
+      "snorkeling",
+      "luxury-hotel",
+      "yacht"
+    ],
+    "tagSlugs": [
+      "beach",
+      "diving",
+      "island",
+      "kayak",
+      "luxury"
+    ],
+    "interestSlugs": [
+      "beaches-islands"
+    ]
+  },
+  {
+    "slug": "song-saa-private-island",
+    "name": "Song Saa Private Island",
+    "shortDescription": "Two small islands joined by a footbridge, and a protected marine reserve.",
+    "description": "Conservation-funded luxury — the reef fee is the point.",
+    "address": "Koh Ouen & Koh Bong, Preah Sihanouk",
+    "latitude": 10.79,
+    "longitude": 103.25,
+    "image": "song-saa-private-island.jpg",
+    "featured": true,
+    "provinceSlug": "preah-sihanouk",
+    "categorySlugs": [
+      "beach",
+      "island",
+      "fine-dining",
+      "luxury-hotel",
+      "private-island",
+      "yacht",
+      "private-guide",
+      "spa"
+    ],
+    "tagSlugs": [
+      "exclusive",
+      "golf-spa",
+      "island",
+      "luxury",
+      "luxury-resort",
+      "private"
+    ],
+    "interestSlugs": [
+      "private-island"
+    ]
+  },
+  {
+    "slug": "otres-beach",
+    "name": "Otres Beach",
+    "shortDescription": "The quiet end of the mainland coast, best at sunset.",
+    "description": "The last calm stretch of sand on the mainland.",
+    "address": "Otres, Sihanoukville, Preah Sihanouk",
+    "latitude": 10.585,
+    "longitude": 103.523,
+    "image": "otres-beach.jpg",
+    "featured": false,
+    "provinceSlug": "preah-sihanouk",
+    "categorySlugs": [
+      "sunset",
+      "beach",
+      "luxury-hotel",
+      "spa"
+    ],
+    "tagSlugs": [
+      "beach",
+      "kayak"
+    ],
+    "interestSlugs": [
+      "beaches-islands"
+    ]
+  },
+  {
+    "slug": "kep-crab-market",
+    "name": "Kep Crab Market",
+    "shortDescription": "Blue swimmer crab pulled from baskets in the shallows and cooked with Kampot pepper.",
+    "description": "Crab and green pepper, eaten within sight of the water.",
+    "address": "Kep Crab Market, Kep",
+    "latitude": 10.4833,
+    "longitude": 104.3167,
+    "image": "kep-crab-market.jpg",
+    "featured": false,
+    "provinceSlug": "kep",
+    "categorySlugs": [
+      "seafood",
+      "street-food",
+      "traditional-food"
+    ],
+    "tagSlugs": [
+      "food",
+      "local-food",
+      "pepper-rice-wine"
+    ],
+    "interestSlugs": [
+      "markets"
+    ]
+  },
+  {
+    "slug": "kampot-riverfront",
+    "name": "Kampot Riverfront",
+    "shortDescription": "A row of restored shophouses facing a slow river and the Bokor ridge.",
+    "description": "Take the sunset boat — the mountain does the rest.",
+    "address": "Riverside Road, Kampot",
+    "latitude": 10.594,
+    "longitude": 104.164,
+    "image": "kampot-riverfront.jpg",
+    "featured": false,
+    "provinceSlug": "kampot",
+    "categorySlugs": [
+      "sunset",
+      "cycling",
+      "city-walk",
+      "street-food"
+    ],
+    "tagSlugs": [
+      "architecture",
+      "boat",
+      "food",
+      "landscape"
+    ],
+    "interestSlugs": [
+      "streetfood"
+    ]
+  },
+  {
+    "slug": "kampot-pepper-farm",
+    "name": "Kampot Pepper Farm",
+    "shortDescription": "Protected-origin pepper vines, hand-picked and sorted by colour.",
+    "description": "Taste the green pepper fresh off the vine, once.",
+    "address": "Damnak Kantuot, Kampot",
+    "latitude": 10.66,
+    "longitude": 104.35,
+    "image": "kampot-pepper-farm.jpg",
+    "featured": false,
+    "provinceSlug": "kampot",
+    "categorySlugs": [
+      "traditional-food",
+      "farm",
+      "agriculture"
+    ],
+    "tagSlugs": [
+      "farm",
+      "local-food",
+      "pepper-rice-wine"
+    ],
+    "interestSlugs": [
+      "traditional-food"
+    ]
+  },
+  {
+    "slug": "virachey-national-park",
+    "name": "Virachey National Park",
+    "shortDescription": "One of Cambodia's largest protected areas, reaching from the Ratanakiri highlands to the Lao border.",
+    "description": "Multi-day country. Go with a community guide or not at all.",
+    "address": "Virachey National Park, Veun Sai District, Ratanakiri",
+    "latitude": 14.0333,
+    "longitude": 107.0667,
+    "image": "ratanakiri-forest.jpg",
+    "featured": false,
+    "provinceSlug": "ratanakiri",
+    "categorySlugs": [
+      "forest",
+      "wildlife",
+      "adventure",
+      "national-parks"
+    ],
+    "tagSlugs": [
+      "bird",
+      "birding",
+      "camping",
+      "forest",
+      "tribe"
+    ],
+    "interestSlugs": [
+      "national-parks"
+    ]
+  },
+  {
+    "slug": "romanear-waterfall",
+    "name": "Romanear Waterfall",
+    "shortDescription": "Two falls in the forest north-west of Sen Monorom, quieter and closer to town than Bou Sra.",
+    "description": "The pool below the second fall is the one worth the walk.",
+    "address": "Romanear, O Reang District, Mondulkiri",
+    "latitude": 12.4472,
+    "longitude": 107.1611,
+    "image": "bou-sra-waterfall-2.jpg",
+    "featured": false,
+    "provinceSlug": "mondulkiri",
+    "categorySlugs": [
+      "forest",
+      "waterfalls",
+      "adventure"
+    ],
+    "tagSlugs": [
+      "camping",
+      "forest"
+    ],
+    "interestSlugs": [
+      "waterfalls"
+    ]
+  },
+  {
+    "slug": "sesan-srepok-confluence",
+    "name": "Sesan & Srepok Confluence",
+    "shortDescription": "Where the two great north-eastern rivers meet before joining the Mekong above Stung Treng.",
+    "description": "Go out at first light — the birds are on the sandbars and the river is glass.",
+    "address": "Sesan District, Stung Treng",
+    "latitude": 13.5333,
+    "longitude": 106.0167,
+    "image": "mekong-discovery-trail.jpg",
+    "featured": false,
+    "provinceSlug": "stung-treng",
+    "categorySlugs": [
+      "forest",
+      "adventure",
+      "fishing",
+      "boat-trip"
+    ],
+    "tagSlugs": [
+      "bird",
+      "birding",
+      "boat",
+      "fishing",
+      "sesan",
+      "srepok"
+    ],
+    "interestSlugs": [
+      "cruise"
+    ]
+  },
+  {
+    "slug": "mondulkiri-coffee-highlands",
+    "name": "Mondulkiri Coffee Highlands",
+    "shortDescription": "Smallholder coffee grown on the plateau around Sen Monorom, roasted and sold in the town.",
+    "description": "Cambodian coffee is a small industry. This is where most of it is grown.",
+    "address": "Sen Monorom, Mondulkiri",
+    "latitude": 12.4581,
+    "longitude": 107.1878,
+    "image": "elephant-valley-project.jpg",
+    "featured": false,
+    "provinceSlug": "mondulkiri",
+    "categorySlugs": [
+      "coffee",
+      "farm",
+      "village",
+      "agriculture"
+    ],
+    "tagSlugs": [
+      "community",
+      "farm",
+      "forest",
+      "local-food"
+    ],
+    "interestSlugs": [
+      "drinks"
+    ]
+  },
+  {
+    "slug": "prek-toal-bird-sanctuary",
+    "name": "Prek Toal Bird Sanctuary",
+    "shortDescription": "The core bird reserve of the Tonle Sap biosphere, and the largest waterbird colony in South-East Asia.",
+    "description": "Leave Chong Kneas before dawn. You want to be in the trees at sunrise.",
+    "address": "Prek Toal, Ek Phnom District, Battambang",
+    "latitude": 13.2167,
+    "longitude": 103.6333,
+    "image": "tonle-sap-floating-village.jpg",
+    "featured": false,
+    "provinceSlug": "battambang",
+    "categorySlugs": [
+      "floating-village",
+      "bird-sanctuary",
+      "community",
+      "boat-trip",
+      "bird-watching",
+      "local-guide"
+    ],
+    "tagSlugs": [
+      "bird",
+      "birding",
+      "boat",
+      "community",
+      "wetland"
+    ],
+    "interestSlugs": [
+      "bird-sanctuary"
+    ]
+  },
+  {
+    "slug": "kampong-phluk",
+    "name": "Kampong Phluk",
+    "shortDescription": "A village of houses on six-metre stilts, with a flooded forest you paddle through behind it.",
+    "description": "In the dry season you walk under the houses you were boating past in October.",
+    "address": "Kampong Phluk, Prasat Bakong District, Siem Reap",
+    "latitude": 13.1833,
+    "longitude": 103.9667,
+    "image": "tonle-sap-floating-village-2.jpg",
+    "featured": false,
+    "provinceSlug": "siem-reap",
+    "categorySlugs": [
+      "floating-village",
+      "community",
+      "boat-trip",
+      "sunset",
+      "village"
+    ],
+    "tagSlugs": [
+      "boat",
+      "community",
+      "fishing",
+      "wetland"
+    ],
+    "interestSlugs": [
+      "floating-village"
+    ]
+  },
+  {
+    "slug": "kampong-khleang",
+    "name": "Kampong Khleang",
+    "shortDescription": "The largest of the lake settlements — a working fishing town, not a day-trip stop.",
+    "description": "Fewer boats, more life. Come in the afternoon and stay for the light.",
+    "address": "Kampong Khleang, Soutr Nikom District, Siem Reap",
+    "latitude": 13.15,
+    "longitude": 104.1167,
+    "image": "tonle-sap-floating-village.jpg",
+    "featured": false,
+    "provinceSlug": "siem-reap",
+    "categorySlugs": [
+      "floating-village",
+      "fishing",
+      "community",
+      "sunset",
+      "village",
+      "local-guide"
+    ],
+    "tagSlugs": [
+      "boat",
+      "community",
+      "fishing",
+      "wetland"
+    ],
+    "interestSlugs": [
+      "floating-village"
+    ]
+  },
+  {
+    "slug": "koh-trong",
+    "name": "Koh Trong",
+    "shortDescription": "A nine-kilometre island in the Mekong opposite Kratie, ringed by a single flat cycling track.",
+    "description": "Cross on the ferry, hire a bicycle, and give it an afternoon.",
+    "address": "Koh Trong, Kratie",
+    "latitude": 12.4744,
+    "longitude": 106.0119,
+    "image": "mekong-discovery-trail.jpg",
+    "featured": false,
+    "provinceSlug": "kratie",
+    "categorySlugs": [
+      "river-island",
+      "rice",
+      "community",
+      "homestay",
+      "village",
+      "agriculture",
+      "local-guide"
+    ],
+    "tagSlugs": [
+      "boat",
+      "community",
+      "cycling",
+      "farm",
+      "homestay",
+      "island",
+      "local-food",
+      "rice"
+    ],
+    "interestSlugs": [
+      "homestay"
+    ]
+  },
+  {
+    "slug": "kampi-dolphin-pool",
+    "name": "Kampi Dolphin Pool",
+    "shortDescription": "One of the last deep-water pools on the Mekong holding a resident group of Irrawaddy dolphins.",
+    "description": "Take the paddle boat, not the motor. You will see more and disturb less.",
+    "address": "Kampi, Chetr Borei District, Kratie",
+    "latitude": 12.5583,
+    "longitude": 106.0333,
+    "image": "mekong-discovery-trail.jpg",
+    "featured": false,
+    "provinceSlug": "kratie",
+    "categorySlugs": [
+      "wildlife",
+      "river-island",
+      "community",
+      "boat-trip"
+    ],
+    "tagSlugs": [
+      "boat",
+      "community",
+      "fishing"
+    ],
+    "interestSlugs": [
+      "wildlife"
+    ]
+  },
+  {
+    "slug": "kirirom-national-park",
+    "name": "Kirirom National Park",
+    "shortDescription": "Cambodia's first national park — pine forest on a plateau two hours from the capital.",
+    "description": "Pine trees in Cambodia. Camp up here and you will need a jacket.",
+    "address": "Kirirom, Phnom Sruoch District, Kampong Speu",
+    "latitude": 11.3167,
+    "longitude": 104.05,
+    "image": "bokor-mountain.jpg",
+    "featured": false,
+    "provinceSlug": "kampong-speu",
+    "categorySlugs": [
+      "forest",
+      "mountain",
+      "national-parks",
+      "trekking",
+      "camping",
+      "cycling",
+      "viewpoint"
+    ],
+    "tagSlugs": [
+      "camping",
+      "hiking",
+      "landscape",
+      "sunrise",
+      "trail"
+    ],
+    "interestSlugs": [
+      "national-parks"
+    ]
+  },
+  {
+    "slug": "phnom-sampeau",
+    "name": "Phnom Sampeau",
+    "shortDescription": "A limestone hill outside Battambang with caves, a hilltop pagoda, and a bat exodus at dusk.",
+    "description": "Be at the cave mouth by six. The bats come out for half an hour without stopping.",
+    "address": "Phnom Sampeau, Banan District, Battambang",
+    "latitude": 13.0417,
+    "longitude": 103.1264,
+    "image": "battambang-town.jpg",
+    "featured": false,
+    "provinceSlug": "battambang",
+    "categorySlugs": [
+      "sacred-mountain",
+      "mountain",
+      "cave",
+      "viewpoint",
+      "photography"
+    ],
+    "tagSlugs": [
+      "hiking",
+      "landscape",
+      "peak",
+      "sunset"
+    ],
+    "interestSlugs": [
+      "cave"
+    ]
+  },
+  {
+    "slug": "phnom-chhnork-cave",
+    "name": "Phnom Chhnork Cave",
+    "shortDescription": "A limestone cave north of Kampot holding a small brick sanctuary older than Angkor.",
+    "description": "A pre-Angkorian prasat, standing inside a cave, with a stalactite growing into it.",
+    "address": "Phnom Chhnork, Kampot",
+    "latitude": 10.6667,
+    "longitude": 104.2333,
+    "image": "kampot-riverfront.jpg",
+    "featured": false,
+    "provinceSlug": "kampot",
+    "categorySlugs": [
+      "temples",
+      "archaeological-sites",
+      "cave",
+      "photography"
+    ],
+    "tagSlugs": [
+      "architecture",
+      "architecture-style",
+      "historical-period",
+      "landscape",
+      "religion"
+    ],
+    "interestSlugs": [
+      "cave"
+    ],
+    "architectureStyleSlugs": [
+      "sambor-prei-kuk-style"
+    ],
+    "religionSlugs": [
+      "hinduism"
+    ],
+    "historicalPeriodSlugs": [
+      "pre-angkor-period"
+    ]
+  },
+  {
+    "slug": "tatai-waterfall",
+    "name": "Tatai Waterfall",
+    "shortDescription": "A broad set of falls on the Tatai river, at the southern edge of the Cardamoms.",
+    "description": "Go by boat from the bridge. The river approach is half the point.",
+    "address": "Tatai, Thma Bang District, Koh Kong",
+    "latitude": 11.5667,
+    "longitude": 103.15,
+    "image": "cardamom-rainforest.jpg",
+    "featured": false,
+    "provinceSlug": "koh-kong",
+    "categorySlugs": [
+      "forest",
+      "waterfalls",
+      "adventure",
+      "national-parks"
+    ],
+    "tagSlugs": [
+      "hiking",
+      "landscape",
+      "trail"
+    ],
+    "interestSlugs": [
+      "waterfalls"
+    ]
+  },
+  {
+    "slug": "cardamom-mountains",
+    "name": "Cardamom Mountains",
+    "shortDescription": "A rainforest range running from the coast to the Thai border, and the wildest country left in Cambodia.",
+    "description": "Not a day trip. Arrange it properly and give it three days.",
+    "address": "Central Cardamom Mountains, Koh Kong",
+    "latitude": 11.85,
+    "longitude": 103.3,
+    "image": "cardamom-rainforest.jpg",
+    "featured": false,
+    "provinceSlug": "koh-kong",
+    "categorySlugs": [
+      "forest",
+      "wildlife",
+      "mountain",
+      "national-parks",
+      "trekking",
+      "camping"
+    ],
+    "tagSlugs": [
+      "camping",
+      "forest",
+      "hiking",
+      "landscape",
+      "trail"
+    ],
+    "interestSlugs": [
+      "national-parks"
+    ]
+  },
+  {
+    "slug": "koh-rong-sanloem",
+    "name": "Koh Rong Sanloem",
+    "shortDescription": "The quieter of the two big islands — one long bay on the east, a sunset beach on the west.",
+    "description": "Walk the jungle path across to Lazy Beach for the sunset, then walk back.",
+    "address": "Koh Rong Sanloem, Preah Sihanouk",
+    "latitude": 10.6167,
+    "longitude": 103.3167,
+    "image": "song-saa-private-island.jpg",
+    "featured": false,
+    "provinceSlug": "preah-sihanouk",
+    "categorySlugs": [
+      "sunset",
+      "beach",
+      "island",
+      "coral",
+      "diving",
+      "snorkeling"
+    ],
+    "tagSlugs": [
+      "beach",
+      "diving",
+      "island",
+      "kayak"
+    ],
+    "interestSlugs": [
+      "beaches-islands"
+    ]
+  },
+  {
+    "slug": "koh-tang",
+    "name": "Koh Tang",
+    "shortDescription": "Cambodia's furthest dive island — four hours out, and the clearest water in the gulf.",
+    "description": "Liveaboard country. Day trips out here are mostly boat time.",
+    "address": "Koh Tang, Preah Sihanouk",
+    "latitude": 10.1167,
+    "longitude": 103.1,
+    "image": "koh-rong.jpg",
+    "featured": false,
+    "provinceSlug": "preah-sihanouk",
+    "categorySlugs": [
+      "island",
+      "coral",
+      "diving",
+      "snorkeling"
+    ],
+    "tagSlugs": [
+      "diving",
+      "island"
+    ],
+    "interestSlugs": [
+      "diving"
+    ]
+  },
+  {
+    "slug": "peam-krasop-mangrove",
+    "name": "Peam Krasop Mangrove Sanctuary",
+    "shortDescription": "Twenty-three thousand hectares of mangrove estuary, crossed by a walkway on stilts.",
+    "description": "Go at high tide and take the boat channel, not the boardwalk.",
+    "address": "Peam Krasop, Mondol Seima District, Koh Kong",
+    "latitude": 11.5167,
+    "longitude": 102.9833,
+    "image": "cardamom-rainforest.jpg",
+    "featured": false,
+    "provinceSlug": "koh-kong",
+    "categorySlugs": [
+      "community",
+      "boat-trip",
+      "mangrove",
+      "bird-watching",
+      "local-guide"
+    ],
+    "tagSlugs": [
+      "bird",
+      "birding",
+      "boat",
+      "community",
+      "kayak",
+      "wetland"
+    ],
+    "interestSlugs": [
+      "kayak"
+    ]
+  },
+  {
+    "slug": "ream-national-park",
+    "name": "Ream National Park",
+    "shortDescription": "Coastal park south-east of Sihanoukville — mangrove river, beaches, and offshore islands.",
+    "description": "The Prek Toek Sap river trip is the reason to come.",
+    "address": "Ream, Prey Nob District, Preah Sihanouk",
+    "latitude": 10.5333,
+    "longitude": 103.6333,
+    "image": "otres-beach-2.jpg",
+    "featured": false,
+    "provinceSlug": "preah-sihanouk",
+    "categorySlugs": [
+      "boat-trip",
+      "national-parks",
+      "beach",
+      "mangrove",
+      "bird-watching"
+    ],
+    "tagSlugs": [
+      "beach",
+      "bird",
+      "birding",
+      "boat",
+      "wetland"
+    ],
+    "interestSlugs": [
+      "national-parks"
+    ]
+  },
+  {
+    "slug": "phnom-penh-riverside",
+    "name": "Phnom Penh Riverside",
+    "shortDescription": "Sisowath Quay along the Chaktomuk — the promenade the whole city walks at dusk.",
+    "description": "Arrive an hour before sunset and walk north. The whole quay fills up behind you.",
+    "address": "Sisowath Quay, Daun Penh, Phnom Penh",
+    "latitude": 11.5686,
+    "longitude": 104.9319,
+    "image": "phnom-penh-riverside.jpg",
+    "featured": false,
+    "provinceSlug": "phnom-penh",
+    "categorySlugs": [
+      "sunset",
+      "city-walk",
+      "shopping",
+      "street-food"
+    ],
+    "tagSlugs": [
+      "architecture",
+      "festival",
+      "food",
+      "nightlife"
+    ],
+    "interestSlugs": [
+      "streetfood"
+    ]
+  },
+  {
+    "slug": "central-market",
+    "name": "Central Market",
+    "shortDescription": "Psar Thmei — a 1937 Art Deco dome with four arms of stalls running off it.",
+    "description": "Stand under the middle of the dome and look up before you buy anything.",
+    "address": "Kampuchea Krom Blvd, Daun Penh, Phnom Penh",
+    "latitude": 11.5694,
+    "longitude": 104.9211,
+    "image": "phnom-penh-riverside.jpg",
+    "featured": false,
+    "provinceSlug": "phnom-penh",
+    "categorySlugs": [
+      "city-walk",
+      "shopping",
+      "street-food"
+    ],
+    "tagSlugs": [
+      "architecture",
+      "food",
+      "shopping"
+    ],
+    "interestSlugs": [
+      "markets"
+    ]
+  },
+  {
+    "slug": "russian-market",
+    "name": "Russian Market",
+    "shortDescription": "Psar Toul Tom Poung — a low tin-roofed maze of textiles, silver, spare parts and food stalls.",
+    "description": "The food stalls at the south-east corner are the reason locals come.",
+    "address": "St 163, Boeng Keng Kang, Phnom Penh",
+    "latitude": 11.5478,
+    "longitude": 104.9186,
+    "image": "kep-crab-market-2.jpg",
+    "featured": false,
+    "provinceSlug": "phnom-penh",
+    "categorySlugs": [
+      "shopping",
+      "street-food",
+      "craft"
+    ],
+    "tagSlugs": [
+      "cafe",
+      "food",
+      "shopping"
+    ],
+    "interestSlugs": [
+      "markets"
+    ]
+  },
+  {
+    "slug": "siem-reap-night-market",
+    "name": "Siem Reap Night Market",
+    "shortDescription": "The night market quarter west of the river, and the bar street that runs beside it.",
+    "description": "Eat at the market, drink one street over, and walk back along the river.",
+    "address": "Old Market area, Siem Reap",
+    "latitude": 13.3544,
+    "longitude": 103.855,
+    "image": "siem-reap-street.jpg",
+    "featured": false,
+    "provinceSlug": "siem-reap",
+    "categorySlugs": [
+      "night-market",
+      "shopping",
+      "street-food"
+    ],
+    "tagSlugs": [
+      "food",
+      "music",
+      "nightlife",
+      "shopping"
+    ],
+    "interestSlugs": [
+      "markets"
+    ]
+  },
+  {
+    "slug": "sora-sky-bar",
+    "name": "Sora Sky Bar",
+    "shortDescription": "A rooftop bar on the upper floors of Vattanac Capital Tower, looking down over the Chaktomuk.",
+    "description": "The whole river junction laid out below you, thirty-seven floors down.",
+    "address": "Vattanac Capital Tower, Monivong Blvd, Daun Penh, Phnom Penh",
+    "latitude": 11.5747,
+    "longitude": 104.9203,
+    "image": "phnom-penh-riverside.jpg",
+    "featured": false,
+    "provinceSlug": "phnom-penh",
+    "categorySlugs": [
+      "sky-bar",
+      "fine-dining"
+    ],
+    "tagSlugs": [
+      "architecture",
+      "luxury",
+      "music",
+      "nightlife"
+    ],
+    "interestSlugs": [
+      "skybar"
+    ]
+  },
+  {
+    "slug": "phnom-penh-coffee-quarter",
+    "name": "Phnom Penh Coffee Quarter",
+    "shortDescription": "The roasteries and shophouse cafés of Boeng Keng Kang and Daun Penh, walkable in an afternoon.",
+    "description": "Cambodian-grown, Cambodian-roasted, poured in a 1960s shophouse. Ask what's on.",
+    "address": "Boeng Keng Kang & Daun Penh, Phnom Penh",
+    "latitude": 11.5511,
+    "longitude": 104.9231,
+    "image": "phnom-penh-riverside.jpg",
+    "featured": false,
+    "provinceSlug": "phnom-penh",
+    "categorySlugs": [
+      "coffee",
+      "city-walk"
+    ],
+    "tagSlugs": [
+      "architecture",
+      "cafe",
+      "food"
+    ],
+    "interestSlugs": [
+      "drinks"
+    ]
+  },
+  {
+    "slug": "battambang-art-quarter",
+    "name": "Battambang Art Quarter",
+    "shortDescription": "Cambodia's art capital — galleries, circus school and craft studios in the riverside shophouses.",
+    "description": "The best-preserved shophouse street in the country, with galleries behind the shutters.",
+    "address": "Riverside quarter, Battambang",
+    "latitude": 13.0957,
+    "longitude": 103.2022,
+    "image": "battambang-town.jpg",
+    "featured": false,
+    "provinceSlug": "battambang",
+    "categorySlugs": [
+      "coffee",
+      "city-walk",
+      "art-gallery",
+      "craft"
+    ],
+    "tagSlugs": [
+      "architecture",
+      "cafe",
+      "music",
+      "shopping"
+    ],
+    "interestSlugs": [
+      "culture"
+    ]
+  },
+  {
+    "slug": "num-banh-chok-markets",
+    "name": "Num Banh Chok Morning Markets",
+    "shortDescription": "The morning stalls where Cambodia's national breakfast is pressed, boiled and sauced to order.",
+    "description": "Gone by nine. Herbs on top are not optional.",
+    "address": "Psar Leu and neighbourhood markets, Siem Reap",
+    "latitude": 13.3556,
+    "longitude": 103.8681,
+    "image": "kep-crab-market-2.jpg",
+    "featured": false,
+    "provinceSlug": "siem-reap",
+    "categorySlugs": [
+      "street-food",
+      "traditional-food"
+    ],
+    "tagSlugs": [
+      "food",
+      "local-food",
+      "num-banh-chok"
+    ],
+    "interestSlugs": [
+      "streetfood"
+    ]
+  },
+  {
+    "slug": "khmer-cooking-class-siem-reap",
+    "name": "Khmer Cooking Classes, Siem Reap",
+    "shortDescription": "Half-day classes that start at the market and end with amok you pounded the paste for.",
+    "description": "The market hour at the start is worth as much as the cooking.",
+    "address": "Siem Reap",
+    "latitude": 13.3622,
+    "longitude": 103.8597,
+    "image": "siem-reap-street.jpg",
+    "featured": false,
+    "provinceSlug": "siem-reap",
+    "categorySlugs": [
+      "traditional-food",
+      "cooking-class"
+    ],
+    "tagSlugs": [
+      "fish-amok",
+      "food",
+      "khmer-curry",
+      "local-food"
+    ],
+    "interestSlugs": [
+      "traditional-food"
+    ]
+  },
+  {
+    "slug": "kampong-speu-palm-sugar",
+    "name": "Kampong Speu Palm Sugar Farms",
+    "shortDescription": "Sugar palms tapped at dawn and boiled the same morning, in the province that gave the sugar its name.",
+    "description": "Watch someone climb a palm before breakfast and you will never buy the pale stuff again.",
+    "address": "Kampong Speu",
+    "latitude": 11.4531,
+    "longitude": 104.5208,
+    "image": "kampot-pepper-farm.jpg",
+    "featured": false,
+    "provinceSlug": "kampong-speu",
+    "categorySlugs": [
+      "traditional-food",
+      "farm",
+      "village",
+      "craft",
+      "agriculture"
+    ],
+    "tagSlugs": [
+      "community",
+      "farm",
+      "local-food",
+      "palm-sugar"
+    ],
+    "interestSlugs": [
+      "traditional-food"
+    ]
+  },
+  {
+    "slug": "malis-phnom-penh",
+    "name": "Malis",
+    "shortDescription": "Chef-led modern Khmer cooking in a garden courtyard off Norodom Boulevard.",
+    "description": "The room that made a case for Khmer cooking as fine dining, and still makes it.",
+    "address": "Norodom Blvd, Chamkarmon, Phnom Penh",
+    "latitude": 11.5464,
+    "longitude": 104.9236,
+    "image": "royal-palace.jpg",
+    "featured": false,
+    "provinceSlug": "phnom-penh",
+    "categorySlugs": [
+      "traditional-food",
+      "fine-dining"
+    ],
+    "tagSlugs": [
+      "fish-amok",
+      "food",
+      "khmer-curry"
+    ],
+    "interestSlugs": [
+      "restaurants"
+    ]
+  },
+  {
+    "slug": "chi-phat",
+    "name": "Chi Phat",
+    "shortDescription": "A Cardamom village that turned from logging and poaching to running its own ecotourism.",
+    "description": "Book through the community office in the village. That is the whole model.",
+    "address": "Chi Phat, Thma Bang District, Koh Kong",
+    "latitude": 11.4667,
+    "longitude": 103.4667,
+    "image": "cardamom-rainforest.jpg",
+    "featured": false,
+    "provinceSlug": "koh-kong",
+    "categorySlugs": [
+      "forest",
+      "trekking",
+      "homestay",
+      "village",
+      "eco-lodge",
+      "bird-watching",
+      "local-guide"
+    ],
+    "tagSlugs": [
+      "bird",
+      "birding",
+      "camping",
+      "community",
+      "cycling",
+      "forest",
+      "homestay",
+      "local-food"
+    ],
+    "interestSlugs": [
+      "eco-lodge"
+    ]
+  },
+  {
+    "slug": "banteay-chhmar-community",
+    "name": "Banteay Chhmar",
+    "shortDescription": "A vast Jayavarman VII temple city in the north-west, with a community homestay inside the village beside it.",
+    "description": "Face towers, a Lokesvara gallery, and almost nobody else there.",
+    "address": "Banteay Chhmar, Thmar Puok District, Banteay Meanchey",
+    "latitude": 14.0333,
+    "longitude": 103.0833,
+    "image": "ta-prohm.jpg",
+    "featured": false,
+    "provinceSlug": "banteay-meanchey",
+    "categorySlugs": [
+      "ancient-cities",
+      "temples",
+      "archaeological-sites",
+      "homestay",
+      "village",
+      "craft",
+      "local-guide"
+    ],
+    "tagSlugs": [
+      "community",
+      "cycling",
+      "homestay",
+      "local-food"
+    ],
+    "interestSlugs": [
+      "homestay"
+    ],
+    "architectureStyleSlugs": [
+      "bayon-style"
+    ],
+    "religionSlugs": [
+      "buddhism",
+      "hinduism"
+    ]
+  },
+  {
+    "slug": "koh-dach-silk-island",
+    "name": "Koh Dach Silk Island",
+    "shortDescription": "A Mekong island half an hour from the capital, where weaving households still work hand looms.",
+    "description": "Take the ferry, take a bicycle, and stop wherever you hear a loom.",
+    "address": "Koh Dach, Mukh Kampul District, Kandal",
+    "latitude": 11.6289,
+    "longitude": 104.9622,
+    "image": "mekong-discovery-trail.jpg",
+    "featured": false,
+    "provinceSlug": "kandal",
+    "categorySlugs": [
+      "river-island",
+      "community",
+      "village",
+      "craft",
+      "agriculture",
+      "local-guide"
+    ],
+    "tagSlugs": [
+      "boat",
+      "community",
+      "cycling",
+      "island",
+      "local-food"
+    ],
+    "interestSlugs": [
+      "culture"
+    ]
+  },
+  {
+    "slug": "angkor-golf-resort",
+    "name": "Angkor Golf Resort",
+    "shortDescription": "An eighteen-hole championship course on the western edge of Siem Reap, designed by Nick Faldo.",
+    "description": "Play early. By eleven the heat is the hardest hazard on the course.",
+    "address": "Kasekam Village, Siem Reap",
+    "latitude": 13.3536,
+    "longitude": 103.8022,
+    "image": "siem-reap-street.jpg",
+    "featured": false,
+    "provinceSlug": "siem-reap",
+    "categorySlugs": [
+      "golf"
+    ],
+    "tagSlugs": [
+      "golf-spa",
+      "luxury"
+    ],
+    "interestSlugs": [
+      "resorts"
+    ]
+  }
+]

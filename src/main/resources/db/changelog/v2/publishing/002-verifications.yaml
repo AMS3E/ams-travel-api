@@ -1,0 +1,34 @@
+# Destination verification: an editor's, BDO's or administrator's decision that
+# a destination is what it says, and the evidence it was made on — usually an
+# invoice. Append-only: renewing or revoking files another row, and the latest
+# row says whether the destination is verified. Not in the 41-table ERD; the
+# verify service keeps it. Not a badge: badges are earned by visitors.
+databaseChangeLog:
+  - changeSet:
+      id: v2-publishing-destination-verifications
+      author: ams-travel-v2
+      changes:
+        - createTable:
+            schemaName: publishing
+            tableName: destination_verifications
+            columns:
+              - column: {name: id, type: uuid, defaultValueComputed: "${fn.uuid}", constraints: {primaryKey: true, primaryKeyName: destination_verifications_pkey, nullable: false}}
+              - column: {name: destination_id, type: uuid, constraints: {nullable: false}}
+              # The decision: true verifies or renews, false revokes.
+              - column: {name: verified, type: boolean, constraints: {nullable: false}}
+              # The invoice or receipt number, as the paperwork prints it.
+              - column: {name: reference, type: varchar(120)}
+              - column: {name: note, type: text}
+              # A key in the private verification/ media folder, never a public link.
+              - column: {name: evidence_key, type: varchar(512)}
+              - column: {name: decided_by, type: uuid, constraints: {nullable: false}}
+              - column: {name: created_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+        - createIndex:
+            schemaName: publishing
+            tableName: destination_verifications
+            indexName: idx_destination_verifications_destination
+            columns:
+              - column: {name: destination_id}
+              - column: {name: created_at}
+      rollback:
+        - dropTable: {schemaName: publishing, tableName: destination_verifications}

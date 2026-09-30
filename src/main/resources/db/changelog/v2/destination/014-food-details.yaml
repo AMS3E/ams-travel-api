@@ -1,0 +1,55 @@
+# What a traveller wants to know about a place to eat beyond its name and its
+# hours: what it cooks, when it serves, what it can do for a diet, how a meal is
+# had there, who it suits, how the bill is paid and how to reach the kitchen.
+databaseChangeLog:
+  - changeSet:
+      id: v2-destination-food-details
+      author: ams-travel-v2
+      changes:
+        - addColumn:
+            schemaName: destination
+            tableName: destination_foods
+            columns:
+              - column: {name: cuisines, type: "${type.json}"}
+              - column: {name: meals_served, type: "${type.json}"}
+              - column: {name: dietary, type: "${type.json}"}
+              - column: {name: service_options, type: "${type.json}"}
+              - column: {name: amenities, type: "${type.json}"}
+              - column: {name: good_for, type: "${type.json}"}
+              - column: {name: menu_languages, type: "${type.json}"}
+              - column: {name: delivery_partners, type: "${type.json}"}
+              - column: {name: payment_methods, type: "${type.json}"}
+              - column: {name: languages_spoken, type: "${type.json}"}
+              - column: {name: alcohol, type: varchar(20)}
+              - column: {name: parking_option, type: varchar(20)}
+              - column: {name: reservations, type: varchar(20)}
+              - column: {name: seating_capacity, type: int}
+              - column: {name: average_meal_price, type: "decimal(12,2)"}
+              - column: {name: telegram, type: varchar(100)}
+              - column: {name: whatsapp, type: varchar(50)}
+              - column: {name: facebook_url, type: varchar(512)}
+              - column: {name: year_opened, type: int}
+      rollback:
+        - dropColumn:
+            schemaName: destination
+            tableName: destination_foods
+            columns:
+              - column: {name: cuisines}
+              - column: {name: meals_served}
+              - column: {name: dietary}
+              - column: {name: service_options}
+              - column: {name: amenities}
+              - column: {name: good_for}
+              - column: {name: menu_languages}
+              - column: {name: delivery_partners}
+              - column: {name: payment_methods}
+              - column: {name: languages_spoken}
+              - column: {name: alcohol}
+              - column: {name: parking_option}
+              - column: {name: reservations}
+              - column: {name: seating_capacity}
+              - column: {name: average_meal_price}
+              - column: {name: telegram}
+              - column: {name: whatsapp}
+              - column: {name: facebook_url}
+              - column: {name: year_opened}

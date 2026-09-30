@@ -1,0 +1,141 @@
+# engagement: what visitors do. Reviews and favorites point at a destination,
+# food, stay (or corridor, for favorites) by type and id, so they have no key to
+# the thing itself. Browse events and stamps carry a destination id with no key
+# either: they outlive the place so badge counts stay whole.
+databaseChangeLog:
+  - changeSet:
+      id: v2-engagement-tables
+      author: ams-travel-v2
+      changes:
+        - createTable:
+            schemaName: engagement
+            tableName: reviews
+            columns:
+              - column: {name: id, type: uuid, defaultValueComputed: "${fn.uuid}", constraints: {primaryKey: true, primaryKeyName: reviews_pkey, nullable: false}}
+              - column: {name: user_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: target_type, type: varchar(30), constraints: {nullable: false}}
+              - column: {name: target_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: rating, type: smallint, constraints: {nullable: false}}
+              - column: {name: title, type: varchar(200)}
+              - column: {name: content, type: text}
+              - column: {name: status, type: varchar(30), defaultValue: VISIBLE, constraints: {nullable: false}}
+              - column: {name: created_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+              - column: {name: updated_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+        # One review per person per place; it keeps the averages honest.
+        - addUniqueConstraint:
+            schemaName: engagement
+            tableName: reviews
+            columnNames: user_id, target_type, target_id
+            constraintName: uk_reviews_user_target
+        - createIndex:
+            schemaName: engagement
+            tableName: reviews
+            indexName: idx_reviews_target
+            columns:
+              - column: {name: target_type}
+              - column: {name: target_id}
+
+        - createTable:
+            schemaName: engagement
+            tableName: review_photos
+            columns:
+              - column: {name: id, type: uuid, defaultValueComputed: "${fn.uuid}", constraints: {primaryKey: true, primaryKeyName: review_photos_pkey, nullable: false}}
+              - column: {name: review_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: photo_key, type: varchar(512), constraints: {nullable: false}}
+              - column: {name: sort_order, type: int, defaultValueNumeric: 0, constraints: {nullable: false}}
+              - column: {name: created_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+        - createIndex:
+            schemaName: engagement
+            tableName: review_photos
+            indexName: idx_review_photos_review
+            columns:
+              - column: {name: review_id}
+        - addForeignKeyConstraint:
+            baseTableSchemaName: engagement
+            baseTableName: review_photos
+            baseColumnNames: review_id
+            constraintName: fk_review_photos_review
+            referencedTableSchemaName: engagement
+            referencedTableName: reviews
+            referencedColumnNames: id
+            onDelete: CASCADE
+
+        - createTable:
+            schemaName: engagement
+            tableName: favorites
+            columns:
+              - column: {name: user_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: target_type, type: varchar(30), constraints: {nullable: false}}
+              - column: {name: target_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: created_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+        - addPrimaryKey:
+            schemaName: engagement
+            tableName: favorites
+            columnNames: user_id, target_type, target_id
+            constraintName: favorites_pkey
+        - createIndex:
+            schemaName: engagement
+            tableName: favorites
+            indexName: idx_favorites_target
+            columns:
+              - column: {name: target_type}
+              - column: {name: target_id}
+
+        # Every place opened. A person's row stays after they are deleted (the
+        # user goes to null), so Popular keeps its history.
+        - createTable:
+            schemaName: engagement
+            tableName: browse_events
+            columns:
+              - column: {name: id, type: bigint, autoIncrement: true, constraints: {primaryKey: true, primaryKeyName: browse_events_pkey, nullable: false}}
+              - column: {name: user_id, type: uuid}
+              - column: {name: destination_id, type: uuid}
+              - column: {name: event_type, type: varchar(50), constraints: {nullable: false}}
+              - column: {name: session_id, type: varchar(100)}
+              - column: {name: metadata, type: "${type.json}"}
+              - column: {name: created_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+        - createIndex:
+            schemaName: engagement
+            tableName: browse_events
+            indexName: idx_browse_events_destination_created
+            columns:
+              - column: {name: destination_id}
+              - column: {name: created_at}
+        - createIndex:
+            schemaName: engagement
+            tableName: browse_events
+            indexName: idx_browse_events_user_created
+            columns:
+              - column: {name: user_id}
+              - column: {name: created_at}
+
+        # A stamp is collected by standing at the place. One per person, place
+        # and day in Cambodia — a PostgreSQL expression index holds that.
+        - createTable:
+            schemaName: engagement
+            tableName: digital_stamps
+            columns:
+              - column: {name: id, type: uuid, defaultValueComputed: "${fn.uuid}", constraints: {primaryKey: true, primaryKeyName: digital_stamps_pkey, nullable: false}}
+              - column: {name: user_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: destination_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: collected_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+              - column: {name: source, type: varchar(50), defaultValue: GPS, constraints: {nullable: false}}
+        - createIndex:
+            schemaName: engagement
+            tableName: digital_stamps
+            indexName: idx_digital_stamps_user_collected
+            columns:
+              - column: {name: user_id}
+              - column: {name: collected_at}
+        - createIndex:
+            schemaName: engagement
+            tableName: digital_stamps
+            indexName: idx_digital_stamps_destination
+            columns:
+              - column: {name: destination_id}
+      rollback:
+        - dropTable: {schemaName: engagement, tableName: digital_stamps}
+        - dropTable: {schemaName: engagement, tableName: browse_events}
+        - dropTable: {schemaName: engagement, tableName: favorites}
+        - dropTable: {schemaName: engagement, tableName: review_photos}
+        - dropTable: {schemaName: engagement, tableName: reviews}

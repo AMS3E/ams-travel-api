@@ -1,0 +1,193 @@
+spring:
+  application:
+    name: api
+
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/ams_travel}
+    username: ${SPRING_DATASOURCE_USERNAME:ams_user}
+    password: ${SPRING_DATASOURCE_PASSWORD:ams_password}
+
+  jpa:
+    open-in-view: ${SPRING_JPA_OPEN_IN_VIEW:false}
+    hibernate:
+      ddl-auto: ${SPRING_JPA_HIBERNATE_DDL_AUTO:validate}
+    properties:
+      # A list's collections (a destination's categories, tags, interests…) load
+      # in one query per collection for the whole list, not one per row, and
+      # not joined all at once into every combination of them.
+      hibernate.default_batch_fetch_size: 100
+
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+    enabled: ${LIQUIBASE_ENABLED:true}
+
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+
+  cache:
+    type: redis
+    redis:
+      time-to-live: ${CACHE_TTL:10m}
+      # v2: the 41-table model; entries cached under the old prefix are never read.
+      key-prefix: "ams-travel:v2:"
+
+  mvc:
+    problemdetails:
+      # Errors answer as RFC 9457 problem documents, so the sentence a service
+      # wrote — "Publish Koh Ker first" — reaches the CMS as `detail`.
+      enabled: true
+
+  servlet:
+    multipart:
+      max-file-size: ${MAX_IMAGE_SIZE:10MB}
+      max-request-size: ${MAX_UPLOAD_REQUEST_SIZE:50MB}
+
+server:
+  port: ${SERVER_PORT:8080}
+
+# Google Maps Platform, as the corridor route service uses it: the Routes API
+# works out the road between a corridor's stops. A server key, never sent to a
+# browser; restrict it to the Routes API. Empty turns route calculation off —
+# corridors still save, and their maps join the stops with straight lines.
+google:
+  maps:
+    api-key: ${GOOGLE_MAPS_API_KEY:}
+    routes-url: ${GOOGLE_ROUTES_URL:https://routes.googleapis.com/directions/v2:computeRoutes}
+    timeout: ${GOOGLE_ROUTES_TIMEOUT:10s}
+
+# Real roads without a Google key: an OpenStreetMap routing server (OSRM) laid
+# out as FOSSGIS runs routing.openstreetmap.de — routed-car, routed-bike,
+# routed-foot. Asked only while GOOGLE_MAPS_API_KEY is empty, and only when a
+# corridor's stops change, which keeps to the public server's fair use. Empty
+# turns it off.
+osm:
+  routing:
+    url: ${OSM_ROUTING_URL:https://routing.openstreetmap.de}
+    timeout: ${OSM_ROUTING_TIMEOUT:15s}
+
+# Keycloak as the resource server sees it. KeycloakSecurityConfig builds the
+# JwtDecoder from these rather than from spring.security.oauth2.resourceserver.*,
+# so the realm is named once and the JWKS URL follows from it.
+keycloak:
+  auth-server-url: ${KEYCLOAK_SERVER_URL:http://localhost:9090}
+  realm: ${KEYCLOAK_REALM:amstravel}
+  # The iss claim tokens must carry, for when the URL this API dials is not the
+  # URL the browser saw — in Docker the first is http://kc-master:9090 and the
+  # second http://localhost:9090. Empty means: derive it from the two above.
+  issuer-uri: ${KEYCLOAK_ISSUER_URI:}
+  # Back-office tokens come from their own realm. The same API trusts both
+  # issuers, but only after matching this explicit allow-list and verifying the
+  # signature against the corresponding realm's JWKS endpoint.
+  backoffice-realm: ${KEYCLOAK_BACKOFFICE_REALM:amsadmin}
+  backoffice-issuer-uri: ${KEYCLOAK_BACKOFFICE_ISSUER_URI:}
+  # The secret of each realm's own API client (amsadmin-api, amstravel-api),
+  # which used to be written into Java. Set both in deployment/.env: the realm
+  # provisioner writes the same two onto the clients on every start, so this is
+  # the one place either value lives.
+  customer-client-secret: ${KEYCLOAK_CUSTOMER_CLIENT_SECRET:}
+  backoffice-client-secret: ${KEYCLOAK_BACKOFFICE_CLIENT_SECRET:}
+
+app:
+  cors:
+    # The customer site and the CMS are separate Next.js origins, so every
+    # browser call into this API is cross-origin and needs a pre-flight answer.
+    allowed-origin-patterns: ${CORS_ALLOWED_ORIGINS:http://localhost:3000,http://localhost:3001}
+    allowed-methods: GET,POST,PUT,PATCH,DELETE,OPTIONS
+    allowed-headers: "*"
+    # Location is read after a create; Content-Disposition after an image fetch.
+    exposed-headers: Location,Content-Disposition
+    # The CMS sends its bearer token on every call, and a credentialed request
+    # may not be answered with "*" — hence patterns rather than a wildcard above.
+    allow-credentials: ${CORS_ALLOW_CREDENTIALS:true}
+    max-age: ${CORS_MAX_AGE:1h}
+  security:
+    oauth2:
+      enabled: ${OAUTH2_ENABLED:true}
+  popular:
+    # The homepage's Popular list: how many places it shows, and how many days
+    # back it counts browses (today included).
+    size: ${POPULAR_SIZE:10}
+    days: ${POPULAR_DAYS:30}
+    # A place counts once per visitor per calendar day here, not per UTC day.
+    zone: ${SEASONS_ZONE:Asia/Phnom_Penh}
+  recommendation:
+    # The homepage's Recommended list: how many places it shows.
+    size: ${RECOMMENDATION_SIZE:10}
+  keycloak:
+    admin:
+      # Accounts and roles live in Keycloak, not in this database, so creating a
+      # partner means calling Keycloak's admin API. Which realms, which client
+      # and which secret are in KeycloakAdminConfig; this only says whether the
+      # client is built at all. Turn it off to run the catalogue with no
+      # Keycloak at hand — the people endpoints then answer 503.
+      enabled: ${KEYCLOAK_ADMIN_ENABLED:true}
+  audit:
+    # Records every catalogue write. Off only for load tests and data imports,
+    # where the extra row per write is the point being measured.
+    enabled: ${AUDIT_ENABLED:true}
+    retention:
+      # Nothing else deletes from this table, so its size tracks uptime rather
+      # than catalogue size. Entries older than this are dropped nightly.
+      # 0 keeps everything, which is fine until the row count starts to matter.
+      days: ${AUDIT_RETENTION_DAYS:365}
+      # Small hours, when a bulk delete competes with nobody.
+      cron: ${AUDIT_RETENTION_CRON:0 30 3 * * *}
+  staff:
+    # How much of the staff realm one admin screen reads from Keycloak at once:
+    # members of one role for the staff list, and matches of one search.
+    role-member-limit: ${ADMIN_ROLE_MEMBER_LIMIT:200}
+    search-limit: ${ADMIN_SEARCH_LIMIT:20}
+  user:
+    # Every signed-in request finds its person; last_login_at is written again
+    # only once it is older than this, so reads stay reads.
+    last-login-precision: ${LAST_LOGIN_PRECISION:10m}
+  badges:
+    # How close a visitor has to stand to a destination to collect its digital
+    # stamp. Wide enough for a temple complex's car park, narrow enough that a
+    # stamp still means you went.
+    stamp-radius-meters: ${STAMP_RADIUS_METERS:1000}
+  seasons:
+    # Season boundaries are calendar dates in Cambodia. Reading "today" in the
+    # server's zone would move the changeover by the UTC offset.
+    zone: ${SEASONS_ZONE:Asia/Phnom_Penh}
+  seed:
+    # Load each service's own seed file when no service reports rows yet.
+    # Seeding is skipped against an already-populated database, so this is
+    # safe to leave on.
+    catalog: ${SEED_CATALOG:true}
+
+# The media service, with its settings under media.* like the reference
+# project's. The reference keeps uploads in a folder (media.server-path); these
+# go to a MinIO bucket, and each row that shows a picture keeps its key.
+media:
+  bucket: ${MINIO_BUCKET:ams-travel-images}
+  # What a stored file's link starts with (the reference's media.base-uri).
+  # Origin-relative on purpose. Both Next.js apps proxy this exact path to
+  # the API, so one stored value works from a browser, from a server-side
+  # image optimizer inside the compose network, and from a crawler — and no
+  # environment's hostname ends up written into the database.
+  base-uri: ${IMAGE_PUBLIC_BASE_URL:/api/v1/media/files}
+  # The largest single file. spring.servlet.multipart reads the same variable.
+  max-file-size: ${MAX_IMAGE_SIZE:10MB}
+  # One folder per category in the bucket, laid out at startup.
+  prepare-folders: true
+  minio:
+    endpoint: ${MINIO_ENDPOINT:http://localhost:9000}
+    access-key: ${MINIO_ACCESS_KEY:ams_minio}
+    secret-key: ${MINIO_SECRET_KEY:ams_minio_change_me}
+
+springdoc:
+  # A parameter the controller takes as an object — a filter, a search — is
+  # published as the fields it holds rather than as one parameter named after
+  # the Java argument, which said nothing to anyone reading the page.
+  default-flat-param-object: true
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+    tags-sorter: alpha
+    # Keeps the pasted bearer token across reloads. Without it, every refresh
+    # of the page means fetching a fresh token from the dashboard again.
+    persist-authorization: true

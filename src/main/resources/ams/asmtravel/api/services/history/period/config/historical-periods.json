@@ -1,0 +1,21 @@
+[
+  {
+    "slug": "angkor-period",
+    "name": "Angkor Period",
+    "startYear": 802,
+    "endYear": 1431,
+    "description": "From Jayavarman II's consecration in 802 to the fall of Angkor in 1431: the Khmer Empire at its height."
+  },
+  {
+    "slug": "post-angkor-period",
+    "name": "Post-Angkor Period",
+    "startYear": 1431,
+    "description": "After Angkor was left as the capital in 1431, the court moved south: Longvek, Oudong, then Phnom Penh."
+  },
+  {
+    "slug": "pre-angkor-period",
+    "name": "Pre-Angkor Period",
+    "endYear": 802,
+    "description": "Funan and Chenla, before Jayavarman II was consecrated on Phnom Kulen in 802."
+  }
+]

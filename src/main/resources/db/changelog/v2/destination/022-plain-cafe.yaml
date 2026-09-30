@@ -1,0 +1,19 @@
+# The catalogue writes "cafe", not "café": existing destination text follows.
+databaseChangeLog:
+  - changeSet:
+      id: v2-destination-plain-cafe
+      author: ams-travel-v2
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              UPDATE destination.destinations SET name = REPLACE(REPLACE(name, 'Café', 'Cafe'), 'café', 'cafe') WHERE name LIKE '%af_%';
+              UPDATE destination.destinations SET short_description = REPLACE(REPLACE(short_description, 'Café', 'Cafe'), 'café', 'cafe') WHERE short_description LIKE '%af_%';
+              UPDATE destination.destinations SET description = REPLACE(REPLACE(description, 'Café', 'Cafe'), 'café', 'cafe') WHERE description LIKE '%af_%';
+              UPDATE destination.destination_foods SET name = REPLACE(REPLACE(name, 'Café', 'Cafe'), 'café', 'cafe') WHERE name LIKE '%af_%';
+              UPDATE destination.destination_foods SET short_description = REPLACE(REPLACE(short_description, 'Café', 'Cafe'), 'café', 'cafe') WHERE short_description LIKE '%af_%';
+              UPDATE destination.destination_foods SET description = REPLACE(REPLACE(description, 'Café', 'Cafe'), 'café', 'cafe') WHERE description LIKE '%af_%';
+      # The accented spelling is not kept anywhere to restore.
+      rollback:
+        - sql:
+            sql: SELECT 1

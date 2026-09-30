@@ -1,0 +1,85 @@
+# Badges become one feature: a definition (type, level, threshold, status) and one row per person, badge and
+# season (progress, and when it unlocked). Seasons are the windows, so badge periods, progress and history go.
+# Existing definitions, destination collections and earned badges are copied across first.
+databaseChangeLog:
+  - changeSet:
+      id: v2-gamification-badges-rebuild
+      author: ams-travel-v2
+      changes:
+        - createTable:
+            schemaName: gamification
+            tableName: badges
+            columns:
+              - column: {name: id, type: uuid, defaultValueComputed: "${fn.uuid}", constraints: {primaryKey: true, primaryKeyName: badges_pkey, nullable: false}}
+              - column: {name: code, type: varchar(50), constraints: {nullable: false, unique: true, uniqueConstraintName: uk_badges_code}}
+              - column: {name: name, type: varchar(150), constraints: {nullable: false}}
+              - column: {name: description, type: text}
+              - column: {name: icon_key, type: varchar(512)}
+              - column: {name: type, type: varchar(30), constraints: {nullable: false}}
+              - column: {name: level, type: varchar(20)}
+              - column: {name: threshold, type: int, constraints: {nullable: false}}
+              - column: {name: status, type: varchar(20), defaultValue: ACTIVE, constraints: {nullable: false}}
+              - column: {name: created_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+              - column: {name: updated_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+        - createTable:
+            schemaName: gamification
+            tableName: badge_destinations
+            columns:
+              - column: {name: badge_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: destination_id, type: uuid, constraints: {nullable: false}}
+        - addPrimaryKey: {schemaName: gamification, tableName: badge_destinations, columnNames: "badge_id, destination_id", constraintName: badge_destinations_pkey}
+        - addForeignKeyConstraint: {baseTableSchemaName: gamification, baseTableName: badge_destinations, baseColumnNames: badge_id, constraintName: fk_badge_destinations_badge, referencedTableSchemaName: gamification, referencedTableName: badges, referencedColumnNames: id, onDelete: CASCADE}
+        - addForeignKeyConstraint: {baseTableSchemaName: gamification, baseTableName: badge_destinations, baseColumnNames: destination_id, constraintName: fk_badge_destinations_destination, referencedTableSchemaName: destination, referencedTableName: destinations, referencedColumnNames: id, onDelete: CASCADE}
+        - renameTable: {schemaName: gamification, oldTableName: user_badges, newTableName: legacy_user_badges}
+        - createTable:
+            schemaName: gamification
+            tableName: user_badges
+            columns:
+              - column: {name: id, type: uuid, defaultValueComputed: "${fn.uuid}", constraints: {primaryKey: true, primaryKeyName: user_badges_v3_pkey, nullable: false}}
+              - column: {name: user_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: badge_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: season_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: progress, type: int, defaultValueNumeric: 0, constraints: {nullable: false}}
+              - column: {name: earned_at, type: TIMESTAMP WITH TIME ZONE}
+              - column: {name: updated_at, type: TIMESTAMP WITH TIME ZONE, constraints: {nullable: false}}
+        - addUniqueConstraint: {schemaName: gamification, tableName: user_badges, columnNames: "user_id, badge_id, season_id", constraintName: uk_user_badges_user_badge_season}
+        - addForeignKeyConstraint: {baseTableSchemaName: gamification, baseTableName: user_badges, baseColumnNames: badge_id, constraintName: fk_user_badges_v3_badge, referencedTableSchemaName: gamification, referencedTableName: badges, referencedColumnNames: id}
+        - addForeignKeyConstraint: {baseTableSchemaName: gamification, baseTableName: user_badges, baseColumnNames: season_id, constraintName: fk_user_badges_v3_season, referencedTableSchemaName: gamification, referencedTableName: seasons, referencedColumnNames: id}
+        - addForeignKeyConstraint: {baseTableSchemaName: gamification, baseTableName: user_badges, baseColumnNames: user_id, constraintName: fk_user_badges_v3_user, referencedTableSchemaName: auth, referencedTableName: users, referencedColumnNames: id, onDelete: CASCADE}
+        - createIndex:
+            schemaName: gamification
+            tableName: user_badges
+            indexName: idx_user_badges_user_season
+            columns:
+              - column: {name: user_id}
+              - column: {name: season_id}
+        - sql:
+            splitStatements: true
+            sql: |
+              INSERT INTO gamification.badges (id, code, name, description, icon_key, type, level, threshold, status, created_at, updated_at)
+              SELECT id, code, name, description, icon_key, criteria_type,
+                     CASE WHEN criteria_type = 'DESTINATION_STAMPS' THEN NULL
+                          WHEN code LIKE '%SILVER' THEN 'SILVER'
+                          WHEN code LIKE '%GOLDEN' THEN 'GOLDEN'
+                          WHEN code LIKE '%PLATINUM' THEN 'PLATINUM' END,
+                     criteria_value, CASE WHEN is_active THEN 'ACTIVE' ELSE 'INACTIVE' END, created_at, created_at
+              FROM gamification.badge_definitions;
+              INSERT INTO gamification.badge_destinations (badge_id, destination_id)
+              SELECT badge_id, destination_id FROM gamification.destination_badges;
+              INSERT INTO gamification.user_badges (id, user_id, badge_id, season_id, progress, earned_at, updated_at)
+              SELECT ub.id, ub.user_id, ub.badge_id, s.id, b.threshold, ub.earned_at, ub.earned_at
+              FROM gamification.legacy_user_badges ub
+              JOIN gamification.badge_periods p ON p.id = ub.period_id
+              JOIN gamification.seasons s ON s.starts_on = p.start_date AND s.ends_on = p.end_date
+              JOIN gamification.badges b ON b.id = ub.badge_id;
+        - dropTable: {schemaName: gamification, tableName: badge_history, cascadeConstraints: true}
+        - dropTable: {schemaName: gamification, tableName: user_badge_progress, cascadeConstraints: true}
+        - dropTable: {schemaName: gamification, tableName: legacy_user_badges, cascadeConstraints: true}
+        - dropTable: {schemaName: gamification, tableName: badge_periods, cascadeConstraints: true}
+        - dropTable: {schemaName: gamification, tableName: destination_badges, cascadeConstraints: true}
+        - dropTable: {schemaName: gamification, tableName: badge_definitions, cascadeConstraints: true}
+      # The old tables cannot be rebuilt from the new ones without loss: restore them from a backup instead.
+      rollback:
+        - dropTable: {schemaName: gamification, tableName: user_badges}
+        - dropTable: {schemaName: gamification, tableName: badge_destinations}
+        - dropTable: {schemaName: gamification, tableName: badges}

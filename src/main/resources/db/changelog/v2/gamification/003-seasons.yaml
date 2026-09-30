@@ -1,0 +1,40 @@
+# The tourist calendar: Cambodia's high and green seasons. Not in the 41-table
+# ERD; the season service keeps it, and each badge's periods follow it (a
+# season saved is a period for every badge). Seeded here, like the badges,
+# because "the current season" must answer on a fresh database.
+databaseChangeLog:
+  - changeSet:
+      id: v2-gamification-seasons
+      author: ams-travel-v2
+      changes:
+        - createTable:
+            schemaName: gamification
+            tableName: seasons
+            columns:
+              - column: {name: id, type: uuid, defaultValueComputed: "${fn.uuid}", constraints: {primaryKey: true, primaryKeyName: seasons_pkey, nullable: false}}
+              - column: {name: name, type: varchar(100), constraints: {nullable: false}}
+              - column: {name: kind, type: varchar(20), constraints: {nullable: false}}
+              - column: {name: starts_on, type: date, constraints: {nullable: false, unique: true, uniqueConstraintName: uk_seasons_starts_on}}
+              - column: {name: ends_on, type: date, constraints: {nullable: false}}
+              - column: {name: is_active, type: boolean, defaultValueBoolean: true, constraints: {nullable: false}}
+              - column: {name: created_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+              - column: {name: updated_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+      rollback:
+        - dropTable: {schemaName: gamification, tableName: seasons}
+
+  # Every column spelled out: the test run replays this against tables Hibernate made.
+  - changeSet:
+      id: v2-gamification-seasons-calendar
+      author: ams-travel-v2
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              INSERT INTO gamification.seasons (id, name, kind, starts_on, ends_on, is_active, created_at, updated_at) VALUES
+                (${fn.uuid}, 'High season 2025/26', 'HIGH', DATE '2025-11-01', DATE '2026-04-30', TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'Green season 2026', 'GREEN', DATE '2026-05-01', DATE '2026-10-31', TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'High season 2026/27', 'HIGH', DATE '2026-11-01', DATE '2027-04-30', TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'Green season 2027', 'GREEN', DATE '2027-05-01', DATE '2027-10-31', TRUE, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+      rollback:
+        - sql:
+            sql: DELETE FROM gamification.seasons

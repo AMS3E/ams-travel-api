@@ -1,0 +1,69 @@
+# Points for rating and reviewing places. The unique key is the rule itself: one point per
+# person, place, day and season, whether a rating or a review earned it, whatever the retries.
+databaseChangeLog:
+  - changeSet:
+      id: v2-gamification-point-transactions
+      author: ams-travel-v2
+      changes:
+        - createTable:
+            schemaName: gamification
+            tableName: point_transactions
+            columns:
+              - column: {name: id, type: uuid, constraints: {primaryKey: true, primaryKeyName: point_transactions_pkey, nullable: false}}
+              - column: {name: user_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: target_type, type: varchar(30), constraints: {nullable: false}}
+              - column: {name: target_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: source_type, type: varchar(20), constraints: {nullable: false}}
+              - column: {name: source_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: season_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: points, type: int, constraints: {nullable: false}}
+              - column: {name: reward_date, type: date, constraints: {nullable: false}}
+              - column: {name: created_at, type: TIMESTAMP WITH TIME ZONE, constraints: {nullable: false}}
+        - addUniqueConstraint:
+            schemaName: gamification
+            tableName: point_transactions
+            columnNames: user_id, target_id, target_type, reward_date, season_id
+            constraintName: uk_point_transactions_daily_target
+        - createIndex:
+            schemaName: gamification
+            tableName: point_transactions
+            indexName: idx_point_transactions_user_date
+            columns:
+              - column: {name: user_id}
+              - column: {name: reward_date}
+        - addForeignKeyConstraint:
+            baseTableSchemaName: gamification
+            baseTableName: point_transactions
+            baseColumnNames: season_id
+            constraintName: fk_point_transactions_season
+            referencedTableSchemaName: gamification
+            referencedTableName: seasons
+            referencedColumnNames: id
+        # A place a person rated or reviewed in a season, once: what the season's unique counts are made of.
+        - createTable:
+            schemaName: gamification
+            tableName: point_activities
+            columns:
+              - column: {name: id, type: uuid, constraints: {primaryKey: true, primaryKeyName: point_activities_pkey, nullable: false}}
+              - column: {name: user_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: season_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: source_type, type: varchar(20), constraints: {nullable: false}}
+              - column: {name: target_type, type: varchar(30), constraints: {nullable: false}}
+              - column: {name: target_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: first_at, type: TIMESTAMP WITH TIME ZONE, constraints: {nullable: false}}
+        - addUniqueConstraint:
+            schemaName: gamification
+            tableName: point_activities
+            columnNames: user_id, season_id, source_type, target_type, target_id
+            constraintName: uk_point_activities
+        - addForeignKeyConstraint:
+            baseTableSchemaName: gamification
+            baseTableName: point_activities
+            baseColumnNames: season_id
+            constraintName: fk_point_activities_season
+            referencedTableSchemaName: gamification
+            referencedTableName: seasons
+            referencedColumnNames: id
+      rollback:
+        - dropTable: {schemaName: gamification, tableName: point_activities}
+        - dropTable: {schemaName: gamification, tableName: point_transactions}

@@ -1,0 +1,41 @@
+# publishing: asking for a destination to go live, and the answer. Which desk
+# reviews a request is not stored — it follows from the requester's roles.
+# One request per destination may be open; PostgreSQL holds that with a
+# partial unique index (810-postgresql-indexes.yaml).
+databaseChangeLog:
+  - changeSet:
+      id: v2-publishing-tables
+      author: ams-travel-v2
+      changes:
+        - createTable:
+            schemaName: publishing
+            tableName: publish_requests
+            columns:
+              - column: {name: id, type: uuid, defaultValueComputed: "${fn.uuid}", constraints: {primaryKey: true, primaryKeyName: publish_requests_pkey, nullable: false}}
+              - column: {name: destination_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: requested_by, type: uuid, constraints: {nullable: false}}
+              - column: {name: status, type: varchar(30), defaultValue: PENDING, constraints: {nullable: false}}
+              - column: {name: reviewer_id, type: uuid}
+              - column: {name: review_note, type: text}
+              - column: {name: requested_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+              - column: {name: reviewed_at, type: TIMESTAMP WITH TIME ZONE}
+        - createIndex:
+            schemaName: publishing
+            tableName: publish_requests
+            indexName: idx_publish_requests_destination
+            columns:
+              - column: {name: destination_id}
+        - createIndex:
+            schemaName: publishing
+            tableName: publish_requests
+            indexName: idx_publish_requests_requested_by
+            columns:
+              - column: {name: requested_by}
+        - createIndex:
+            schemaName: publishing
+            tableName: publish_requests
+            indexName: idx_publish_requests_status
+            columns:
+              - column: {name: status}
+      rollback:
+        - dropTable: {schemaName: publishing, tableName: publish_requests}

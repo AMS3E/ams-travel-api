@@ -1,0 +1,31 @@
+# Signing a business up is its own grant.
+#
+# Partners used to be written by PERM_USER_MANAGE, which only an administrator
+# holds — yet the desk that deals with partners is the BDO's. PERM_PARTNER_MANAGE
+# says exactly who may register a business and name the people who act for it:
+# a BDO, and an administrator through it.
+#
+# A separate change set because 002 has already run everywhere; the grant for
+# ADMIN is spelled out here for the same reason (002's "every permission" ran
+# before this row existed).
+databaseChangeLog:
+  - changeSet:
+      id: v2-auth-partner-manage-permission
+      author: ams-travel-v2
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              INSERT INTO auth.permissions (id, code, name, description) VALUES
+                (${fn.uuid}, 'PERM_PARTNER_MANAGE', 'Manage partners', 'Register partner businesses and name the people who act for them');
+
+              INSERT INTO auth.role_permissions (role_id, permission_id)
+              SELECT r.id, p.id FROM auth.roles r CROSS JOIN auth.permissions p
+              WHERE r.code IN ('BDO', 'ADMIN') AND p.code = 'PERM_PARTNER_MANAGE';
+      rollback:
+        - sql:
+            splitStatements: true
+            sql: |
+              DELETE FROM auth.role_permissions WHERE permission_id IN
+                (SELECT id FROM auth.permissions WHERE code = 'PERM_PARTNER_MANAGE');
+              DELETE FROM auth.permissions WHERE code = 'PERM_PARTNER_MANAGE';

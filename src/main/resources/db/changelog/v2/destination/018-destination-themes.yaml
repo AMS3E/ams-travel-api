@@ -1,0 +1,44 @@
+# An attraction's theme — its main tourism region, by code — and what only
+# that theme has (DestinationThemes). A place already listed is given the
+# tourism region most of its categories come from, ties to the name A to Z.
+databaseChangeLog:
+  - changeSet:
+      id: v2-destination-themes
+      author: ams-travel-v2
+      changes:
+        - addColumn:
+            schemaName: destination
+            tableName: destinations
+            columns:
+              - column: {name: theme, type: varchar(40)}
+              - column: {name: specialties, type: "${type.json}"}
+      rollback:
+        - dropColumn:
+            schemaName: destination
+            tableName: destinations
+            columns:
+              - column: {name: theme}
+              - column: {name: specialties}
+  - changeSet:
+      id: v2-destination-themes-backfill
+      author: ams-travel-v2
+      dbms: postgresql
+      changes:
+        - sql:
+            sql: |
+              UPDATE destination.destinations d
+              SET theme = (
+                SELECT r.code
+                FROM destination.destination_regions dr
+                JOIN taxonomy.regions r ON r.id = dr.region_id
+                LEFT JOIN taxonomy.region_categories rc ON rc.region_id = r.id
+                LEFT JOIN destination.destination_categories dc
+                  ON dc.category_id = rc.category_id AND dc.destination_id = d.id
+                WHERE dr.destination_id = d.id AND r.kind = 'TOURISM'
+                GROUP BY r.code, r.name
+                ORDER BY COUNT(dc.category_id) DESC, r.name
+                LIMIT 1)
+              WHERE d.theme IS NULL;
+      rollback:
+        - sql:
+            sql: UPDATE destination.destinations SET theme = NULL;

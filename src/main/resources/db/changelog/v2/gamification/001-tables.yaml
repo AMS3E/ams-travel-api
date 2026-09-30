@@ -1,0 +1,174 @@
+# gamification: badges. A definition says what earns it (criteria_type and
+# how many, criteria_value); periods are the windows it can be earned in; a
+# person's progress in the current window, the badges they hold, and what
+# happened along the way. destination_badges ties a destination to the badges
+# collected by stamping it.
+databaseChangeLog:
+  - changeSet:
+      id: v2-gamification-tables
+      author: ams-travel-v2
+      changes:
+        - createTable:
+            schemaName: gamification
+            tableName: badge_definitions
+            columns:
+              - column: {name: id, type: uuid, defaultValueComputed: "${fn.uuid}", constraints: {primaryKey: true, primaryKeyName: badge_definitions_pkey, nullable: false}}
+              - column: {name: code, type: varchar(50), constraints: {nullable: false, unique: true, uniqueConstraintName: uk_badge_definitions_code}}
+              - column: {name: name, type: varchar(150), constraints: {nullable: false}}
+              - column: {name: description, type: text}
+              - column: {name: icon_key, type: varchar(512)}
+              - column: {name: criteria_type, type: varchar(50), constraints: {nullable: false}}
+              - column: {name: criteria_value, type: int, constraints: {nullable: false}}
+              - column: {name: is_active, type: boolean, defaultValueBoolean: true, constraints: {nullable: false}}
+              - column: {name: created_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+
+        - createTable:
+            schemaName: gamification
+            tableName: badge_periods
+            columns:
+              - column: {name: id, type: uuid, defaultValueComputed: "${fn.uuid}", constraints: {primaryKey: true, primaryKeyName: badge_periods_pkey, nullable: false}}
+              - column: {name: badge_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: name, type: varchar(100), constraints: {nullable: false}}
+              - column: {name: start_date, type: date, constraints: {nullable: false}}
+              - column: {name: end_date, type: date, constraints: {nullable: false}}
+              - column: {name: is_active, type: boolean, defaultValueBoolean: true, constraints: {nullable: false}}
+        - addUniqueConstraint:
+            schemaName: gamification
+            tableName: badge_periods
+            columnNames: badge_id, start_date
+            constraintName: uk_badge_periods_badge_start
+        - addForeignKeyConstraint:
+            baseTableSchemaName: gamification
+            baseTableName: badge_periods
+            baseColumnNames: badge_id
+            constraintName: fk_badge_periods_badge
+            referencedTableSchemaName: gamification
+            referencedTableName: badge_definitions
+            referencedColumnNames: id
+            onDelete: CASCADE
+
+        - createTable:
+            schemaName: gamification
+            tableName: user_badge_progress
+            columns:
+              - column: {name: id, type: uuid, defaultValueComputed: "${fn.uuid}", constraints: {primaryKey: true, primaryKeyName: user_badge_progress_pkey, nullable: false}}
+              - column: {name: user_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: badge_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: current_value, type: int, defaultValueNumeric: 0, constraints: {nullable: false}}
+              - column: {name: target_value, type: int, constraints: {nullable: false}}
+              - column: {name: updated_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+        - addUniqueConstraint:
+            schemaName: gamification
+            tableName: user_badge_progress
+            columnNames: user_id, badge_id
+            constraintName: uk_user_badge_progress_user_badge
+        - addForeignKeyConstraint:
+            baseTableSchemaName: gamification
+            baseTableName: user_badge_progress
+            baseColumnNames: badge_id
+            constraintName: fk_user_badge_progress_badge
+            referencedTableSchemaName: gamification
+            referencedTableName: badge_definitions
+            referencedColumnNames: id
+            onDelete: CASCADE
+
+        # Its id is the badge's share link.
+        - createTable:
+            schemaName: gamification
+            tableName: user_badges
+            columns:
+              - column: {name: id, type: uuid, defaultValueComputed: "${fn.uuid}", constraints: {primaryKey: true, primaryKeyName: user_badges_pkey, nullable: false}}
+              - column: {name: user_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: badge_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: period_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: earned_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+        - addUniqueConstraint:
+            schemaName: gamification
+            tableName: user_badges
+            columnNames: user_id, badge_id, period_id
+            constraintName: uk_user_badges_user_badge_period
+        - createIndex:
+            schemaName: gamification
+            tableName: user_badges
+            indexName: idx_user_badges_badge
+            columns:
+              - column: {name: badge_id}
+        - addForeignKeyConstraint:
+            baseTableSchemaName: gamification
+            baseTableName: user_badges
+            baseColumnNames: badge_id
+            constraintName: fk_user_badges_badge
+            referencedTableSchemaName: gamification
+            referencedTableName: badge_definitions
+            referencedColumnNames: id
+            onDelete: CASCADE
+        - addForeignKeyConstraint:
+            baseTableSchemaName: gamification
+            baseTableName: user_badges
+            baseColumnNames: period_id
+            constraintName: fk_user_badges_period
+            referencedTableSchemaName: gamification
+            referencedTableName: badge_periods
+            referencedColumnNames: id
+            onDelete: CASCADE
+
+        - createTable:
+            schemaName: gamification
+            tableName: badge_history
+            columns:
+              - column: {name: id, type: uuid, defaultValueComputed: "${fn.uuid}", constraints: {primaryKey: true, primaryKeyName: badge_history_pkey, nullable: false}}
+              - column: {name: user_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: badge_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: action, type: varchar(30), constraints: {nullable: false}}
+              - column: {name: note, type: text}
+              - column: {name: created_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+        - createIndex:
+            schemaName: gamification
+            tableName: badge_history
+            indexName: idx_badge_history_user
+            columns:
+              - column: {name: user_id}
+              - column: {name: created_at}
+        - addForeignKeyConstraint:
+            baseTableSchemaName: gamification
+            baseTableName: badge_history
+            baseColumnNames: badge_id
+            constraintName: fk_badge_history_badge
+            referencedTableSchemaName: gamification
+            referencedTableName: badge_definitions
+            referencedColumnNames: id
+            onDelete: CASCADE
+
+        - createTable:
+            schemaName: gamification
+            tableName: destination_badges
+            columns:
+              - column: {name: destination_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: badge_id, type: uuid, constraints: {nullable: false}}
+        - addPrimaryKey:
+            schemaName: gamification
+            tableName: destination_badges
+            columnNames: destination_id, badge_id
+            constraintName: destination_badges_pkey
+        - createIndex:
+            schemaName: gamification
+            tableName: destination_badges
+            indexName: idx_destination_badges_badge
+            columns:
+              - column: {name: badge_id}
+        - addForeignKeyConstraint:
+            baseTableSchemaName: gamification
+            baseTableName: destination_badges
+            baseColumnNames: badge_id
+            constraintName: fk_destination_badges_badge
+            referencedTableSchemaName: gamification
+            referencedTableName: badge_definitions
+            referencedColumnNames: id
+            onDelete: CASCADE
+      rollback:
+        - dropTable: {schemaName: gamification, tableName: destination_badges}
+        - dropTable: {schemaName: gamification, tableName: badge_history}
+        - dropTable: {schemaName: gamification, tableName: user_badges}
+        - dropTable: {schemaName: gamification, tableName: user_badge_progress}
+        - dropTable: {schemaName: gamification, tableName: badge_periods}
+        - dropTable: {schemaName: gamification, tableName: badge_definitions}

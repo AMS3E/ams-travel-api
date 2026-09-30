@@ -1,0 +1,327 @@
+[
+  {
+    "slug": "ancient-cities",
+    "name": "Ancient Cities",
+    "sortOrder": 1
+  },
+  {
+    "slug": "temples",
+    "name": "Temples",
+    "sortOrder": 2
+  },
+  {
+    "slug": "archaeological-sites",
+    "name": "Archaeological Sites",
+    "sortOrder": 3
+  },
+  {
+    "slug": "ancient-roads",
+    "name": "Ancient Roads",
+    "sortOrder": 4
+  },
+  {
+    "slug": "bridges",
+    "name": "Bridges",
+    "sortOrder": 5
+  },
+  {
+    "slug": "hospitals",
+    "name": "Hospitals",
+    "sortOrder": 6
+  },
+  {
+    "slug": "museums",
+    "name": "Museums",
+    "sortOrder": 7
+  },
+  {
+    "slug": "indigenous-culture",
+    "name": "Indigenous Culture",
+    "sortOrder": 8
+  },
+  {
+    "slug": "volcano-lake",
+    "name": "Volcano Lake",
+    "sortOrder": 9
+  },
+  {
+    "slug": "forest",
+    "name": "Forest",
+    "sortOrder": 10
+  },
+  {
+    "slug": "wildlife",
+    "name": "Wildlife",
+    "sortOrder": 11
+  },
+  {
+    "slug": "waterfalls",
+    "name": "Waterfall",
+    "sortOrder": 12
+  },
+  {
+    "slug": "sacred-mountain",
+    "name": "Sacred Mountain",
+    "sortOrder": 13
+  },
+  {
+    "slug": "adventure",
+    "name": "Adventure",
+    "sortOrder": 14
+  },
+  {
+    "slug": "coffee",
+    "name": "Coffee",
+    "sortOrder": 15
+  },
+  {
+    "slug": "floating-village",
+    "name": "Floating Village",
+    "sortOrder": 16
+  },
+  {
+    "slug": "fishing",
+    "name": "Fishing",
+    "sortOrder": 17
+  },
+  {
+    "slug": "bird-sanctuary",
+    "name": "Bird Sanctuary",
+    "sortOrder": 18
+  },
+  {
+    "slug": "river-island",
+    "name": "River Island",
+    "sortOrder": 19
+  },
+  {
+    "slug": "rice",
+    "name": "Rice",
+    "sortOrder": 20
+  },
+  {
+    "slug": "community",
+    "name": "Community",
+    "sortOrder": 21
+  },
+  {
+    "slug": "boat-trip",
+    "name": "Boat Trip",
+    "sortOrder": 22
+  },
+  {
+    "slug": "sunset",
+    "name": "Sunset",
+    "sortOrder": 23
+  },
+  {
+    "slug": "mountain",
+    "name": "Mountain",
+    "sortOrder": 24
+  },
+  {
+    "slug": "national-parks",
+    "name": "National Park",
+    "sortOrder": 25
+  },
+  {
+    "slug": "cave",
+    "name": "Cave",
+    "sortOrder": 26
+  },
+  {
+    "slug": "trekking",
+    "name": "Trekking",
+    "sortOrder": 27
+  },
+  {
+    "slug": "camping",
+    "name": "Camping",
+    "sortOrder": 28
+  },
+  {
+    "slug": "cycling",
+    "name": "Cycling",
+    "sortOrder": 29
+  },
+  {
+    "slug": "viewpoint",
+    "name": "Viewpoint",
+    "sortOrder": 30
+  },
+  {
+    "slug": "photography",
+    "name": "Photography",
+    "sortOrder": 31
+  },
+  {
+    "slug": "beach",
+    "name": "Beach",
+    "sortOrder": 32
+  },
+  {
+    "slug": "island",
+    "name": "Island",
+    "sortOrder": 33
+  },
+  {
+    "slug": "coral",
+    "name": "Coral",
+    "sortOrder": 34
+  },
+  {
+    "slug": "diving",
+    "name": "Diving",
+    "sortOrder": 35
+  },
+  {
+    "slug": "seafood",
+    "name": "Seafood",
+    "sortOrder": 36
+  },
+  {
+    "slug": "mangrove",
+    "name": "Mangrove",
+    "sortOrder": 37
+  },
+  {
+    "slug": "cruise",
+    "name": "Cruise",
+    "sortOrder": 38
+  },
+  {
+    "slug": "snorkeling",
+    "name": "Snorkeling",
+    "sortOrder": 39
+  },
+  {
+    "slug": "city-walk",
+    "name": "City Walk",
+    "sortOrder": 40
+  },
+  {
+    "slug": "night-market",
+    "name": "Night Market",
+    "sortOrder": 41
+  },
+  {
+    "slug": "sky-bar",
+    "name": "Sky Bar",
+    "sortOrder": 42
+  },
+  {
+    "slug": "shopping",
+    "name": "Shopping",
+    "sortOrder": 43
+  },
+  {
+    "slug": "art-gallery",
+    "name": "Art Gallery",
+    "sortOrder": 44
+  },
+  {
+    "slug": "street-food",
+    "name": "Street Food",
+    "sortOrder": 45
+  },
+  {
+    "slug": "traditional-food",
+    "name": "Traditional Food",
+    "sortOrder": 46
+  },
+  {
+    "slug": "michelin",
+    "name": "Michelin",
+    "sortOrder": 47
+  },
+  {
+    "slug": "fine-dining",
+    "name": "Fine Dining",
+    "sortOrder": 48
+  },
+  {
+    "slug": "cooking-class",
+    "name": "Cooking Class",
+    "sortOrder": 49
+  },
+  {
+    "slug": "farm",
+    "name": "Farm",
+    "sortOrder": 50
+  },
+  {
+    "slug": "homestay",
+    "name": "Homestay",
+    "sortOrder": 51
+  },
+  {
+    "slug": "village",
+    "name": "Village",
+    "sortOrder": 52
+  },
+  {
+    "slug": "craft",
+    "name": "Craft",
+    "sortOrder": 53
+  },
+  {
+    "slug": "agriculture",
+    "name": "Agriculture",
+    "sortOrder": 54
+  },
+  {
+    "slug": "eco-lodge",
+    "name": "Eco Lodge",
+    "sortOrder": 55
+  },
+  {
+    "slug": "bird-watching",
+    "name": "Bird Watching",
+    "sortOrder": 56
+  },
+  {
+    "slug": "local-guide",
+    "name": "Local Guide",
+    "sortOrder": 57
+  },
+  {
+    "slug": "luxury-hotel",
+    "name": "Luxury Hotel",
+    "sortOrder": 58
+  },
+  {
+    "slug": "private-island",
+    "name": "Private Island",
+    "sortOrder": 59
+  },
+  {
+    "slug": "golf",
+    "name": "Golf",
+    "sortOrder": 60
+  },
+  {
+    "slug": "helicopter",
+    "name": "Helicopter",
+    "sortOrder": 61
+  },
+  {
+    "slug": "yacht",
+    "name": "Yacht",
+    "sortOrder": 62
+  },
+  {
+    "slug": "private-guide",
+    "name": "Private Guide",
+    "sortOrder": 63
+  },
+  {
+    "slug": "spa",
+    "name": "Spa",
+    "sortOrder": 64
+  },
+  {
+    "slug": "vip-tour",
+    "name": "VIP Tour",
+    "sortOrder": 65
+  }
+]

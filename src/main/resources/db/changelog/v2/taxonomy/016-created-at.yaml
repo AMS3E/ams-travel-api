@@ -1,0 +1,20 @@
+# When a catalogue row was made.
+#
+# "Newest first" is one of the two ways every list in the dashboard can be
+# sorted, and these four tables kept no creation time, so the rows all looked
+# the same age and the list never moved. The ones already there are dated from
+# the moment the column is added; anything made after that dates itself.
+databaseChangeLog:
+  - changeSet:
+      id: v2-taxonomy-created-at
+      author: ams-travel-v2
+      changes:
+        - addColumn: {schemaName: taxonomy, tableName: categories, columns: [{column: {name: created_at, type: timestamptz, defaultValueComputed: now(), constraints: {nullable: false}}}]}
+        - addColumn: {schemaName: taxonomy, tableName: tags, columns: [{column: {name: created_at, type: timestamptz, defaultValueComputed: now(), constraints: {nullable: false}}}]}
+        - addColumn: {schemaName: taxonomy, tableName: interests, columns: [{column: {name: created_at, type: timestamptz, defaultValueComputed: now(), constraints: {nullable: false}}}]}
+        - addColumn: {schemaName: taxonomy, tableName: provinces, columns: [{column: {name: created_at, type: timestamptz, defaultValueComputed: now(), constraints: {nullable: false}}}]}
+      rollback:
+        - dropColumn: {schemaName: taxonomy, tableName: categories, columnName: created_at}
+        - dropColumn: {schemaName: taxonomy, tableName: tags, columnName: created_at}
+        - dropColumn: {schemaName: taxonomy, tableName: interests, columnName: created_at}
+        - dropColumn: {schemaName: taxonomy, tableName: provinces, columnName: created_at}

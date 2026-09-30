@@ -1,0 +1,30 @@
+# Contributors write stays and food listings too.
+#
+# A contributor is to an editor what a partner is to a BDO: they write
+# attractions, stays and food listings of their own, and an editor (or an
+# administrator) decides whether each goes live. A stay and a food listing are
+# written under PERM_LISTING_EDIT_OWN — "the caller owns it" — and deleted,
+# while not live, under PERM_LISTING_DELETE_OWN, so the CONTRIBUTOR role holds
+# both now. Their requests land on the CONTRIBUTOR desk as before.
+#
+# The matching composites are in Permissions.deskComposites().
+databaseChangeLog:
+  - changeSet:
+      id: v2-auth-contributor-listings
+      author: ams-travel-v2
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              INSERT INTO auth.role_permissions (role_id, permission_id)
+              SELECT r.id, p.id FROM auth.roles r CROSS JOIN auth.permissions p
+              WHERE r.code = 'CONTRIBUTOR' AND p.code IN ('PERM_LISTING_EDIT_OWN', 'PERM_LISTING_DELETE_OWN')
+                AND NOT EXISTS (
+                  SELECT 1 FROM auth.role_permissions existing
+                  WHERE existing.role_id = r.id AND existing.permission_id = p.id);
+      rollback:
+        - sql:
+            sql: |
+              DELETE FROM auth.role_permissions
+              WHERE role_id IN (SELECT id FROM auth.roles WHERE code = 'CONTRIBUTOR')
+                AND permission_id IN (SELECT id FROM auth.permissions WHERE code IN ('PERM_LISTING_EDIT_OWN', 'PERM_LISTING_DELETE_OWN'));

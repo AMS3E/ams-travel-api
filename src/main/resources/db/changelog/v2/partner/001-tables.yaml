@@ -1,0 +1,56 @@
+# partner: the businesses that list stays and food, and the people who act
+# for them. partner_users.user_id points at auth.users; that key is added with
+# the other cross-schema ones.
+databaseChangeLog:
+  - changeSet:
+      id: v2-partner-tables
+      author: ams-travel-v2
+      changes:
+        - createTable:
+            schemaName: partner
+            tableName: partners
+            columns:
+              - column: {name: id, type: uuid, defaultValueComputed: "${fn.uuid}", constraints: {primaryKey: true, primaryKeyName: partners_pkey, nullable: false}}
+              - column: {name: name, type: varchar(255), constraints: {nullable: false}}
+              - column: {name: slug, type: varchar(100), constraints: {nullable: false, unique: true, uniqueConstraintName: uk_partners_slug}}
+              - column: {name: type, type: varchar(50), constraints: {nullable: false}}
+              - column: {name: contact_email, type: varchar(255)}
+              - column: {name: contact_phone, type: varchar(50)}
+              - column: {name: logo_key, type: varchar(512)}
+              - column: {name: status, type: varchar(30), defaultValue: ACTIVE, constraints: {nullable: false}}
+              - column: {name: created_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+              - column: {name: updated_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+
+        - createTable:
+            schemaName: partner
+            tableName: partner_users
+            columns:
+              - column: {name: id, type: uuid, defaultValueComputed: "${fn.uuid}", constraints: {primaryKey: true, primaryKeyName: partner_users_pkey, nullable: false}}
+              - column: {name: partner_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: user_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: role, type: varchar(50), constraints: {nullable: false}}
+              - column: {name: created_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+        # A person belongs to a partner once, as its owner or as staff.
+        - addUniqueConstraint:
+            schemaName: partner
+            tableName: partner_users
+            columnNames: partner_id, user_id
+            constraintName: uk_partner_users_partner_user
+        - createIndex:
+            schemaName: partner
+            tableName: partner_users
+            indexName: idx_partner_users_user
+            columns:
+              - column: {name: user_id}
+        - addForeignKeyConstraint:
+            baseTableSchemaName: partner
+            baseTableName: partner_users
+            baseColumnNames: partner_id
+            constraintName: fk_partner_users_partner
+            referencedTableSchemaName: partner
+            referencedTableName: partners
+            referencedColumnNames: id
+            onDelete: CASCADE
+      rollback:
+        - dropTable: {schemaName: partner, tableName: partner_users}
+        - dropTable: {schemaName: partner, tableName: partners}

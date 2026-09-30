@@ -1,0 +1,44 @@
+# The order the catalogue is shown in, as the curators numbered it: the tourism
+# regions 1 to 9, each region's own categories and search filters, the
+# interests within their group, and the tourism corridors.
+#
+# A region's categories and filters are ordered per region — Coffee is the
+# last of Northeastern Civilization's and the third of Urban Lifestyle's — so
+# the position is on the link row. The rows already there are numbered by
+# 012-display-order-rows.yaml.
+databaseChangeLog:
+  - changeSet:
+      id: v2-taxonomy-display-order
+      author: ams-travel-v2
+      changes:
+        - addColumn:
+            schemaName: taxonomy
+            tableName: regions
+            columns:
+              - column: {name: sort_order, type: int}
+        - addColumn:
+            schemaName: taxonomy
+            tableName: interests
+            columns:
+              - column: {name: sort_order, type: int}
+        - addColumn:
+            schemaName: taxonomy
+            tableName: corridors
+            columns:
+              - column: {name: sort_order, type: int}
+        - addColumn:
+            schemaName: taxonomy
+            tableName: region_categories
+            columns:
+              - column: {name: sort_order, type: int, defaultValueNumeric: 0, constraints: {nullable: false}}
+        - addColumn:
+            schemaName: taxonomy
+            tableName: region_tags
+            columns:
+              - column: {name: sort_order, type: int, defaultValueNumeric: 0, constraints: {nullable: false}}
+      rollback:
+        - dropColumn: {schemaName: taxonomy, tableName: region_tags, columnName: sort_order}
+        - dropColumn: {schemaName: taxonomy, tableName: region_categories, columnName: sort_order}
+        - dropColumn: {schemaName: taxonomy, tableName: corridors, columnName: sort_order}
+        - dropColumn: {schemaName: taxonomy, tableName: interests, columnName: sort_order}
+        - dropColumn: {schemaName: taxonomy, tableName: regions, columnName: sort_order}

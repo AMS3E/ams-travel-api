@@ -1,0 +1,69 @@
+package ams.asmtravel.api.services.destination.food.dto.response;
+
+import ams.asmtravel.api.services.destination.food.domain.AlcoholOption;
+import ams.asmtravel.api.services.destination.food.domain.FoodParking;
+import ams.asmtravel.api.services.destination.food.domain.FoodType;
+import ams.asmtravel.api.services.destination.food.domain.ReservationPolicy;
+import ams.asmtravel.api.services.destination.destination.domain.ListingStatus;
+
+import java.math.BigDecimal;
+import java.time.Instant;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+public record FoodResponse(
+        UUID id,
+        UUID destinationId,
+        UUID ownerUserId,
+        String name,
+        String slug,
+        FoodType type,
+        String shortDescription,
+        String description,
+        String address,
+        BigDecimal latitude,
+        BigDecimal longitude,
+        String priceRange,
+        BigDecimal priceFrom,
+        String currency,
+        Map<String, String> openingHours,
+        String phone,
+        String contactEmail,
+        String website,
+        String coverKey,
+        String coverUrl,
+        ListingStatus status,
+        Boolean isFeatured,
+        Boolean isLocalSpecialty,
+        BigDecimal averageRating,
+        Integer reviewCount,
+        UUID createdBy,
+        Instant publishedAt,
+        Instant createdAt,
+        Instant updatedAt,
+        List<UUID> categoryIds,
+        List<UUID> tagIds,
+        List<UUID> interestIds,
+        List<String> cuisines,
+        List<String> mealsServed,
+        List<String> dietary,
+        List<String> serviceOptions,
+        List<String> amenities,
+        List<String> goodFor,
+        List<String> menuLanguages,
+        List<String> deliveryPartners,
+        List<String> paymentMethods,
+        List<String> languagesSpoken,
+        AlcoholOption alcohol,
+        FoodParking parkingOption,
+        ReservationPolicy reservations,
+        Integer seatingCapacity,
+        BigDecimal averageMealPrice,
+        String telegram,
+        String whatsapp,
+        String facebookUrl,
+        Integer yearOpened,
+        List<String> specialties
+) {
+}

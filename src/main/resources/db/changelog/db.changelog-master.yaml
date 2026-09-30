@@ -1,0 +1,95 @@
+# AMS Travel database: the 41-table ERD in 8 schemas, plus the tables of the
+# features restored beside it — history & heritage (schema `history`), the
+# season calendar, and destination verification.
+#
+# Order matters: legacy tables go first, then the schemas, then each schema's
+# tables (only their own foreign keys), then the foreign keys that cross
+# schemas, PostgreSQL-only indexes, and the reference rows the API relies on.
+databaseChangeLog:
+  # What differs between PostgreSQL (the app) and H2 (the test run).
+  - property: {name: fn.uuid, value: gen_random_uuid(), dbms: postgresql}
+  - property: {name: fn.uuid, value: random_uuid(), dbms: h2}
+  - property: {name: type.json, value: jsonb, dbms: postgresql}
+  - property: {name: type.json, value: json, dbms: h2}
+  - property: {name: type.inet, value: inet, dbms: postgresql}
+  - property: {name: type.inet, value: varchar(45), dbms: h2}
+
+  # The tables, in the order their foreign keys allow.
+  - include: { file: v2/000-drop-legacy.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/001-schemas.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/auth/001-tables.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/partner/001-tables.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/taxonomy/001-tables.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/taxonomy/002-tourism-regions.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/destination/001-tables.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/publishing/001-tables.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/publishing/002-verifications.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/engagement/001-tables.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/gamification/001-tables.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/gamification/003-seasons.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/system/001-tables.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/history/001-tables.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/destination/003-stay-details.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/history/002-region-coverage.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/800-cross-schema-foreign-keys.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/810-postgresql-indexes.yaml, relativeToChangelogFile: true }
+  # Last of the schema changes: it drops keys that 800 creates.
+  - include: { file: v2/destination/004-listing-owner.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/destination/005-tourism-regions.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/taxonomy/005-corridor-itinerary.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/destination/007-stay-stands-alone.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/destination/008-food-stands-alone.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/destination/009-stay-interests.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/destination/010-stay-rooms.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/destination/011-stay-house-rules.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/destination/012-stay-room-details.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/destination/013-stay-room-layout.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/destination/014-food-details.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/destination/015-food-menu-items.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/destination/016-food-specialties.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/destination/017-stay-specialties.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/destination/018-destination-themes.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/destination/019-destination-heritage-filters.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/destination/020-bakery-into-cafe.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/destination/021-bar-into-restaurant.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/destination/022-plain-cafe.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/taxonomy/009-corridor-interests.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/taxonomy/011-display-order.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/publishing/003-listing-requests.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/media/001-media-items.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/media/002-media-status.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/media/003-drop-media-type.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/engagement/002-ratings.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/gamification/005-season-progress.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/gamification/006-point-transactions.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/engagement/003-review-workflow.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/gamification/007-badges.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/publishing/004-publishing-workflow.yaml, relativeToChangelogFile: true }
+
+  # Then the rows: reference data, and the top-ups for a database seeded before a feature existed.
+  - include: { file: v2/auth/002-roles-and-permissions.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/auth/003-partner-manage.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/auth/004-editor-bdo-publish.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/gamification/002-badges.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/taxonomy/003-discover-rows.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/destination/002-unesco-tag.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/taxonomy/004-spec-filters.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/history/003-region-coverage-rows.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/auth/005-drop-partner-manage.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/destination/006-tourism-region-rows.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/taxonomy/006-mekong-discovery-rows.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/taxonomy/007-region-interests.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/taxonomy/008-heritage-tags.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/taxonomy/010-corridor-interest-rows.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/taxonomy/012-display-order-rows.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/auth/006-contributor-listings.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/auth/007-verify-bdo-admin.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/taxonomy/013-created-by.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/taxonomy/014-province-created-by.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/taxonomy/015-province-slug.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/taxonomy/016-created-at.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/taxonomy/017-plain-cafe.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/taxonomy/018-province-zone-optional.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/gamification/004-period-created-at.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/gamification/008-badge-rows.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/gamification/009-season-rows.yaml, relativeToChangelogFile: true }

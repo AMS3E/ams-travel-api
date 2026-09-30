@@ -1,0 +1,160 @@
+# history: heritage behind the destinations — the periods of Khmer history,
+# its monarchs, architecture styles and religions, each destination's
+# timeline, and which of them it belongs to. Not in the 41-table ERD; laid out
+# as the user's 59-table spec has it. Keys to destinations are added with the
+# other cross-schema ones.
+databaseChangeLog:
+  - changeSet:
+      id: v2-history-tables
+      author: ams-travel-v2
+      changes:
+        - createTable:
+            schemaName: history
+            tableName: historical_periods
+            columns:
+              - column: {name: id, type: uuid, defaultValueComputed: "${fn.uuid}", constraints: {primaryKey: true, primaryKeyName: historical_periods_pkey, nullable: false}}
+              - column: {name: name, type: varchar(150), constraints: {nullable: false, unique: true, uniqueConstraintName: uk_historical_periods_name}}
+              - column: {name: start_year, type: int}
+              - column: {name: end_year, type: int}
+              - column: {name: description, type: text}
+              - column: {name: cover_key, type: varchar(512)}
+              - column: {name: created_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+              - column: {name: updated_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+
+        - createTable:
+            schemaName: history
+            tableName: monarchs
+            columns:
+              - column: {name: id, type: uuid, defaultValueComputed: "${fn.uuid}", constraints: {primaryKey: true, primaryKeyName: monarchs_pkey, nullable: false}}
+              - column: {name: name, type: varchar(150), constraints: {nullable: false, unique: true, uniqueConstraintName: uk_monarchs_name}}
+              - column: {name: title, type: varchar(150)}
+              - column: {name: reign_start_year, type: int}
+              - column: {name: reign_end_year, type: int}
+              - column: {name: description, type: text}
+              - column: {name: image_key, type: varchar(512)}
+              - column: {name: created_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+              - column: {name: updated_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+
+        - createTable:
+            schemaName: history
+            tableName: architecture_styles
+            columns:
+              - column: {name: id, type: uuid, defaultValueComputed: "${fn.uuid}", constraints: {primaryKey: true, primaryKeyName: architecture_styles_pkey, nullable: false}}
+              - column: {name: name, type: varchar(150), constraints: {nullable: false, unique: true, uniqueConstraintName: uk_architecture_styles_name}}
+              - column: {name: description, type: text}
+              - column: {name: period_id, type: uuid}
+              - column: {name: image_key, type: varchar(512)}
+              - column: {name: created_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+        - addForeignKeyConstraint:
+            baseTableSchemaName: history
+            baseTableName: architecture_styles
+            baseColumnNames: period_id
+            constraintName: fk_architecture_styles_period
+            referencedTableSchemaName: history
+            referencedTableName: historical_periods
+            referencedColumnNames: id
+            onDelete: SET NULL
+
+        - createTable:
+            schemaName: history
+            tableName: religions
+            columns:
+              - column: {name: id, type: uuid, defaultValueComputed: "${fn.uuid}", constraints: {primaryKey: true, primaryKeyName: religions_pkey, nullable: false}}
+              - column: {name: name, type: varchar(150), constraints: {nullable: false, unique: true, uniqueConstraintName: uk_religions_name}}
+              - column: {name: description, type: text}
+              - column: {name: icon_key, type: varchar(512)}
+              - column: {name: created_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+
+        # A destination's timeline: when it was built, rebuilt, rediscovered.
+        - createTable:
+            schemaName: history
+            tableName: destination_history
+            columns:
+              - column: {name: id, type: uuid, defaultValueComputed: "${fn.uuid}", constraints: {primaryKey: true, primaryKeyName: destination_history_pkey, nullable: false}}
+              - column: {name: destination_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: historical_period_id, type: uuid}
+              - column: {name: title, type: varchar(255), constraints: {nullable: false}}
+              - column: {name: description, type: text}
+              - column: {name: event_year, type: int}
+              - column: {name: start_date, type: date}
+              - column: {name: end_date, type: date}
+              - column: {name: source_reference, type: text}
+              - column: {name: created_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+              - column: {name: updated_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+        - createIndex:
+            schemaName: history
+            tableName: destination_history
+            indexName: idx_destination_history_destination
+            columns:
+              - column: {name: destination_id}
+        - addForeignKeyConstraint:
+            baseTableSchemaName: history
+            baseTableName: destination_history
+            baseColumnNames: historical_period_id
+            constraintName: fk_destination_history_period
+            referencedTableSchemaName: history
+            referencedTableName: historical_periods
+            referencedColumnNames: id
+            onDelete: SET NULL
+
+        # Which monarchs built or shaped a destination, and how.
+        - createTable:
+            schemaName: history
+            tableName: destination_monarchs
+            columns:
+              - column: {name: destination_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: monarch_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: description, type: text}
+        - addPrimaryKey: {schemaName: history, tableName: destination_monarchs, columnNames: "destination_id, monarch_id", constraintName: destination_monarchs_pkey}
+        - addForeignKeyConstraint:
+            baseTableSchemaName: history
+            baseTableName: destination_monarchs
+            baseColumnNames: monarch_id
+            constraintName: fk_destination_monarchs_monarch
+            referencedTableSchemaName: history
+            referencedTableName: monarchs
+            referencedColumnNames: id
+            onDelete: CASCADE
+
+        - createTable:
+            schemaName: history
+            tableName: destination_architecture_styles
+            columns:
+              - column: {name: destination_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: architecture_style_id, type: uuid, constraints: {nullable: false}}
+        - addPrimaryKey: {schemaName: history, tableName: destination_architecture_styles, columnNames: "destination_id, architecture_style_id", constraintName: destination_architecture_styles_pkey}
+        - addForeignKeyConstraint:
+            baseTableSchemaName: history
+            baseTableName: destination_architecture_styles
+            baseColumnNames: architecture_style_id
+            constraintName: fk_destination_architecture_styles_style
+            referencedTableSchemaName: history
+            referencedTableName: architecture_styles
+            referencedColumnNames: id
+            onDelete: CASCADE
+
+        - createTable:
+            schemaName: history
+            tableName: destination_religions
+            columns:
+              - column: {name: destination_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: religion_id, type: uuid, constraints: {nullable: false}}
+        - addPrimaryKey: {schemaName: history, tableName: destination_religions, columnNames: "destination_id, religion_id", constraintName: destination_religions_pkey}
+        - addForeignKeyConstraint:
+            baseTableSchemaName: history
+            baseTableName: destination_religions
+            baseColumnNames: religion_id
+            constraintName: fk_destination_religions_religion
+            referencedTableSchemaName: history
+            referencedTableName: religions
+            referencedColumnNames: id
+            onDelete: CASCADE
+      rollback:
+        - dropTable: {schemaName: history, tableName: destination_religions}
+        - dropTable: {schemaName: history, tableName: destination_architecture_styles}
+        - dropTable: {schemaName: history, tableName: destination_monarchs}
+        - dropTable: {schemaName: history, tableName: destination_history}
+        - dropTable: {schemaName: history, tableName: religions}
+        - dropTable: {schemaName: history, tableName: architecture_styles}
+        - dropTable: {schemaName: history, tableName: monarchs}
+        - dropTable: {schemaName: history, tableName: historical_periods}

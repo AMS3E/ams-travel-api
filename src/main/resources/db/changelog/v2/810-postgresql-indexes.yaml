@@ -1,0 +1,46 @@
+# Rules H2 cannot express, so the test run skips them and the services check
+# the same things before writing.
+databaseChangeLog:
+  # "Nearby": a GiST index over the point the coordinates make. Queries must
+  # use this exact expression (and the same null checks) to be served by it.
+  - changeSet:
+      id: v2-destinations-location-index
+      author: ams-travel-v2
+      dbms: postgresql
+      changes:
+        - sql:
+            sql: >-
+              CREATE INDEX idx_destinations_location ON destination.destinations
+              USING gist ((ST_SetSRID(ST_MakePoint(longitude::float8, latitude::float8), 4326)::geography))
+              WHERE latitude IS NOT NULL AND longitude IS NOT NULL
+      rollback:
+        - sql:
+            sql: DROP INDEX IF EXISTS destination.idx_destinations_location
+
+  # One stamp per person, place and calendar day in Cambodia.
+  - changeSet:
+      id: v2-digital-stamps-one-a-day
+      author: ams-travel-v2
+      dbms: postgresql
+      changes:
+        - sql:
+            sql: >-
+              CREATE UNIQUE INDEX uk_digital_stamps_user_destination_day ON engagement.digital_stamps
+              (user_id, destination_id, ((collected_at AT TIME ZONE 'Asia/Phnom_Penh')::date))
+      rollback:
+        - sql:
+            sql: DROP INDEX IF EXISTS engagement.uk_digital_stamps_user_destination_day
+
+  # At most one open request (waiting, or handed back for changes) per destination.
+  - changeSet:
+      id: v2-publish-requests-one-open
+      author: ams-travel-v2
+      dbms: postgresql
+      changes:
+        - sql:
+            sql: >-
+              CREATE UNIQUE INDEX uk_publish_requests_open_destination ON publishing.publish_requests
+              (destination_id) WHERE status IN ('PENDING', 'CHANGES_REQUESTED')
+      rollback:
+        - sql:
+            sql: DROP INDEX IF EXISTS publishing.uk_publish_requests_open_destination

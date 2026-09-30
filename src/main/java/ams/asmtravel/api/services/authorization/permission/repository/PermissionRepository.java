@@ -1,0 +1,14 @@
+package ams.asmtravel.api.services.authorization.permission.repository;
+
+import ams.asmtravel.api.services.authorization.permission.domain.Permission;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+import java.util.UUID;
+
+public interface PermissionRepository extends JpaRepository<Permission, UUID> {
+
+    List<Permission> findAllByOrderByCodeAsc();
+
+    List<Permission> findByCodeIgnoreCase(String code);
+}

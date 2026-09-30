@@ -1,0 +1,76 @@
+# A tourism region's own interests, beside its categories and tags: what an
+# attraction of its theme is offered on the form. Ancient Capitals & Khmer
+# Civilization offers Historical Sites and Culture, not Diving.
+#
+# The rows are the region seed's (`regions.json`, key `interests`), for a
+# database seeded before the link existed; a fresh one gets them from the seed.
+databaseChangeLog:
+  - changeSet:
+      id: v2-taxonomy-region-interests
+      author: ams-travel-v2
+      changes:
+        - createTable:
+            schemaName: taxonomy
+            tableName: region_interests
+            columns:
+              - column: {name: region_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: interest_id, type: uuid, constraints: {nullable: false}}
+        - addPrimaryKey: {schemaName: taxonomy, tableName: region_interests, columnNames: "region_id, interest_id", constraintName: region_interests_pkey}
+        - addForeignKeyConstraint:
+            baseTableSchemaName: taxonomy
+            baseTableName: region_interests
+            baseColumnNames: region_id
+            constraintName: fk_region_interests_region
+            referencedTableSchemaName: taxonomy
+            referencedTableName: regions
+            referencedColumnNames: id
+            onDelete: CASCADE
+        - addForeignKeyConstraint:
+            baseTableSchemaName: taxonomy
+            baseTableName: region_interests
+            baseColumnNames: interest_id
+            constraintName: fk_region_interests_interest
+            referencedTableSchemaName: taxonomy
+            referencedTableName: interests
+            referencedColumnNames: id
+            onDelete: CASCADE
+      rollback:
+        - dropTable: {schemaName: taxonomy, tableName: region_interests}
+  - changeSet:
+      id: v2-taxonomy-region-interest-rows
+      author: ams-travel-v2
+      dbms: postgresql
+      changes:
+        - sql:
+            sql: |
+              INSERT INTO taxonomy.region_interests (region_id, interest_id)
+              SELECT r.id, i.id
+              FROM (VALUES
+                ('ANCIENT-CAPITALS', 'historical-sites'), ('ANCIENT-CAPITALS', 'culture'), ('ANCIENT-CAPITALS', 'cave'), ('ANCIENT-CAPITALS', 'viewpoint'),
+                ('NORTHEASTERN', 'culture'), ('NORTHEASTERN', 'national-parks'), ('NORTHEASTERN', 'waterfalls'), ('NORTHEASTERN', 'wildlife'),
+                ('NORTHEASTERN', 'bird-sanctuary'), ('NORTHEASTERN', 'hiking-trekking'), ('NORTHEASTERN', 'camping'), ('NORTHEASTERN', 'kayak'),
+                ('NORTHEASTERN', 'viewpoint'),
+                ('MEKONG-TONLE-SAP', 'floating-village'), ('MEKONG-TONLE-SAP', 'fishing'), ('MEKONG-TONLE-SAP', 'bird-sanctuary'),
+                ('MEKONG-TONLE-SAP', 'cruise'), ('MEKONG-TONLE-SAP', 'kayak'), ('MEKONG-TONLE-SAP', 'culture'), ('MEKONG-TONLE-SAP', 'viewpoint'),
+                ('MEKONG-TONLE-SAP', 'wildlife'),
+                ('MOUNTAIN-WATERFALL', 'national-parks'), ('MOUNTAIN-WATERFALL', 'waterfalls'), ('MOUNTAIN-WATERFALL', 'cave'),
+                ('MOUNTAIN-WATERFALL', 'hiking-trekking'), ('MOUNTAIN-WATERFALL', 'camping'), ('MOUNTAIN-WATERFALL', 'viewpoint'),
+                ('MOUNTAIN-WATERFALL', 'wildlife'),
+                ('COASTAL-ISLAND', 'beaches-islands'), ('COASTAL-ISLAND', 'diving'), ('COASTAL-ISLAND', 'kayak'), ('COASTAL-ISLAND', 'cruise'),
+                ('COASTAL-ISLAND', 'fishing'), ('COASTAL-ISLAND', 'national-parks'), ('COASTAL-ISLAND', 'resorts'),
+                ('URBAN-LIFESTYLE', 'culture'), ('URBAN-LIFESTYLE', 'historical-sites'), ('URBAN-LIFESTYLE', 'markets'), ('URBAN-LIFESTYLE', 'shopping'),
+                ('URBAN-LIFESTYLE', 'skybar'), ('URBAN-LIFESTYLE', 'streetfood'), ('URBAN-LIFESTYLE', 'drinks'), ('URBAN-LIFESTYLE', 'restaurants'),
+                ('KHMER-CULINARY', 'traditional-food'), ('KHMER-CULINARY', 'streetfood'), ('KHMER-CULINARY', 'restaurants'), ('KHMER-CULINARY', 'markets'),
+                ('KHMER-CULINARY', 'drinks'), ('KHMER-CULINARY', 'culture'), ('KHMER-CULINARY', 'skybar'),
+                ('ECO-COMMUNITY', 'homestay'), ('ECO-COMMUNITY', 'eco-lodge'), ('ECO-COMMUNITY', 'culture'), ('ECO-COMMUNITY', 'bird-sanctuary'),
+                ('ECO-COMMUNITY', 'wildlife'), ('ECO-COMMUNITY', 'hiking-trekking'), ('ECO-COMMUNITY', 'kayak'), ('ECO-COMMUNITY', 'fishing'),
+                ('ECO-COMMUNITY', 'camping'), ('ECO-COMMUNITY', 'traditional-food'), ('ECO-COMMUNITY', 'drinks'),
+                ('LUXURY-TOURISM', 'luxury-hotel'), ('LUXURY-TOURISM', 'resorts'), ('LUXURY-TOURISM', 'private-island'), ('LUXURY-TOURISM', 'beaches-islands'),
+                ('LUXURY-TOURISM', 'restaurants'), ('LUXURY-TOURISM', 'skybar'), ('LUXURY-TOURISM', 'cruise'), ('LUXURY-TOURISM', 'diving')
+              ) AS v (code, slug)
+              JOIN taxonomy.regions r ON r.code = v.code AND r.kind = 'TOURISM'
+              JOIN taxonomy.interests i ON i.slug = v.slug
+              ON CONFLICT DO NOTHING;
+      rollback:
+        - sql:
+            sql: DELETE FROM taxonomy.region_interests;

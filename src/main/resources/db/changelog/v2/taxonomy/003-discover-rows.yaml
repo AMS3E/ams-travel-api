@@ -1,0 +1,135 @@
+# The Discover layer's rows, for a database that was seeded before they existed.
+#
+# A fresh database gets these from the catalogue seed (region/config/regions.json,
+# interest/config/interests.json), which runs after Liquibase and only when the
+# tables are empty — so this change set checks for regions and marks itself run
+# when there are none, leaving the seeder to do the work. It exists for the one
+# database that was already filled, and is generated from those same seed files.
+databaseChangeLog:
+  - changeSet:
+      id: v2-taxonomy-discover-rows
+      author: ams-travel-v2
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 1
+            sql: SELECT CASE WHEN count(*) > 0 THEN 1 ELSE 0 END FROM taxonomy.regions
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              -- The nine tourism regions, their shelves and their filter chips.
+              INSERT INTO taxonomy.regions (id, code, name, kind, description, is_active, created_at) VALUES
+                (${fn.uuid}, 'ANCIENT-CAPITALS', 'Ancient Capitals & Khmer Civilization', 'TOURISM', 'The royal capitals of the Khmer empire and what they left behind: temple cities, the roads and bridges that joined them, the hospitals that served them, and the museums that keep them.', true, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'NORTHEASTERN', 'Northeastern Civilization', 'TOURISM', 'The highlands of Ratanakiri, Mondulkiri and Stung Treng: indigenous villages, a volcano lake, elephant forests and the waterfalls of the Sesan and Srepok.', true, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'MEKONG-TONLE-SAP', 'Mekong & Tonle Sap Civilization', 'TOURISM', 'Life on the water: floating villages, fishing grounds, bird sanctuaries, river islands and the rice country the flood feeds.', true, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'MOUNTAIN-WATERFALL', 'Mountain & Waterfall Region', 'TOURISM', 'The Cardamoms, the Elephant Mountains and Preah Vihear: national parks, caves, trails to a peak and the waterfalls along them.', true, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'COASTAL-ISLAND', 'Coastal & Island Region', 'TOURISM', 'The Gulf of Thailand: beaches, islands, coral and mangrove, and the seafood between them.', true, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'URBAN-LIFESTYLE', 'Urban Lifestyle & Nightlife', 'TOURISM', 'Phnom Penh, Siem Reap and Battambang after dark: night markets, sky bars, galleries, coffee and the street food between them.', true, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'KHMER-CULINARY', 'Khmer Culinary Region', 'TOURISM', 'What Cambodia eats and where it is cooked: the traditional table, the street, the fine dining room, the cooking class and the farm behind them.', true, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'ECO-COMMUNITY', 'Eco-Community Tourism', 'TOURISM', 'Travel that stays in the village: homestays, craft and farming, eco lodges, birdwatching and the local guides who take you.', true, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'LUXURY-TOURISM', 'Luxury Tourism', 'TOURISM', 'The private end of Cambodia: island resorts, golf, spa, a helicopter or a yacht, and a guide of your own.', true, CURRENT_TIMESTAMP);
+
+              INSERT INTO taxonomy.tags (id, name, slug, is_active)
+              SELECT ${fn.uuid}, 'UNESCO', 'unesco', true
+              WHERE NOT EXISTS (SELECT 1 FROM taxonomy.tags WHERE slug = 'unesco');
+
+              INSERT INTO taxonomy.region_categories (region_id, category_id)
+              SELECT r.id, c.id FROM taxonomy.regions r JOIN taxonomy.categories c
+                ON c.slug IN ('ancient-cities', 'temples', 'archaeological-sites', 'ancient-roads', 'bridges', 'hospitals', 'museums')
+              WHERE r.code = 'ANCIENT-CAPITALS';
+              INSERT INTO taxonomy.region_tags (region_id, tag_id)
+              SELECT r.id, t.id FROM taxonomy.regions r JOIN taxonomy.tags t
+                ON t.slug IN ('unesco')
+              WHERE r.code = 'ANCIENT-CAPITALS';
+
+              INSERT INTO taxonomy.region_categories (region_id, category_id)
+              SELECT r.id, c.id FROM taxonomy.regions r JOIN taxonomy.categories c
+                ON c.slug IN ('indigenous-culture', 'volcano-lake', 'forest', 'wildlife', 'waterfalls', 'sacred-mountain', 'adventure', 'coffee')
+              WHERE r.code = 'NORTHEASTERN';
+              INSERT INTO taxonomy.region_tags (region_id, tag_id)
+              SELECT r.id, t.id FROM taxonomy.regions r JOIN taxonomy.tags t
+                ON t.slug IN ('tribe', 'forest', 'elephant', 'camping', 'bird', 'sesan', 'srepok')
+              WHERE r.code = 'NORTHEASTERN';
+
+              INSERT INTO taxonomy.region_categories (region_id, category_id)
+              SELECT r.id, c.id FROM taxonomy.regions r JOIN taxonomy.categories c
+                ON c.slug IN ('floating-village', 'fishing', 'bird-sanctuary', 'river-island', 'rice', 'community', 'boat-trip', 'sunset')
+              WHERE r.code = 'MEKONG-TONLE-SAP';
+              INSERT INTO taxonomy.region_tags (region_id, tag_id)
+              SELECT r.id, t.id FROM taxonomy.regions r JOIN taxonomy.tags t
+                ON t.slug IN ('boat', 'bird', 'fishing', 'lotus', 'rice', 'island', 'wetland', 'festival')
+              WHERE r.code = 'MEKONG-TONLE-SAP';
+
+              INSERT INTO taxonomy.region_categories (region_id, category_id)
+              SELECT r.id, c.id FROM taxonomy.regions r JOIN taxonomy.categories c
+                ON c.slug IN ('mountain', 'national-parks', 'waterfalls', 'cave', 'trekking', 'camping', 'cycling', 'viewpoint', 'photography')
+              WHERE r.code = 'MOUNTAIN-WATERFALL';
+              INSERT INTO taxonomy.region_tags (region_id, tag_id)
+              SELECT r.id, t.id FROM taxonomy.regions r JOIN taxonomy.tags t
+                ON t.slug IN ('hiking', 'sunrise', 'sunset', 'camping', 'trail', 'peak', 'landscape')
+              WHERE r.code = 'MOUNTAIN-WATERFALL';
+
+              INSERT INTO taxonomy.region_categories (region_id, category_id)
+              SELECT r.id, c.id FROM taxonomy.regions r JOIN taxonomy.categories c
+                ON c.slug IN ('beach', 'island', 'coral', 'diving', 'seafood', 'mangrove', 'cruise', 'snorkeling')
+              WHERE r.code = 'COASTAL-ISLAND';
+              INSERT INTO taxonomy.region_tags (region_id, tag_id)
+              SELECT r.id, t.id FROM taxonomy.regions r JOIN taxonomy.tags t
+                ON t.slug IN ('beach', 'island', 'luxury-resort', 'diving', 'kayak')
+              WHERE r.code = 'COASTAL-ISLAND';
+
+              INSERT INTO taxonomy.region_categories (region_id, category_id)
+              SELECT r.id, c.id FROM taxonomy.regions r JOIN taxonomy.categories c
+                ON c.slug IN ('city-walk', 'night-market', 'coffee', 'sky-bar', 'shopping', 'art-gallery', 'street-food')
+              WHERE r.code = 'URBAN-LIFESTYLE';
+              INSERT INTO taxonomy.region_tags (region_id, tag_id)
+              SELECT r.id, t.id FROM taxonomy.regions r JOIN taxonomy.tags t
+                ON t.slug IN ('cafe', 'nightlife', 'shopping', 'music', 'food', 'architecture')
+              WHERE r.code = 'URBAN-LIFESTYLE';
+
+              INSERT INTO taxonomy.region_categories (region_id, category_id)
+              SELECT r.id, c.id FROM taxonomy.regions r JOIN taxonomy.categories c
+                ON c.slug IN ('traditional-food', 'michelin', 'street-food', 'fine-dining', 'cooking-class', 'farm')
+              WHERE r.code = 'KHMER-CULINARY';
+              INSERT INTO taxonomy.region_tags (region_id, tag_id)
+              SELECT r.id, t.id FROM taxonomy.regions r JOIN taxonomy.tags t
+                ON t.slug IN ('khmer-curry', 'fish-amok', 'num-banh-chok', 'pepper', 'rice-wine', 'palm-sugar')
+              WHERE r.code = 'KHMER-CULINARY';
+
+              INSERT INTO taxonomy.region_categories (region_id, category_id)
+              SELECT r.id, c.id FROM taxonomy.regions r JOIN taxonomy.categories c
+                ON c.slug IN ('homestay', 'village', 'craft', 'agriculture', 'eco-lodge', 'bird-watching', 'local-guide')
+              WHERE r.code = 'ECO-COMMUNITY';
+              INSERT INTO taxonomy.region_tags (region_id, tag_id)
+              SELECT r.id, t.id FROM taxonomy.regions r JOIN taxonomy.tags t
+                ON t.slug IN ('homestay', 'community', 'cycling', 'farm', 'local-food', 'fishing')
+              WHERE r.code = 'ECO-COMMUNITY';
+
+              INSERT INTO taxonomy.region_categories (region_id, category_id)
+              SELECT r.id, c.id FROM taxonomy.regions r JOIN taxonomy.categories c
+                ON c.slug IN ('luxury-hotel', 'private-island', 'golf', 'helicopter', 'yacht', 'private-guide', 'fine-dining', 'spa', 'vip-tour')
+              WHERE r.code = 'LUXURY-TOURISM';
+              INSERT INTO taxonomy.region_tags (region_id, tag_id)
+              SELECT r.id, t.id FROM taxonomy.regions r JOIN taxonomy.tags t
+                ON t.slug IN ('luxury', 'five-stars', 'private', 'exclusive', 'helicopter', 'golf', 'spa')
+              WHERE r.code = 'LUXURY-TOURISM';
+
+              -- The group the Discover layer lists each interest under.
+              UPDATE taxonomy.interests SET group_name = 'Attraction Sites'
+                WHERE slug IN ('historical-sites', 'culture', 'national-parks', 'cave');
+              UPDATE taxonomy.interests SET group_name = 'Stays'
+                WHERE slug IN ('luxury-hotel', 'homestay', 'resorts', 'private-island', 'eco-lodge');
+              UPDATE taxonomy.interests SET group_name = 'Food'
+                WHERE slug IN ('restaurants', 'markets', 'drinks', 'streetfood', 'traditional-food', 'skybar');
+              UPDATE taxonomy.interests SET group_name = 'Water'
+                WHERE slug IN ('beaches-islands', 'waterfalls', 'floating-village');
+              UPDATE taxonomy.interests SET group_name = 'Activities & Experiences'
+                WHERE slug IN ('diving', 'kayak', 'bird-sanctuary', 'wildlife', 'hiking-trekking', 'fishing', 'camping', 'viewpoint', 'cruise', 'shopping');
+      rollback:
+        - sql:
+            splitStatements: true
+            sql: |
+              UPDATE taxonomy.interests SET group_name = NULL;
+              DELETE FROM taxonomy.regions WHERE kind = 'TOURISM';
+              DELETE FROM taxonomy.tags WHERE slug = 'unesco';

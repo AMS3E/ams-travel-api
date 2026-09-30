@@ -1,0 +1,23 @@
+# A database seeded before a region could be chosen keeps what its website
+# showed: each place in every tourism region one of its categories is shelved
+# in. A fresh database gets the same from the destination seeder, and nothing
+# is here to copy yet.
+databaseChangeLog:
+  - changeSet:
+      id: v2-destination-tourism-region-rows
+      author: ams-travel-v2
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              INSERT INTO destination.destination_regions (destination_id, region_id)
+              SELECT DISTINCT dc.destination_id, r.id
+              FROM destination.destination_categories dc
+              JOIN taxonomy.region_categories rc ON rc.category_id = dc.category_id
+              JOIN taxonomy.regions r ON r.id = rc.region_id AND r.kind = 'TOURISM'
+              WHERE NOT EXISTS (
+                SELECT 1 FROM destination.destination_regions existing
+                WHERE existing.destination_id = dc.destination_id AND existing.region_id = r.id);
+      rollback:
+        - sql:
+            sql: DELETE FROM destination.destination_regions;

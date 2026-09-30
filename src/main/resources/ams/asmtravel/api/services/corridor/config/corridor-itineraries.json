@@ -1,0 +1,259 @@
+[
+  {
+    "corridorSlug": "khmer-civilization-trail",
+    "days": [
+      {
+        "title": "Angkor at dawn",
+        "startTime": "05:00",
+        "stops": [
+          {
+            "destinationSlug": "angkor-wat",
+            "arrivalTime": "05:00",
+            "departureTime": "11:00",
+            "recommendedDurationMinutes": 360
+          }
+        ]
+      },
+      {
+        "title": "The jungle capitals",
+        "startTime": "07:30",
+        "stops": [
+          {
+            "destinationSlug": "koh-ker",
+            "arrivalTime": "09:45",
+            "departureTime": "12:45",
+            "recommendedDurationMinutes": 180,
+            "transportType": "CAR"
+          },
+          {
+            "destinationSlug": "sambor-prei-kuk",
+            "arrivalTime": "15:30",
+            "departureTime": "17:30",
+            "recommendedDurationMinutes": 120,
+            "transportType": "CAR"
+          }
+        ]
+      },
+      {
+        "title": "Down to Phnom Penh",
+        "startTime": "08:00",
+        "stops": [
+          {
+            "destinationSlug": "royal-palace",
+            "arrivalTime": "11:00",
+            "departureTime": "13:00",
+            "recommendedDurationMinutes": 120,
+            "transportType": "CAR"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "corridorSlug": "mekong-civilization",
+    "days": [
+      {
+        "title": "The great lake",
+        "startTime": "07:30",
+        "stops": [
+          {
+            "destinationSlug": "kampong-phluk",
+            "arrivalTime": "08:00",
+            "departureTime": "10:30",
+            "recommendedDurationMinutes": 150
+          },
+          {
+            "destinationSlug": "tonle-sap-floating-village",
+            "arrivalTime": "11:30",
+            "departureTime": "13:30",
+            "recommendedDurationMinutes": 120,
+            "transportType": "BOAT"
+          }
+        ]
+      },
+      {
+        "title": "South to the silk island",
+        "startTime": "08:00",
+        "stops": [
+          {
+            "destinationSlug": "koh-dach-silk-island",
+            "arrivalTime": "14:30",
+            "departureTime": "17:00",
+            "recommendedDurationMinutes": 150,
+            "transportType": "CAR"
+          }
+        ]
+      },
+      {
+        "title": "Dolphins and the community trail",
+        "startTime": "06:30",
+        "stops": [
+          {
+            "destinationSlug": "kampi-dolphin-pool",
+            "arrivalTime": "11:30",
+            "departureTime": "13:30",
+            "recommendedDurationMinutes": 120,
+            "transportType": "CAR"
+          },
+          {
+            "destinationSlug": "mekong-discovery-trail",
+            "arrivalTime": "16:00",
+            "departureTime": "18:00",
+            "recommendedDurationMinutes": 120,
+            "transportType": "CAR"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "corridorSlug": "coastal-paradise-route",
+    "days": [
+      {
+        "title": "Kampot and Kep",
+        "startTime": "09:00",
+        "stops": [
+          {
+            "destinationSlug": "kampot-riverfront",
+            "arrivalTime": "09:00",
+            "departureTime": "11:00",
+            "recommendedDurationMinutes": 120
+          },
+          {
+            "destinationSlug": "kep-crab-market",
+            "arrivalTime": "11:45",
+            "departureTime": "14:00",
+            "recommendedDurationMinutes": 135,
+            "transportType": "CAR"
+          }
+        ]
+      },
+      {
+        "title": "The Sihanoukville coast",
+        "startTime": "08:00",
+        "stops": [
+          {
+            "destinationSlug": "otres-beach",
+            "arrivalTime": "11:00",
+            "departureTime": "16:00",
+            "recommendedDurationMinutes": 300,
+            "transportType": "CAR"
+          }
+        ]
+      },
+      {
+        "title": "Out to Koh Rong",
+        "startTime": "08:30",
+        "stops": [
+          {
+            "destinationSlug": "koh-rong",
+            "arrivalTime": "10:30",
+            "recommendedDurationMinutes": 360,
+            "transportType": "BOAT",
+            "notes": "Speedboats leave from the Sihanoukville pier."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "corridorSlug": "cardamom-peaks-explorer",
+    "days": [
+      {
+        "title": "Out of the capital",
+        "startTime": "08:00",
+        "stops": [
+          {
+            "destinationSlug": "royal-palace",
+            "arrivalTime": "08:00",
+            "departureTime": "10:00",
+            "recommendedDurationMinutes": 120
+          },
+          {
+            "destinationSlug": "kampot-riverfront",
+            "arrivalTime": "13:30",
+            "recommendedDurationMinutes": 180,
+            "transportType": "MINIVAN"
+          }
+        ]
+      },
+      {
+        "title": "Up the Bokor plateau",
+        "startTime": "08:00",
+        "stops": [
+          {
+            "destinationSlug": "bokor-mountain",
+            "arrivalTime": "09:00",
+            "departureTime": "15:00",
+            "recommendedDurationMinutes": 360,
+            "transportType": "MOTORBIKE"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "corridorSlug": "khmer-culinary",
+    "days": [
+      {
+        "title": "Siem Reap kitchens",
+        "startTime": "09:00",
+        "stops": [
+          {
+            "destinationSlug": "khmer-cooking-class-siem-reap",
+            "arrivalTime": "09:00",
+            "departureTime": "12:00",
+            "recommendedDurationMinutes": 180
+          },
+          {
+            "destinationSlug": "num-banh-chok-markets",
+            "arrivalTime": "12:30",
+            "departureTime": "13:30",
+            "recommendedDurationMinutes": 60,
+            "transportType": "TUK_TUK"
+          }
+        ]
+      },
+      {
+        "title": "Phnom Penh",
+        "startTime": "07:00",
+        "stops": [
+          {
+            "destinationSlug": "malis-phnom-penh",
+            "arrivalTime": "13:00",
+            "departureTime": "14:30",
+            "recommendedDurationMinutes": 90,
+            "transportType": "BUS"
+          }
+        ]
+      },
+      {
+        "title": "Palm sugar, pepper and crab",
+        "startTime": "08:00",
+        "stops": [
+          {
+            "destinationSlug": "kampong-speu-palm-sugar",
+            "arrivalTime": "09:30",
+            "departureTime": "10:30",
+            "recommendedDurationMinutes": 60,
+            "transportType": "CAR"
+          },
+          {
+            "destinationSlug": "kampot-pepper-farm",
+            "arrivalTime": "12:30",
+            "departureTime": "14:00",
+            "recommendedDurationMinutes": 90,
+            "transportType": "CAR"
+          },
+          {
+            "destinationSlug": "kep-crab-market",
+            "arrivalTime": "14:45",
+            "departureTime": "16:30",
+            "recommendedDurationMinutes": 105,
+            "transportType": "CAR"
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,41 @@
+# One schema per area of the ERD, plus `history` for heritage (the user's
+# 59-table spec), which the 41-table ERD left out.
+databaseChangeLog:
+  - changeSet:
+      id: v2-schemas
+      author: ams-travel-v2
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              CREATE SCHEMA IF NOT EXISTS auth;
+              CREATE SCHEMA IF NOT EXISTS partner;
+              CREATE SCHEMA IF NOT EXISTS taxonomy;
+              CREATE SCHEMA IF NOT EXISTS destination;
+              CREATE SCHEMA IF NOT EXISTS publishing;
+              CREATE SCHEMA IF NOT EXISTS engagement;
+              CREATE SCHEMA IF NOT EXISTS gamification;
+              CREATE SCHEMA IF NOT EXISTS system;
+              CREATE SCHEMA IF NOT EXISTS history;
+      rollback:
+        - sql:
+            splitStatements: true
+            sql: |
+              DROP SCHEMA IF EXISTS history CASCADE;
+              DROP SCHEMA IF EXISTS system CASCADE;
+              DROP SCHEMA IF EXISTS gamification CASCADE;
+              DROP SCHEMA IF EXISTS engagement CASCADE;
+              DROP SCHEMA IF EXISTS publishing CASCADE;
+              DROP SCHEMA IF EXISTS destination CASCADE;
+              DROP SCHEMA IF EXISTS taxonomy CASCADE;
+              DROP SCHEMA IF EXISTS partner CASCADE;
+              DROP SCHEMA IF EXISTS auth CASCADE;
+
+  # PostGIS is kept for "nearby" (an expression over latitude/longitude).
+  - changeSet:
+      id: v2-postgis
+      author: ams-travel-v2
+      dbms: postgresql
+      changes:
+        - sql:
+            sql: CREATE EXTENSION IF NOT EXISTS postgis

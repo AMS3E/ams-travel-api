@@ -1,0 +1,26 @@
+# A bar is a restaurant.
+#
+# The mirror of 020: a bar sells at a table as a restaurant does, and the
+# restaurant's form already asks a place to pick how it serves and what it
+# cooks, so draught beer, happy hour and the rules on the door are three more
+# groups on that same list rather than a kind of their own
+# (FoodSpecialties.BY_KIND.RESTAURANT). FoodType loses BAR, so the rows that
+# hold it move here; the specialty slugs are unchanged, so a bar keeps every
+# drink and every night it had chosen and reads as a restaurant that pours.
+databaseChangeLog:
+  - changeSet:
+      id: v2-destination-bar-into-restaurant
+      author: ams-travel-v2
+      changes:
+        - sql: {sql: "UPDATE destination.destination_foods SET type = 'RESTAURANT' WHERE type = 'BAR'"}
+      rollback:
+        # Which restaurants used to be bars is not recorded; the ones that say
+        # what they pour are the closest honest answer.
+        - sql:
+            sql: |
+              UPDATE destination.destination_foods SET type = 'BAR'
+              WHERE type = 'RESTAURANT'
+                AND (CAST(specialties AS VARCHAR) LIKE '%draught-beer%'
+                  OR CAST(specialties AS VARCHAR) LIKE '%craft-beer%'
+                  OR CAST(specialties AS VARCHAR) LIKE '%signature-cocktails%'
+                  OR CAST(specialties AS VARCHAR) LIKE '%spirits%');

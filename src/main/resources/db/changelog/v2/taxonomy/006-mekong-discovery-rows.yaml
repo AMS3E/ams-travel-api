@@ -1,0 +1,66 @@
+# The 3-Day Mekong Discovery, for a catalogue seeded before corridors had days.
+#
+# A fresh database gets it, with every other corridor's days, from the corridor
+# seed files. This is for one whose corridors were already seeded: it adds the
+# example multi-day corridor when all five of its destinations are there and no
+# corridor has taken its slug. Its road route is worked out the first time it
+# is shown with a Google key configured.
+databaseChangeLog:
+  - changeSet:
+      id: v2-corridor-mekong-discovery
+      author: ams-travel-v2
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 1
+            sql: |
+              SELECT CASE WHEN
+                (SELECT COUNT(*) FROM taxonomy.corridors) > 0
+                AND (SELECT COUNT(*) FROM taxonomy.corridors WHERE slug = '3-day-mekong-discovery') = 0
+                AND (SELECT COUNT(*) FROM destination.destinations
+                     WHERE slug IN ('phnom-penh-riverside', 'koh-dach-silk-island', 'mekong-discovery-trail', 'koh-trong', 'kampi-dolphin-pool')) = 5
+              THEN 1 ELSE 0 END
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              INSERT INTO taxonomy.corridors (name, slug, short_description, description, cover_key, is_featured, status,
+                                              duration_days, duration_nights, estimated_budget_min, estimated_budget_max,
+                                              start_destination_id, end_destination_id, published_at)
+              SELECT '3-Day Mekong Discovery', '3-day-mekong-discovery',
+                     'Up the Mekong from Phnom Penh to the river dolphins of Kratie, by road and by boat.',
+                     'Three days on Cambodia''s great river: the capital''s riverfront and the weaving island of Koh Dach, the community trail around Kampong Cham, a night on Koh Trong, and the Irrawaddy dolphins of the Kampi pool.',
+                     trail.cover_key, TRUE, 'PUBLISHED', 3, 2, 180, 320,
+                     (SELECT id FROM destination.destinations WHERE slug = 'phnom-penh-riverside'),
+                     (SELECT id FROM destination.destinations WHERE slug = 'kampi-dolphin-pool'),
+                     CURRENT_TIMESTAMP
+              FROM destination.destinations trail
+              WHERE trail.slug = 'mekong-discovery-trail';
+
+              INSERT INTO taxonomy.corridor_days (corridor_id, day_number, title, description, start_time)
+              SELECT c.id, v.day_number, v.title, v.description, CAST(v.start_time AS TIME)
+              FROM taxonomy.corridors c
+              CROSS JOIN (VALUES
+                (1, 'Phnom Penh and the silk island', 'The capital''s riverfront at the four-river junction, then the weavers of Koh Dach.', '08:00'),
+                (2, 'Upriver to Kratie', 'The community trail around Kampong Cham, then the ferry to Koh Trong for the night.', '07:30'),
+                (3, 'River dolphins', 'An early boat to the Kampi pool, where the Irrawaddy dolphins surface.', '07:00')
+              ) AS v (day_number, title, description, start_time)
+              WHERE c.slug = '3-day-mekong-discovery';
+
+              INSERT INTO destination.corridor_destinations (corridor_day_id, destination_id, stop_order, arrival_time, departure_time,
+                                                             recommended_duration_minutes, transport_type, title, notes)
+              SELECT day.id, place.id, v.stop_order, CAST(v.arrival AS TIME), CAST(v.departure AS TIME), v.minutes, v.transport, v.title, v.notes
+              FROM (VALUES
+                (1, 1, 'phnom-penh-riverside', '08:00', '09:30', 90, NULL, NULL, NULL),
+                (1, 2, 'koh-dach-silk-island', '10:15', '13:00', 150, 'CAR', NULL, 'Take small notes for the ferry and the weaving workshops.'),
+                (2, 1, 'mekong-discovery-trail', '10:00', '12:30', 150, 'CAR', NULL, NULL),
+                (2, 2, 'koh-trong', '16:30', '18:00', 90, 'BOAT', 'Sunset on Koh Trong', 'Homestays on the island; book ahead in the dry season.'),
+                (3, 1, 'koh-trong', '07:00', '07:30', 30, 'BOAT', NULL, NULL),
+                (3, 2, 'kampi-dolphin-pool', '08:30', '10:30', 120, 'BOAT', NULL, 'Mornings are calmest; the boatmen cut their engines near the dolphins.')
+              ) AS v (day_number, stop_order, slug, arrival, departure, minutes, transport, title, notes)
+              JOIN taxonomy.corridors c ON c.slug = '3-day-mekong-discovery'
+              JOIN taxonomy.corridor_days day ON day.corridor_id = c.id AND day.day_number = v.day_number
+              JOIN destination.destinations place ON place.slug = v.slug;
+      rollback:
+        - sql:
+            sql: DELETE FROM taxonomy.corridors WHERE slug = '3-day-mekong-discovery'

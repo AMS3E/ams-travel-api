@@ -1,0 +1,28 @@
+# The tourism regions a destination is chosen for.
+#
+# A tourism region — Ancient Capitals & Khmer Civilization, Khmer Culinary —
+# used to take every place carrying one of its categories, so a place filed
+# under Seafood turned up on the coast whatever it was. Now the person listing
+# a place says which regions it belongs in, and the website shelves it there.
+databaseChangeLog:
+  - changeSet:
+      id: v2-destination-tourism-regions
+      author: ams-travel-v2
+      changes:
+        - createTable:
+            schemaName: destination
+            tableName: destination_regions
+            columns:
+              - column: {name: destination_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: region_id, type: uuid, constraints: {nullable: false}}
+        - addPrimaryKey: {schemaName: destination, tableName: destination_regions, columnNames: "destination_id, region_id", constraintName: destination_regions_pkey}
+        - createIndex:
+            schemaName: destination
+            tableName: destination_regions
+            indexName: idx_destination_regions_region
+            columns:
+              - column: {name: region_id}
+        - addForeignKeyConstraint: {baseTableSchemaName: destination, baseTableName: destination_regions, baseColumnNames: destination_id, constraintName: fk_destination_regions_destination, referencedTableSchemaName: destination, referencedTableName: destinations, referencedColumnNames: id, onDelete: CASCADE}
+        - addForeignKeyConstraint: {baseTableSchemaName: destination, baseTableName: destination_regions, baseColumnNames: region_id, constraintName: fk_destination_regions_region, referencedTableSchemaName: taxonomy, referencedTableName: regions, referencedColumnNames: id, onDelete: CASCADE}
+      rollback:
+        - dropTable: {schemaName: destination, tableName: destination_regions}

@@ -1,0 +1,127 @@
+[
+  {
+    "slug": "banteay-meanchey",
+    "name": "Banteay Meanchey",
+    "regionCode": "ANGKOR"
+  },
+  {
+    "slug": "battambang",
+    "name": "Battambang",
+    "regionCode": "ANGKOR"
+  },
+  {
+    "slug": "kampong-cham",
+    "name": "Kampong Cham",
+    "regionCode": "MEKONG"
+  },
+  {
+    "slug": "kampong-chhnang",
+    "name": "Kampong Chhnang",
+    "regionCode": "CAPITAL"
+  },
+  {
+    "slug": "kampong-speu",
+    "name": "Kampong Speu",
+    "regionCode": "CAPITAL"
+  },
+  {
+    "slug": "kampong-thom",
+    "name": "Kampong Thom",
+    "regionCode": "ANGKOR"
+  },
+  {
+    "slug": "kampot",
+    "name": "Kampot",
+    "regionCode": "COAST"
+  },
+  {
+    "slug": "kandal",
+    "name": "Kandal",
+    "regionCode": "CAPITAL"
+  },
+  {
+    "slug": "kep",
+    "name": "Kep",
+    "regionCode": "COAST"
+  },
+  {
+    "slug": "koh-kong",
+    "name": "Koh Kong",
+    "regionCode": "COAST"
+  },
+  {
+    "slug": "kratie",
+    "name": "Kratie",
+    "regionCode": "NORTHEAST"
+  },
+  {
+    "slug": "mondulkiri",
+    "name": "Mondulkiri",
+    "regionCode": "NORTHEAST"
+  },
+  {
+    "slug": "oddar-meanchey",
+    "name": "Oddar Meanchey",
+    "regionCode": "ANGKOR"
+  },
+  {
+    "slug": "pailin",
+    "name": "Pailin",
+    "regionCode": "ANGKOR"
+  },
+  {
+    "slug": "phnom-penh",
+    "name": "Phnom Penh",
+    "regionCode": "CAPITAL"
+  },
+  {
+    "slug": "preah-sihanouk",
+    "name": "Preah Sihanouk",
+    "regionCode": "COAST"
+  },
+  {
+    "slug": "preah-vihear",
+    "name": "Preah Vihear",
+    "regionCode": "NORTHEAST"
+  },
+  {
+    "slug": "prey-veng",
+    "name": "Prey Veng",
+    "regionCode": "MEKONG"
+  },
+  {
+    "slug": "pursat",
+    "name": "Pursat",
+    "regionCode": "ANGKOR"
+  },
+  {
+    "slug": "ratanakiri",
+    "name": "Ratanakiri",
+    "regionCode": "NORTHEAST"
+  },
+  {
+    "slug": "siem-reap",
+    "name": "Siem Reap",
+    "regionCode": "ANGKOR"
+  },
+  {
+    "slug": "stung-treng",
+    "name": "Stung Treng",
+    "regionCode": "NORTHEAST"
+  },
+  {
+    "slug": "svay-rieng",
+    "name": "Svay Rieng",
+    "regionCode": "MEKONG"
+  },
+  {
+    "slug": "takeo",
+    "name": "Takeo",
+    "regionCode": "CAPITAL"
+  },
+  {
+    "slug": "tbong-khmum",
+    "name": "Tbong Khmum",
+    "regionCode": "MEKONG"
+  }
+]

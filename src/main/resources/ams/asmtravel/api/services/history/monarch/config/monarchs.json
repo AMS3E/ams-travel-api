@@ -1,0 +1,107 @@
+[
+  {
+    "slug": "isanavarman-i",
+    "name": "Isanavarman I",
+    "title": "King",
+    "reignStartYear": 616,
+    "reignEndYear": 637
+  },
+  {
+    "slug": "jayavarman-ii",
+    "name": "Jayavarman II",
+    "title": "King",
+    "reignStartYear": 802,
+    "reignEndYear": 835
+  },
+  {
+    "slug": "indravarman-i",
+    "name": "Indravarman I",
+    "title": "King",
+    "reignStartYear": 877,
+    "reignEndYear": 889
+  },
+  {
+    "slug": "yasovarman-i",
+    "name": "Yasovarman I",
+    "title": "King",
+    "reignStartYear": 889,
+    "reignEndYear": 910
+  },
+  {
+    "slug": "jayavarman-iv",
+    "name": "Jayavarman IV",
+    "title": "King",
+    "reignStartYear": 928,
+    "reignEndYear": 941
+  },
+  {
+    "slug": "rajendravarman-ii",
+    "name": "Rajendravarman II",
+    "title": "King",
+    "reignStartYear": 944,
+    "reignEndYear": 968
+  },
+  {
+    "slug": "jayavarman-v",
+    "name": "Jayavarman V",
+    "title": "King",
+    "reignStartYear": 968,
+    "reignEndYear": 1001
+  },
+  {
+    "slug": "suryavarman-i",
+    "name": "Suryavarman I",
+    "title": "King",
+    "reignStartYear": 1006,
+    "reignEndYear": 1050
+  },
+  {
+    "slug": "suryavarman-ii",
+    "name": "Suryavarman II",
+    "title": "King",
+    "reignStartYear": 1113,
+    "reignEndYear": 1150
+  },
+  {
+    "slug": "jayavarman-vii",
+    "name": "Jayavarman VII",
+    "title": "King",
+    "reignStartYear": 1181,
+    "reignEndYear": 1218
+  },
+  {
+    "slug": "ang-chan-i",
+    "name": "Ang Chan I",
+    "title": "King",
+    "reignStartYear": 1516,
+    "reignEndYear": 1566
+  },
+  {
+    "slug": "chey-chettha-ii",
+    "name": "Chey Chettha II",
+    "title": "King",
+    "reignStartYear": 1618,
+    "reignEndYear": 1628
+  },
+  {
+    "slug": "ang-duong",
+    "name": "Ang Duong",
+    "title": "King",
+    "reignStartYear": 1841,
+    "reignEndYear": 1860
+  },
+  {
+    "slug": "norodom-i",
+    "name": "Norodom I",
+    "title": "King",
+    "reignStartYear": 1860,
+    "reignEndYear": 1904
+  },
+  {
+    "slug": "sisowath",
+    "name": "Sisowath",
+    "title": "King",
+    "reignStartYear": 1904,
+    "reignEndYear": 1927
+  }
+]

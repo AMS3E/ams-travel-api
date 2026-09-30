@@ -1,0 +1,33 @@
+# What a room's own page tells a traveller beyond its beds and price: a line
+# that sells it, whether it has a window, extra beds, the high-season price,
+# whether taxes are included, the fewest nights, and when the guest pays.
+databaseChangeLog:
+  - changeSet:
+      id: v2-destination-stay-room-details
+      author: ams-travel-v2
+      changes:
+        - addColumn:
+            schemaName: destination
+            tableName: destination_stay_rooms
+            columns:
+              - column: {name: highlight, type: varchar(150)}
+              - column: {name: has_window, type: boolean, defaultValueBoolean: true, constraints: {nullable: false}}
+              - column: {name: extra_beds, type: int, defaultValueNumeric: 0, constraints: {nullable: false}}
+              - column: {name: extra_bed_price, type: "decimal(12,2)"}
+              - column: {name: high_season_price, type: "decimal(12,2)"}
+              - column: {name: taxes_included, type: boolean, defaultValueBoolean: true, constraints: {nullable: false}}
+              - column: {name: min_nights, type: int, defaultValueNumeric: 1, constraints: {nullable: false}}
+              - column: {name: payment_terms, type: varchar(20)}
+      rollback:
+        - dropColumn:
+            schemaName: destination
+            tableName: destination_stay_rooms
+            columns:
+              - column: {name: highlight}
+              - column: {name: has_window}
+              - column: {name: extra_beds}
+              - column: {name: extra_bed_price}
+              - column: {name: high_season_price}
+              - column: {name: taxes_included}
+              - column: {name: min_nights}
+              - column: {name: payment_terms}

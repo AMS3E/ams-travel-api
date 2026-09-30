@@ -1,0 +1,10 @@
+# A new province is no longer asked its zone: the column may be empty.
+databaseChangeLog:
+  - changeSet:
+      id: v2-taxonomy-province-zone-optional
+      author: ams-travel-v2
+      changes:
+        - dropNotNullConstraint: {schemaName: taxonomy, tableName: provinces, columnName: region_id, columnDataType: uuid}
+      # Fails while a province has no zone; give each one first.
+      rollback:
+        - addNotNullConstraint: {schemaName: taxonomy, tableName: provinces, columnName: region_id, columnDataType: uuid}

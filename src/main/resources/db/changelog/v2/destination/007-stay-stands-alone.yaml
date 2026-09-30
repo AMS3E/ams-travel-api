@@ -1,0 +1,53 @@
+# A stay stands on its own map pin.
+#
+# A hotel, resort, guesthouse or homestay is a place in its own right, not a
+# part of one destination. Travellers find it on the page of every destination
+# near its pin, so it no longer has to name one, and deleting a destination
+# leaves the hotels around it where they are.
+#
+# The column stays: a stay may still name the destination it belongs to.
+databaseChangeLog:
+  - changeSet:
+      id: v2-destination-stay-stands-alone
+      author: ams-travel-v2
+      changes:
+        - dropForeignKeyConstraint:
+            baseTableSchemaName: destination
+            baseTableName: destination_stays
+            constraintName: fk_destination_stays_destination
+        - dropNotNullConstraint:
+            schemaName: destination
+            tableName: destination_stays
+            columnName: destination_id
+            columnDataType: uuid
+        - addForeignKeyConstraint:
+            baseTableSchemaName: destination
+            baseTableName: destination_stays
+            baseColumnNames: destination_id
+            constraintName: fk_destination_stays_destination
+            referencedTableSchemaName: destination
+            referencedTableName: destinations
+            referencedColumnNames: id
+            onDelete: SET NULL
+      rollback:
+        - dropForeignKeyConstraint:
+            baseTableSchemaName: destination
+            baseTableName: destination_stays
+            constraintName: fk_destination_stays_destination
+        # A stay without a destination has nowhere to go back to.
+        - sql:
+            sql: DELETE FROM destination.destination_stays WHERE destination_id IS NULL
+        - addNotNullConstraint:
+            schemaName: destination
+            tableName: destination_stays
+            columnName: destination_id
+            columnDataType: uuid
+        - addForeignKeyConstraint:
+            baseTableSchemaName: destination
+            baseTableName: destination_stays
+            baseColumnNames: destination_id
+            constraintName: fk_destination_stays_destination
+            referencedTableSchemaName: destination
+            referencedTableName: destinations
+            referencedColumnNames: id
+            onDelete: CASCADE

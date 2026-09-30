@@ -1,0 +1,58 @@
+# The model before the ERD: 45 tables in `public`, all with integer ids.
+# Dropped by name so a database created before the switch moves over on the
+# next start. PostGIS's own tables (spatial_ref_sys) and Liquibase's are left
+# alone. A dump taken before the switch is the way back.
+databaseChangeLog:
+  - changeSet:
+      id: v2-drop-legacy-tables
+      author: ams-travel-v2
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              DROP TABLE IF EXISTS public.activities CASCADE;
+              DROP TABLE IF EXISTS public.architecture_styles CASCADE;
+              DROP TABLE IF EXISTS public.audit_log CASCADE;
+              DROP TABLE IF EXISTS public.categories CASCADE;
+              DROP TABLE IF EXISTS public.corridor_stops CASCADE;
+              DROP TABLE IF EXISTS public.corridors CASCADE;
+              DROP TABLE IF EXISTS public.destination_activities CASCADE;
+              DROP TABLE IF EXISTS public.destination_browse_counts CASCADE;
+              DROP TABLE IF EXISTS public.destination_categories CASCADE;
+              DROP TABLE IF EXISTS public.destination_explorations CASCADE;
+              DROP TABLE IF EXISTS public.destination_histories CASCADE;
+              DROP TABLE IF EXISTS public.destination_history_architecture_styles CASCADE;
+              DROP TABLE IF EXISTS public.destination_history_centuries CASCADE;
+              DROP TABLE IF EXISTS public.destination_history_monarchs CASCADE;
+              DROP TABLE IF EXISTS public.destination_history_religions CASCADE;
+              DROP TABLE IF EXISTS public.destination_profile_facts CASCADE;
+              DROP TABLE IF EXISTS public.destination_ratings CASCADE;
+              DROP TABLE IF EXISTS public.destination_secondary_regions CASCADE;
+              DROP TABLE IF EXISTS public.destination_stamps CASCADE;
+              DROP TABLE IF EXISTS public.destination_tags CASCADE;
+              DROP TABLE IF EXISTS public.destination_verifications CASCADE;
+              DROP TABLE IF EXISTS public.destinations CASCADE;
+              DROP TABLE IF EXISTS public.earned_badges CASCADE;
+              DROP TABLE IF EXISTS public.gallery_images CASCADE;
+              DROP TABLE IF EXISTS public.hidden_places CASCADE;
+              DROP TABLE IF EXISTS public.historical_periods CASCADE;
+              DROP TABLE IF EXISTS public.homepage_banner CASCADE;
+              DROP TABLE IF EXISTS public.interest_categories CASCADE;
+              DROP TABLE IF EXISTS public.interest_tags CASCADE;
+              DROP TABLE IF EXISTS public.interests CASCADE;
+              DROP TABLE IF EXISTS public.medias CASCADE;
+              DROP TABLE IF EXISTS public.monarchs CASCADE;
+              DROP TABLE IF EXISTS public.profile_fact_types CASCADE;
+              DROP TABLE IF EXISTS public.provinces CASCADE;
+              DROP TABLE IF EXISTS public.publish_requests CASCADE;
+              DROP TABLE IF EXISTS public.region_categories CASCADE;
+              DROP TABLE IF EXISTS public.region_coverages CASCADE;
+              DROP TABLE IF EXISTS public.region_filters CASCADE;
+              DROP TABLE IF EXISTS public.region_tags CASCADE;
+              DROP TABLE IF EXISTS public.regions CASCADE;
+              DROP TABLE IF EXISTS public.religions CASCADE;
+              DROP TABLE IF EXISTS public.reviews CASCADE;
+              DROP TABLE IF EXISTS public.saves CASCADE;
+              DROP TABLE IF EXISTS public.seasons CASCADE;
+              DROP TABLE IF EXISTS public.tags CASCADE;
+              DROP TABLE IF EXISTS public.users CASCADE;

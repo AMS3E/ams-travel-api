@@ -1,0 +1,69 @@
+[
+  {
+    "region": "ANCIENT-CAPITALS",
+    "intro": "The succession of royal capitals this region is built around — read it top to bottom.",
+    "entries": [
+      {
+        "title": "Ishanapura",
+        "titleKm": "ឦសានបុរី",
+        "dateRange": "c. 600 – 700 CE",
+        "description": "Capital of Chenla under Isanavarman I, and the first place Khmer temple architecture settled into a form of its own.",
+        "period": "pre-angkor-period",
+        "destination": "sambor-prei-kuk"
+      },
+      {
+        "title": "Mahendraparvata",
+        "titleKm": "មហេន្ទ្របវ៌ត",
+        "dateRange": "802 – c. 835 CE",
+        "description": "The mountain city where Jayavarman II declared himself universal monarch in 802, the act that begins the Angkorian era.",
+        "period": "angkor-period",
+        "destination": "phnom-kulen"
+      },
+      {
+        "title": "Hariharalaya",
+        "titleKm": "ហរិហរាល័យ",
+        "dateRange": "c. 835 – 889 CE",
+        "description": "The plain below the mountain, where Indravarman I built the first state temple and the first great reservoir.",
+        "period": "angkor-period"
+      },
+      {
+        "title": "Yasodharapura",
+        "titleKm": "យសោធរបុរី",
+        "dateRange": "889 – c. 1431 CE",
+        "description": "Five centuries of capital on one site — Angkor Wat, Angkor Thom, and the largest pre-industrial city in the world.",
+        "period": "angkor-period",
+        "destination": "angkor-wat"
+      },
+      {
+        "title": "Lingapura",
+        "titleKm": "លិង្គបុរី",
+        "dateRange": "928 – 944 CE",
+        "description": "Jayavarman IV moved the court a hundred kilometres north-east and raised a seven-tier pyramid. It lasted sixteen years.",
+        "period": "angkor-period",
+        "destination": "koh-ker"
+      },
+      {
+        "title": "Longvek",
+        "titleKm": "លង្វែក",
+        "dateRange": "1528 – 1594 CE",
+        "description": "The walled river capital of Ang Chan I, at the centre of Cambodia's maritime trade with China and the Malay world.",
+        "period": "post-angkor-period"
+      },
+      {
+        "title": "Oudong",
+        "titleKm": "ឧដុង្គ",
+        "dateRange": "1618 – 1866 CE",
+        "description": "Two and a half centuries of capital on a low ridge, crowned by the stupas of the kings buried there.",
+        "period": "post-angkor-period"
+      },
+      {
+        "title": "Chaktomuk",
+        "titleKm": "ចតុមុខ",
+        "dateRange": "1866 CE – present",
+        "description": "The capital returns to the four-rivers junction it first held in 1434. Norodom I builds the Royal Palace here in 1866.",
+        "period": "post-angkor-period",
+        "destination": "royal-palace"
+      }
+    ]
+  }
+]

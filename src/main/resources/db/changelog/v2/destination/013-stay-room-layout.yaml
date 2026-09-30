@@ -1,0 +1,41 @@
+# The rest of what a room's page answers: how it is laid out and where in the
+# building it is, how it is cleaned, cots and which children stay free, and the
+# prices a longer stay pays with the deposit that books it.
+databaseChangeLog:
+  - changeSet:
+      id: v2-destination-stay-room-layout
+      author: ams-travel-v2
+      changes:
+        - addColumn:
+            schemaName: destination
+            tableName: destination_stay_rooms
+            columns:
+              - column: {name: bedrooms, type: int, defaultValueNumeric: 1, constraints: {nullable: false}}
+              - column: {name: living_rooms, type: int, defaultValueNumeric: 0, constraints: {nullable: false}}
+              - column: {name: bathroom_count, type: int, defaultValueNumeric: 1, constraints: {nullable: false}}
+              - column: {name: floor, type: int}
+              - column: {name: lift_access, type: boolean, defaultValueBoolean: false, constraints: {nullable: false}}
+              - column: {name: housekeeping, type: varchar(20)}
+              - column: {name: cots, type: int, defaultValueNumeric: 0, constraints: {nullable: false}}
+              - column: {name: cot_price, type: "decimal(12,2)"}
+              - column: {name: children_free_under_age, type: int}
+              - column: {name: weekly_price, type: "decimal(12,2)"}
+              - column: {name: monthly_price, type: "decimal(12,2)"}
+              - column: {name: deposit_percent, type: int}
+      rollback:
+        - dropColumn:
+            schemaName: destination
+            tableName: destination_stay_rooms
+            columns:
+              - column: {name: bedrooms}
+              - column: {name: living_rooms}
+              - column: {name: bathroom_count}
+              - column: {name: floor}
+              - column: {name: lift_access}
+              - column: {name: housekeeping}
+              - column: {name: cots}
+              - column: {name: cot_price}
+              - column: {name: children_free_under_age}
+              - column: {name: weekly_price}
+              - column: {name: monthly_price}
+              - column: {name: deposit_percent}

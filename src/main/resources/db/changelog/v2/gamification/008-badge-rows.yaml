@@ -1,0 +1,49 @@
+# The four ladders, three levels each; thresholds are editable in the dashboard. A badge already
+# there (copied from the old definitions) is left as it is. The test run replays these statements.
+databaseChangeLog:
+  - changeSet:
+      id: v2-gamification-badge-rows
+      author: ams-travel-v2
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              INSERT INTO gamification.badges (id, code, name, description, icon_key, type, level, threshold, status, created_at, updated_at)
+              SELECT ${fn.uuid}, 'BROWSER_SILVER', 'Silver Browser', 'Open 300 destinations in one season (each place once a day)', 'compass', 'BROWSES', 'SILVER', 300, 'ACTIVE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+              WHERE NOT EXISTS (SELECT 1 FROM gamification.badges WHERE code = 'BROWSER_SILVER');
+              INSERT INTO gamification.badges (id, code, name, description, icon_key, type, level, threshold, status, created_at, updated_at)
+              SELECT ${fn.uuid}, 'BROWSER_GOLDEN', 'Golden Browser', 'Open 800 destinations in one season (each place once a day)', 'compass', 'BROWSES', 'GOLDEN', 800, 'ACTIVE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+              WHERE NOT EXISTS (SELECT 1 FROM gamification.badges WHERE code = 'BROWSER_GOLDEN');
+              INSERT INTO gamification.badges (id, code, name, description, icon_key, type, level, threshold, status, created_at, updated_at)
+              SELECT ${fn.uuid}, 'BROWSER_PLATINUM', 'Platinum Browser', 'Open 1,000 destinations in one season (each place once a day)', 'compass', 'BROWSES', 'PLATINUM', 1000, 'ACTIVE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+              WHERE NOT EXISTS (SELECT 1 FROM gamification.badges WHERE code = 'BROWSER_PLATINUM');
+              INSERT INTO gamification.badges (id, code, name, description, icon_key, type, level, threshold, status, created_at, updated_at)
+              SELECT ${fn.uuid}, 'REVIEWER_SILVER', 'Silver Reviewer', 'Publish 50 reviews in one season', 'pen', 'REVIEWS', 'SILVER', 50, 'ACTIVE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+              WHERE NOT EXISTS (SELECT 1 FROM gamification.badges WHERE code = 'REVIEWER_SILVER');
+              INSERT INTO gamification.badges (id, code, name, description, icon_key, type, level, threshold, status, created_at, updated_at)
+              SELECT ${fn.uuid}, 'REVIEWER_GOLDEN', 'Golden Reviewer', 'Publish 400 reviews in one season', 'pen', 'REVIEWS', 'GOLDEN', 400, 'ACTIVE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+              WHERE NOT EXISTS (SELECT 1 FROM gamification.badges WHERE code = 'REVIEWER_GOLDEN');
+              INSERT INTO gamification.badges (id, code, name, description, icon_key, type, level, threshold, status, created_at, updated_at)
+              SELECT ${fn.uuid}, 'REVIEWER_PLATINUM', 'Platinum Reviewer', 'Publish 1,000 reviews in one season', 'pen', 'REVIEWS', 'PLATINUM', 1000, 'ACTIVE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+              WHERE NOT EXISTS (SELECT 1 FROM gamification.badges WHERE code = 'REVIEWER_PLATINUM');
+              INSERT INTO gamification.badges (id, code, name, description, icon_key, type, level, threshold, status, created_at, updated_at)
+              SELECT ${fn.uuid}, 'ADVENTURE_SILVER', 'Silver Adventurer', 'Collect 50 digital stamps on site in one season', 'stamp', 'STAMPS', 'SILVER', 50, 'ACTIVE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+              WHERE NOT EXISTS (SELECT 1 FROM gamification.badges WHERE code = 'ADVENTURE_SILVER');
+              INSERT INTO gamification.badges (id, code, name, description, icon_key, type, level, threshold, status, created_at, updated_at)
+              SELECT ${fn.uuid}, 'ADVENTURE_GOLDEN', 'Golden Adventurer', 'Collect 200 digital stamps on site in one season', 'stamp', 'STAMPS', 'GOLDEN', 200, 'ACTIVE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+              WHERE NOT EXISTS (SELECT 1 FROM gamification.badges WHERE code = 'ADVENTURE_GOLDEN');
+              INSERT INTO gamification.badges (id, code, name, description, icon_key, type, level, threshold, status, created_at, updated_at)
+              SELECT ${fn.uuid}, 'ADVENTURE_PLATINUM', 'Platinum Adventurer', 'Collect 1,000 digital stamps on site in one season', 'stamp', 'STAMPS', 'PLATINUM', 1000, 'ACTIVE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+              WHERE NOT EXISTS (SELECT 1 FROM gamification.badges WHERE code = 'ADVENTURE_PLATINUM');
+              INSERT INTO gamification.badges (id, code, name, description, icon_key, type, level, threshold, status, created_at, updated_at)
+              SELECT ${fn.uuid}, 'POINTS_SILVER', 'Silver Explorer', 'Earn 30 points in one season by rating and reviewing places', 'star', 'POINTS', 'SILVER', 30, 'ACTIVE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+              WHERE NOT EXISTS (SELECT 1 FROM gamification.badges WHERE code = 'POINTS_SILVER');
+              INSERT INTO gamification.badges (id, code, name, description, icon_key, type, level, threshold, status, created_at, updated_at)
+              SELECT ${fn.uuid}, 'POINTS_GOLDEN', 'Golden Explorer', 'Earn 100 points in one season by rating and reviewing places', 'star', 'POINTS', 'GOLDEN', 100, 'ACTIVE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+              WHERE NOT EXISTS (SELECT 1 FROM gamification.badges WHERE code = 'POINTS_GOLDEN');
+              INSERT INTO gamification.badges (id, code, name, description, icon_key, type, level, threshold, status, created_at, updated_at)
+              SELECT ${fn.uuid}, 'POINTS_PLATINUM', 'Platinum Explorer', 'Earn 250 points in one season by rating and reviewing places', 'star', 'POINTS', 'PLATINUM', 250, 'ACTIVE', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+              WHERE NOT EXISTS (SELECT 1 FROM gamification.badges WHERE code = 'POINTS_PLATINUM');
+      rollback:
+        - sql:
+            sql: DELETE FROM gamification.badges WHERE code LIKE 'POINTS_%'

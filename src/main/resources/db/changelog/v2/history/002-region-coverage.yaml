@@ -1,0 +1,74 @@
+# A region's historical coverage: the succession it is built around.
+#
+# The Ancient Capitals region is read as a sequence — Ishanapura, then
+# Mahendraparvata, then Hariharalaya — each with the era it falls in, the years
+# it held the court, and the place you can visit today where there is one. That
+# is editorial writing about the region, not a fact about any one destination,
+# so it is a row here rather than a moment on a destination's timeline.
+databaseChangeLog:
+  - changeSet:
+      id: v2-history-region-coverage
+      author: ams-travel-v2
+      changes:
+        - addColumn:
+            schemaName: taxonomy
+            tableName: regions
+            columns:
+              # The line under the section's heading, in the region's own words.
+              - column: {name: history_intro, type: text}
+
+        - createTable:
+            schemaName: history
+            tableName: region_coverage
+            columns:
+              - column: {name: id, type: uuid, defaultValueComputed: "${fn.uuid}", constraints: {primaryKey: true, primaryKeyName: region_coverage_pkey, nullable: false}}
+              - column: {name: region_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: sort_order, type: int, defaultValueNumeric: 0, constraints: {nullable: false}}
+              - column: {name: title, type: varchar(150), constraints: {nullable: false}}
+              # The same name in Khmer script, shown beside it.
+              - column: {name: title_km, type: varchar(150)}
+              # Free text, because "c. 600 – 700 CE" is not a pair of years.
+              - column: {name: date_range, type: varchar(100)}
+              - column: {name: historical_period_id, type: uuid}
+              - column: {name: description, type: text}
+              # The place to open, where one is in the catalogue.
+              - column: {name: destination_id, type: uuid}
+              - column: {name: created_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+              - column: {name: updated_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+        - createIndex:
+            schemaName: history
+            tableName: region_coverage
+            indexName: idx_region_coverage_region
+            columns:
+              - column: {name: region_id}
+              - column: {name: sort_order}
+        - addForeignKeyConstraint:
+            baseTableSchemaName: history
+            baseTableName: region_coverage
+            baseColumnNames: region_id
+            constraintName: fk_region_coverage_region
+            referencedTableSchemaName: taxonomy
+            referencedTableName: regions
+            referencedColumnNames: id
+            onDelete: CASCADE
+        - addForeignKeyConstraint:
+            baseTableSchemaName: history
+            baseTableName: region_coverage
+            baseColumnNames: historical_period_id
+            constraintName: fk_region_coverage_period
+            referencedTableSchemaName: history
+            referencedTableName: historical_periods
+            referencedColumnNames: id
+            onDelete: SET NULL
+        - addForeignKeyConstraint:
+            baseTableSchemaName: history
+            baseTableName: region_coverage
+            baseColumnNames: destination_id
+            constraintName: fk_region_coverage_destination
+            referencedTableSchemaName: destination
+            referencedTableName: destinations
+            referencedColumnNames: id
+            onDelete: SET NULL
+      rollback:
+        - dropTable: {schemaName: history, tableName: region_coverage}
+        - dropColumn: {schemaName: taxonomy, tableName: regions, columnName: history_intro}

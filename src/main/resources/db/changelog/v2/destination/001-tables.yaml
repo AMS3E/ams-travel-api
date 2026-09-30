@@ -1,0 +1,327 @@
+# destination: the places, their photos, the stays and food around them, and
+# how each is sorted. Keys to taxonomy, partner and auth rows are added with
+# the other cross-schema ones; the keys inside this schema are here.
+databaseChangeLog:
+  - changeSet:
+      id: v2-destination-tables
+      author: ams-travel-v2
+      changes:
+        - createTable:
+            schemaName: destination
+            tableName: destinations
+            columns:
+              - column: {name: id, type: uuid, defaultValueComputed: "${fn.uuid}", constraints: {primaryKey: true, primaryKeyName: destinations_pkey, nullable: false}}
+              - column: {name: name, type: varchar(255), constraints: {nullable: false}}
+              - column: {name: slug, type: varchar(150), constraints: {nullable: false, unique: true, uniqueConstraintName: uk_destinations_slug}}
+              - column: {name: province_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: short_description, type: varchar(500)}
+              - column: {name: description, type: text}
+              - column: {name: latitude, type: "decimal(10,7)"}
+              - column: {name: longitude, type: "decimal(10,7)"}
+              - column: {name: address, type: text}
+              - column: {name: cover_key, type: varchar(512)}
+              - column: {name: status, type: varchar(30), defaultValue: DRAFT, constraints: {nullable: false}}
+              - column: {name: is_featured, type: boolean, defaultValueBoolean: false, constraints: {nullable: false}}
+              - column: {name: view_count, type: bigint, defaultValueNumeric: 0, constraints: {nullable: false}}
+              - column: {name: created_by, type: uuid}
+              - column: {name: published_at, type: TIMESTAMP WITH TIME ZONE}
+              - column: {name: created_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+              - column: {name: updated_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+        - createIndex:
+            schemaName: destination
+            tableName: destinations
+            indexName: idx_destinations_province
+            columns:
+              - column: {name: province_id}
+        - createIndex:
+            schemaName: destination
+            tableName: destinations
+            indexName: idx_destinations_status
+            columns:
+              - column: {name: status}
+        - createIndex:
+            schemaName: destination
+            tableName: destinations
+            indexName: idx_destinations_created_by
+            columns:
+              - column: {name: created_by}
+
+        - createTable:
+            schemaName: destination
+            tableName: destination_media
+            columns:
+              - column: {name: id, type: uuid, defaultValueComputed: "${fn.uuid}", constraints: {primaryKey: true, primaryKeyName: destination_media_pkey, nullable: false}}
+              - column: {name: destination_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: media_key, type: varchar(512), constraints: {nullable: false}}
+              - column: {name: media_type, type: varchar(30), defaultValue: IMAGE, constraints: {nullable: false}}
+              - column: {name: caption, type: varchar(255)}
+              - column: {name: sort_order, type: int, defaultValueNumeric: 0, constraints: {nullable: false}}
+              - column: {name: is_cover, type: boolean, defaultValueBoolean: false, constraints: {nullable: false}}
+              - column: {name: created_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+        - createIndex:
+            schemaName: destination
+            tableName: destination_media
+            indexName: idx_destination_media_destination
+            columns:
+              - column: {name: destination_id}
+        - addForeignKeyConstraint:
+            baseTableSchemaName: destination
+            baseTableName: destination_media
+            baseColumnNames: destination_id
+            constraintName: fk_destination_media_destination
+            referencedTableSchemaName: destination
+            referencedTableName: destinations
+            referencedColumnNames: id
+            onDelete: CASCADE
+
+        - createTable:
+            schemaName: destination
+            tableName: destination_stays
+            columns:
+              - column: {name: id, type: uuid, defaultValueComputed: "${fn.uuid}", constraints: {primaryKey: true, primaryKeyName: destination_stays_pkey, nullable: false}}
+              - column: {name: destination_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: partner_id, type: uuid}
+              - column: {name: name, type: varchar(255), constraints: {nullable: false}}
+              - column: {name: type, type: varchar(50), constraints: {nullable: false}}
+              - column: {name: star_rating, type: "decimal(2,1)"}
+              - column: {name: price_from, type: "decimal(12,2)"}
+              - column: {name: currency, type: varchar(10), defaultValue: USD, constraints: {nullable: false}}
+              # A JSON array of amenity names.
+              - column: {name: amenities, type: "${type.json}"}
+              - column: {name: cover_key, type: varchar(512)}
+              - column: {name: address, type: text}
+              - column: {name: latitude, type: "decimal(10,7)"}
+              - column: {name: longitude, type: "decimal(10,7)"}
+              - column: {name: status, type: varchar(30), defaultValue: DRAFT, constraints: {nullable: false}}
+              - column: {name: created_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+              - column: {name: updated_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+        - createIndex:
+            schemaName: destination
+            tableName: destination_stays
+            indexName: idx_destination_stays_destination
+            columns:
+              - column: {name: destination_id}
+        - createIndex:
+            schemaName: destination
+            tableName: destination_stays
+            indexName: idx_destination_stays_partner
+            columns:
+              - column: {name: partner_id}
+        - addForeignKeyConstraint:
+            baseTableSchemaName: destination
+            baseTableName: destination_stays
+            baseColumnNames: destination_id
+            constraintName: fk_destination_stays_destination
+            referencedTableSchemaName: destination
+            referencedTableName: destinations
+            referencedColumnNames: id
+            onDelete: CASCADE
+
+        - createTable:
+            schemaName: destination
+            tableName: destination_foods
+            columns:
+              - column: {name: id, type: uuid, defaultValueComputed: "${fn.uuid}", constraints: {primaryKey: true, primaryKeyName: destination_foods_pkey, nullable: false}}
+              - column: {name: destination_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: partner_id, type: uuid}
+              - column: {name: name, type: varchar(255), constraints: {nullable: false}}
+              - column: {name: slug, type: varchar(150), constraints: {nullable: false, unique: true, uniqueConstraintName: uk_destination_foods_slug}}
+              - column: {name: type, type: varchar(50), constraints: {nullable: false}}
+              - column: {name: short_description, type: varchar(500)}
+              - column: {name: description, type: text}
+              - column: {name: address, type: text}
+              - column: {name: latitude, type: "decimal(10,7)"}
+              - column: {name: longitude, type: "decimal(10,7)"}
+              # "$" to "$$$$".
+              - column: {name: price_range, type: varchar(20)}
+              - column: {name: price_from, type: "decimal(12,2)"}
+              - column: {name: currency, type: varchar(10), defaultValue: USD, constraints: {nullable: false}}
+              # A JSON object from day ("mon") to hours ("07:00-22:00").
+              - column: {name: opening_hours, type: "${type.json}"}
+              - column: {name: phone, type: varchar(50)}
+              - column: {name: website, type: varchar(255)}
+              - column: {name: cover_key, type: varchar(512)}
+              - column: {name: status, type: varchar(30), defaultValue: DRAFT, constraints: {nullable: false}}
+              - column: {name: is_featured, type: boolean, defaultValueBoolean: false, constraints: {nullable: false}}
+              - column: {name: is_local_specialty, type: boolean, defaultValueBoolean: false, constraints: {nullable: false}}
+              # Kept by engagement from the visible reviews of this food.
+              - column: {name: average_rating, type: "decimal(3,2)"}
+              - column: {name: review_count, type: int, defaultValueNumeric: 0, constraints: {nullable: false}}
+              - column: {name: created_by, type: uuid}
+              - column: {name: published_at, type: TIMESTAMP WITH TIME ZONE}
+              - column: {name: created_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+              - column: {name: updated_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+        - createIndex:
+            schemaName: destination
+            tableName: destination_foods
+            indexName: idx_destination_foods_destination
+            columns:
+              - column: {name: destination_id}
+        - createIndex:
+            schemaName: destination
+            tableName: destination_foods
+            indexName: idx_destination_foods_partner
+            columns:
+              - column: {name: partner_id}
+        - addForeignKeyConstraint:
+            baseTableSchemaName: destination
+            baseTableName: destination_foods
+            baseColumnNames: destination_id
+            constraintName: fk_destination_foods_destination
+            referencedTableSchemaName: destination
+            referencedTableName: destinations
+            referencedColumnNames: id
+            onDelete: CASCADE
+
+        - createTable:
+            schemaName: destination
+            tableName: destination_food_media
+            columns:
+              - column: {name: id, type: uuid, defaultValueComputed: "${fn.uuid}", constraints: {primaryKey: true, primaryKeyName: destination_food_media_pkey, nullable: false}}
+              - column: {name: food_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: media_key, type: varchar(512), constraints: {nullable: false}}
+              - column: {name: media_type, type: varchar(30), defaultValue: IMAGE, constraints: {nullable: false}}
+              - column: {name: caption, type: varchar(255)}
+              - column: {name: sort_order, type: int, defaultValueNumeric: 0, constraints: {nullable: false}}
+              - column: {name: is_cover, type: boolean, defaultValueBoolean: false, constraints: {nullable: false}}
+              - column: {name: created_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+        - createIndex:
+            schemaName: destination
+            tableName: destination_food_media
+            indexName: idx_destination_food_media_food
+            columns:
+              - column: {name: food_id}
+        - addForeignKeyConstraint:
+            baseTableSchemaName: destination
+            baseTableName: destination_food_media
+            baseColumnNames: food_id
+            constraintName: fk_destination_food_media_food
+            referencedTableSchemaName: destination
+            referencedTableName: destination_foods
+            referencedColumnNames: id
+            onDelete: CASCADE
+
+        # The links. Each row goes with either end: deleting a destination or
+        # food, or the category, tag or interest, takes its links along.
+        - createTable:
+            schemaName: destination
+            tableName: destination_categories
+            columns:
+              - column: {name: destination_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: category_id, type: uuid, constraints: {nullable: false}}
+        - addPrimaryKey: {schemaName: destination, tableName: destination_categories, columnNames: "destination_id, category_id", constraintName: destination_categories_pkey}
+        - createIndex:
+            schemaName: destination
+            tableName: destination_categories
+            indexName: idx_destination_categories_category
+            columns:
+              - column: {name: category_id}
+
+        - createTable:
+            schemaName: destination
+            tableName: destination_tags
+            columns:
+              - column: {name: destination_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: tag_id, type: uuid, constraints: {nullable: false}}
+        - addPrimaryKey: {schemaName: destination, tableName: destination_tags, columnNames: "destination_id, tag_id", constraintName: destination_tags_pkey}
+        - createIndex:
+            schemaName: destination
+            tableName: destination_tags
+            indexName: idx_destination_tags_tag
+            columns:
+              - column: {name: tag_id}
+
+        - createTable:
+            schemaName: destination
+            tableName: destination_interests
+            columns:
+              - column: {name: destination_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: interest_id, type: uuid, constraints: {nullable: false}}
+        - addPrimaryKey: {schemaName: destination, tableName: destination_interests, columnNames: "destination_id, interest_id", constraintName: destination_interests_pkey}
+        - createIndex:
+            schemaName: destination
+            tableName: destination_interests
+            indexName: idx_destination_interests_interest
+            columns:
+              - column: {name: interest_id}
+
+        # A corridor's stops, in route order.
+        - createTable:
+            schemaName: destination
+            tableName: corridor_destinations
+            columns:
+              - column: {name: corridor_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: destination_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: sort_order, type: int, defaultValueNumeric: 0, constraints: {nullable: false}}
+        - addPrimaryKey: {schemaName: destination, tableName: corridor_destinations, columnNames: "corridor_id, destination_id", constraintName: corridor_destinations_pkey}
+        - createIndex:
+            schemaName: destination
+            tableName: corridor_destinations
+            indexName: idx_corridor_destinations_destination
+            columns:
+              - column: {name: destination_id}
+
+        - createTable:
+            schemaName: destination
+            tableName: destination_food_categories
+            columns:
+              - column: {name: food_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: category_id, type: uuid, constraints: {nullable: false}}
+        - addPrimaryKey: {schemaName: destination, tableName: destination_food_categories, columnNames: "food_id, category_id", constraintName: destination_food_categories_pkey}
+        - createIndex:
+            schemaName: destination
+            tableName: destination_food_categories
+            indexName: idx_destination_food_categories_category
+            columns:
+              - column: {name: category_id}
+
+        - createTable:
+            schemaName: destination
+            tableName: destination_food_tags
+            columns:
+              - column: {name: food_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: tag_id, type: uuid, constraints: {nullable: false}}
+        - addPrimaryKey: {schemaName: destination, tableName: destination_food_tags, columnNames: "food_id, tag_id", constraintName: destination_food_tags_pkey}
+        - createIndex:
+            schemaName: destination
+            tableName: destination_food_tags
+            indexName: idx_destination_food_tags_tag
+            columns:
+              - column: {name: tag_id}
+
+        - createTable:
+            schemaName: destination
+            tableName: destination_food_interests
+            columns:
+              - column: {name: food_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: interest_id, type: uuid, constraints: {nullable: false}}
+        - addPrimaryKey: {schemaName: destination, tableName: destination_food_interests, columnNames: "food_id, interest_id", constraintName: destination_food_interests_pkey}
+        - createIndex:
+            schemaName: destination
+            tableName: destination_food_interests
+            indexName: idx_destination_food_interests_interest
+            columns:
+              - column: {name: interest_id}
+
+        # The destination and food ends of the links (the other ends cross
+        # into taxonomy).
+        - addForeignKeyConstraint: {baseTableSchemaName: destination, baseTableName: destination_categories, baseColumnNames: destination_id, constraintName: fk_destination_categories_destination, referencedTableSchemaName: destination, referencedTableName: destinations, referencedColumnNames: id, onDelete: CASCADE}
+        - addForeignKeyConstraint: {baseTableSchemaName: destination, baseTableName: destination_tags, baseColumnNames: destination_id, constraintName: fk_destination_tags_destination, referencedTableSchemaName: destination, referencedTableName: destinations, referencedColumnNames: id, onDelete: CASCADE}
+        - addForeignKeyConstraint: {baseTableSchemaName: destination, baseTableName: destination_interests, baseColumnNames: destination_id, constraintName: fk_destination_interests_destination, referencedTableSchemaName: destination, referencedTableName: destinations, referencedColumnNames: id, onDelete: CASCADE}
+        - addForeignKeyConstraint: {baseTableSchemaName: destination, baseTableName: corridor_destinations, baseColumnNames: destination_id, constraintName: fk_corridor_destinations_destination, referencedTableSchemaName: destination, referencedTableName: destinations, referencedColumnNames: id, onDelete: CASCADE}
+        - addForeignKeyConstraint: {baseTableSchemaName: destination, baseTableName: destination_food_categories, baseColumnNames: food_id, constraintName: fk_destination_food_categories_food, referencedTableSchemaName: destination, referencedTableName: destination_foods, referencedColumnNames: id, onDelete: CASCADE}
+        - addForeignKeyConstraint: {baseTableSchemaName: destination, baseTableName: destination_food_tags, baseColumnNames: food_id, constraintName: fk_destination_food_tags_food, referencedTableSchemaName: destination, referencedTableName: destination_foods, referencedColumnNames: id, onDelete: CASCADE}
+        - addForeignKeyConstraint: {baseTableSchemaName: destination, baseTableName: destination_food_interests, baseColumnNames: food_id, constraintName: fk_destination_food_interests_food, referencedTableSchemaName: destination, referencedTableName: destination_foods, referencedColumnNames: id, onDelete: CASCADE}
+      rollback:
+        - dropTable: {schemaName: destination, tableName: destination_food_interests}
+        - dropTable: {schemaName: destination, tableName: destination_food_tags}
+        - dropTable: {schemaName: destination, tableName: destination_food_categories}
+        - dropTable: {schemaName: destination, tableName: corridor_destinations}
+        - dropTable: {schemaName: destination, tableName: destination_interests}
+        - dropTable: {schemaName: destination, tableName: destination_tags}
+        - dropTable: {schemaName: destination, tableName: destination_categories}
+        - dropTable: {schemaName: destination, tableName: destination_food_media}
+        - dropTable: {schemaName: destination, tableName: destination_foods}
+        - dropTable: {schemaName: destination, tableName: destination_stays}
+        - dropTable: {schemaName: destination, tableName: destination_media}
+        - dropTable: {schemaName: destination, tableName: destinations}

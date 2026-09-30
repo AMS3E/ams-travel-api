@@ -1,0 +1,88 @@
+# The roles and permissions of the back-office realm (deployment/keycloak/
+# amsadmin-realm.json), plus USER for customers. Keycloak decides what a token
+# may do; these rows let the database say who holds what. Keep them in step
+# with the realm: a role or permission added there belongs here too.
+# ADMIN is given every permission, which is what its composites add up to.
+#
+# Every column is spelled out rather than left to its default: the test run
+# replays these statements against tables Hibernate made, which have none.
+databaseChangeLog:
+  - changeSet:
+      id: v2-auth-roles-and-permissions
+      author: ams-travel-v2
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              INSERT INTO auth.roles (id, code, name, description, created_at) VALUES
+                (${fn.uuid}, 'USER', 'Customer', 'A traveller signed in to the website', CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'PARTNER', 'Partner', 'Manage owned listings and submit them to BDO for publishing', CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'CONTRIBUTOR', 'Contributor', 'Draft destinations and submit them to an editor', CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'EDITOR', 'Editor', 'Review contributor destinations, manage the catalogue, and submit own content to an administrator', CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'BDO', 'Business development officer', 'Review partner destinations, manage the catalogue, and submit own content to an administrator', CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'ADMIN', 'Administrator', 'Manage users, roles, permissions, audit records, and the complete platform', CURRENT_TIMESTAMP);
+
+              INSERT INTO auth.permissions (id, code, name, description) VALUES
+                (${fn.uuid}, 'PERM_LISTING_EDIT_OWN', 'Edit own listings', 'Edit listings owned by the signed-in partner'),
+                (${fn.uuid}, 'PERM_LISTING_DELETE_OWN', 'Delete own listings', 'Delete an owned listing that is not live'),
+                (${fn.uuid}, 'PERM_PARTNER_LISTING_EDIT', 'Edit partner listings', 'Edit a submitted partner listing that is not live'),
+                (${fn.uuid}, 'PERM_PARTNER_LISTING_DELETE', 'Delete partner listings', 'Delete a submitted partner listing that is not live'),
+                (${fn.uuid}, 'PERM_MEDIA_UPLOAD', 'Upload media', 'Upload and manage owned media'),
+                (${fn.uuid}, 'PERM_PUBLISH_REQUEST_SUBMIT', 'Submit for publishing', 'Submit a listing or draft for publishing'),
+                (${fn.uuid}, 'PERM_PUBLISH_REQUEST_VIEW_OWN', 'Track own requests', 'Track the status of owned publishing requests'),
+                (${fn.uuid}, 'PERM_DESTINATION_DRAFT_CREATE', 'Create drafts', 'Create a destination draft'),
+                (${fn.uuid}, 'PERM_DESTINATION_DRAFT_EDIT_OWN', 'Edit own drafts', 'Edit an owned destination draft'),
+                (${fn.uuid}, 'PERM_DESTINATION_DRAFT_DELETE_OWN', 'Delete own drafts', 'Delete an owned destination draft that is not live'),
+                (${fn.uuid}, 'PERM_CORRIDOR_CURATE', 'Curate corridors', 'Create and edit curated corridors'),
+                (${fn.uuid}, 'PERM_TAXONOMY_MANAGE', 'Manage taxonomy', 'Create and edit regions, provinces, interests, categories and tags'),
+                (${fn.uuid}, 'PERM_DESTINATION_EDIT_ANY', 'Edit any destination', 'Edit any destination'),
+                (${fn.uuid}, 'PERM_DESTINATION_PUBLISH', 'Publish destinations', 'Publish a destination'),
+                (${fn.uuid}, 'PERM_DESTINATION_UNPUBLISH', 'Unpublish destinations', 'Unpublish a destination'),
+                (${fn.uuid}, 'PERM_DESTINATION_DELETE', 'Delete destinations', 'Delete a destination'),
+                (${fn.uuid}, 'PERM_CONTRIBUTOR_PUBLISH_APPROVE', 'Approve contributor requests', 'Approve or reject contributor publishing requests'),
+                (${fn.uuid}, 'PERM_REVIEW_MODERATE', 'Moderate reviews', 'Moderate destination reviews'),
+                (${fn.uuid}, 'PERM_PARTNER_PUBLISH_APPROVE', 'Approve partner requests', 'Approve or reject partner publishing requests'),
+                (${fn.uuid}, 'PERM_VERIFIED_BADGE_SET', 'Verify destinations', 'Verify destinations submitted to the desk'),
+                (${fn.uuid}, 'PERM_USER_MANAGE', 'Manage users', 'Manage all back-office accounts'),
+                (${fn.uuid}, 'PERM_ROLE_ASSIGN', 'Assign roles', 'Assign business roles to back-office users'),
+                (${fn.uuid}, 'PERM_AUDIT_VIEW', 'View audit log', 'View the immutable audit log'),
+                (${fn.uuid}, 'PERM_FULL_CONTROL', 'Full control', 'Full access to every amstravel capability');
+
+              INSERT INTO auth.role_permissions (role_id, permission_id)
+              SELECT r.id, p.id FROM auth.roles r CROSS JOIN auth.permissions p
+              WHERE r.code = 'PARTNER' AND p.code IN (
+                'PERM_LISTING_EDIT_OWN', 'PERM_LISTING_DELETE_OWN', 'PERM_MEDIA_UPLOAD',
+                'PERM_PUBLISH_REQUEST_SUBMIT', 'PERM_PUBLISH_REQUEST_VIEW_OWN');
+
+              INSERT INTO auth.role_permissions (role_id, permission_id)
+              SELECT r.id, p.id FROM auth.roles r CROSS JOIN auth.permissions p
+              WHERE r.code = 'CONTRIBUTOR' AND p.code IN (
+                'PERM_DESTINATION_DRAFT_CREATE', 'PERM_DESTINATION_DRAFT_EDIT_OWN', 'PERM_DESTINATION_DRAFT_DELETE_OWN',
+                'PERM_MEDIA_UPLOAD', 'PERM_PUBLISH_REQUEST_SUBMIT', 'PERM_PUBLISH_REQUEST_VIEW_OWN');
+
+              INSERT INTO auth.role_permissions (role_id, permission_id)
+              SELECT r.id, p.id FROM auth.roles r CROSS JOIN auth.permissions p
+              WHERE r.code = 'EDITOR' AND p.code IN (
+                'PERM_DESTINATION_DRAFT_CREATE', 'PERM_DESTINATION_EDIT_ANY', 'PERM_DESTINATION_UNPUBLISH',
+                'PERM_DESTINATION_DELETE', 'PERM_CONTRIBUTOR_PUBLISH_APPROVE', 'PERM_CORRIDOR_CURATE',
+                'PERM_TAXONOMY_MANAGE', 'PERM_REVIEW_MODERATE', 'PERM_VERIFIED_BADGE_SET', 'PERM_MEDIA_UPLOAD',
+                'PERM_PUBLISH_REQUEST_SUBMIT', 'PERM_PUBLISH_REQUEST_VIEW_OWN');
+
+              INSERT INTO auth.role_permissions (role_id, permission_id)
+              SELECT r.id, p.id FROM auth.roles r CROSS JOIN auth.permissions p
+              WHERE r.code = 'BDO' AND p.code IN (
+                'PERM_PARTNER_PUBLISH_APPROVE', 'PERM_PARTNER_LISTING_EDIT', 'PERM_PARTNER_LISTING_DELETE',
+                'PERM_DESTINATION_DRAFT_CREATE', 'PERM_DESTINATION_DRAFT_EDIT_OWN', 'PERM_DESTINATION_DRAFT_DELETE_OWN',
+                'PERM_DESTINATION_EDIT_ANY', 'PERM_CORRIDOR_CURATE', 'PERM_TAXONOMY_MANAGE', 'PERM_MEDIA_UPLOAD',
+                'PERM_VERIFIED_BADGE_SET', 'PERM_PUBLISH_REQUEST_SUBMIT', 'PERM_PUBLISH_REQUEST_VIEW_OWN');
+
+              INSERT INTO auth.role_permissions (role_id, permission_id)
+              SELECT r.id, p.id FROM auth.roles r CROSS JOIN auth.permissions p
+              WHERE r.code = 'ADMIN';
+      rollback:
+        - sql:
+            splitStatements: true
+            sql: |
+              DELETE FROM auth.role_permissions;
+              DELETE FROM auth.permissions;
+              DELETE FROM auth.roles;

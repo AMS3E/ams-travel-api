@@ -1,0 +1,53 @@
+# A food listing stands on its own map pin, as a stay does (007).
+#
+# A restaurant, café, market or street stall is a place in its own right.
+# Travellers find it on the page of every destination near its pin, so it no
+# longer has to name one, and deleting a destination leaves the places to eat
+# around it where they are.
+#
+# The column stays: a food listing may still name the destination it belongs to.
+databaseChangeLog:
+  - changeSet:
+      id: v2-destination-food-stands-alone
+      author: ams-travel-v2
+      changes:
+        - dropForeignKeyConstraint:
+            baseTableSchemaName: destination
+            baseTableName: destination_foods
+            constraintName: fk_destination_foods_destination
+        - dropNotNullConstraint:
+            schemaName: destination
+            tableName: destination_foods
+            columnName: destination_id
+            columnDataType: uuid
+        - addForeignKeyConstraint:
+            baseTableSchemaName: destination
+            baseTableName: destination_foods
+            baseColumnNames: destination_id
+            constraintName: fk_destination_foods_destination
+            referencedTableSchemaName: destination
+            referencedTableName: destinations
+            referencedColumnNames: id
+            onDelete: SET NULL
+      rollback:
+        - dropForeignKeyConstraint:
+            baseTableSchemaName: destination
+            baseTableName: destination_foods
+            constraintName: fk_destination_foods_destination
+        # A food listing without a destination has nowhere to go back to.
+        - sql:
+            sql: DELETE FROM destination.destination_foods WHERE destination_id IS NULL
+        - addNotNullConstraint:
+            schemaName: destination
+            tableName: destination_foods
+            columnName: destination_id
+            columnDataType: uuid
+        - addForeignKeyConstraint:
+            baseTableSchemaName: destination
+            baseTableName: destination_foods
+            baseColumnNames: destination_id
+            constraintName: fk_destination_foods_destination
+            referencedTableSchemaName: destination
+            referencedTableName: destinations
+            referencedColumnNames: id
+            onDelete: CASCADE

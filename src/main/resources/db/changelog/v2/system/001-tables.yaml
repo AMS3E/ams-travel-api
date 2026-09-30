@@ -1,0 +1,64 @@
+# system: messages to a person, and the record of every catalogue write.
+# An audit row outlives the person who made the change (user_id goes to null).
+databaseChangeLog:
+  - changeSet:
+      id: v2-system-tables
+      author: ams-travel-v2
+      changes:
+        - createTable:
+            schemaName: system
+            tableName: notifications
+            columns:
+              - column: {name: id, type: uuid, defaultValueComputed: "${fn.uuid}", constraints: {primaryKey: true, primaryKeyName: notifications_pkey, nullable: false}}
+              - column: {name: user_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: title, type: varchar(255), constraints: {nullable: false}}
+              - column: {name: body, type: text}
+              - column: {name: type, type: varchar(50), constraints: {nullable: false}}
+              - column: {name: data, type: "${type.json}"}
+              - column: {name: is_read, type: boolean, defaultValueBoolean: false, constraints: {nullable: false}}
+              - column: {name: created_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+        - createIndex:
+            schemaName: system
+            tableName: notifications
+            indexName: idx_notifications_user_created
+            columns:
+              - column: {name: user_id}
+              - column: {name: created_at}
+
+        - createTable:
+            schemaName: system
+            tableName: audit_logs
+            columns:
+              - column: {name: id, type: bigint, autoIncrement: true, constraints: {primaryKey: true, primaryKeyName: audit_logs_pkey, nullable: false}}
+              - column: {name: user_id, type: uuid}
+              - column: {name: action, type: varchar(100), constraints: {nullable: false}}
+              - column: {name: entity_type, type: varchar(50), constraints: {nullable: false}}
+              - column: {name: entity_id, type: uuid}
+              # The fields that changed, before and after.
+              - column: {name: old_data, type: "${type.json}"}
+              - column: {name: new_data, type: "${type.json}"}
+              - column: {name: ip_address, type: "${type.inet}"}
+              - column: {name: user_agent, type: text}
+              - column: {name: created_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+        - createIndex:
+            schemaName: system
+            tableName: audit_logs
+            indexName: idx_audit_logs_entity
+            columns:
+              - column: {name: entity_type}
+              - column: {name: entity_id}
+        - createIndex:
+            schemaName: system
+            tableName: audit_logs
+            indexName: idx_audit_logs_created
+            columns:
+              - column: {name: created_at}
+        - createIndex:
+            schemaName: system
+            tableName: audit_logs
+            indexName: idx_audit_logs_user
+            columns:
+              - column: {name: user_id}
+      rollback:
+        - dropTable: {schemaName: system, tableName: audit_logs}
+        - dropTable: {schemaName: system, tableName: notifications}

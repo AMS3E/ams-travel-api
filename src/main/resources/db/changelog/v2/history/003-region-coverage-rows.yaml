@@ -1,0 +1,108 @@
+# The succession the Ancient Capitals region is read as, for a database that
+# was seeded before the table existed.
+#
+# A fresh database gets these from the catalogue seed
+# (historicalcoverage/config/region-coverage.json), which runs after Liquibase
+# and only when the tables are empty — so this marks itself run when there are
+# no regions yet, and is generated from that same seed file.
+databaseChangeLog:
+  - changeSet:
+      id: v2-history-region-coverage-rows
+      author: ams-travel-v2
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 1
+            sql: SELECT CASE WHEN count(*) > 0 THEN 1 ELSE 0 END FROM taxonomy.regions WHERE kind = 'TOURISM'
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              UPDATE taxonomy.regions SET history_intro = 'The succession of royal capitals this region is built around — read it top to bottom.'
+                WHERE code = 'ANCIENT-CAPITALS';
+
+              INSERT INTO history.region_coverage
+                (id, region_id, sort_order, title, title_km, date_range, historical_period_id,
+                 description, destination_id, created_at, updated_at)
+              SELECT ${fn.uuid}, r.id, 0, 'Ishanapura', 'ឦសានបុរី', 'c. 600 – 700 CE',
+                (SELECT id FROM history.historical_periods WHERE name = 'Pre-Angkor Period'),
+                'Capital of Chenla under Isanavarman I, and the first place Khmer temple architecture settled into a form of its own.',
+                (SELECT id FROM destination.destinations WHERE slug = 'sambor-prei-kuk'),
+                CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+              FROM taxonomy.regions r WHERE r.code = 'ANCIENT-CAPITALS';
+
+              INSERT INTO history.region_coverage
+                (id, region_id, sort_order, title, title_km, date_range, historical_period_id,
+                 description, destination_id, created_at, updated_at)
+              SELECT ${fn.uuid}, r.id, 1, 'Mahendraparvata', 'មហេន្ទ្របវ៌ត', '802 – c. 835 CE',
+                (SELECT id FROM history.historical_periods WHERE name = 'Angkor Period'),
+                'The mountain city where Jayavarman II declared himself universal monarch in 802, the act that begins the Angkorian era.',
+                (SELECT id FROM destination.destinations WHERE slug = 'phnom-kulen'),
+                CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+              FROM taxonomy.regions r WHERE r.code = 'ANCIENT-CAPITALS';
+
+              INSERT INTO history.region_coverage
+                (id, region_id, sort_order, title, title_km, date_range, historical_period_id,
+                 description, destination_id, created_at, updated_at)
+              SELECT ${fn.uuid}, r.id, 2, 'Hariharalaya', 'ហរិហរាល័យ', 'c. 835 – 889 CE',
+                (SELECT id FROM history.historical_periods WHERE name = 'Angkor Period'),
+                'The plain below the mountain, where Indravarman I built the first state temple and the first great reservoir.',
+                NULL,
+                CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+              FROM taxonomy.regions r WHERE r.code = 'ANCIENT-CAPITALS';
+
+              INSERT INTO history.region_coverage
+                (id, region_id, sort_order, title, title_km, date_range, historical_period_id,
+                 description, destination_id, created_at, updated_at)
+              SELECT ${fn.uuid}, r.id, 3, 'Yasodharapura', 'យសោធរបុរី', '889 – c. 1431 CE',
+                (SELECT id FROM history.historical_periods WHERE name = 'Angkor Period'),
+                'Five centuries of capital on one site — Angkor Wat, Angkor Thom, and the largest pre-industrial city in the world.',
+                (SELECT id FROM destination.destinations WHERE slug = 'angkor-wat'),
+                CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+              FROM taxonomy.regions r WHERE r.code = 'ANCIENT-CAPITALS';
+
+              INSERT INTO history.region_coverage
+                (id, region_id, sort_order, title, title_km, date_range, historical_period_id,
+                 description, destination_id, created_at, updated_at)
+              SELECT ${fn.uuid}, r.id, 4, 'Lingapura', 'លិង្គបុរី', '928 – 944 CE',
+                (SELECT id FROM history.historical_periods WHERE name = 'Angkor Period'),
+                'Jayavarman IV moved the court a hundred kilometres north-east and raised a seven-tier pyramid. It lasted sixteen years.',
+                (SELECT id FROM destination.destinations WHERE slug = 'koh-ker'),
+                CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+              FROM taxonomy.regions r WHERE r.code = 'ANCIENT-CAPITALS';
+
+              INSERT INTO history.region_coverage
+                (id, region_id, sort_order, title, title_km, date_range, historical_period_id,
+                 description, destination_id, created_at, updated_at)
+              SELECT ${fn.uuid}, r.id, 5, 'Longvek', 'លង្វែក', '1528 – 1594 CE',
+                (SELECT id FROM history.historical_periods WHERE name = 'Post-Angkor Period'),
+                'The walled river capital of Ang Chan I, at the centre of Cambodia''s maritime trade with China and the Malay world.',
+                NULL,
+                CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+              FROM taxonomy.regions r WHERE r.code = 'ANCIENT-CAPITALS';
+
+              INSERT INTO history.region_coverage
+                (id, region_id, sort_order, title, title_km, date_range, historical_period_id,
+                 description, destination_id, created_at, updated_at)
+              SELECT ${fn.uuid}, r.id, 6, 'Oudong', 'ឧដុង្គ', '1618 – 1866 CE',
+                (SELECT id FROM history.historical_periods WHERE name = 'Post-Angkor Period'),
+                'Two and a half centuries of capital on a low ridge, crowned by the stupas of the kings buried there.',
+                NULL,
+                CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+              FROM taxonomy.regions r WHERE r.code = 'ANCIENT-CAPITALS';
+
+              INSERT INTO history.region_coverage
+                (id, region_id, sort_order, title, title_km, date_range, historical_period_id,
+                 description, destination_id, created_at, updated_at)
+              SELECT ${fn.uuid}, r.id, 7, 'Chaktomuk', 'ចតុមុខ', '1866 CE – present',
+                (SELECT id FROM history.historical_periods WHERE name = 'Post-Angkor Period'),
+                'The capital returns to the four-rivers junction it first held in 1434. Norodom I builds the Royal Palace here in 1866.',
+                (SELECT id FROM destination.destinations WHERE slug = 'royal-palace'),
+                CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+              FROM taxonomy.regions r WHERE r.code = 'ANCIENT-CAPITALS';
+
+      rollback:
+        - sql:
+            sql: |
+              DELETE FROM history.region_coverage;
+              UPDATE taxonomy.regions SET history_intro = NULL;

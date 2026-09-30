@@ -1,0 +1,182 @@
+# A corridor becomes a travel plan over days.
+#
+# Before, a corridor was a name and an ordered list of destinations, and it was
+# either active or not. Now it has days, each day its stops, each stop the times
+# of the visit and the road that reaches it; it is published or a draft; and it
+# keeps the road route Google Routes worked out for it.
+#
+#   taxonomy.corridors               + overview, duration, budget, status, stored route
+#   taxonomy.corridor_days           new: Day 1, Day 2 ...
+#   destination.corridor_destinations  a stop of its own, on a day, with times and its leg
+#
+# Every existing route becomes Day 1 of its corridor, in the same order, and an
+# active corridor becomes a published one. A stop gets its own id, so the same
+# destination can be stopped at twice — a day that begins where the last ended.
+databaseChangeLog:
+  - changeSet:
+      id: v2-corridor-itinerary
+      author: ams-travel-v2
+      changes:
+        # --- the corridor --------------------------------------------------------------------------
+        - addColumn:
+            schemaName: taxonomy
+            tableName: corridors
+            columns:
+              - column: {name: short_description, type: varchar(500)}
+              - column: {name: status, type: varchar(20), defaultValue: DRAFT, constraints: {nullable: false}}
+              - column: {name: duration_days, type: int}
+              - column: {name: duration_nights, type: int}
+              - column: {name: total_distance_km, type: "numeric(10,2)"}
+              - column: {name: total_duration_minutes, type: int}
+              - column: {name: estimated_budget_min, type: "numeric(10,2)"}
+              - column: {name: estimated_budget_max, type: "numeric(10,2)"}
+              - column: {name: start_destination_id, type: uuid}
+              - column: {name: end_destination_id, type: uuid}
+              - column: {name: encoded_polyline, type: text}
+              - column: {name: route_signature, type: varchar(64)}
+              - column: {name: route_error, type: varchar(500)}
+              - column: {name: route_calculated_at, type: TIMESTAMP WITH TIME ZONE}
+              - column: {name: route_failed_at, type: TIMESTAMP WITH TIME ZONE}
+              - column: {name: published_at, type: TIMESTAMP WITH TIME ZONE}
+              - column: {name: created_by, type: uuid}
+              - column: {name: updated_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+        - sql:
+            sql: |
+              UPDATE taxonomy.corridors
+              SET status = CASE WHEN is_active THEN 'PUBLISHED' ELSE 'DRAFT' END,
+                  published_at = CASE WHEN is_active THEN created_at ELSE NULL END
+        - dropColumn: {schemaName: taxonomy, tableName: corridors, columnName: is_active}
+
+        # --- its days ------------------------------------------------------------------------------
+        - createTable:
+            schemaName: taxonomy
+            tableName: corridor_days
+            columns:
+              - column: {name: id, type: uuid, defaultValueComputed: "${fn.uuid}", constraints: {primaryKey: true, primaryKeyName: corridor_days_pkey, nullable: false}}
+              - column: {name: corridor_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: day_number, type: int, constraints: {nullable: false}}
+              - column: {name: title, type: varchar(200)}
+              - column: {name: description, type: text}
+              - column: {name: start_time, type: time}
+              - column: {name: notes, type: text}
+              - column: {name: created_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+              - column: {name: updated_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+        - addUniqueConstraint: {schemaName: taxonomy, tableName: corridor_days, columnNames: "corridor_id, day_number", constraintName: uk_corridor_days_number}
+        - addForeignKeyConstraint: {baseTableSchemaName: taxonomy, baseTableName: corridor_days, baseColumnNames: corridor_id, constraintName: fk_corridor_days_corridor, referencedTableSchemaName: taxonomy, referencedTableName: corridors, referencedColumnNames: id, onDelete: CASCADE}
+
+        # Every corridor with a route gets a Day 1 to hold it.
+        - sql:
+            sql: |
+              INSERT INTO taxonomy.corridor_days (corridor_id, day_number, title)
+              SELECT DISTINCT s.corridor_id, 1, 'Day 1' FROM destination.corridor_destinations s
+        - sql:
+            sql: |
+              UPDATE taxonomy.corridors c
+              SET duration_days = 1,
+                  duration_nights = 0,
+                  start_destination_id = (SELECT s.destination_id FROM destination.corridor_destinations s
+                                          WHERE s.corridor_id = c.id ORDER BY s.sort_order ASC LIMIT 1),
+                  end_destination_id = (SELECT s.destination_id FROM destination.corridor_destinations s
+                                        WHERE s.corridor_id = c.id ORDER BY s.sort_order DESC LIMIT 1)
+              WHERE EXISTS (SELECT 1 FROM destination.corridor_destinations s WHERE s.corridor_id = c.id)
+
+        # --- its stops -----------------------------------------------------------------------------
+        - addColumn:
+            schemaName: destination
+            tableName: corridor_destinations
+            columns:
+              - column: {name: id, type: uuid, defaultValueComputed: "${fn.uuid}", constraints: {nullable: false}}
+              - column: {name: corridor_day_id, type: uuid}
+              - column: {name: arrival_time, type: time}
+              - column: {name: departure_time, type: time}
+              - column: {name: recommended_duration_minutes, type: int}
+              - column: {name: transport_type, type: varchar(20)}
+              - column: {name: title, type: varchar(200)}
+              - column: {name: description, type: text}
+              - column: {name: notes, type: text}
+              - column: {name: distance_from_previous_km, type: "numeric(10,2)"}
+              - column: {name: travel_time_from_previous_minutes, type: int}
+              - column: {name: route_polyline, type: text}
+        - sql:
+            sql: |
+              UPDATE destination.corridor_destinations s
+              SET corridor_day_id = (SELECT d.id FROM taxonomy.corridor_days d
+                                     WHERE d.corridor_id = s.corridor_id AND d.day_number = 1)
+        - dropForeignKeyConstraint: {baseTableSchemaName: destination, baseTableName: corridor_destinations, constraintName: fk_corridor_destinations_corridor}
+        - dropPrimaryKey: {schemaName: destination, tableName: corridor_destinations, constraintName: corridor_destinations_pkey}
+        - dropColumn: {schemaName: destination, tableName: corridor_destinations, columnName: corridor_id}
+        - renameColumn: {schemaName: destination, tableName: corridor_destinations, oldColumnName: sort_order, newColumnName: stop_order, columnDataType: int}
+        - addPrimaryKey: {schemaName: destination, tableName: corridor_destinations, columnNames: id, constraintName: corridor_destinations_pkey}
+        - addNotNullConstraint: {schemaName: destination, tableName: corridor_destinations, columnName: corridor_day_id, columnDataType: uuid}
+        - addUniqueConstraint: {schemaName: destination, tableName: corridor_destinations, columnNames: "corridor_day_id, stop_order", constraintName: uk_corridor_destinations_day_order}
+
+        # --- keys across schemas -------------------------------------------------------------------
+        - addForeignKeyConstraint: {baseTableSchemaName: destination, baseTableName: corridor_destinations, baseColumnNames: corridor_day_id, constraintName: fk_corridor_destinations_day, referencedTableSchemaName: taxonomy, referencedTableName: corridor_days, referencedColumnNames: id, onDelete: CASCADE}
+        - addForeignKeyConstraint: {baseTableSchemaName: taxonomy, baseTableName: corridors, baseColumnNames: start_destination_id, constraintName: fk_corridors_start_destination, referencedTableSchemaName: destination, referencedTableName: destinations, referencedColumnNames: id, onDelete: SET NULL}
+        - addForeignKeyConstraint: {baseTableSchemaName: taxonomy, baseTableName: corridors, baseColumnNames: end_destination_id, constraintName: fk_corridors_end_destination, referencedTableSchemaName: destination, referencedTableName: destinations, referencedColumnNames: id, onDelete: SET NULL}
+        - addForeignKeyConstraint: {baseTableSchemaName: taxonomy, baseTableName: corridors, baseColumnNames: created_by, constraintName: fk_corridors_created_by, referencedTableSchemaName: auth, referencedTableName: users, referencedColumnNames: id, onDelete: SET NULL}
+      rollback:
+        # Back to one ordered list per corridor. Days collapse in order; a destination stopped at twice keeps its first stop.
+        - dropForeignKeyConstraint: {baseTableSchemaName: taxonomy, baseTableName: corridors, constraintName: fk_corridors_created_by}
+        - dropForeignKeyConstraint: {baseTableSchemaName: taxonomy, baseTableName: corridors, constraintName: fk_corridors_end_destination}
+        - dropForeignKeyConstraint: {baseTableSchemaName: taxonomy, baseTableName: corridors, constraintName: fk_corridors_start_destination}
+        - dropForeignKeyConstraint: {baseTableSchemaName: destination, baseTableName: corridor_destinations, constraintName: fk_corridor_destinations_day}
+        - addColumn:
+            schemaName: destination
+            tableName: corridor_destinations
+            columns:
+              - column: {name: corridor_id, type: uuid}
+              - column: {name: sort_order, type: int, defaultValueNumeric: 0}
+        - sql:
+            sql: |
+              UPDATE destination.corridor_destinations s
+              SET corridor_id = (SELECT d.corridor_id FROM taxonomy.corridor_days d WHERE d.id = s.corridor_day_id),
+                  sort_order = (SELECT d.day_number FROM taxonomy.corridor_days d WHERE d.id = s.corridor_day_id) * 1000 + s.stop_order;
+              DELETE FROM destination.corridor_destinations s
+              WHERE EXISTS (SELECT 1 FROM destination.corridor_destinations earlier
+                            WHERE earlier.corridor_id = s.corridor_id AND earlier.destination_id = s.destination_id
+                              AND earlier.sort_order < s.sort_order)
+        - dropUniqueConstraint: {schemaName: destination, tableName: corridor_destinations, constraintName: uk_corridor_destinations_day_order}
+        - dropPrimaryKey: {schemaName: destination, tableName: corridor_destinations, constraintName: corridor_destinations_pkey}
+        - dropColumn: {schemaName: destination, tableName: corridor_destinations, columnName: stop_order}
+        - dropColumn: {schemaName: destination, tableName: corridor_destinations, columnName: corridor_day_id}
+        - dropColumn: {schemaName: destination, tableName: corridor_destinations, columnName: id}
+        - dropColumn: {schemaName: destination, tableName: corridor_destinations, columnName: arrival_time}
+        - dropColumn: {schemaName: destination, tableName: corridor_destinations, columnName: departure_time}
+        - dropColumn: {schemaName: destination, tableName: corridor_destinations, columnName: recommended_duration_minutes}
+        - dropColumn: {schemaName: destination, tableName: corridor_destinations, columnName: transport_type}
+        - dropColumn: {schemaName: destination, tableName: corridor_destinations, columnName: title}
+        - dropColumn: {schemaName: destination, tableName: corridor_destinations, columnName: description}
+        - dropColumn: {schemaName: destination, tableName: corridor_destinations, columnName: notes}
+        - dropColumn: {schemaName: destination, tableName: corridor_destinations, columnName: distance_from_previous_km}
+        - dropColumn: {schemaName: destination, tableName: corridor_destinations, columnName: travel_time_from_previous_minutes}
+        - dropColumn: {schemaName: destination, tableName: corridor_destinations, columnName: route_polyline}
+        - addNotNullConstraint: {schemaName: destination, tableName: corridor_destinations, columnName: corridor_id, columnDataType: uuid}
+        - addPrimaryKey: {schemaName: destination, tableName: corridor_destinations, columnNames: "corridor_id, destination_id", constraintName: corridor_destinations_pkey}
+        - addForeignKeyConstraint: {baseTableSchemaName: destination, baseTableName: corridor_destinations, baseColumnNames: corridor_id, constraintName: fk_corridor_destinations_corridor, referencedTableSchemaName: taxonomy, referencedTableName: corridors, referencedColumnNames: id, onDelete: CASCADE}
+        - dropTable: {schemaName: taxonomy, tableName: corridor_days}
+        - addColumn:
+            schemaName: taxonomy
+            tableName: corridors
+            columns:
+              - column: {name: is_active, type: boolean, defaultValueBoolean: true, constraints: {nullable: false}}
+        - sql:
+            sql: UPDATE taxonomy.corridors SET is_active = (status = 'PUBLISHED')
+        - dropColumn: {schemaName: taxonomy, tableName: corridors, columnName: short_description}
+        - dropColumn: {schemaName: taxonomy, tableName: corridors, columnName: status}
+        - dropColumn: {schemaName: taxonomy, tableName: corridors, columnName: duration_days}
+        - dropColumn: {schemaName: taxonomy, tableName: corridors, columnName: duration_nights}
+        - dropColumn: {schemaName: taxonomy, tableName: corridors, columnName: total_distance_km}
+        - dropColumn: {schemaName: taxonomy, tableName: corridors, columnName: total_duration_minutes}
+        - dropColumn: {schemaName: taxonomy, tableName: corridors, columnName: estimated_budget_min}
+        - dropColumn: {schemaName: taxonomy, tableName: corridors, columnName: estimated_budget_max}
+        - dropColumn: {schemaName: taxonomy, tableName: corridors, columnName: start_destination_id}
+        - dropColumn: {schemaName: taxonomy, tableName: corridors, columnName: end_destination_id}
+        - dropColumn: {schemaName: taxonomy, tableName: corridors, columnName: encoded_polyline}
+        - dropColumn: {schemaName: taxonomy, tableName: corridors, columnName: route_signature}
+        - dropColumn: {schemaName: taxonomy, tableName: corridors, columnName: route_error}
+        - dropColumn: {schemaName: taxonomy, tableName: corridors, columnName: route_calculated_at}
+        - dropColumn: {schemaName: taxonomy, tableName: corridors, columnName: route_failed_at}
+        - dropColumn: {schemaName: taxonomy, tableName: corridors, columnName: published_at}
+        - dropColumn: {schemaName: taxonomy, tableName: corridors, columnName: created_by}
+        - dropColumn: {schemaName: taxonomy, tableName: corridors, columnName: updated_at}

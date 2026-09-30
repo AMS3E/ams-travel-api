@@ -1,0 +1,9 @@
+# Every gallery item is an uploaded picture; ownerType already says what it is for.
+databaseChangeLog:
+  - changeSet:
+      id: v2-media-drop-media-type
+      author: ams-travel-v2
+      changes:
+        - dropColumn: {schemaName: media, tableName: media_items, columnName: media_type}
+      rollback:
+        - addColumn: {schemaName: media, tableName: media_items, columns: [{column: {name: media_type, type: varchar(30), defaultValue: IMAGE, constraints: {nullable: false}}}]}

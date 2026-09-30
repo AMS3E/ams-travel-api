@@ -1,0 +1,15 @@
+# The catalogue writes "cafe", not "café": existing interest text follows.
+databaseChangeLog:
+  - changeSet:
+      id: v2-taxonomy-plain-cafe
+      author: ams-travel-v2
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              UPDATE taxonomy.interests SET name = REPLACE(REPLACE(name, 'Café', 'Cafe'), 'café', 'cafe') WHERE name LIKE '%af_%';
+              UPDATE taxonomy.interests SET description = REPLACE(REPLACE(description, 'Café', 'Cafe'), 'café', 'cafe') WHERE description LIKE '%af_%';
+      # The accented spelling is not kept anywhere to restore.
+      rollback:
+        - sql:
+            sql: SELECT 1

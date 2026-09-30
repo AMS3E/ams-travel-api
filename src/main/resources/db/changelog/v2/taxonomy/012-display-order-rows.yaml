@@ -1,0 +1,249 @@
+# The curators' numbering for the rows already there (see 011-display-order.yaml).
+#
+# From the seed files, which follow it: each region, category, search filter,
+# interest and corridor the seed knows takes its place; anything added since
+# follows them A to Z. A fresh database is numbered by the seeders instead, so
+# this finds nothing to do there. Positions count from 0; the link rows of each
+# region are numbered 0, 1, 2… without gaps, as the region's ordered list needs.
+databaseChangeLog:
+  - changeSet:
+      id: v2-taxonomy-display-order-rows
+      author: ams-travel-v2
+      dbms: postgresql
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              UPDATE taxonomy.regions r SET sort_order = n.position
+              FROM (
+                SELECT r2.id, ROW_NUMBER() OVER (PARTITION BY r2.kind ORDER BY v.position NULLS LAST, r2.name) - 1 AS position
+                FROM taxonomy.regions r2
+                LEFT JOIN (VALUES
+                ('CAPITAL', 0),
+                ('ANGKOR', 1),
+                ('NORTHEAST', 2),
+                ('MEKONG', 3),
+                ('COAST', 4),
+                ('ANCIENT-CAPITALS', 0),
+                ('NORTHEASTERN', 1),
+                ('MEKONG-TONLE-SAP', 2),
+                ('MOUNTAIN-WATERFALL', 3),
+                ('COASTAL-ISLAND', 4),
+                ('URBAN-LIFESTYLE', 5),
+                ('KHMER-CULINARY', 6),
+                ('ECO-COMMUNITY', 7),
+                ('LUXURY-TOURISM', 8)
+                ) AS v (code, position) ON v.code = r2.code
+              ) n
+              WHERE n.id = r.id;
+
+              UPDATE taxonomy.region_categories rc SET sort_order = n.position
+              FROM (
+                SELECT rc2.region_id, rc2.category_id,
+                       ROW_NUMBER() OVER (PARTITION BY rc2.region_id ORDER BY v.position NULLS LAST, c.name) - 1 AS position
+                FROM taxonomy.region_categories rc2
+                JOIN taxonomy.regions r ON r.id = rc2.region_id
+                JOIN taxonomy.categories c ON c.id = rc2.category_id
+                LEFT JOIN (VALUES
+                ('ANCIENT-CAPITALS', 'ancient-cities', 0),
+                ('ANCIENT-CAPITALS', 'temples', 1),
+                ('ANCIENT-CAPITALS', 'archaeological-sites', 2),
+                ('ANCIENT-CAPITALS', 'ancient-roads', 3),
+                ('ANCIENT-CAPITALS', 'bridges', 4),
+                ('ANCIENT-CAPITALS', 'hospitals', 5),
+                ('ANCIENT-CAPITALS', 'museums', 6),
+                ('NORTHEASTERN', 'indigenous-culture', 0),
+                ('NORTHEASTERN', 'volcano-lake', 1),
+                ('NORTHEASTERN', 'forest', 2),
+                ('NORTHEASTERN', 'wildlife', 3),
+                ('NORTHEASTERN', 'waterfalls', 4),
+                ('NORTHEASTERN', 'sacred-mountain', 5),
+                ('NORTHEASTERN', 'adventure', 6),
+                ('NORTHEASTERN', 'coffee', 7),
+                ('MEKONG-TONLE-SAP', 'floating-village', 0),
+                ('MEKONG-TONLE-SAP', 'fishing', 1),
+                ('MEKONG-TONLE-SAP', 'bird-sanctuary', 2),
+                ('MEKONG-TONLE-SAP', 'river-island', 3),
+                ('MEKONG-TONLE-SAP', 'rice', 4),
+                ('MEKONG-TONLE-SAP', 'community', 5),
+                ('MEKONG-TONLE-SAP', 'boat-trip', 6),
+                ('MEKONG-TONLE-SAP', 'sunset', 7),
+                ('MOUNTAIN-WATERFALL', 'mountain', 0),
+                ('MOUNTAIN-WATERFALL', 'national-parks', 1),
+                ('MOUNTAIN-WATERFALL', 'waterfalls', 2),
+                ('MOUNTAIN-WATERFALL', 'cave', 3),
+                ('MOUNTAIN-WATERFALL', 'trekking', 4),
+                ('MOUNTAIN-WATERFALL', 'camping', 5),
+                ('MOUNTAIN-WATERFALL', 'cycling', 6),
+                ('MOUNTAIN-WATERFALL', 'viewpoint', 7),
+                ('MOUNTAIN-WATERFALL', 'photography', 8),
+                ('COASTAL-ISLAND', 'beach', 0),
+                ('COASTAL-ISLAND', 'island', 1),
+                ('COASTAL-ISLAND', 'coral', 2),
+                ('COASTAL-ISLAND', 'diving', 3),
+                ('COASTAL-ISLAND', 'seafood', 4),
+                ('COASTAL-ISLAND', 'mangrove', 5),
+                ('COASTAL-ISLAND', 'cruise', 6),
+                ('COASTAL-ISLAND', 'snorkeling', 7),
+                ('URBAN-LIFESTYLE', 'city-walk', 0),
+                ('URBAN-LIFESTYLE', 'night-market', 1),
+                ('URBAN-LIFESTYLE', 'coffee', 2),
+                ('URBAN-LIFESTYLE', 'sky-bar', 3),
+                ('URBAN-LIFESTYLE', 'shopping', 4),
+                ('URBAN-LIFESTYLE', 'art-gallery', 5),
+                ('URBAN-LIFESTYLE', 'street-food', 6),
+                ('KHMER-CULINARY', 'traditional-food', 0),
+                ('KHMER-CULINARY', 'michelin', 1),
+                ('KHMER-CULINARY', 'street-food', 2),
+                ('KHMER-CULINARY', 'fine-dining', 3),
+                ('KHMER-CULINARY', 'cooking-class', 4),
+                ('KHMER-CULINARY', 'farm', 5),
+                ('ECO-COMMUNITY', 'homestay', 0),
+                ('ECO-COMMUNITY', 'village', 1),
+                ('ECO-COMMUNITY', 'craft', 2),
+                ('ECO-COMMUNITY', 'agriculture', 3),
+                ('ECO-COMMUNITY', 'eco-lodge', 4),
+                ('ECO-COMMUNITY', 'bird-watching', 5),
+                ('ECO-COMMUNITY', 'local-guide', 6),
+                ('LUXURY-TOURISM', 'luxury-hotel', 0),
+                ('LUXURY-TOURISM', 'private-island', 1),
+                ('LUXURY-TOURISM', 'golf', 2),
+                ('LUXURY-TOURISM', 'helicopter', 3),
+                ('LUXURY-TOURISM', 'yacht', 4),
+                ('LUXURY-TOURISM', 'private-guide', 5),
+                ('LUXURY-TOURISM', 'fine-dining', 6),
+                ('LUXURY-TOURISM', 'spa', 7),
+                ('LUXURY-TOURISM', 'vip-tour', 8)
+                ) AS v (code, slug, position) ON v.code = r.code AND v.slug = c.slug
+              ) n
+              WHERE n.region_id = rc.region_id AND n.category_id = rc.category_id;
+
+              UPDATE taxonomy.region_tags rt SET sort_order = n.position
+              FROM (
+                SELECT rt2.region_id, rt2.tag_id,
+                       ROW_NUMBER() OVER (PARTITION BY rt2.region_id ORDER BY v.position NULLS LAST, t.name) - 1 AS position
+                FROM taxonomy.region_tags rt2
+                JOIN taxonomy.regions r ON r.id = rt2.region_id
+                JOIN taxonomy.tags t ON t.id = rt2.tag_id
+                LEFT JOIN (VALUES
+                ('ANCIENT-CAPITALS', 'century', 0),
+                ('ANCIENT-CAPITALS', 'king', 1),
+                ('ANCIENT-CAPITALS', 'architecture-style', 2),
+                ('ANCIENT-CAPITALS', 'unesco', 3),
+                ('ANCIENT-CAPITALS', 'religion', 4),
+                ('ANCIENT-CAPITALS', 'historical-period', 5),
+                ('NORTHEASTERN', 'tribe', 0),
+                ('NORTHEASTERN', 'forest', 1),
+                ('NORTHEASTERN', 'elephant', 2),
+                ('NORTHEASTERN', 'camping', 3),
+                ('NORTHEASTERN', 'birding', 4),
+                ('NORTHEASTERN', 'sesan', 5),
+                ('NORTHEASTERN', 'srepok', 6),
+                ('MEKONG-TONLE-SAP', 'boat', 0),
+                ('MEKONG-TONLE-SAP', 'bird', 1),
+                ('MEKONG-TONLE-SAP', 'fishing', 2),
+                ('MEKONG-TONLE-SAP', 'lotus', 3),
+                ('MEKONG-TONLE-SAP', 'rice', 4),
+                ('MEKONG-TONLE-SAP', 'island', 5),
+                ('MEKONG-TONLE-SAP', 'wetland', 6),
+                ('MEKONG-TONLE-SAP', 'festival', 7),
+                ('MOUNTAIN-WATERFALL', 'hiking', 0),
+                ('MOUNTAIN-WATERFALL', 'sunrise', 1),
+                ('MOUNTAIN-WATERFALL', 'sunset', 2),
+                ('MOUNTAIN-WATERFALL', 'camping', 3),
+                ('MOUNTAIN-WATERFALL', 'trail', 4),
+                ('MOUNTAIN-WATERFALL', 'peak', 5),
+                ('MOUNTAIN-WATERFALL', 'landscape', 6),
+                ('COASTAL-ISLAND', 'beach', 0),
+                ('COASTAL-ISLAND', 'island', 1),
+                ('COASTAL-ISLAND', 'luxury-resort', 2),
+                ('COASTAL-ISLAND', 'diving', 3),
+                ('COASTAL-ISLAND', 'kayak', 4),
+                ('URBAN-LIFESTYLE', 'cafe', 0),
+                ('URBAN-LIFESTYLE', 'nightlife', 1),
+                ('URBAN-LIFESTYLE', 'shopping', 2),
+                ('URBAN-LIFESTYLE', 'music', 3),
+                ('URBAN-LIFESTYLE', 'food', 4),
+                ('URBAN-LIFESTYLE', 'architecture', 5),
+                ('KHMER-CULINARY', 'khmer-curry', 0),
+                ('KHMER-CULINARY', 'fish-amok', 1),
+                ('KHMER-CULINARY', 'num-banh-chok', 2),
+                ('KHMER-CULINARY', 'pepper-rice-wine', 3),
+                ('KHMER-CULINARY', 'palm-sugar', 4),
+                ('ECO-COMMUNITY', 'homestay', 0),
+                ('ECO-COMMUNITY', 'community', 1),
+                ('ECO-COMMUNITY', 'cycling', 2),
+                ('ECO-COMMUNITY', 'farm', 3),
+                ('ECO-COMMUNITY', 'local-food', 4),
+                ('ECO-COMMUNITY', 'fishing', 5),
+                ('LUXURY-TOURISM', 'luxury', 0),
+                ('LUXURY-TOURISM', 'five-stars', 1),
+                ('LUXURY-TOURISM', 'private', 2),
+                ('LUXURY-TOURISM', 'exclusive', 3),
+                ('LUXURY-TOURISM', 'helicopter', 4),
+                ('LUXURY-TOURISM', 'golf-spa', 5)
+                ) AS v (code, slug, position) ON v.code = r.code AND v.slug = t.slug
+              ) n
+              WHERE n.region_id = rt.region_id AND n.tag_id = rt.tag_id;
+
+              UPDATE taxonomy.interests i SET sort_order = n.position
+              FROM (
+                SELECT i2.id, ROW_NUMBER() OVER (PARTITION BY i2.group_name ORDER BY v.position NULLS LAST, i2.name) - 1 AS position
+                FROM taxonomy.interests i2
+                LEFT JOIN (VALUES
+                ('historical-sites', 0),
+                ('culture', 1),
+                ('national-parks', 2),
+                ('cave', 3),
+                ('luxury-hotel', 0),
+                ('homestay', 1),
+                ('resorts', 2),
+                ('private-island', 3),
+                ('eco-lodge', 4),
+                ('restaurants', 0),
+                ('markets', 1),
+                ('drinks', 2),
+                ('streetfood', 3),
+                ('traditional-food', 4),
+                ('skybar', 5),
+                ('beaches-islands', 0),
+                ('waterfalls', 1),
+                ('floating-village', 2),
+                ('diving', 0),
+                ('kayak', 1),
+                ('bird-sanctuary', 2),
+                ('wildlife', 3),
+                ('hiking-trekking', 4),
+                ('fishing', 5),
+                ('camping', 6),
+                ('viewpoint', 7),
+                ('cruise', 8),
+                ('shopping', 9),
+                ('khmer-civilization', 0),
+                ('mekong-civilization', 1),
+                ('coastal-discovery', 2),
+                ('mountain-adventure', 3),
+                ('khmer-culinary', 4)
+                ) AS v (slug, position) ON v.slug = i2.slug
+              ) n
+              WHERE n.id = i.id;
+
+              UPDATE taxonomy.corridors c SET sort_order = n.position
+              FROM (
+                SELECT c2.id, ROW_NUMBER() OVER (ORDER BY v.position NULLS LAST, c2.name) - 1 AS position
+                FROM taxonomy.corridors c2
+                LEFT JOIN (VALUES
+                ('khmer-civilization-trail', 0),
+                ('mekong-civilization', 1),
+                ('coastal-paradise-route', 2),
+                ('cardamom-peaks-explorer', 3),
+                ('khmer-culinary', 4)
+                ) AS v (slug, position) ON v.slug = c2.slug
+              ) n
+              WHERE n.id = c.id;
+      rollback:
+        - sql:
+            sql: >
+              UPDATE taxonomy.regions SET sort_order = NULL;
+              UPDATE taxonomy.interests SET sort_order = NULL;
+              UPDATE taxonomy.corridors SET sort_order = NULL;

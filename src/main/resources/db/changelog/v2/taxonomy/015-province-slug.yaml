@@ -1,0 +1,20 @@
+# A province's address, in place of its ISO number.
+#
+# KH-7 was a technical field: nobody in the back office typed it or read it, and
+# the website used it for the province's address (/provinces/kh-7). Its name
+# makes a better one (/provinces/kampot), which is what the seed always called
+# it, so the number goes and the slug takes over.
+databaseChangeLog:
+  - changeSet:
+      id: v2-taxonomy-province-slug
+      author: ams-travel-v2
+      changes:
+        - addColumn: {schemaName: taxonomy, tableName: provinces, columns: [{column: {name: slug, type: varchar(120)}}]}
+        - sql: {sql: "update taxonomy.provinces set slug = lower(replace(name, ' ', '-'))"}
+        - addNotNullConstraint: {schemaName: taxonomy, tableName: provinces, columnName: slug, columnDataType: varchar(120)}
+        - addUniqueConstraint: {schemaName: taxonomy, tableName: provinces, columnNames: slug, constraintName: uk_provinces_slug}
+        - dropColumn: {schemaName: taxonomy, tableName: provinces, columnName: code}
+      rollback:
+        # The numbers themselves are gone; the column comes back empty.
+        - addColumn: {schemaName: taxonomy, tableName: provinces, columns: [{column: {name: code, type: varchar(20)}}]}
+        - dropColumn: {schemaName: taxonomy, tableName: provinces, columnName: slug}

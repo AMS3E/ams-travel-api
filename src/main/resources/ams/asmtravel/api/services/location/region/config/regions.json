@@ -1,0 +1,334 @@
+[
+  {
+    "code": "CAPITAL",
+    "name": "Phnom Penh & Central Plains",
+    "description": "The capital at the meeting of four rivers, and the rice plains, silk islands and palm-sugar country around it.",
+    "kind": "ZONE"
+  },
+  {
+    "code": "ANGKOR",
+    "name": "Angkor & the Tonle Sap",
+    "description": "The temples of Angkor and the great lake whose flood feeds the country, from Siem Reap to Battambang and the western hills.",
+    "kind": "ZONE"
+  },
+  {
+    "code": "NORTHEAST",
+    "name": "Northeast Highlands",
+    "description": "Cliff-top temples, crater lakes, river dolphins and the forests of the Bunong, Jarai and Kreung peoples.",
+    "kind": "ZONE"
+  },
+  {
+    "code": "MEKONG",
+    "name": "Mekong Lowlands",
+    "description": "River towns, rubber plantations and the paddy fields east of the Mekong, down to the Vietnamese border.",
+    "kind": "ZONE"
+  },
+  {
+    "code": "COAST",
+    "name": "South Coast",
+    "description": "Pepper farms, crab markets, the Cardamom rainforest and the islands of the Gulf of Thailand.",
+    "kind": "ZONE"
+  },
+  {
+    "code": "ANCIENT-CAPITALS",
+    "name": "Ancient Capitals & Khmer Civilization",
+    "description": "The royal capitals of the Khmer empire and what they left behind: temple cities, the roads and bridges that joined them, the hospitals that served them, and the museums that keep them.",
+    "kind": "TOURISM",
+    "categories": [
+      "ancient-cities",
+      "temples",
+      "archaeological-sites",
+      "ancient-roads",
+      "bridges",
+      "hospitals",
+      "museums"
+    ],
+    "tags": [
+      "century",
+      "king",
+      "architecture-style",
+      "unesco",
+      "religion",
+      "historical-period"
+    ],
+    "interests": [
+      "historical-sites",
+      "culture",
+      "cave",
+      "viewpoint"
+    ]
+  },
+  {
+    "code": "NORTHEASTERN",
+    "name": "Northeastern Civilization",
+    "description": "The highlands of Ratanakiri, Mondulkiri and Stung Treng: indigenous villages, a volcano lake, elephant forests and the waterfalls of the Sesan and Srepok.",
+    "kind": "TOURISM",
+    "categories": [
+      "indigenous-culture",
+      "volcano-lake",
+      "forest",
+      "wildlife",
+      "waterfalls",
+      "sacred-mountain",
+      "adventure",
+      "coffee"
+    ],
+    "tags": [
+      "tribe",
+      "forest",
+      "elephant",
+      "camping",
+      "birding",
+      "sesan",
+      "srepok"
+    ],
+    "interests": [
+      "culture",
+      "kayak",
+      "waterfalls",
+      "bird-sanctuary",
+      "national-parks",
+      "wildlife",
+      "hiking-trekking",
+      "camping",
+      "viewpoint"
+    ]
+  },
+  {
+    "code": "MEKONG-TONLE-SAP",
+    "name": "Mekong & Tonle Sap Civilization",
+    "description": "Life on the water: floating villages, fishing grounds, bird sanctuaries, river islands and the rice country the flood feeds.",
+    "kind": "TOURISM",
+    "categories": [
+      "floating-village",
+      "fishing",
+      "bird-sanctuary",
+      "river-island",
+      "rice",
+      "community",
+      "boat-trip",
+      "sunset"
+    ],
+    "tags": [
+      "boat",
+      "bird",
+      "fishing",
+      "lotus",
+      "rice",
+      "island",
+      "wetland",
+      "festival"
+    ],
+    "interests": [
+      "culture",
+      "kayak",
+      "bird-sanctuary",
+      "floating-village",
+      "wildlife",
+      "fishing",
+      "viewpoint",
+      "cruise"
+    ]
+  },
+  {
+    "code": "MOUNTAIN-WATERFALL",
+    "name": "Mountain & Waterfall Region",
+    "description": "The Cardamoms, the Elephant Mountains and Preah Vihear: national parks, caves, trails to a peak and the waterfalls along them.",
+    "kind": "TOURISM",
+    "categories": [
+      "mountain",
+      "national-parks",
+      "waterfalls",
+      "cave",
+      "trekking",
+      "camping",
+      "cycling",
+      "viewpoint",
+      "photography"
+    ],
+    "tags": [
+      "hiking",
+      "sunrise",
+      "sunset",
+      "camping",
+      "trail",
+      "peak",
+      "landscape"
+    ],
+    "interests": [
+      "waterfalls",
+      "national-parks",
+      "cave",
+      "wildlife",
+      "hiking-trekking",
+      "camping",
+      "viewpoint"
+    ]
+  },
+  {
+    "code": "COASTAL-ISLAND",
+    "name": "Coastal & Island Region",
+    "description": "The Gulf of Thailand: beaches, islands, coral and mangrove, and the seafood between them.",
+    "kind": "TOURISM",
+    "categories": [
+      "beach",
+      "island",
+      "coral",
+      "diving",
+      "seafood",
+      "mangrove",
+      "cruise",
+      "snorkeling"
+    ],
+    "tags": [
+      "beach",
+      "island",
+      "luxury-resort",
+      "diving",
+      "kayak"
+    ],
+    "interests": [
+      "beaches-islands",
+      "diving",
+      "kayak",
+      "national-parks",
+      "resorts",
+      "fishing",
+      "cruise"
+    ]
+  },
+  {
+    "code": "URBAN-LIFESTYLE",
+    "name": "Urban Lifestyle & Nightlife",
+    "description": "Phnom Penh, Siem Reap and Battambang after dark: night markets, sky bars, galleries, coffee and the street food between them.",
+    "kind": "TOURISM",
+    "categories": [
+      "city-walk",
+      "night-market",
+      "coffee",
+      "sky-bar",
+      "shopping",
+      "art-gallery",
+      "street-food"
+    ],
+    "tags": [
+      "cafe",
+      "nightlife",
+      "shopping",
+      "music",
+      "food",
+      "architecture"
+    ],
+    "interests": [
+      "historical-sites",
+      "restaurants",
+      "culture",
+      "markets",
+      "drinks",
+      "streetfood",
+      "skybar",
+      "shopping"
+    ]
+  },
+  {
+    "code": "KHMER-CULINARY",
+    "name": "Khmer Culinary Region",
+    "description": "What Cambodia eats and where it is cooked: the traditional table, the street, the fine dining room, the cooking class and the farm behind them.",
+    "kind": "TOURISM",
+    "categories": [
+      "traditional-food",
+      "michelin",
+      "street-food",
+      "fine-dining",
+      "cooking-class",
+      "farm"
+    ],
+    "tags": [
+      "khmer-curry",
+      "fish-amok",
+      "num-banh-chok",
+      "pepper-rice-wine",
+      "palm-sugar"
+    ],
+    "interests": [
+      "restaurants",
+      "culture",
+      "markets",
+      "drinks",
+      "streetfood",
+      "traditional-food",
+      "skybar"
+    ]
+  },
+  {
+    "code": "ECO-COMMUNITY",
+    "name": "Eco-Community Tourism",
+    "description": "Travel that stays in the village: homestays, craft and farming, eco lodges, birdwatching and the local guides who take you.",
+    "kind": "TOURISM",
+    "categories": [
+      "homestay",
+      "village",
+      "craft",
+      "agriculture",
+      "eco-lodge",
+      "bird-watching",
+      "local-guide"
+    ],
+    "tags": [
+      "homestay",
+      "community",
+      "cycling",
+      "farm",
+      "local-food",
+      "fishing"
+    ],
+    "interests": [
+      "culture",
+      "homestay",
+      "kayak",
+      "bird-sanctuary",
+      "drinks",
+      "wildlife",
+      "eco-lodge",
+      "hiking-trekking",
+      "traditional-food",
+      "fishing",
+      "camping"
+    ]
+  },
+  {
+    "code": "LUXURY-TOURISM",
+    "name": "Luxury Tourism",
+    "description": "The private end of Cambodia: island resorts, golf, spa, a helicopter or a yacht, and a guide of your own.",
+    "kind": "TOURISM",
+    "categories": [
+      "luxury-hotel",
+      "private-island",
+      "golf",
+      "helicopter",
+      "yacht",
+      "private-guide",
+      "fine-dining",
+      "spa",
+      "vip-tour"
+    ],
+    "tags": [
+      "luxury",
+      "five-stars",
+      "private",
+      "exclusive",
+      "helicopter",
+      "golf-spa"
+    ],
+    "interests": [
+      "beaches-islands",
+      "diving",
+      "luxury-hotel",
+      "restaurants",
+      "resorts",
+      "private-island",
+      "skybar",
+      "cruise"
+    ]
+  }
+]

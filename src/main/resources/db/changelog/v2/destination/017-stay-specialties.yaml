@@ -1,0 +1,19 @@
+# What only one kind of stay has — a hotel's desk and events, a hostel's dorms
+# and social life, a resort's setting and meal plans, a homestay's life with
+# the family, a villa's staff — as slugs from StaySpecialties.
+databaseChangeLog:
+  - changeSet:
+      id: v2-destination-stay-specialties
+      author: ams-travel-v2
+      changes:
+        - addColumn:
+            schemaName: destination
+            tableName: destination_stays
+            columns:
+              - column: {name: specialties, type: "${type.json}"}
+      rollback:
+        - dropColumn:
+            schemaName: destination
+            tableName: destination_stays
+            columns:
+              - column: {name: specialties}

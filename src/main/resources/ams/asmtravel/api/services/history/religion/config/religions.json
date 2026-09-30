@@ -1,0 +1,17 @@
+[
+  {
+    "slug": "animism",
+    "name": "Animism",
+    "description": "Neak ta, the spirits of place, honoured alongside both."
+  },
+  {
+    "slug": "buddhism",
+    "name": "Buddhism",
+    "description": "Mahayana under Jayavarman VII; Theravada from the fourteenth century to today."
+  },
+  {
+    "slug": "hinduism",
+    "name": "Hinduism",
+    "description": "Shiva and Vishnu worship, the state religion of most Angkorian kings."
+  }
+]

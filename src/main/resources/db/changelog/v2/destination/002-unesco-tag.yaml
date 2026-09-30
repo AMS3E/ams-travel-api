@@ -1,0 +1,33 @@
+# The UNESCO filter needs places behind it.
+#
+# Cambodia's World Heritage properties: Angkor (1992) with Banteay Srei and the
+# royal road inside it, Preah Vihear (2008), Sambor Prei Kuk (2017) and Koh Ker
+# (2023). A fresh database gets these from destinations.json; this is for the
+# one that was seeded before the tag existed, and does nothing when the tag is
+# not there yet.
+databaseChangeLog:
+  - changeSet:
+      id: v2-destination-unesco-tag
+      author: ams-travel-v2
+      preConditions:
+        - onFail: MARK_RAN
+        - sqlCheck:
+            expectedResult: 1
+            sql: SELECT CASE WHEN count(*) > 0 THEN 1 ELSE 0 END FROM taxonomy.tags WHERE slug = 'unesco'
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              INSERT INTO destination.destination_tags (destination_id, tag_id)
+              SELECT d.id, t.id
+              FROM destination.destinations d
+              CROSS JOIN taxonomy.tags t
+              WHERE t.slug = 'unesco' AND d.slug IN ('angkor-wat', 'banteay-srei', 'angkorian-royal-road', 'preah-vihear-temple', 'sambor-prei-kuk', 'koh-ker')
+                AND NOT EXISTS (
+                  SELECT 1 FROM destination.destination_tags existing
+                  WHERE existing.destination_id = d.id AND existing.tag_id = t.id);
+      rollback:
+        - sql:
+            sql: |
+              DELETE FROM destination.destination_tags
+              WHERE tag_id IN (SELECT id FROM taxonomy.tags WHERE slug = 'unesco');

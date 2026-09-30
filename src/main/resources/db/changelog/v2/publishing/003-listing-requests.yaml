@@ -1,0 +1,66 @@
+# A publish request puts forward any listing a partner or a contributor
+# writes: an attraction (destination_id), a place to stay (stay_id) or a place
+# to eat (food_id). listing_type names which, and exactly one of the three is
+# set. Requests raised before this were all for attractions, so they read as
+# DESTINATION. As before, one request per listing may be open at a time.
+databaseChangeLog:
+  - changeSet:
+      id: v2-publishing-listing-requests
+      author: ams-travel-v2
+      changes:
+        - addColumn:
+            schemaName: publishing
+            tableName: publish_requests
+            columns:
+              - column: {name: listing_type, type: varchar(20), defaultValue: DESTINATION, constraints: {nullable: false}}
+              - column: {name: stay_id, type: uuid}
+              - column: {name: food_id, type: uuid}
+        - dropNotNullConstraint: {schemaName: publishing, tableName: publish_requests, columnName: destination_id, columnDataType: uuid}
+        - addForeignKeyConstraint: {baseTableSchemaName: publishing, baseTableName: publish_requests, baseColumnNames: stay_id, constraintName: fk_publish_requests_stay, referencedTableSchemaName: destination, referencedTableName: destination_stays, referencedColumnNames: id, onDelete: CASCADE}
+        - addForeignKeyConstraint: {baseTableSchemaName: publishing, baseTableName: publish_requests, baseColumnNames: food_id, constraintName: fk_publish_requests_food, referencedTableSchemaName: destination, referencedTableName: destination_foods, referencedColumnNames: id, onDelete: CASCADE}
+        - createIndex:
+            schemaName: publishing
+            tableName: publish_requests
+            indexName: idx_publish_requests_stay
+            columns:
+              - column: {name: stay_id}
+        - createIndex:
+            schemaName: publishing
+            tableName: publish_requests
+            indexName: idx_publish_requests_food
+            columns:
+              - column: {name: food_id}
+        - sql:
+            sql: >-
+              ALTER TABLE publishing.publish_requests ADD CONSTRAINT ck_publish_requests_one_listing CHECK (
+              (listing_type = 'DESTINATION' AND destination_id IS NOT NULL AND stay_id IS NULL AND food_id IS NULL)
+              OR (listing_type = 'STAY' AND stay_id IS NOT NULL AND destination_id IS NULL AND food_id IS NULL)
+              OR (listing_type = 'FOOD' AND food_id IS NOT NULL AND destination_id IS NULL AND stay_id IS NULL))
+      rollback:
+        - sql:
+            sql: ALTER TABLE publishing.publish_requests DROP CONSTRAINT ck_publish_requests_one_listing
+        - dropIndex: {schemaName: publishing, tableName: publish_requests, indexName: idx_publish_requests_food}
+        - dropIndex: {schemaName: publishing, tableName: publish_requests, indexName: idx_publish_requests_stay}
+        - dropForeignKeyConstraint: {baseTableSchemaName: publishing, baseTableName: publish_requests, constraintName: fk_publish_requests_food}
+        - dropForeignKeyConstraint: {baseTableSchemaName: publishing, baseTableName: publish_requests, constraintName: fk_publish_requests_stay}
+        - dropColumn: {schemaName: publishing, tableName: publish_requests, columnName: food_id}
+        - dropColumn: {schemaName: publishing, tableName: publish_requests, columnName: stay_id}
+        - dropColumn: {schemaName: publishing, tableName: publish_requests, columnName: listing_type}
+  - changeSet:
+      id: v2-publishing-one-open-listing
+      author: ams-travel-v2
+      dbms: postgresql
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              CREATE UNIQUE INDEX uk_publish_requests_open_stay ON publishing.publish_requests
+              (stay_id) WHERE status IN ('PENDING', 'CHANGES_REQUESTED');
+              CREATE UNIQUE INDEX uk_publish_requests_open_food ON publishing.publish_requests
+              (food_id) WHERE status IN ('PENDING', 'CHANGES_REQUESTED');
+      rollback:
+        - sql:
+            splitStatements: true
+            sql: |
+              DROP INDEX IF EXISTS publishing.uk_publish_requests_open_stay;
+              DROP INDEX IF EXISTS publishing.uk_publish_requests_open_food;
