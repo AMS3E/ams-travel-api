@@ -1,0 +1,20 @@
+# A destination's slogan: one line someone said about it, shown as a quote at
+# the top of its page on the app, with who said it. Both optional.
+databaseChangeLog:
+  - changeSet:
+      id: v2-destination-slogan
+      author: ams-travel-v2
+      changes:
+        - addColumn:
+            schemaName: destination
+            tableName: destinations
+            columns:
+              - column: {name: slogan, type: varchar(300)}
+              - column: {name: slogan_by, type: varchar(120)}
+      rollback:
+        - dropColumn:
+            schemaName: destination
+            tableName: destinations
+            columns:
+              - column: {name: slogan}
+              - column: {name: slogan_by}

@@ -330,6 +330,8 @@ public class DestinationServiceImpl implements DestinationService {
         destination.setProvince(provinceService.getEntity(request.provinceId()));
         destination.setShortDescription(blankToNull(request.shortDescription()));
         destination.setDescription(blankToNull(request.description()));
+        destination.setSlogan(blankToNull(request.slogan()));
+        destination.setSloganBy(blankToNull(request.sloganBy()));
         destination.setLatitude(request.latitude());
         destination.setLongitude(request.longitude());
         destination.setAddress(blankToNull(request.address()));

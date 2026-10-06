@@ -19,6 +19,8 @@ public record DestinationResponse(
         UUID regionId,
         String shortDescription,
         String description,
+        String slogan,
+        String sloganBy,
         BigDecimal latitude,
         BigDecimal longitude,
         String address,

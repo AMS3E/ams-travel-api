@@ -53,6 +53,7 @@ databaseChangeLog:
   - include: { file: v2/destination/020-bakery-into-cafe.yaml, relativeToChangelogFile: true }
   - include: { file: v2/destination/021-bar-into-restaurant.yaml, relativeToChangelogFile: true }
   - include: { file: v2/destination/022-plain-cafe.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/destination/023-destination-slogan.yaml, relativeToChangelogFile: true }
   - include: { file: v2/taxonomy/009-corridor-interests.yaml, relativeToChangelogFile: true }
   - include: { file: v2/taxonomy/011-display-order.yaml, relativeToChangelogFile: true }
   - include: { file: v2/publishing/003-listing-requests.yaml, relativeToChangelogFile: true }
