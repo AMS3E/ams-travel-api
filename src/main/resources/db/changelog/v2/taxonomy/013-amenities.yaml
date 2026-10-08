@@ -1,0 +1,111 @@
+# What a stay offers, as one taxonomy the team manages instead of two fixed
+# lists in code: each amenity is offered at the property, in the room, or at
+# both, and a stay and a room store the slugs of theirs. The rows are the
+# 34 property facilities and 47 room amenities the dashboard and the API used
+# to carry, merged where they were the same thing (Wi-Fi, air conditioning…),
+# so every saved stay and room keeps its ticks.
+databaseChangeLog:
+  - changeSet:
+      id: v2-taxonomy-amenities
+      author: ams-travel-v2
+      changes:
+        - createTable:
+            schemaName: taxonomy
+            tableName: amenities
+            columns:
+              - column: {name: id, type: uuid, defaultValueComputed: "${fn.uuid}", constraints: {primaryKey: true, primaryKeyName: amenities_pkey, nullable: false}}
+              - column: {name: name, type: varchar(100), constraints: {nullable: false}}
+              - column: {name: slug, type: varchar(100), constraints: {nullable: false, unique: true, uniqueConstraintName: uk_amenities_slug}}
+              - column: {name: group_name, type: varchar(100), constraints: {nullable: false}}
+              - column: {name: icon_key, type: varchar(60)}
+              - column: {name: level, type: varchar(20), constraints: {nullable: false}}
+              - column: {name: sort_order, type: integer, defaultValueNumeric: 0, constraints: {nullable: false}}
+              - column: {name: is_active, type: boolean, defaultValueBoolean: true, constraints: {nullable: false}}
+              - column: {name: created_by, type: uuid}
+              - column: {name: created_at, type: timestamp with time zone, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+      rollback:
+        - dropTable: {schemaName: taxonomy, tableName: amenities}
+  # Every column is spelled out rather than left to its default: the test run
+  # replays these statements against tables Hibernate made, which have none.
+  - changeSet:
+      id: v2-taxonomy-amenities-rows
+      author: ams-travel-v2
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              INSERT INTO taxonomy.amenities (id, slug, name, group_name, icon_key, level, sort_order, is_active, created_at) VALUES
+                (${fn.uuid}, 'wifi', 'Wi-Fi', 'Tech & work', 'wifi', 'BOTH', 0, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'wifi-free', 'Free Wi-Fi', 'Internet', 'wifi', 'PROPERTY', 0, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'workspace', 'Workspace', 'Internet', 'laptop', 'PROPERTY', 1, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'parking', 'Parking', 'Parking & transport', 'square-parking', 'PROPERTY', 0, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'parking-free', 'Free parking', 'Parking & transport', 'square-parking', 'PROPERTY', 1, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'airport-shuttle', 'Airport shuttle', 'Parking & transport', 'plane', 'PROPERTY', 2, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'car-hire', 'Car hire', 'Parking & transport', 'car', 'PROPERTY', 3, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'pool', 'Swimming pool', 'Wellbeing', 'waves', 'PROPERTY', 0, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'spa', 'Spa', 'Wellbeing', 'flower-2', 'PROPERTY', 1, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'gym', 'Gym', 'Wellbeing', 'dumbbell', 'PROPERTY', 2, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'garden', 'Garden', 'Wellbeing', 'trees', 'PROPERTY', 3, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'terrace', 'Terrace', 'Space & outdoors', 'sun', 'BOTH', 0, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'breakfast', 'Breakfast', 'Food & drink', 'egg-fried', 'PROPERTY', 0, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'restaurant', 'Restaurant', 'Food & drink', 'utensils', 'PROPERTY', 1, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'bar', 'Bar', 'Food & drink', 'martini', 'PROPERTY', 2, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'room-service', 'Room service', 'Food & drink', 'concierge-bell', 'PROPERTY', 3, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'kitchen', 'Kitchen', 'Food & drink', 'cooking-pot', 'BOTH', 4, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'private-bathroom', 'Private bathroom', 'Bathroom', 'bath', 'PROPERTY', 0, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'air-conditioning', 'Air conditioning', 'Comfort', 'air-vent', 'BOTH', 0, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'heating', 'Heating', 'Comfort', 'heater', 'BOTH', 1, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'balcony', 'Balcony', 'Space & outdoors', 'door-open', 'BOTH', 1, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'tv', 'TV', 'Tech & work', 'tv', 'BOTH', 1, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'safe', 'Safe', 'Safety & access', 'vault', 'BOTH', 0, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'front-desk-24h', '24-hour front desk', 'Services', 'clock', 'PROPERTY', 0, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'laundry', 'Laundry', 'Services', 'washing-machine', 'PROPERTY', 1, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'housekeeping', 'Housekeeping', 'Services', 'sparkles', 'PROPERTY', 2, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'luggage-storage', 'Luggage storage', 'Services', 'luggage', 'PROPERTY', 3, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'tours', 'Tour desk', 'Services', 'compass', 'PROPERTY', 4, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'family-rooms', 'Family rooms', 'Family & pets', 'users', 'PROPERTY', 0, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'cot', 'Cot', 'Family & pets', 'baby', 'PROPERTY', 1, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'pets-allowed', 'Pets allowed', 'Family & pets', 'paw-print', 'PROPERTY', 2, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'step-free-access', 'Step-free access', 'Accessibility', 'accessibility', 'PROPERTY', 0, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'lift', 'Lift', 'Accessibility', 'arrow-up-down', 'PROPERTY', 1, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'accessible-bathroom', 'Accessible bathroom', 'Safety & access', 'shower-head', 'BOTH', 1, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'fan', 'Fan', 'Comfort', 'fan', 'ROOM', 2, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'mosquito-net', 'Mosquito net', 'Comfort', 'bug-off', 'ROOM', 3, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'blackout-curtains', 'Blackout curtains', 'Comfort', 'moon', 'ROOM', 4, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'soundproofing', 'Soundproofing', 'Comfort', 'volume-x', 'ROOM', 5, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'privacy-curtain', 'Privacy curtain on the bed', 'Comfort', 'blinds', 'ROOM', 6, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'reading-light', 'Reading light by the bed', 'Comfort', 'lamp', 'ROOM', 7, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'hot-water', 'Hot water', 'Bathroom', 'flame', 'ROOM', 1, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'shower', 'Shower', 'Bathroom', 'shower-head', 'ROOM', 2, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'rain-shower', 'Rain shower', 'Bathroom', 'shower-head', 'ROOM', 3, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'bathtub', 'Bathtub', 'Bathroom', 'bath', 'ROOM', 4, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'bidet', 'Bidet', 'Bathroom', 'droplets', 'ROOM', 5, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'hairdryer', 'Hairdryer', 'Bathroom', 'wind', 'ROOM', 6, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'toiletries', 'Free toiletries', 'Bathroom', 'spray-can', 'ROOM', 7, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'towels', 'Towels', 'Bathroom', 'layers', 'ROOM', 8, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'slippers', 'Slippers', 'Bathroom', 'footprints', 'ROOM', 9, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'bathrobes', 'Bathrobes', 'Bathroom', 'shirt', 'ROOM', 10, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'kettle', 'Kettle', 'Food & drink', 'coffee', 'ROOM', 5, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'coffee-machine', 'Coffee machine', 'Food & drink', 'coffee', 'ROOM', 6, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'minibar', 'Minibar', 'Food & drink', 'wine', 'ROOM', 7, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'fridge', 'Fridge', 'Food & drink', 'refrigerator', 'ROOM', 8, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'kitchenette', 'Kitchenette', 'Food & drink', 'cooking-pot', 'ROOM', 9, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'microwave', 'Microwave', 'Food & drink', 'microwave', 'ROOM', 10, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'water-bottles', 'Free drinking water', 'Food & drink', 'glass-water', 'ROOM', 11, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'streaming', 'Streaming service', 'Tech & work', 'monitor-play', 'ROOM', 2, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'desk', 'Desk', 'Tech & work', 'lamp-desk', 'ROOM', 3, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'usb-sockets', 'USB sockets', 'Tech & work', 'plug', 'ROOM', 4, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'phone', 'Telephone', 'Tech & work', 'phone', 'ROOM', 5, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'private-pool', 'Private pool', 'Space & outdoors', 'waves', 'ROOM', 2, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'seating-area', 'Seating area', 'Space & outdoors', 'sofa', 'ROOM', 3, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'wardrobe', 'Wardrobe', 'Space & outdoors', 'door-closed', 'ROOM', 4, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'iron', 'Iron', 'Space & outdoors', 'shirt', 'ROOM', 5, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'clothes-rack', 'Clothes rack', 'Space & outdoors', 'shirt', 'ROOM', 6, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'lockers', 'Lockers', 'Safety & access', 'lock', 'ROOM', 2, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'smoke-alarm', 'Smoke alarm', 'Safety & access', 'siren', 'ROOM', 3, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'step-free', 'Step-free access', 'Safety & access', 'accessibility', 'ROOM', 4, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'ground-floor', 'Ground floor', 'Safety & access', 'layers', 'ROOM', 5, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'cot-available', 'Cot on request', 'Family & pets', 'baby', 'ROOM', 3, TRUE, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'extra-bed-available', 'Extra bed on request', 'Family & pets', 'bed-single', 'ROOM', 4, TRUE, CURRENT_TIMESTAMP);
+      rollback:
+        - delete: {schemaName: taxonomy, tableName: amenities}

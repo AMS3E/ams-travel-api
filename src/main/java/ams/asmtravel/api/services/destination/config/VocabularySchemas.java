@@ -4,10 +4,8 @@ import ams.asmtravel.api.services.destination.destination.domain.DestinationThem
 import ams.asmtravel.api.services.destination.food.domain.FoodAmenities;
 import ams.asmtravel.api.services.destination.food.domain.FoodSpecialties;
 import ams.asmtravel.api.services.destination.food.domain.FoodVocabularies;
-import ams.asmtravel.api.services.destination.stay.domain.StayAmenities;
 import ams.asmtravel.api.services.destination.stay.domain.StaySpecialties;
 import ams.asmtravel.api.services.destination.stay.domain.StayVocabularies;
-import ams.asmtravel.api.services.destination.stayroom.domain.RoomAmenities;
 import io.swagger.v3.oas.models.media.Schema;
 import org.springdoc.core.customizers.OpenApiCustomizer;
 import org.springframework.context.annotation.Bean;
@@ -24,12 +22,10 @@ public class VocabularySchemas {
     /** Schema, then field, to its allowed values. */
     private static final Map<String, Map<String, Collection<String>>> LISTS = Map.of(
             "StayRequest", Map.of(
-                    "amenities", StayAmenities.ALL,
                     "specialties", StaySpecialties.ALL,
                     "breakfastTypes", StayVocabularies.BREAKFAST_TYPES,
                     "paymentMethods", StayVocabularies.PAYMENT_METHODS,
                     "languagesSpoken", StayVocabularies.LANGUAGES),
-            "StayRoomRequest", Map.of("amenities", RoomAmenities.ALL),
             "FoodRequest", Map.ofEntries(
                     Map.entry("amenities", FoodAmenities.ALL),
                     Map.entry("specialties", FoodSpecialties.ALL),

@@ -5,7 +5,6 @@ import ams.asmtravel.api.services.destination.destination.domain.ListingStatus;
 import ams.asmtravel.api.services.destination.stay.domain.Stay;
 import ams.asmtravel.api.services.destination.stay.domain.StaySavedEvent;
 import ams.asmtravel.api.services.destination.stay.service.StayService;
-import ams.asmtravel.api.services.destination.stayroom.domain.RoomAmenities;
 import ams.asmtravel.api.services.destination.stayroom.domain.RoomBathroom;
 import ams.asmtravel.api.services.destination.stayroom.domain.RoomPaymentTerms;
 import ams.asmtravel.api.services.destination.stayroom.domain.StayRoom;
@@ -15,6 +14,9 @@ import ams.asmtravel.api.services.destination.stayroom.exception.StayRoomNotFoun
 import ams.asmtravel.api.services.destination.stayroom.mapper.StayRoomMapper;
 import ams.asmtravel.api.services.destination.stayroom.repository.StayRoomRepository;
 import ams.asmtravel.api.services.destination.stayroom.service.StayRoomService;
+import ams.asmtravel.api.services.taxonomy.amenity.domain.AmenityDeletingEvent;
+import ams.asmtravel.api.services.taxonomy.amenity.domain.AmenityLevel;
+import ams.asmtravel.api.services.taxonomy.amenity.service.AmenityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpStatus;
@@ -35,6 +37,7 @@ public class StayRoomServiceImpl implements StayRoomService {
     private final StayRoomRepository roomRepository;
     private final StayRoomMapper mapper;
     private final StayService stayService;
+    private final AmenityService amenityService;
 
     @Override
     @Transactional(readOnly = true)
@@ -94,6 +97,16 @@ public class StayRoomServiceImpl implements StayRoomService {
     }
 
     /** After a stay edit, the rooms' "from" price wins over what the form sent. */
+    /** An amenity rooms still list cannot be deleted: retire it instead. */
+    @EventListener
+    public void onAmenityDeleting(AmenityDeletingEvent event) {
+        long listing = roomRepository.countByAmenity("%\"" + event.slug() + "\"%");
+        if (listing > 0) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                    listing + (listing == 1 ? " room still lists it" : " rooms still list it") + ": retire the amenity instead of deleting it");
+        }
+    }
+
     @EventListener
     public void onStaySaved(StaySavedEvent event) {
         refreshPrice(event.stayId());
@@ -125,10 +138,10 @@ public class StayRoomServiceImpl implements StayRoomService {
         room.setRoomView(request.view());
         room.setBathroom(request.bathroom() == null ? RoomBathroom.PRIVATE : request.bathroom());
 
-        /* Fixed list so amenities can be filtered. */
+        /* Amenities are the taxonomy's, offered in the room; unknown slugs are refused. */
         List<String> amenities = request.amenities() == null ? List.of()
                 : request.amenities().stream().map(String::trim).filter(one -> !one.isEmpty()).distinct().toList();
-        List<String> unknown = RoomAmenities.unknown(amenities);
+        List<String> unknown = amenityService.unknown(amenities, AmenityLevel.ROOM);
         if (!unknown.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No such room amenity: " + String.join(", ", unknown));
         }

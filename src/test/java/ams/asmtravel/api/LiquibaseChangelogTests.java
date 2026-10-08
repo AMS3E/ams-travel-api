@@ -46,9 +46,10 @@ class LiquibaseChangelogTests {
         // a food listing's menu, a tourism region's interests and a corridor's interests;
         // the four galleries became one media table, and ratings got their own; points and
         // season progress are three more, and six badge tables became three. The history
-        // schema and its ten tables went with the History & Heritage module (2026-10-08).
-        assertThat(tables).hasSize(41 - 2 + 1 + 1 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 - 4 + 1 + 1 + 3 - 3);
-        assertThat(tables).contains("taxonomy.region_interests", "taxonomy.corridor_interests");
+        // schema and its ten tables went with the History & Heritage module (2026-10-08);
+        // the amenities taxonomy is one more.
+        assertThat(tables).hasSize(41 - 2 + 1 + 1 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 - 4 + 1 + 1 + 3 - 3 + 1);
+        assertThat(tables).contains("taxonomy.region_interests", "taxonomy.corridor_interests", "taxonomy.amenities");
         assertThat(tables).doesNotContain("history.destination_history", "history.destination_periods");
         assertThat(tables).contains("publishing.destination_verifications", "gamification.seasons",
                 "system.audit_logs", "engagement.digital_stamps",

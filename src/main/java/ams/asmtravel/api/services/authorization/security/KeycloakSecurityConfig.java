@@ -101,6 +101,14 @@ public class KeycloakSecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/api/v1/admin/overview")
                         .hasAnyAuthority(Permissions.FULL_CONTROL, Permissions.REVIEW_MODERATE)
 
+                /* Amenities: what a stay offers, at the property and in the room. */
+                .requestMatchers(HttpMethod.GET, "/api/v1/amenities", "/api/v1/amenities/*").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/v1/amenities")
+                        .hasAnyAuthority(Permissions.TAXONOMY_MANAGE, Permissions.FULL_CONTROL)
+                .requestMatchers(HttpMethod.PUT, "/api/v1/amenities/*")
+                        .hasAnyAuthority(Permissions.TAXONOMY_MANAGE, Permissions.FULL_CONTROL)
+                .requestMatchers(HttpMethod.DELETE, "/api/v1/amenities/*").hasAuthority(Permissions.FULL_CONTROL)
+
                 /* Audit: only admin may clear it. */
                 .requestMatchers(HttpMethod.DELETE, "/api/v1/admin/audit").hasAuthority(Permissions.FULL_CONTROL)
                 .requestMatchers("/api/v1/admin/audit")

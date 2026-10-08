@@ -56,6 +56,7 @@ databaseChangeLog:
   - include: { file: v2/destination/027-stay-policies.yaml, relativeToChangelogFile: true }
   - include: { file: v2/taxonomy/009-corridor-interests.yaml, relativeToChangelogFile: true }
   - include: { file: v2/taxonomy/011-display-order.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/taxonomy/013-amenities.yaml, relativeToChangelogFile: true }
   - include: { file: v2/publishing/003-listing-requests.yaml, relativeToChangelogFile: true }
   - include: { file: v2/media/001-media-items.yaml, relativeToChangelogFile: true }
   - include: { file: v2/media/002-media-status.yaml, relativeToChangelogFile: true }

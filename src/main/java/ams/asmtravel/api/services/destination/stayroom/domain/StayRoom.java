@@ -116,7 +116,7 @@ public class StayRoom {
     @Column(nullable = false, length = 20)
     private RoomBathroom bathroom = RoomBathroom.PRIVATE;
 
-    /** Slugs from {@link RoomAmenities}. */
+    /** Slugs of the taxonomy's amenities offered in a room. */
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(nullable = false)
     private List<String> amenities = new ArrayList<>();
