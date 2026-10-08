@@ -37,11 +37,7 @@ public record DestinationResponse(
         List<UUID> tagIds,
         List<UUID> interestIds,
         List<UUID> tourismRegionIds,
-        List<UUID> architectureStyleIds,
-        List<UUID> religionIds,
         String theme,
-        List<String> specialties,
-        List<UUID> historicalPeriodIds,
-        List<Integer> centuries
+        List<String> specialties
 ) {
 }

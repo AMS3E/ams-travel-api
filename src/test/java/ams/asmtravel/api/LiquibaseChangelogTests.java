@@ -38,17 +38,20 @@ class LiquibaseChangelogTests {
         List<String> tables = jdbc.queryForList("""
                 select lower(table_schema) || '.' || lower(table_name) from information_schema.tables
                 where lower(table_schema) in ('auth', 'taxonomy', 'destination', 'publishing',
-                                              'engagement', 'gamification', 'system', 'history', 'media')
+                                              'engagement', 'gamification', 'system', 'media')
                 """, String.class);
         // The ERD less the two partner tables it dissolved into the listings, plus
-        // seasons, verifications, the history schema, the two region link tables, a
-        // region's historical coverage, a stay's gallery, a destination's tourism regions, a corridor's days,
-        // a stay's interests, its rooms, a food listing's menu, a tourism region's interests,
-        // an ancient site's historical periods, and a corridor's interests; the four galleries became one media table, and ratings got their own; points and season progress are three more, and six badge tables became three.
-        assertThat(tables).hasSize(41 - 2 + 1 + 1 + 8 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 - 4 + 1 + 1 + 3 - 3);
-        assertThat(tables).contains("taxonomy.region_interests", "history.destination_periods", "taxonomy.corridor_interests");
+        // seasons, verifications, the two region link tables, a stay's gallery, a
+        // destination's tourism regions, a corridor's days, a stay's interests, its rooms,
+        // a food listing's menu, a tourism region's interests and a corridor's interests;
+        // the four galleries became one media table, and ratings got their own; points and
+        // season progress are three more, and six badge tables became three. The history
+        // schema and its ten tables went with the History & Heritage module (2026-10-08).
+        assertThat(tables).hasSize(41 - 2 + 1 + 1 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 - 4 + 1 + 1 + 3 - 3);
+        assertThat(tables).contains("taxonomy.region_interests", "taxonomy.corridor_interests");
+        assertThat(tables).doesNotContain("history.destination_history", "history.destination_periods");
         assertThat(tables).contains("publishing.destination_verifications", "gamification.seasons",
-                "history.destination_history", "system.audit_logs", "engagement.digital_stamps",
+                "system.audit_logs", "engagement.digital_stamps",
                 "destination.destination_stay_interests", "destination.destination_stay_rooms",
                 "destination.destination_food_menu_items", "media.media_items", "engagement.ratings");
     }

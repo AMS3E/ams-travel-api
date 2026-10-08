@@ -1,8 +1,5 @@
 package ams.asmtravel.api.services.destination.destination.domain;
 
-import ams.asmtravel.api.services.history.architecture.domain.ArchitectureStyle;
-import ams.asmtravel.api.services.history.period.domain.HistoricalPeriod;
-import ams.asmtravel.api.services.history.religion.domain.Religion;
 import ams.asmtravel.api.services.taxonomy.category.domain.Category;
 import ams.asmtravel.api.services.taxonomy.interest.domain.Interest;
 import ams.asmtravel.api.services.location.province.domain.Province;
@@ -89,10 +86,6 @@ public class Destination {
     @JdbcTypeCode(SqlTypes.JSON)
     private List<String> specialties = new ArrayList<>();
 
-    /** Centuries 1 to 21, for the Ancient Capitals Century filter. */
-    @JdbcTypeCode(SqlTypes.JSON)
-    private List<Integer> centuries = new ArrayList<>();
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)
     private ListingStatus status = ListingStatus.DRAFT;
@@ -145,26 +138,6 @@ public class Destination {
             joinColumns = @JoinColumn(name = "destination_id"),
             inverseJoinColumns = @JoinColumn(name = "region_id"))
     private Set<Region> tourismRegions = new HashSet<>();
-
-    /** Architecture styles, from the history schema. */
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(schema = "history", name = "destination_architecture_styles",
-            joinColumns = @JoinColumn(name = "destination_id"),
-            inverseJoinColumns = @JoinColumn(name = "architecture_style_id"))
-    private Set<ArchitectureStyle> architectureStyles = new HashSet<>();
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(schema = "history", name = "destination_religions",
-            joinColumns = @JoinColumn(name = "destination_id"),
-            inverseJoinColumns = @JoinColumn(name = "religion_id"))
-    private Set<Religion> religions = new HashSet<>();
-
-    /** Historical periods, besides those its timeline names. */
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(schema = "history", name = "destination_periods",
-            joinColumns = @JoinColumn(name = "destination_id"),
-            inverseJoinColumns = @JoinColumn(name = "historical_period_id"))
-    private Set<HistoricalPeriod> historicalPeriods = new HashSet<>();
 
     public boolean isPublished() {
         return status == ListingStatus.PUBLISHED;

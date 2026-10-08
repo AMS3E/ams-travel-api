@@ -28,11 +28,11 @@ public interface DestinationRepository extends JpaRepository<Destination, UUID> 
     List<Destination> findAllByCreatedByInOrderByNameAsc(Collection<UUID> createdBy);
 
     @EntityGraph(attributePaths = {"province", "province.region", "categories", "tags", "interests",
-            "tourismRegions", "architectureStyles", "religions", "historicalPeriods"})
+            "tourismRegions"})
     Optional<Destination> findWithLinksById(UUID id);
 
     @EntityGraph(attributePaths = {"province", "province.region", "categories", "tags", "interests",
-            "tourismRegions", "architectureStyles", "religions", "historicalPeriods"})
+            "tourismRegions"})
     Optional<Destination> findBySlugAndStatus(String slug, ListingStatus status);
 
     @EntityGraph(attributePaths = {"province", "province.region", "categories", "interests", "tourismRegions"})
@@ -71,7 +71,7 @@ public interface DestinationRepository extends JpaRepository<Destination, UUID> 
                              @Param("radiusMeters") double radiusMeters,
                              @Param("resultLimit") int resultLimit);
 
-    /** Unlinks a deleted category, tag, interest, region, style or religion. */
+    /** Unlinks a deleted category, tag, interest or region. */
     @Modifying
     @Query(value = "DELETE FROM destination.destination_categories WHERE category_id = :id", nativeQuery = true)
     int unlinkCategory(@Param("id") UUID id);
@@ -88,15 +88,4 @@ public interface DestinationRepository extends JpaRepository<Destination, UUID> 
     @Query(value = "DELETE FROM destination.destination_regions WHERE region_id = :id", nativeQuery = true)
     int unlinkRegion(@Param("id") UUID id);
 
-    @Modifying
-    @Query(value = "DELETE FROM history.destination_architecture_styles WHERE architecture_style_id = :id", nativeQuery = true)
-    int unlinkArchitectureStyle(@Param("id") UUID id);
-
-    @Modifying
-    @Query(value = "DELETE FROM history.destination_religions WHERE religion_id = :id", nativeQuery = true)
-    int unlinkReligion(@Param("id") UUID id);
-
-    @Modifying
-    @Query(value = "DELETE FROM history.destination_periods WHERE historical_period_id = :id", nativeQuery = true)
-    int unlinkHistoricalPeriod(@Param("id") UUID id);
 }

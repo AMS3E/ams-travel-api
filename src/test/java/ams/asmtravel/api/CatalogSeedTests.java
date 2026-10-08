@@ -6,12 +6,6 @@ import ams.asmtravel.api.services.admin.domain.SeedJson;
 import ams.asmtravel.api.services.corridor.config.CorridorSeeder;
 import ams.asmtravel.api.services.corridor.config.CorridorItinerarySeeder;
 import ams.asmtravel.api.services.destination.destination.config.DestinationSeeder;
-import ams.asmtravel.api.services.history.architecture.config.ArchitectureStyleSeeder;
-import ams.asmtravel.api.services.history.destinationmonarch.config.DestinationMonarchSeeder;
-import ams.asmtravel.api.services.history.period.config.HistoricalPeriodSeeder;
-import ams.asmtravel.api.services.history.history.config.HistorySeeder;
-import ams.asmtravel.api.services.history.monarch.config.MonarchSeeder;
-import ams.asmtravel.api.services.history.religion.config.ReligionSeeder;
 import ams.asmtravel.api.services.location.province.config.ProvinceSeeder;
 import ams.asmtravel.api.services.location.region.config.RegionSeeder;
 import ams.asmtravel.api.services.media.config.MinioConfig;
@@ -67,22 +61,11 @@ class CatalogSeedTests {
         assertThat(count("taxonomy.region_categories"))
                 .isEqualTo(nested(RegionSeeder.class, "regions.json", "categories"));
         assertThat(count("taxonomy.region_tags")).isEqualTo(nested(RegionSeeder.class, "regions.json", "tags"));
-        // Ancient Capitals' search filters are all tags, and a site carries the one its heritage answers.
+        // Ancient Capitals' search filters are six plain tags: Century, King, Architecture Style, UNESCO, Religion, Historical Period.
         assertThat(count("taxonomy.region_tags rt join taxonomy.regions r on r.id = rt.region_id "
                 + "where r.code = 'ANCIENT-CAPITALS'")).isEqualTo(6);
-        assertThat(count("destination.destinations d where d.theme = 'ANCIENT-CAPITALS' "
-                + "and exists (select 1 from history.destination_monarchs m where m.destination_id = d.id) "
-                + "and not exists (select 1 from destination.destination_tags dt join taxonomy.tags t on t.id = dt.tag_id "
-                + "where dt.destination_id = d.id and t.slug = 'king')")).isZero();
-        assertThat(count("destination.destinations d where d.theme = 'ANCIENT-CAPITALS' "
-                + "and exists (select 1 from history.destination_religions g where g.destination_id = d.id) "
-                + "and not exists (select 1 from destination.destination_tags dt join taxonomy.tags t on t.id = dt.tag_id "
-                + "where dt.destination_id = d.id and t.slug = 'religion')")).isZero();
         assertThat(count("destination.destination_tags dt join taxonomy.tags t on t.id = dt.tag_id where t.slug = 'king'"))
                 .isPositive();
-        // And what they answer: an ancient site's periods, as its timeline dates it.
-        assertThat(count("history.destination_periods"))
-                .isEqualTo(nested(DestinationSeeder.class, "destinations.json", "historicalPeriodSlugs")).isPositive();
         // Each tourism region offers its own interests, and every interest of places belongs to one at least.
         assertThat(count("taxonomy.region_interests")).isEqualTo(nested(RegionSeeder.class, "regions.json", "interests"));
         assertThat(count("taxonomy.regions r where r.kind = 'TOURISM' and not exists "
@@ -145,20 +128,6 @@ class CatalogSeedTests {
         assertThat(count("taxonomy.corridors where status = 'PUBLISHED' and duration_days is not null"))
                 .isEqualTo(rows(CorridorSeeder.class, "corridors.json").size());
         assertThat(count("media.media_items where owner_type = 'DESTINATION'")).isEqualTo(nested(MinioConfig.class, "destination-media.json", "media"));
-
-        assertThat(count("history.historical_periods")).isEqualTo(rows(HistoricalPeriodSeeder.class, "historical-periods.json").size());
-        assertThat(count("history.monarchs")).isEqualTo(rows(MonarchSeeder.class, "monarchs.json").size());
-        assertThat(count("history.architecture_styles"))
-                .isEqualTo(rows(ArchitectureStyleSeeder.class, "architecture-styles.json").size());
-        assertThat(count("history.architecture_styles where period_id is null")).isZero();
-        assertThat(count("history.religions")).isEqualTo(rows(ReligionSeeder.class, "religions.json").size());
-        assertThat(count("history.destination_history")).isEqualTo(rows(HistorySeeder.class, "destination-histories.json").size());
-        assertThat(count("history.destination_monarchs"))
-                .isEqualTo(nested(DestinationMonarchSeeder.class, "destination-monarchs.json", "monarchSlugs"));
-        assertThat(count("history.destination_architecture_styles"))
-                .isEqualTo(nested(DestinationSeeder.class, "destinations.json", "architectureStyleSlugs"));
-        assertThat(count("history.destination_religions"))
-                .isEqualTo(nested(DestinationSeeder.class, "destinations.json", "religionSlugs"));
 
         // What the changelog ships, the test fixture replays: roles, badges and the season calendar.
         assertThat(count("auth.roles")).isEqualTo(6);

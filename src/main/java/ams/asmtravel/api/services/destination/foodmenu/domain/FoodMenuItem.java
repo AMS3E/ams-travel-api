@@ -55,10 +55,6 @@ public class FoodMenuItem {
     @Column(nullable = false, length = 20)
     private MenuCourse course = MenuCourse.MAIN;
 
-    /** The heading the host prints it under, in their own words: Soups, Grill, Drinks. */
-    @Column(length = 100)
-    private String section;
-
     @Column(columnDefinition = "text")
     private String description;
 

@@ -6,8 +6,6 @@ import ams.asmtravel.api.services.corridor.repository.CorridorStopRepository;
 import ams.asmtravel.api.services.media.repository.MediaRepository;
 import ams.asmtravel.api.services.destination.food.repository.FoodRepository;
 import ams.asmtravel.api.services.destination.stay.repository.StayRepository;
-import ams.asmtravel.api.services.history.period.domain.HistoricalPeriod;
-import ams.asmtravel.api.services.history.period.repository.HistoricalPeriodRepository;
 import ams.asmtravel.api.services.taxonomy.category.domain.Category;
 import ams.asmtravel.api.services.corridor.domain.Corridor;
 import ams.asmtravel.api.services.location.province.domain.Province;
@@ -76,7 +74,6 @@ class DestinationIntegrationTests {
     @Autowired FoodRepository foods;
     @Autowired MediaRepository media;
     @Autowired CorridorStopRepository stops;
-    @Autowired HistoricalPeriodRepository periods;
 
     private Province province;
     private Category temples;
@@ -209,41 +206,6 @@ class DestinationIntegrationTests {
                         .content("{\"name\":\"Odd Temple\",\"provinceId\":\"" + province.getId() + "\",\"specialties\":[\"lava-slide\"]}"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.detail").value("No such specialty: lava-slide"));
-    }
-
-    /** An Ancient Capitals site's own search filters: the historical periods and centuries chosen on its form. */
-    @Test
-    void anAncientSiteKeepsItsPeriodsAndCenturies() throws Exception {
-        HistoricalPeriod angkor = new HistoricalPeriod();
-        angkor.setName("Angkor period");
-        angkor.setStartYear(802);
-        angkor.setEndYear(1431);
-        angkor = periods.save(angkor);
-        String id = create(owner(), "{\"name\":\"Preah Khan\",\"provinceId\":\"" + province.getId()
-                + "\",\"theme\":\"ANCIENT-CAPITALS\",\"historicalPeriodIds\":[\"" + angkor.getId()
-                + "\"],\"centuries\":[13,12,12]}");
-        mvc.perform(get("/api/v1/destinations/" + id).with(editor()))
-                .andExpect(jsonPath("$.historicalPeriodIds[0]").value(angkor.getId().toString()))
-                .andExpect(jsonPath("$.centuries", contains(12, 13)));
-        // An edit that says nothing about them keeps them; an empty list clears them.
-        mvc.perform(put("/api/v1/destinations/" + id).with(editor()).contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"Preah Khan\",\"provinceId\":\"" + province.getId() + "\"}"))
-                .andExpect(jsonPath("$.historicalPeriodIds", hasSize(1)))
-                .andExpect(jsonPath("$.centuries", hasSize(2)));
-        mvc.perform(put("/api/v1/destinations/" + id).with(editor()).contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"Preah Khan\",\"provinceId\":\"" + province.getId()
-                                + "\",\"historicalPeriodIds\":[],\"centuries\":[]}"))
-                .andExpect(jsonPath("$.historicalPeriodIds", hasSize(0)))
-                .andExpect(jsonPath("$.centuries", hasSize(0)));
-        mvc.perform(post("/api/v1/destinations").with(owner()).contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"Future Temple\",\"provinceId\":\"" + province.getId() + "\",\"centuries\":[30]}"))
-                .andExpect(status().isBadRequest());
-        nextRequest();
-        mvc.perform(post("/api/v1/destinations").with(owner()).contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"Lost Temple\",\"provinceId\":\"" + province.getId()
-                                + "\",\"historicalPeriodIds\":[\"" + UUID.randomUUID() + "\"]}"))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.detail", containsString("No such historical period")));
     }
 
     /** A form that sends something the API cannot take is told which field, and what to change: never just "Invalid request content." */

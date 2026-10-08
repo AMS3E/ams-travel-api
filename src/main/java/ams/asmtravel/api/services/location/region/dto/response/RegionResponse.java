@@ -20,7 +20,6 @@ public record RegionResponse(
         RegionKind kind,
         UUID parentId,
         String description,
-        String historyIntro,
         List<UUID> categoryIds,
         List<UUID> tagIds,
         List<UUID> interestIds,

@@ -25,7 +25,6 @@ import java.util.UUID;
  * @param isFeatured       used only from someone who may edit any destination
  * @param tourismRegionIds zones are refused
  * @param theme            main tourism region code, see {@link ams.asmtravel.api.services.destination.destination.domain.DestinationThemes}
- * @param centuries        1 to 21
  */
 public record DestinationRequest(
         @NotBlank @Size(max = 255) String name,
@@ -46,11 +45,7 @@ public record DestinationRequest(
         Set<UUID> tagIds,
         Set<UUID> interestIds,
         Set<UUID> tourismRegionIds,
-        Set<UUID> architectureStyleIds,
-        Set<UUID> religionIds,
         @Size(max = 40) String theme,
-        List<@NotBlank @Size(max = 100) String> specialties,
-        Set<UUID> historicalPeriodIds,
-        List<@NotNull @Min(1) @Max(21) Integer> centuries
+        List<@NotBlank @Size(max = 100) String> specialties
 ) {
 }

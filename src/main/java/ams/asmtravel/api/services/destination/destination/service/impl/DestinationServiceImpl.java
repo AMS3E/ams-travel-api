@@ -1,7 +1,5 @@
 package ams.asmtravel.api.services.destination.destination.service.impl;
 
-import ams.asmtravel.api.services.history.architecture.domain.ArchitectureStyleDeletingEvent;
-import ams.asmtravel.api.services.history.architecture.service.ArchitectureStyleService;
 import ams.asmtravel.api.services.taxonomy.category.domain.CategoryDeletingEvent;
 import ams.asmtravel.api.services.taxonomy.category.service.CategoryService;
 import ams.asmtravel.api.services.destination.destination.domain.Destination;
@@ -24,10 +22,6 @@ import ams.asmtravel.api.services.location.province.domain.ProvinceDeletingEvent
 import ams.asmtravel.api.services.location.province.service.ProvinceService;
 import ams.asmtravel.api.services.location.region.domain.RegionDeletingEvent;
 import ams.asmtravel.api.services.location.region.service.RegionService;
-import ams.asmtravel.api.services.history.period.domain.HistoricalPeriodDeletingEvent;
-import ams.asmtravel.api.services.history.period.service.HistoricalPeriodService;
-import ams.asmtravel.api.services.history.religion.domain.ReligionDeletingEvent;
-import ams.asmtravel.api.services.history.religion.service.ReligionService;
 import ams.asmtravel.api.services.authorization.role.domain.RoleCode;
 import ams.asmtravel.api.services.taxonomy.tag.domain.TagDeletingEvent;
 import ams.asmtravel.api.services.taxonomy.tag.service.TagService;
@@ -69,9 +63,6 @@ public class DestinationServiceImpl implements DestinationService {
     private final TagService tagService;
     private final InterestService interestService;
     private final RegionService regionService;
-    private final ArchitectureStyleService architectureStyleService;
-    private final ReligionService religionService;
-    private final HistoricalPeriodService historicalPeriodService;
     private final UserService userService;
     private final DestinationPermissionEvaluator permission;
     private final DestinationMapper mapper;
@@ -302,21 +293,6 @@ public class DestinationServiceImpl implements DestinationService {
         destinationRepository.unlinkRegion(event.regionId());
     }
 
-    @EventListener
-    public void onArchitectureStyleDeleting(ArchitectureStyleDeletingEvent event) {
-        destinationRepository.unlinkArchitectureStyle(event.styleId());
-    }
-
-    @EventListener
-    public void onReligionDeleting(ReligionDeletingEvent event) {
-        destinationRepository.unlinkReligion(event.religionId());
-    }
-
-    @EventListener
-    public void onHistoricalPeriodDeleting(HistoricalPeriodDeletingEvent event) {
-        destinationRepository.unlinkHistoricalPeriod(event.periodId());
-    }
-
     /** A province can be deleted only once its destinations have moved. */
     @EventListener
     public void onProvinceDeleting(ProvinceDeletingEvent event) {
@@ -347,22 +323,6 @@ public class DestinationServiceImpl implements DestinationService {
         }
         if (request.tourismRegionIds() != null || destination.getId() == null) {
             destination.setTourismRegions(new HashSet<>(regionService.getTourismEntities(nullToEmpty(request.tourismRegionIds()))));
-        }
-        if (request.architectureStyleIds() != null || destination.getId() == null) {
-            destination.setArchitectureStyles(new HashSet<>(
-                    architectureStyleService.getEntities(nullToEmpty(request.architectureStyleIds()))));
-        }
-        if (request.religionIds() != null || destination.getId() == null) {
-            destination.setReligions(new HashSet<>(religionService.getEntities(nullToEmpty(request.religionIds()))));
-        }
-        /* Ancient Capitals filters: Historical Period and Century. */
-        if (request.historicalPeriodIds() != null || destination.getId() == null) {
-            destination.setHistoricalPeriods(new HashSet<>(
-                    historicalPeriodService.getEntities(nullToEmpty(request.historicalPeriodIds()))));
-        }
-        if (request.centuries() != null || destination.getId() == null) {
-            destination.setCenturies(new ArrayList<>(request.centuries() == null ? List.of()
-                    : request.centuries().stream().distinct().sorted().toList()));
         }
         /* Theme and its specialties; values from an old theme are kept. */
         String theme = blankToNull(request.theme());

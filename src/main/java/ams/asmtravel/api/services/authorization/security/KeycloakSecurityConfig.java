@@ -101,16 +101,6 @@ public class KeycloakSecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/api/v1/admin/overview")
                         .hasAnyAuthority(Permissions.FULL_CONTROL, Permissions.REVIEW_MODERATE)
 
-                /* Building styles (heritage vocabulary). */
-                .requestMatchers(HttpMethod.GET, "/api/v1/historical-coverage/styles",
-                        "/api/v1/historical-coverage/styles/*").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/v1/historical-coverage/styles")
-                        .hasAnyAuthority(Permissions.TAXONOMY_MANAGE, Permissions.FULL_CONTROL)
-                .requestMatchers(HttpMethod.PUT, "/api/v1/historical-coverage/styles/*")
-                        .hasAnyAuthority(Permissions.TAXONOMY_MANAGE, Permissions.FULL_CONTROL)
-                .requestMatchers(HttpMethod.DELETE, "/api/v1/historical-coverage/styles/*")
-                        .hasAuthority(Permissions.FULL_CONTROL)
-
                 /* Audit: only admin may clear it. */
                 .requestMatchers(HttpMethod.DELETE, "/api/v1/admin/audit").hasAuthority(Permissions.FULL_CONTROL)
                 .requestMatchers("/api/v1/admin/audit")
@@ -166,13 +156,6 @@ public class KeycloakSecurityConfig {
                 .requestMatchers(HttpMethod.PATCH, "/api/v1/destinations/*/unpublish")
                         .hasAnyAuthority(Permissions.DESTINATION_UNPUBLISH, Permissions.FULL_CONTROL)
 
-                /* Destination kings: same editors as the destination. */
-                .requestMatchers(HttpMethod.GET, "/api/v1/destination-monarchs").permitAll()
-                .requestMatchers(HttpMethod.PUT, "/api/v1/destination-monarchs/*")
-                        .hasAnyAuthority(Permissions.LISTING_EDIT_OWN, Permissions.DESTINATION_DRAFT_EDIT_OWN,
-                                Permissions.DESTINATION_EDIT_ANY, Permissions.PARTNER_LISTING_EDIT,
-                                Permissions.FULL_CONTROL)
-
                 /* Favorites: the signed-in user's own. */
                 .requestMatchers("/api/v1/favorites", "/api/v1/favorites/**").authenticated()
 
@@ -189,24 +172,6 @@ public class KeycloakSecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/api/v1/food-menu-items", "/api/v1/food-menu-items/*").permitAll()
                 .requestMatchers("/api/v1/food-menu-items", "/api/v1/food-menu-items/*")
                         .hasAnyAuthority(Permissions.LISTING_EDIT_OWN, Permissions.DESTINATION_EDIT_ANY,
-                                Permissions.FULL_CONTROL)
-
-                /* Historical periods. */
-                .requestMatchers(HttpMethod.GET, "/api/v1/historical-coverage/periods",
-                        "/api/v1/historical-coverage/periods/*").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/v1/historical-coverage/periods")
-                        .hasAnyAuthority(Permissions.TAXONOMY_MANAGE, Permissions.FULL_CONTROL)
-                .requestMatchers(HttpMethod.PUT, "/api/v1/historical-coverage/periods/*")
-                        .hasAnyAuthority(Permissions.TAXONOMY_MANAGE, Permissions.FULL_CONTROL)
-                .requestMatchers(HttpMethod.DELETE, "/api/v1/historical-coverage/periods/*")
-                        .hasAuthority(Permissions.FULL_CONTROL)
-
-                /* Destination history: same editors as the destination. */
-                .requestMatchers(HttpMethod.GET, "/api/v1/destination-histories",
-                        "/api/v1/destination-histories/*").permitAll()
-                .requestMatchers("/api/v1/destination-histories", "/api/v1/destination-histories/*")
-                        .hasAnyAuthority(Permissions.LISTING_EDIT_OWN, Permissions.DESTINATION_DRAFT_EDIT_OWN,
-                                Permissions.DESTINATION_EDIT_ANY, Permissions.PARTNER_LISTING_EDIT,
                                 Permissions.FULL_CONTROL)
 
                 /* Identities: user management only. */
@@ -232,16 +197,6 @@ public class KeycloakSecurityConfig {
                         .hasAnyAuthority(Permissions.LISTING_EDIT_OWN, Permissions.DESTINATION_DRAFT_EDIT_OWN,
                                 Permissions.DESTINATION_EDIT_ANY, Permissions.PARTNER_LISTING_EDIT,
                                 Permissions.FULL_CONTROL)
-
-                /* Kings. */
-                .requestMatchers(HttpMethod.GET, "/api/v1/historical-coverage/monarchs",
-                        "/api/v1/historical-coverage/monarchs/*").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/v1/historical-coverage/monarchs")
-                        .hasAnyAuthority(Permissions.TAXONOMY_MANAGE, Permissions.FULL_CONTROL)
-                .requestMatchers(HttpMethod.PUT, "/api/v1/historical-coverage/monarchs/*")
-                        .hasAnyAuthority(Permissions.TAXONOMY_MANAGE, Permissions.FULL_CONTROL)
-                .requestMatchers(HttpMethod.DELETE, "/api/v1/historical-coverage/monarchs/*")
-                        .hasAuthority(Permissions.FULL_CONTROL)
 
                 /* Notifications: the signed-in user's own. */
                 .requestMatchers("/api/v1/notifications", "/api/v1/notifications/**").authenticated()
@@ -297,25 +252,6 @@ public class KeycloakSecurityConfig {
                         .hasAnyAuthority(Permissions.TAXONOMY_MANAGE, Permissions.FULL_CONTROL)
                 .requestMatchers(HttpMethod.DELETE, "/api/v1/regions/*").hasAuthority(Permissions.FULL_CONTROL)
 
-                /* Historical coverage per region. */
-                .requestMatchers(HttpMethod.GET, "/api/v1/historical-coverage/regions",
-                        "/api/v1/historical-coverage/regions/*").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/v1/historical-coverage/regions")
-                        .hasAnyAuthority(Permissions.TAXONOMY_MANAGE, Permissions.FULL_CONTROL)
-                .requestMatchers(HttpMethod.PUT, "/api/v1/historical-coverage/regions/*")
-                        .hasAnyAuthority(Permissions.TAXONOMY_MANAGE, Permissions.FULL_CONTROL)
-                .requestMatchers(HttpMethod.DELETE, "/api/v1/historical-coverage/regions/*")
-                        .hasAuthority(Permissions.FULL_CONTROL)
-
-                /* Religions. */
-                .requestMatchers(HttpMethod.GET, "/api/v1/historical-coverage/religions",
-                        "/api/v1/historical-coverage/religions/*").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/v1/historical-coverage/religions")
-                        .hasAnyAuthority(Permissions.TAXONOMY_MANAGE, Permissions.FULL_CONTROL)
-                .requestMatchers(HttpMethod.PUT, "/api/v1/historical-coverage/religions/*")
-                        .hasAnyAuthority(Permissions.TAXONOMY_MANAGE, Permissions.FULL_CONTROL)
-                .requestMatchers(HttpMethod.DELETE, "/api/v1/historical-coverage/religions/*")
-                        .hasAuthority(Permissions.FULL_CONTROL)
 
                 /* Reviews: published ones are public; the service shows others only to their author or a moderator. */
                 .requestMatchers(HttpMethod.GET, "/api/v1/reviews/me").authenticated()

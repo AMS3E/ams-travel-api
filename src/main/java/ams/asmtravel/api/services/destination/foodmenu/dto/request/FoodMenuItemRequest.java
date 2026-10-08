@@ -22,7 +22,6 @@ import java.util.UUID;
  * @param price      the cheapest dish sets the listing's "from" price
  * @param spiceLevel 0 not spicy to 3 Khmer hot
  * @param labels     slugs from {@code FoodVocabularies.DISH_LABELS}
- * @param section    the heading the host prints it under, in their own words; optional
  */
 public record FoodMenuItemRequest(
         @NotNull UUID foodId,
@@ -30,7 +29,6 @@ public record FoodMenuItemRequest(
         @Size(max = 150) String localName,
         @Size(max = 150) String pronunciation,
         @NotNull MenuCourse course,
-        @Size(max = 100) String section,
         String description,
         @DecimalMin("0") @Digits(integer = 10, fraction = 2) BigDecimal price,
         @Size(max = 60) String portion,

@@ -59,10 +59,6 @@ public class Region {
     @Column(columnDefinition = "text")
     private String description;
 
-    /** The line under the Historical coverage heading, in the region's own words. */
-    @Column(columnDefinition = "text")
-    private String historyIntro;
-
     /** Its place among the regions of its kind, 0 for the first: Discover shows them in this order. */
     private Integer sortOrder;
 
