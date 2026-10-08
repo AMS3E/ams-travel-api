@@ -18,6 +18,7 @@ public record FoodMenuItemResponse(
         String localName,
         String pronunciation,
         MenuCourse course,
+        String section,
         String description,
         BigDecimal price,
         String currency,

@@ -1,5 +1,6 @@
 package ams.asmtravel.api.services.destination.stay.service.impl;
 
+import ams.asmtravel.api.services.location.province.service.ProvinceService;
 import ams.asmtravel.api.services.destination.destination.domain.DestinationDeletingEvent;
 import ams.asmtravel.api.services.destination.destination.domain.ListingStatus;
 import ams.asmtravel.api.services.destination.destination.domain.NearbyArea;
@@ -50,6 +51,7 @@ public class StayServiceImpl implements StayService {
     private final DestinationService destinationService;
     private final UserService userService;
     private final InterestService interestService;
+    private final ProvinceService provinceService;
     private final StayPermissionEvaluator permission;
     private final StayMapper mapper;
     private final ApplicationEventPublisher events;
@@ -107,6 +109,7 @@ public class StayServiceImpl implements StayService {
         checkWrite(ownerUserId);
         Stay stay = new Stay();
         apply(stay, request, ownerUserId);
+        stay.setIsFeatured(permission.isEditor(Authorities.current()) && Boolean.TRUE.equals(request.isFeatured()));
         stay.setStatus(permittedStatus(request.status(), ListingStatus.DRAFT));
         return mapper.toStayResponse(stayRepository.save(stay));
     }
@@ -120,6 +123,9 @@ public class StayServiceImpl implements StayService {
         UUID ownerUserId = owner(request.ownerUserId());
         checkWrite(ownerUserId);
         apply(stay, request, ownerUserId);
+        if (request.isFeatured() != null && permission.isEditor(Authorities.current())) {
+            stay.setIsFeatured(request.isFeatured());
+        }
         stay.setStatus(permittedStatus(request.status(), stay.getStatus()));
         Stay saved = stayRepository.saveAndFlush(stay);
         // Rooms reset the "from" price before the response is built.
@@ -237,6 +243,10 @@ public class StayServiceImpl implements StayService {
         stay.setStarRating(request.starRating());
         stay.setShortDescription(blankToNull(request.shortDescription()));
         stay.setDescription(request.description());
+        stay.setSlogan(blankToNull(request.slogan()));
+        stay.setSloganBy(blankToNull(request.sloganBy()));
+        stay.setProvince(request.provinceId() == null ? null : provinceService.getEntity(request.provinceId()));
+        stay.setPolicies(blankToNull(request.policies()));
         stay.setCheckInFrom(request.checkInFrom());
         stay.setCheckOutUntil(request.checkOutUntil());
         stay.setPhone(blankToNull(request.phone()));

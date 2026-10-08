@@ -1,5 +1,6 @@
 package ams.asmtravel.api.services.destination.food.service.impl;
 
+import ams.asmtravel.api.services.location.province.service.ProvinceService;
 import ams.asmtravel.api.services.taxonomy.category.domain.CategoryDeletingEvent;
 import ams.asmtravel.api.services.taxonomy.category.service.CategoryService;
 import ams.asmtravel.api.services.destination.destination.domain.DestinationDeletingEvent;
@@ -59,6 +60,7 @@ public class FoodServiceImpl implements FoodService {
     private final CategoryService categoryService;
     private final TagService tagService;
     private final InterestService interestService;
+    private final ProvinceService provinceService;
     private final FoodPermissionEvaluator permission;
     private final FoodMapper mapper;
     private final ApplicationEventPublisher events;
@@ -273,6 +275,9 @@ public class FoodServiceImpl implements FoodService {
         food.setType(request.type());
         food.setShortDescription(blankToNull(request.shortDescription()));
         food.setDescription(blankToNull(request.description()));
+        food.setSlogan(blankToNull(request.slogan()));
+        food.setSloganBy(blankToNull(request.sloganBy()));
+        food.setProvince(request.provinceId() == null ? null : provinceService.getEntity(request.provinceId()));
         food.setAddress(blankToNull(request.address()));
         food.setLatitude(request.latitude());
         food.setLongitude(request.longitude());

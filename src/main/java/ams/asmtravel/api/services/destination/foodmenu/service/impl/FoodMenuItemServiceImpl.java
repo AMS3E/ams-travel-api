@@ -102,6 +102,7 @@ public class FoodMenuItemServiceImpl implements FoodMenuItemService {
         item.setLocalName(blankToNull(request.localName()));
         item.setPronunciation(blankToNull(request.pronunciation()));
         item.setCourse(request.course());
+        item.setSection(blankToNull(request.section()));
         item.setDescription(blankToNull(request.description()));
         item.setPrice(request.price());
         item.setPortion(blankToNull(request.portion()));

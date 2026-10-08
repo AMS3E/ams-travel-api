@@ -1,0 +1,15 @@
+# A stay's policies in the host's own words — check-in and check-out, children,
+# pets, smoking, how guests pay — as one Markdown text the app shows under
+# Stay policies. The old one-box-per-rule columns stay as they are.
+databaseChangeLog:
+  - changeSet:
+      id: v2-stay-policies
+      author: ams-travel-v2
+      changes:
+        - addColumn:
+            schemaName: destination
+            tableName: destination_stays
+            columns:
+              - column: {name: policies, type: text}
+      rollback:
+        - dropColumn: {schemaName: destination, tableName: destination_stays, columnName: policies}

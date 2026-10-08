@@ -18,6 +18,7 @@ public abstract class StayMapper {
     protected MediaService mediaService;
 
     @Mapping(target = "destinationId", source = "destination.id")
+    @Mapping(target = "provinceId", source = "province.id")
     @Mapping(target = "coverUrl", expression = "java(mediaService.url(stay.getCoverKey()))")
     @Mapping(target = "interestIds", expression = "java(interestIds(stay))")
     public abstract StayResponse toStayResponse(Stay stay);

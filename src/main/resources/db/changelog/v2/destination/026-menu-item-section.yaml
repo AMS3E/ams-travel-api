@@ -1,0 +1,15 @@
+# A dish's category on the menu, in the host's own words — Soups, Grill,
+# Drinks — the heading the app prints it under. Optional; the fixed course
+# stays for the lists that still read it.
+databaseChangeLog:
+  - changeSet:
+      id: v2-menu-item-section
+      author: ams-travel-v2
+      changes:
+        - addColumn:
+            schemaName: destination
+            tableName: destination_food_menu_items
+            columns:
+              - column: {name: section, type: varchar(100)}
+      rollback:
+        - dropColumn: {schemaName: destination, tableName: destination_food_menu_items, columnName: section}
