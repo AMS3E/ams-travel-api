@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,9 @@ public interface RatingService {
 
     /** Average, total and 1–5 distribution for 1 to 100 places, in the order asked, unrated ones included. */
     List<RatingSummaryResponse> summaries(RatingTargetType targetType, List<UUID> targetIds);
+
+    /** The same, counting only the ratings given in a window; {@code to} exclusive. */
+    List<RatingSummaryResponse> summariesBetween(RatingTargetType targetType, List<UUID> targetIds, Instant from, Instant to);
 
     RatingResponse findById(UUID id);
 

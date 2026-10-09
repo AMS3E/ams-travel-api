@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -110,6 +111,17 @@ public class PopularServiceImpl implements PopularService {
     @Override
     public int windowDays() {
         return properties.days();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<BrowseTotal> totalsBetween(Instant from, Instant to) {
+        return eventRepository.totalsBetween(from, to);
+    }
+
+    @Override
+    public ZoneId zone() {
+        return properties.zone();
     }
 
     @Override

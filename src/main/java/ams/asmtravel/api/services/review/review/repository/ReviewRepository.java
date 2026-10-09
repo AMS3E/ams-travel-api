@@ -46,4 +46,15 @@ public interface ReviewRepository extends JpaRepository<Review, UUID>, JpaSpecif
             group by r.targetId
             """)
     List<Object[]> summarize(@Param("targetType") ReviewTargetType targetType, @Param("targetIds") Collection<UUID> targetIds);
+
+    /** The same, for reviews written in a window; {@code to} exclusive. */
+    @Query("""
+            select r.targetId, count(r), max(r.createdAt) from Review r
+            where r.targetType = :targetType and r.targetId in :targetIds
+              and r.status = ams.asmtravel.api.services.review.review.domain.ReviewStatus.PUBLISHED
+              and r.createdAt >= :from and r.createdAt < :to
+            group by r.targetId
+            """)
+    List<Object[]> summarizeBetween(@Param("targetType") ReviewTargetType targetType, @Param("targetIds") Collection<UUID> targetIds,
+                                    @Param("from") Instant from, @Param("to") Instant to);
 }

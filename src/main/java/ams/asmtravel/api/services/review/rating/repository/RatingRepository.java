@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -47,6 +48,18 @@ public interface RatingRepository extends JpaRepository<Rating, UUID>, JpaSpecif
             group by r.targetId, r.stars
             """)
     List<StarCount> countStars(@Param("targetType") RatingTargetType targetType, @Param("targetIds") Collection<UUID> targetIds);
+
+    /** The same, for ratings given in a window; {@code to} exclusive. */
+    @Query("""
+            select r.targetId as targetId, r.stars as stars, count(r) as count
+            from Rating r
+            where r.targetType = :targetType and r.targetId in :targetIds
+              and r.status = ams.asmtravel.api.services.review.rating.domain.RatingStatus.ACTIVE
+              and r.createdAt >= :from and r.createdAt < :to
+            group by r.targetId, r.stars
+            """)
+    List<StarCount> countStarsBetween(@Param("targetType") RatingTargetType targetType, @Param("targetIds") Collection<UUID> targetIds,
+                                      @Param("from") Instant from, @Param("to") Instant to);
 
     @Query("select avg(r.stars) from Rating r where r.status = ams.asmtravel.api.services.review.rating.domain.RatingStatus.ACTIVE")
     Double averageStars();

@@ -36,6 +36,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.Instant;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -75,6 +76,16 @@ public class RatingServiceImpl implements RatingService {
             throw new InvalidRatingException("Name a targetType and 1 to 100 targetIds");
         }
         return summariesOf(targetType, new LinkedHashSet<>(targetIds));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<RatingSummaryResponse> summariesBetween(RatingTargetType targetType, List<UUID> targetIds, Instant from, Instant to) {
+        if (targetType == null || targetIds == null || targetIds.isEmpty() || targetIds.size() > 100) {
+            throw new InvalidRatingException("Name a targetType and 1 to 100 targetIds");
+        }
+        Set<UUID> ids = new LinkedHashSet<>(targetIds);
+        return summariesOf(targetType, ids, ratingRepository.countStarsBetween(targetType, ids, from, to));
     }
 
     @Override
@@ -215,8 +226,13 @@ public class RatingServiceImpl implements RatingService {
 
     /** One summary per place, in the order asked, unrated ones included; counted by the database. */
     private List<RatingSummaryResponse> summariesOf(RatingTargetType targetType, Collection<UUID> targetIds) {
+        return summariesOf(targetType, targetIds, ratingRepository.countStars(targetType, targetIds));
+    }
+
+    private List<RatingSummaryResponse> summariesOf(RatingTargetType targetType, Collection<UUID> targetIds,
+                                                    List<RatingRepository.StarCount> counts) {
         Map<UUID, Map<Integer, Long>> stars = new HashMap<>();
-        for (RatingRepository.StarCount count : ratingRepository.countStars(targetType, targetIds)) {
+        for (RatingRepository.StarCount count : counts) {
             stars.computeIfAbsent(count.getTargetId(), id -> new HashMap<>()).put(count.getStars().intValue(), count.getCount());
         }
         return targetIds.stream()

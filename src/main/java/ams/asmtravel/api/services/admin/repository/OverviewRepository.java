@@ -29,6 +29,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.time.Instant;
+import java.time.ZoneId;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -99,25 +100,34 @@ public class OverviewRepository {
         return destinationService.findAllSummaries();
     }
 
-    public int browseWindowDays() {
-        return popularService.windowDays();
+    /** The zone a day is counted in: Cambodia. */
+    public ZoneId zone() {
+        return popularService.zone();
     }
 
-    /** Different signed-in visitors per place over Popular's window. */
-    public Map<UUID, Long> recentBrowses() {
+    /** Different signed-in visitors per place in a window; {@code to} exclusive. */
+    public Map<UUID, Long> browses(Instant from, Instant to) {
         Map<UUID, Long> browses = new LinkedHashMap<>();
-        for (BrowseTotal total : popularService.recentTotals()) {
+        for (BrowseTotal total : popularService.totalsBetween(from, to)) {
             browses.put(total.destinationId(), total.browses());
         }
         return browses;
     }
 
-    /** Review count and stars per place; the review service answers 100 at a time. */
-    public Map<UUID, ReviewSummaryResponse> reviewSummaries(List<UUID> destinationIds) {
+    /**
+     * Review count and stars per place, all time or in a window; the review
+     * service answers 100 at a time.
+     *
+     * @param from null, with {@code to} null, for all time; otherwise the window, {@code to} exclusive
+     */
+    public Map<UUID, ReviewSummaryResponse> reviewSummaries(List<UUID> destinationIds, Instant from, Instant to) {
         Map<UUID, ReviewSummaryResponse> summaries = new LinkedHashMap<>();
-        for (int from = 0; from < destinationIds.size(); from += 100) {
-            List<UUID> chunk = destinationIds.subList(from, Math.min(from + 100, destinationIds.size()));
-            reviewService.summaries(ReviewTargetType.DESTINATION, chunk).forEach(summary -> summaries.put(summary.targetId(), summary));
+        for (int start = 0; start < destinationIds.size(); start += 100) {
+            List<UUID> chunk = destinationIds.subList(start, Math.min(start + 100, destinationIds.size()));
+            List<ReviewSummaryResponse> page = from == null && to == null
+                    ? reviewService.summaries(ReviewTargetType.DESTINATION, chunk)
+                    : reviewService.summariesBetween(ReviewTargetType.DESTINATION, chunk, from, to);
+            page.forEach(summary -> summaries.put(summary.targetId(), summary));
         }
         return summaries;
     }

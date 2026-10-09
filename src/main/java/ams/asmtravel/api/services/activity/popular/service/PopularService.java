@@ -5,6 +5,7 @@ import ams.asmtravel.api.services.activity.popular.dto.request.BrowseEventReques
 import ams.asmtravel.api.services.activity.popular.dto.response.PopularResponse;
 
 import java.time.Instant;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -33,6 +34,12 @@ public interface PopularService {
 
     /** How many days that window spans, today included. */
     int windowDays();
+
+    /** Different signed-in visitors per place in any window, most first; {@code to} exclusive. */
+    List<BrowseTotal> totalsBetween(Instant from, Instant to);
+
+    /** The zone a day is counted in: Cambodia. */
+    ZoneId zone();
 
     /** Places a visitor has opened, ever. */
     Set<UUID> browsedDestinationIds(UUID userId);

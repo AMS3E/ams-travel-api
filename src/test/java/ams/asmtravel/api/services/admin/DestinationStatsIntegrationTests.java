@@ -13,10 +13,15 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+
 import static ams.asmtravel.api.support.Callers.contributor;
 import static ams.asmtravel.api.support.Callers.customer;
 import static ams.asmtravel.api.support.Callers.editor;
 import static ams.asmtravel.api.support.Callers.owner;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.nullValue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -44,7 +49,6 @@ class DestinationStatsIntegrationTests {
 
         mvc.perform(get("/api/v1/admin/destination-stats").with(editor()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.browseDays").value(30))
                 .andExpect(jsonPath(row + ".name").value("Phnom Bakheng"))
                 .andExpect(jsonPath(row + ".ratingCount").value(0))
                 .andExpect(jsonPath(row + ".browses").value(0))
@@ -73,6 +77,26 @@ class DestinationStatsIntegrationTests {
                 .andExpect(jsonPath(row + ".verified").value(true))
                 .andExpect(jsonPath(row + ".basis").value("OFFICIAL_SITE"))
                 .andExpect(jsonPath(row + ".travelerRecommended").value(false));
+
+        // A period narrows what travellers did; views, the badge and the status stay as of today.
+        LocalDate today = LocalDate.now(ZoneId.of("Asia/Phnom_Penh"));
+        mvc.perform(get("/api/v1/admin/destination-stats").with(editor())
+                        .param("from", today.toString()).param("to", today.toString()))
+                .andExpect(jsonPath("$.from").value(today.toString()))
+                .andExpect(jsonPath(row + ".ratingCount").value(1))
+                .andExpect(jsonPath(row + ".reviewCount").value(1))
+                .andExpect(jsonPath(row + ".browses").value(1));
+        mvc.perform(get("/api/v1/admin/destination-stats").with(editor())
+                        .param("from", today.plusDays(1).toString()).param("to", today.plusDays(1).toString()))
+                .andExpect(jsonPath(row + ".ratingCount").value(0))
+                .andExpect(jsonPath(row + ".averageRating", hasItem(nullValue())))
+                .andExpect(jsonPath(row + ".reviewCount").value(0))
+                .andExpect(jsonPath(row + ".browses").value(0))
+                .andExpect(jsonPath(row + ".viewCount").value(1))
+                .andExpect(jsonPath(row + ".verified").value(true));
+        mvc.perform(get("/api/v1/admin/destination-stats").with(editor())
+                        .param("from", today.plusDays(1).toString()).param("to", today.toString()))
+                .andExpect(status().isBadRequest());
 
         // A contributor edits their own drafts; the catalogue's standing is the editorial desks' to read.
         mvc.perform(get("/api/v1/admin/destination-stats").with(contributor("writer@stats.test"))).andExpect(status().isForbidden());

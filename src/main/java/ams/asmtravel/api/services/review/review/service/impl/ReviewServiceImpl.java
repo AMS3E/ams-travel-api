@@ -104,9 +104,26 @@ public class ReviewServiceImpl implements ReviewService {
             throw new InvalidReviewException("Name a targetType and 1 to 100 targetIds");
         }
         Set<UUID> ids = new LinkedHashSet<>(targetIds);
-        Map<UUID, Object[]> reviews = reviewRepository.summarize(targetType, ids).stream()
-                .collect(Collectors.toMap(row -> (UUID) row[0], Function.identity()));
-        Map<UUID, RatingSummaryResponse> ratings = ratingService.summaries(ratingTarget(targetType), List.copyOf(ids)).stream()
+        return summarize(targetType, ids, reviewRepository.summarize(targetType, ids),
+                ratingService.summaries(ratingTarget(targetType), List.copyOf(ids)));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ReviewSummaryResponse> summariesBetween(ReviewTargetType targetType, List<UUID> targetIds, Instant from, Instant to) {
+        if (targetType == null || targetIds == null || targetIds.isEmpty() || targetIds.size() > 100) {
+            throw new InvalidReviewException("Name a targetType and 1 to 100 targetIds");
+        }
+        Set<UUID> ids = new LinkedHashSet<>(targetIds);
+        return summarize(targetType, ids, reviewRepository.summarizeBetween(targetType, ids, from, to),
+                ratingService.summariesBetween(ratingTarget(targetType), List.copyOf(ids), from, to));
+    }
+
+    /** One summary per place asked for, in that order, from the grouped review rows and the rating summaries. */
+    private static List<ReviewSummaryResponse> summarize(ReviewTargetType targetType, Set<UUID> ids, List<Object[]> rows,
+                                                         List<RatingSummaryResponse> ratingSummaries) {
+        Map<UUID, Object[]> reviews = rows.stream().collect(Collectors.toMap(row -> (UUID) row[0], Function.identity()));
+        Map<UUID, RatingSummaryResponse> ratings = ratingSummaries.stream()
                 .collect(Collectors.toMap(RatingSummaryResponse::targetId, Function.identity()));
         return ids.stream().map(id -> {
             Object[] row = reviews.get(id);
