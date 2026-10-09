@@ -1,0 +1,18 @@
+# What a verification rests on (the boss's four routes, 2026-10-09): an official
+# site, a partnership with AMS, a payment — or the travellers' reviews, which
+# are worked out on the fly and never filed as a row. Decisions made before
+# this column existed were all made on invoices, so they read as paid.
+databaseChangeLog:
+  - changeSet:
+      id: v2-publishing-verification-basis
+      author: ams-travel-v2
+      changes:
+        - addColumn:
+            schemaName: publishing
+            tableName: destination_verifications
+            columns:
+              - column: {name: basis, type: varchar(30)}
+        - sql:
+            sql: UPDATE publishing.destination_verifications SET basis = 'PAID' WHERE verified
+      rollback:
+        - dropColumn: {schemaName: publishing, tableName: destination_verifications, columnName: basis}

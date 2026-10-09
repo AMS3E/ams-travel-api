@@ -24,6 +24,7 @@ databaseChangeLog:
   - include: { file: v2/destination/001-tables.yaml, relativeToChangelogFile: true }
   - include: { file: v2/publishing/001-tables.yaml, relativeToChangelogFile: true }
   - include: { file: v2/publishing/002-verifications.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/publishing/003-verification-basis.yaml, relativeToChangelogFile: true }
   - include: { file: v2/engagement/001-tables.yaml, relativeToChangelogFile: true }
   - include: { file: v2/gamification/001-tables.yaml, relativeToChangelogFile: true }
   - include: { file: v2/gamification/003-seasons.yaml, relativeToChangelogFile: true }
