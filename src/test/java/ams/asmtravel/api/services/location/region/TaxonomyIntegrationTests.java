@@ -301,10 +301,9 @@ class TaxonomyIntegrationTests {
                         .content("{\"name\":\"Coastal Discovery\"}"))
                 .andExpect(status().isForbidden());
         String body = mvc.perform(post("/api/v1/corridors").with(curator()).contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"Coastal Discovery\",\"isFeatured\":true}"))
+                        .content("{\"name\":\"Coastal Discovery\"}"))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.slug").value("coastal-discovery"))
-                .andExpect(jsonPath("$.isFeatured").value(true))
                 .andExpect(jsonPath("$.coverUrl").isEmpty())
                 .andReturn().getResponse().getContentAsString();
         mvc.perform(get("/api/v1/corridor-destinations").param("corridorId", (String) JsonPath.read(body, "$.id")))

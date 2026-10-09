@@ -25,7 +25,6 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -33,7 +32,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-/** Browses and Popular, from published places only: featured first, then the most browsed. */
+/** Browses and Popular, from published places only, the most browsed first. */
 @Service
 @RequiredArgsConstructor
 public class PopularServiceImpl implements PopularService {
@@ -88,24 +87,13 @@ public class PopularServiceImpl implements PopularService {
                 .filter(place -> regionId == null || place.inRegion(regionId))
                 .forEach(place -> catalogue.put(place.id(), place));
 
-        List<BrowseTotal> totals = recentTotals();
-        Map<UUID, Long> browses = new LinkedHashMap<>();
-        totals.forEach(total -> browses.put(total.destinationId(), total.browses()));
-
-        // Featured first, the most browsed of them leading.
-        List<PopularPlace> places = new ArrayList<>(catalogue.values().stream()
-                .filter(DestinationSummary::featured)
-                .sorted(Comparator.comparingLong((DestinationSummary place) -> browses.getOrDefault(place.id(), 0L)).reversed())
-                .limit(size)
-                .map(place -> new PopularPlace(place.id(), browses.getOrDefault(place.id(), 0L), PopularReason.FEATURED))
-                .toList());
-        Set<UUID> listed = new HashSet<>(places.stream().map(PopularPlace::destinationId).toList());
-        // Then whatever visitors browse most.
-        for (BrowseTotal total : totals) {
+        // Whatever visitors browse most, published places only.
+        List<PopularPlace> places = new ArrayList<>();
+        for (BrowseTotal total : recentTotals()) {
             if (places.size() >= size) {
                 break;
             }
-            if (total.browses() > 0 && catalogue.containsKey(total.destinationId()) && !listed.contains(total.destinationId())) {
+            if (total.browses() > 0 && catalogue.containsKey(total.destinationId())) {
                 places.add(new PopularPlace(total.destinationId(), total.browses(), PopularReason.MOST_BROWSED));
             }
         }

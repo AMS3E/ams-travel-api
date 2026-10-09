@@ -22,7 +22,6 @@ import java.util.UUID;
  *
  * @param slug             blank: made from the name on create, kept on edit
  * @param slogan           one line someone said about it, quoted on its page; sloganBy says who
- * @param isFeatured       used only from someone who may edit any destination
  * @param tourismRegionIds zones are refused
  * @param theme            main tourism region code, see {@link ams.asmtravel.api.services.destination.destination.domain.DestinationThemes}
  */
@@ -40,7 +39,6 @@ public record DestinationRequest(
         String address,
         @MediaKey(allowEmpty = true, message = "Upload the cover first, then send its key")
         String coverKey,
-        Boolean isFeatured,
         Set<UUID> categoryIds,
         Set<UUID> tagIds,
         Set<UUID> interestIds,

@@ -109,7 +109,6 @@ public class DestinationServiceImpl implements DestinationService {
         apply(destination, request);
         destination.setStatus(ListingStatus.DRAFT);
         destination.setCreatedBy(authorId);
-        destination.setIsFeatured(permission.canFeature(authentication()) && Boolean.TRUE.equals(request.isFeatured()));
         destination = destinationRepository.save(destination);
         log.info("Destination {} ({}) drafted by {}", destination.getName(), destination.getId(), authorId);
         return mapper.toDestinationResponse(destination);
@@ -125,9 +124,6 @@ public class DestinationServiceImpl implements DestinationService {
         BigDecimal latitude = destination.getLatitude();
         BigDecimal longitude = destination.getLongitude();
         apply(destination, request);
-        if (request.isFeatured() != null && permission.canFeature(authentication())) {
-            destination.setIsFeatured(request.isFeatured());
-        }
         DestinationResponse saved = mapper.toDestinationResponse(destinationRepository.saveAndFlush(destination));
         if (!sameNumber(latitude, destination.getLatitude()) || !sameNumber(longitude, destination.getLongitude())) {
             events.publishEvent(new DestinationRelocatedEvent(id));

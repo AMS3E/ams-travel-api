@@ -61,9 +61,6 @@ public class Corridor {
     @Column(length = 512)
     private String coverKey;
 
-    @Column(nullable = false)
-    private Boolean isFeatured = false;
-
     /** List position, 0 first; website and dashboard use this order. */
     private Integer sortOrder;
 

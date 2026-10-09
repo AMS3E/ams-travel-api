@@ -1,0 +1,62 @@
+# "Featured" was never in the product: nothing asked for a staff-picked place
+# that leads the homepage's lists. The flag, its switch and its pinning rule
+# went on 2026-10-09; what the app shows instead is the Verified badge and the
+# two seals (Recommended by AMS Travel, Recommended by Traveler). Each drop is
+# guarded, so a database that never had the column marks the step as run.
+databaseChangeLog:
+  - changeSet:
+      id: v2-featured-retired-destinations
+      author: ams-travel-v2
+      preConditions:
+        - onFail: MARK_RAN
+        - columnExists: {schemaName: destination, tableName: destinations, columnName: is_featured}
+      changes:
+        - dropColumn: {schemaName: destination, tableName: destinations, columnName: is_featured}
+      rollback:
+        - addColumn:
+            schemaName: destination
+            tableName: destinations
+            columns:
+              - column: {name: is_featured, type: boolean, defaultValueBoolean: false, constraints: {nullable: false}}
+  - changeSet:
+      id: v2-featured-retired-stays
+      author: ams-travel-v2
+      preConditions:
+        - onFail: MARK_RAN
+        - columnExists: {schemaName: destination, tableName: destination_stays, columnName: is_featured}
+      changes:
+        - dropColumn: {schemaName: destination, tableName: destination_stays, columnName: is_featured}
+      rollback:
+        - addColumn:
+            schemaName: destination
+            tableName: destination_stays
+            columns:
+              - column: {name: is_featured, type: boolean, defaultValueBoolean: false, constraints: {nullable: false}}
+  - changeSet:
+      id: v2-featured-retired-foods
+      author: ams-travel-v2
+      preConditions:
+        - onFail: MARK_RAN
+        - columnExists: {schemaName: destination, tableName: destination_foods, columnName: is_featured}
+      changes:
+        - dropColumn: {schemaName: destination, tableName: destination_foods, columnName: is_featured}
+      rollback:
+        - addColumn:
+            schemaName: destination
+            tableName: destination_foods
+            columns:
+              - column: {name: is_featured, type: boolean, defaultValueBoolean: false, constraints: {nullable: false}}
+  - changeSet:
+      id: v2-featured-retired-corridors
+      author: ams-travel-v2
+      preConditions:
+        - onFail: MARK_RAN
+        - columnExists: {schemaName: taxonomy, tableName: corridors, columnName: is_featured}
+      changes:
+        - dropColumn: {schemaName: taxonomy, tableName: corridors, columnName: is_featured}
+      rollback:
+        - addColumn:
+            schemaName: taxonomy
+            tableName: corridors
+            columns:
+              - column: {name: is_featured, type: boolean, defaultValueBoolean: false, constraints: {nullable: false}}

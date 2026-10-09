@@ -193,9 +193,6 @@ public class Food {
     private ListingStatus status = ListingStatus.DRAFT;
 
     @Column(nullable = false)
-    private Boolean isFeatured = false;
-
-    @Column(nullable = false)
     private Boolean isLocalSpecialty = false;
 
     /** Average of visible reviews, kept by engagement; null when none. */

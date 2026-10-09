@@ -34,7 +34,6 @@ import java.util.UUID;
  * @param provinceId   the province the pin is in, filled from the pin on the dashboard; optional
  * @param openingHours day ({@code mon}…{@code sun}) to hours ({@code 07:00-22:00})
  * @param status       null keeps it (new is DRAFT); only an editor may set PUBLISHED
- * @param isFeatured   used only from an editor
  */
 public record FoodRequest(
         UUID destinationId,
@@ -63,7 +62,6 @@ public record FoodRequest(
         @MediaKey(allowEmpty = true, message = "Upload the cover first, then send its key")
         String coverKey,
         ListingStatus status,
-        Boolean isFeatured,
         Boolean isLocalSpecialty,
         Set<UUID> categoryIds,
         Set<UUID> tagIds,

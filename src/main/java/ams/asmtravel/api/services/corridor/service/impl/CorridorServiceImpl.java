@@ -51,10 +51,9 @@ public class CorridorServiceImpl implements CorridorService {
     private final InterestService interestService;
     private final ApplicationEventPublisher events;
 
-    /** By sort order; unnumbered ones after, featured first, then by name. */
+    /** By sort order; unnumbered ones after, then by name. */
     private static final Comparator<Corridor> IN_ORDER = Comparator
             .comparing(Corridor::getSortOrder, Comparator.nullsLast(Comparator.naturalOrder()))
-            .thenComparing(Corridor::getIsFeatured, Comparator.reverseOrder())
             .thenComparing(Corridor::getName, String.CASE_INSENSITIVE_ORDER);
 
     @Override
@@ -68,8 +67,8 @@ public class CorridorServiceImpl implements CorridorService {
                     .stream().toList();
         } else {
             corridors = curator
-                    ? corridorRepository.findAllByOrderByIsFeaturedDescNameAsc()
-                    : corridorRepository.findAllByStatusOrderByIsFeaturedDescNameAsc(CorridorStatus.PUBLISHED);
+                    ? corridorRepository.findAllByOrderByNameAsc()
+                    : corridorRepository.findAllByStatusOrderByNameAsc(CorridorStatus.PUBLISHED);
         }
         Map<UUID, List<CorridorStop>> stops = stopRepository.findAllInTravelOrder().stream()
                 .collect(Collectors.groupingBy(stop -> stop.getDay().getCorridor().getId(), LinkedHashMap::new, Collectors.toList()));
@@ -97,7 +96,6 @@ public class CorridorServiceImpl implements CorridorService {
         corridor.setSlug(Slugs.forCreate(request.slug(), request.name(), corridorRepository::existsBySlug));
         apply(corridor, request);
         linkInterests(corridor, request);
-        corridor.setIsFeatured(Boolean.TRUE.equals(request.isFeatured()));
         corridor.setStatus(CorridorStatus.DRAFT);
         corridor.setCreatedBy(authorId);
         placeIn(corridor, others, request.sortOrder());
@@ -115,9 +113,6 @@ public class CorridorServiceImpl implements CorridorService {
                 slug -> corridorRepository.existsBySlugAndIdNot(slug, id)));
         apply(corridor, request);
         linkInterests(corridor, request);
-        if (request.isFeatured() != null) {
-            corridor.setIsFeatured(request.isFeatured());
-        }
         placeIn(corridor, others, request.sortOrder() != null ? request.sortOrder() : corridor.getSortOrder());
         return response(corridorRepository.saveAndFlush(corridor), stopRepository.findInTravelOrder(id));
     }

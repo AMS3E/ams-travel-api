@@ -36,7 +36,6 @@ public abstract class DestinationMapper {
     @Mapping(target = "tourismRegionIds", expression = "java(ids(destination.getTourismRegions(), Region::getId))")
     public abstract DestinationResponse toDestinationResponse(Destination destination);
 
-    @Mapping(target = "featured", source = "isFeatured")
     @Mapping(target = "provinceId", source = "province.id")
     @Mapping(target = "regionId", source = "province.region.id")
     @Mapping(target = "categoryIds", expression = "java(idSet(destination.getCategories(), Category::getId))")

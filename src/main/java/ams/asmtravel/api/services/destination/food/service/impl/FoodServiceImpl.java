@@ -124,7 +124,6 @@ public class FoodServiceImpl implements FoodService {
         food.setSlug(slugFor(request.slug(), request.name(), null));
         food.setCreatedBy(authorId);
         apply(food, request, ownerUserId);
-        food.setIsFeatured(permission.isEditor(Authorities.current()) && Boolean.TRUE.equals(request.isFeatured()));
         setStatus(food, permittedStatus(request.status(), ListingStatus.DRAFT));
         return mapper.toFoodResponse(foodRepository.save(food));
     }
@@ -141,9 +140,6 @@ public class FoodServiceImpl implements FoodService {
             food.setSlug(slugFor(request.slug(), request.name(), id));
         }
         apply(food, request, ownerUserId);
-        if (request.isFeatured() != null && permission.isEditor(Authorities.current())) {
-            food.setIsFeatured(request.isFeatured());
-        }
         setStatus(food, permittedStatus(request.status(), food.getStatus()));
         Food saved = foodRepository.saveAndFlush(food);
         events.publishEvent(new FoodSavedEvent(saved.getId()));

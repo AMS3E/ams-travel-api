@@ -15,7 +15,7 @@ public record PopularResponse(
         List<Place> destinations
 ) {
 
-    /** @param browses different signed-in visitors in the window; 0 for a featured filler */
+    /** @param browses different signed-in visitors in the window */
     public record Place(UUID destinationId, long browses, PopularReason reason) {
     }
 }

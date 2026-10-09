@@ -76,10 +76,6 @@ public class Stay {
     @Column(length = 120)
     private String sloganBy;
 
-    /** Shown first on the homepage's lists. Set by an editor only. */
-    @Column(nullable = false)
-    private Boolean isFeatured = false;
-
     /** The stay's policies in the host's own words, as Markdown: check-in and check-out, children, pets, smoking, paying. */
     @Column(columnDefinition = "text")
     private String policies;

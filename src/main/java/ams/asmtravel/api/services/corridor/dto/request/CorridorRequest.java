@@ -31,7 +31,6 @@ public record CorridorRequest(
         String coverKey,
         @DecimalMin("0") @DecimalMax("99999999") BigDecimal estimatedBudgetMin,
         @DecimalMin("0") @DecimalMax("99999999") BigDecimal estimatedBudgetMax,
-        Boolean isFeatured,
         Set<UUID> interestIds,
         @PositiveOrZero Integer sortOrder
 ) {

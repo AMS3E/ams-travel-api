@@ -27,7 +27,6 @@ public record DestinationResponse(
         String coverKey,
         String coverUrl,
         ListingStatus status,
-        Boolean isFeatured,
         Long viewCount,
         UUID createdBy,
         Instant publishedAt,

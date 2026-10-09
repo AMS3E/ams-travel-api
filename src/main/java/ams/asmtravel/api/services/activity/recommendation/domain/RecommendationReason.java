@@ -5,7 +5,5 @@ public enum RecommendationReason {
     /** Somewhere new to them, like what they have browsed. */
     LIKE_YOUR_BROWSING,
     /** What everyone browses, for a visitor with no taste to go on yet. */
-    MOST_BROWSED,
-    /** Featured by the editors, filling a spot the ranking left. */
-    FEATURED
+    MOST_BROWSED
 }

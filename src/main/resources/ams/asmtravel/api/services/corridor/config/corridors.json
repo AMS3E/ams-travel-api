@@ -7,7 +7,6 @@
     "image": "angkor-wat-2.jpg",
     "estimatedBudgetMin": 220,
     "estimatedBudgetMax": 450,
-    "featured": true,
     "interests": [
       "khmer-civilization"
     ]
@@ -20,7 +19,6 @@
     "image": "tonle-sap-floating-village.jpg",
     "estimatedBudgetMin": 200,
     "estimatedBudgetMax": 380,
-    "featured": true,
     "interests": [
       "mekong-civilization"
     ]
@@ -33,7 +31,6 @@
     "image": "koh-rong-2.jpg",
     "estimatedBudgetMin": 160,
     "estimatedBudgetMax": 340,
-    "featured": true,
     "interests": [
       "coastal-discovery"
     ]
@@ -46,7 +43,6 @@
     "image": "bokor-mountain.jpg",
     "estimatedBudgetMin": 120,
     "estimatedBudgetMax": 240,
-    "featured": true,
     "interests": [
       "mountain-adventure"
     ]
@@ -59,7 +55,6 @@
     "image": "kampot-pepper-farm.jpg",
     "estimatedBudgetMin": 250,
     "estimatedBudgetMax": 480,
-    "featured": true,
     "interests": [
       "khmer-culinary"
     ]

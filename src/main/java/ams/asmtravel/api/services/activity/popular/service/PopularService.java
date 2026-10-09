@@ -19,7 +19,7 @@ public interface PopularService {
     boolean recordBrowse(UUID userId, UUID destinationId);
 
     /**
-     * Most-browsed published places lately, featured ones first.
+     * Most-browsed published places lately.
      *
      * @param regionId only this zone or tourism region; null for everywhere
      * @param limit    how many; null for the configured size

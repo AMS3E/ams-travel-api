@@ -26,7 +26,6 @@ public record StayResponse(
         String slogan,
         String sloganBy,
         UUID provinceId,
-        Boolean isFeatured,
         String policies,
         LocalTime checkInFrom,
         LocalTime checkOutUntil,

@@ -36,6 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Arrays;
 import java.util.UUID;
 
+import static ams.asmtravel.api.support.Callers.customer;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsString;
@@ -100,13 +101,12 @@ class DestinationIntegrationTests {
         RequestPostProcessor contributor = staff("writer@desk.test", "CONTRIBUTOR",
                 "PERM_DESTINATION_DRAFT_CREATE", "PERM_DESTINATION_DRAFT_EDIT_OWN");
         String id = create(contributor, "{\"name\":\"Bayon Temple\",\"provinceId\":\"" + province.getId()
-                + "\",\"coverKey\":\"" + COVER + "\",\"isFeatured\":true,\"categoryIds\":[\"" + temples.getId() + "\"]}");
+                + "\",\"coverKey\":\"" + COVER + "\",\"categoryIds\":[\"" + temples.getId() + "\"]}");
 
         mvc.perform(get("/api/v1/destinations/" + id).with(contributor))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.slug").value("bayon-temple"))
                 .andExpect(jsonPath("$.status").value("DRAFT"))
-                .andExpect(jsonPath("$.isFeatured").value(false))
                 .andExpect(jsonPath("$.regionId").value(province.getRegion().getId().toString()))
                 .andExpect(jsonPath("$.coverUrl").value("http://localhost:8080/api/v1/media/files/" + COVER))
                 .andExpect(jsonPath("$.categoryIds[0]").value(temples.getId().toString()));
@@ -125,10 +125,9 @@ class DestinationIntegrationTests {
                         .content("{\"name\":\"Bayon\",\"provinceId\":\"" + province.getId() + "\"}"))
                 .andExpect(status().isForbidden());
         mvc.perform(put("/api/v1/destinations/" + id).with(editor()).contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"Bayon\",\"provinceId\":\"" + province.getId() + "\",\"isFeatured\":true}"))
+                        .content("{\"name\":\"Bayon\",\"provinceId\":\"" + province.getId() + "\"}"))
                 .andExpect(jsonPath("$.name").value("Bayon"))
                 .andExpect(jsonPath("$.slug").value("bayon-temple"))
-                .andExpect(jsonPath("$.isFeatured").value(true))
                 .andExpect(jsonPath("$.categoryIds[0]").value(temples.getId().toString()));
 
         mvc.perform(patch("/api/v1/destinations/" + id + "/unpublish").with(editor()))
@@ -145,7 +144,7 @@ class DestinationIntegrationTests {
         Region capitals = theme("Ancient Capitals & Khmer Civilization", "CAPITALS-T");
         Region culinary = theme("Khmer Culinary", "CULINARY-T");
         String id = create(owner(), "{\"name\":\"Phnom Da\",\"provinceId\":\"" + province.getId()
-                + "\",\"isFeatured\":true,\"categoryIds\":[\"" + temples.getId()
+                + "\",\"categoryIds\":[\"" + temples.getId()
                 + "\"],\"tourismRegionIds\":[\"" + capitals.getId() + "\"]}");
 
         mvc.perform(get("/api/v1/destinations/" + id).with(editor()))
@@ -156,8 +155,11 @@ class DestinationIntegrationTests {
                                 + "\",\"tourismRegionIds\":[\"" + province.getRegion().getId() + "\"]}"))
                 .andExpect(status().isBadRequest());
 
-        // Published, it counts on its tourism region's page as well as its zone's.
+        // Published and browsed once, it counts on its tourism region's page as well as its zone's.
         mvc.perform(patch("/api/v1/destinations/" + id + "/publish").with(owner())).andExpect(status().isOk());
+        mvc.perform(post("/api/v1/popular/events").with(customer()).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"destinationId\":\"" + id + "\",\"eventType\":\"DESTINATION_VIEW\"}"))
+                .andExpect(status().isAccepted());
         nextRequest();
         mvc.perform(get("/api/v1/popular").param("regionId", capitals.getId().toString()))
                 .andExpect(jsonPath("$.destinations[*].destinationId", hasItem(id)));

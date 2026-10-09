@@ -90,9 +90,6 @@ public class Destination {
     @Column(nullable = false, length = 30)
     private ListingStatus status = ListingStatus.DRAFT;
 
-    @Column(nullable = false)
-    private Boolean isFeatured = false;
-
     /** Distinct visitors a day, from browse events. */
     @Column(nullable = false)
     private Long viewCount = 0L;

@@ -159,44 +159,6 @@ class EngagementIntegrationTests {
                 .andExpect(jsonPath("$.destinations[0].reason").value("MOST_BROWSED"));
     }
 
-    /**
-     * Featured is an editor's promise: the place is on Popular and Recommended
-     * whatever its browses, and first. Browsing orders everything after it.
-     */
-    @Test
-    void aFeaturedPlaceIsAlwaysPopularAndRecommended() throws Exception {
-        Category temples = catalogue.category("Temples");
-        Destination bayon = catalogue.place(province, "Bayon", 13.4412, 103.8591, ListingStatus.PUBLISHED, null, Set.of(temples));
-        Destination kohKer = catalogue.place(province, "Koh Ker", 13.7840, 104.5390, ListingStatus.PUBLISHED, null, Set.of(temples));
-        kohKer.setIsFeatured(true);
-        for (String visitor : new String[] {"a@visit.test", "b@visit.test", "c@visit.test"}) {
-            browse(customer(visitor), bayon, null);
-        }
-        nextRequest();
-
-        // Never browsed, it still comes first; one spot is the featured place's.
-        mvc.perform(get("/api/v1/popular"))
-                .andExpect(jsonPath("$.destinations[0].destinationId").value(kohKer.getId().toString()))
-                .andExpect(jsonPath("$.destinations[0].reason").value("FEATURED"))
-                .andExpect(jsonPath("$.destinations[1].destinationId").value(bayon.getId().toString()))
-                .andExpect(jsonPath("$.destinations[1].reason").value("MOST_BROWSED"));
-        mvc.perform(get("/api/v1/popular").param("limit", "1"))
-                .andExpect(jsonPath("$.destinations", hasSize(1)))
-                .andExpect(jsonPath("$.destinations[0].destinationId").value(kohKer.getId().toString()));
-
-        mvc.perform(get("/api/v1/recommendations/for-you"))
-                .andExpect(jsonPath("$.destinations[0].destinationId").value(kohKer.getId().toString()))
-                .andExpect(jsonPath("$.destinations[0].reason").value("FEATURED"))
-                .andExpect(jsonPath("$.destinations[1].destinationId").value(bayon.getId().toString()));
-        // A visitor who has been there is still shown it: featured is not a guess about their taste.
-        browse(customer("a@visit.test"), kohKer, null);
-        nextRequest();
-        mvc.perform(get("/api/v1/recommendations/for-you").with(customer("a@visit.test")))
-                .andExpect(jsonPath("$.personal").value(true))
-                .andExpect(jsonPath("$.destinations[0].destinationId").value(kohKer.getId().toString()))
-                .andExpect(jsonPath("$.destinations[0].reason").value("FEATURED"));
-    }
-
     /** A contributor hears when the desk answers their request. */
     @Test
     void anAnswerToAPublishRequestIsANotification() throws Exception {

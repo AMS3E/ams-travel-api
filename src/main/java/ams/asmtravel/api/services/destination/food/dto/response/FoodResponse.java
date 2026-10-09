@@ -37,7 +37,6 @@ public record FoodResponse(
         String coverKey,
         String coverUrl,
         ListingStatus status,
-        Boolean isFeatured,
         Boolean isLocalSpecialty,
         BigDecimal averageRating,
         Integer reviewCount,
