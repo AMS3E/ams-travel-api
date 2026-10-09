@@ -2,6 +2,7 @@ package ams.asmtravel.api.services.admin.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import ams.asmtravel.api.services.admin.dto.request.OverviewRequest;
+import ams.asmtravel.api.services.admin.dto.response.DestinationStatsResponse;
 import ams.asmtravel.api.services.admin.dto.response.OverviewResponse;
 import ams.asmtravel.api.services.admin.service.AdminService;
 import jakarta.validation.Valid;
@@ -24,5 +25,11 @@ public class AdminController {
     @GetMapping("/overview")
     public OverviewResponse getOverview(Authentication authentication, @Valid @ModelAttribute OverviewRequest request) {
         return adminService.overview(request, authentication);
+    }
+
+    /** The Destination Stats page: every destination's ratings, browses and Verified standing. */
+    @GetMapping("/destination-stats")
+    public DestinationStatsResponse getDestinationStats() {
+        return adminService.destinationStats();
     }
 }

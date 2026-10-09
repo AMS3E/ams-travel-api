@@ -100,6 +100,9 @@ public class KeycloakSecurityConfig {
                 /* Admin dashboard overview: admin and editors. */
                 .requestMatchers(HttpMethod.GET, "/api/v1/admin/overview")
                         .hasAnyAuthority(Permissions.FULL_CONTROL, Permissions.REVIEW_MODERATE)
+                /* Destination Stats: ratings, browses and the Verified standing of every place; the editorial desks. */
+                .requestMatchers(HttpMethod.GET, "/api/v1/admin/destination-stats")
+                        .hasAnyAuthority(Permissions.FULL_CONTROL, Permissions.DESTINATION_EDIT_ANY)
 
                 /* Amenities: what a stay offers, at the property and in the room. */
                 .requestMatchers(HttpMethod.GET, "/api/v1/amenities", "/api/v1/amenities/*").permitAll()

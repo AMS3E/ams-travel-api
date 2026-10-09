@@ -31,6 +31,9 @@ public interface PopularService {
     /** Different signed-in visitors per place over Popular's window, most first. */
     List<BrowseTotal> recentTotals();
 
+    /** How many days that window spans, today included. */
+    int windowDays();
+
     /** Places a visitor has opened, ever. */
     Set<UUID> browsedDestinationIds(UUID userId);
 

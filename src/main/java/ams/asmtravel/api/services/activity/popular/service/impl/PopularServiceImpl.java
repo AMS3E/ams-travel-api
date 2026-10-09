@@ -108,6 +108,11 @@ public class PopularServiceImpl implements PopularService {
     }
 
     @Override
+    public int windowDays() {
+        return properties.days();
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public Set<UUID> browsedDestinationIds(UUID userId) {
         return userId == null ? Set.of() : Set.copyOf(eventRepository.findBrowsedDestinationIds(userId));
