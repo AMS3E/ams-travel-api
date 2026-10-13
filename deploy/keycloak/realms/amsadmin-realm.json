@@ -1,0 +1,371 @@
+{
+  "realm": "amsadmin",
+  "enabled": true,
+  "displayName": "AMS Travel back office",
+  "loginTheme": "amstravel",
+  "sslRequired": "__SSL_REQUIRED__",
+  "registrationAllowed": false,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "resetPasswordAllowed": true,
+  "bruteForceProtected": false,
+  "accessTokenLifespan": 900,
+  "ssoSessionIdleTimeout": 28800,
+  "ssoSessionMaxLifespan": 36000,
+  "roles": {
+    "realm": [
+      {
+        "name": "PERM_AUDIT_VIEW",
+        "description": "View audit log: View the immutable audit log"
+      },
+      {
+        "name": "PERM_CONTRIBUTOR_PUBLISH_APPROVE",
+        "description": "Approve contributor requests: Approve or reject contributor publishing requests"
+      },
+      {
+        "name": "PERM_CORRIDOR_CURATE",
+        "description": "Curate corridors: Create and edit curated corridors"
+      },
+      {
+        "name": "PERM_DESTINATION_DELETE",
+        "description": "Delete destinations: Delete a destination"
+      },
+      {
+        "name": "PERM_DESTINATION_DRAFT_CREATE",
+        "description": "Create drafts: Create a destination draft"
+      },
+      {
+        "name": "PERM_DESTINATION_DRAFT_DELETE_OWN",
+        "description": "Delete own drafts: Delete an owned destination draft that is not live"
+      },
+      {
+        "name": "PERM_DESTINATION_DRAFT_EDIT_OWN",
+        "description": "Edit own drafts: Edit an owned destination draft"
+      },
+      {
+        "name": "PERM_DESTINATION_EDIT_ANY",
+        "description": "Edit any destination: Edit any destination"
+      },
+      {
+        "name": "PERM_DESTINATION_PUBLISH",
+        "description": "Publish destinations: Publish a destination"
+      },
+      {
+        "name": "PERM_DESTINATION_UNPUBLISH",
+        "description": "Unpublish destinations: Unpublish a destination"
+      },
+      {
+        "name": "PERM_FULL_CONTROL",
+        "description": "Full control: Full access to every amstravel capability"
+      },
+      {
+        "name": "PERM_LISTING_DELETE_OWN",
+        "description": "Delete own listings: Delete an owned listing that is not live"
+      },
+      {
+        "name": "PERM_LISTING_EDIT_OWN",
+        "description": "Edit own listings: Edit listings owned by the signed-in partner"
+      },
+      {
+        "name": "PERM_MEDIA_UPLOAD",
+        "description": "Upload media: Upload and manage owned media"
+      },
+      {
+        "name": "PERM_PARTNER_LISTING_DELETE",
+        "description": "Delete partner listings: Delete a submitted partner listing that is not live"
+      },
+      {
+        "name": "PERM_PARTNER_LISTING_EDIT",
+        "description": "Edit partner listings: Edit a submitted partner listing that is not live"
+      },
+      {
+        "name": "PERM_PARTNER_PUBLISH_APPROVE",
+        "description": "Approve partner requests: Approve or reject partner publishing requests"
+      },
+      {
+        "name": "PERM_PUBLISH_REQUEST_SUBMIT",
+        "description": "Submit for publishing: Submit a listing or draft for publishing"
+      },
+      {
+        "name": "PERM_PUBLISH_REQUEST_VIEW_OWN",
+        "description": "Track own requests: Track the status of owned publishing requests"
+      },
+      {
+        "name": "PERM_REVIEW_MODERATE",
+        "description": "Moderate reviews: Moderate destination reviews"
+      },
+      {
+        "name": "PERM_ROLE_ASSIGN",
+        "description": "Assign roles: Assign business roles to back-office users"
+      },
+      {
+        "name": "PERM_TAXONOMY_MANAGE",
+        "description": "Manage taxonomy: Create and edit regions, provinces, interests, categories and tags"
+      },
+      {
+        "name": "PERM_USER_MANAGE",
+        "description": "Manage users: Manage all back-office accounts"
+      },
+      {
+        "name": "PERM_VERIFIED_BADGE_SET",
+        "description": "Verify destinations: Verify destinations submitted to the desk"
+      },
+      {
+        "name": "ADMIN",
+        "description": "Administrator: Manage users, roles, permissions, audit records, and the complete platform",
+        "composite": true,
+        "composites": {
+          "realm": [
+            "PARTNER",
+            "CONTRIBUTOR",
+            "EDITOR",
+            "BDO",
+            "PERM_FULL_CONTROL",
+            "PERM_USER_MANAGE",
+            "PERM_ROLE_ASSIGN",
+            "PERM_AUDIT_VIEW"
+          ]
+        }
+      },
+      {
+        "name": "BDO",
+        "description": "Business development officer: Review partner destinations, manage the catalogue, and submit own content to an administrator",
+        "composite": true,
+        "composites": {
+          "realm": [
+            "PERM_CORRIDOR_CURATE",
+            "PERM_DESTINATION_DRAFT_CREATE",
+            "PERM_DESTINATION_DRAFT_DELETE_OWN",
+            "PERM_DESTINATION_DRAFT_EDIT_OWN",
+            "PERM_DESTINATION_EDIT_ANY",
+            "PERM_DESTINATION_PUBLISH",
+            "PERM_MEDIA_UPLOAD",
+            "PERM_PARTNER_LISTING_DELETE",
+            "PERM_PARTNER_LISTING_EDIT",
+            "PERM_PARTNER_PUBLISH_APPROVE",
+            "PERM_PUBLISH_REQUEST_SUBMIT",
+            "PERM_PUBLISH_REQUEST_VIEW_OWN",
+            "PERM_TAXONOMY_MANAGE",
+            "PERM_VERIFIED_BADGE_SET"
+          ]
+        }
+      },
+      {
+        "name": "CONTRIBUTOR",
+        "description": "Contributor: Draft destinations and submit them to an editor",
+        "composite": true,
+        "composites": {
+          "realm": [
+            "PERM_DESTINATION_DRAFT_CREATE",
+            "PERM_DESTINATION_DRAFT_DELETE_OWN",
+            "PERM_DESTINATION_DRAFT_EDIT_OWN",
+            "PERM_LISTING_DELETE_OWN",
+            "PERM_LISTING_EDIT_OWN",
+            "PERM_MEDIA_UPLOAD",
+            "PERM_PUBLISH_REQUEST_SUBMIT",
+            "PERM_PUBLISH_REQUEST_VIEW_OWN"
+          ]
+        }
+      },
+      {
+        "name": "EDITOR",
+        "description": "Editor: Review contributor destinations, manage the catalogue, and submit own content to an administrator",
+        "composite": true,
+        "composites": {
+          "realm": [
+            "PERM_CONTRIBUTOR_PUBLISH_APPROVE",
+            "PERM_CORRIDOR_CURATE",
+            "PERM_DESTINATION_DELETE",
+            "PERM_DESTINATION_DRAFT_CREATE",
+            "PERM_DESTINATION_EDIT_ANY",
+            "PERM_DESTINATION_PUBLISH",
+            "PERM_DESTINATION_UNPUBLISH",
+            "PERM_MEDIA_UPLOAD",
+            "PERM_PUBLISH_REQUEST_SUBMIT",
+            "PERM_PUBLISH_REQUEST_VIEW_OWN",
+            "PERM_REVIEW_MODERATE",
+            "PERM_TAXONOMY_MANAGE"
+          ]
+        }
+      },
+      {
+        "name": "PARTNER",
+        "description": "Partner: Manage owned listings and submit them to BDO for publishing",
+        "composite": true,
+        "composites": {
+          "realm": [
+            "PERM_LISTING_DELETE_OWN",
+            "PERM_LISTING_EDIT_OWN",
+            "PERM_MEDIA_UPLOAD",
+            "PERM_PUBLISH_REQUEST_SUBMIT",
+            "PERM_PUBLISH_REQUEST_VIEW_OWN"
+          ]
+        }
+      }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "amsadmin-dashboard",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "secret": "__AMSADMIN_DASHBOARD_SECRET__",
+      "fullScopeAllowed": true,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "name": "Admin dashboard (Next.js)",
+      "rootUrl": "http://localhost:3001",
+      "baseUrl": "http://localhost:3001",
+      "redirectUris": [
+        "__DASHBOARD_URL__/api/auth/callback"
+      ],
+      "webOrigins": [
+        "__DASHBOARD_URL__"
+      ],
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "http://localhost:3001/*"
+      }
+    },
+    {
+      "clientId": "amsadmin-api",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "secret": "__AMSADMIN_API_SECRET__",
+      "fullScopeAllowed": true,
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": true,
+      "name": "Spring API (staff admin, client credentials)"
+    },
+    {
+      "clientId": "local-cli",
+      "name": "Local CLI (password grant, local only)",
+      "enabled": true,
+      "publicClient": true,
+      "protocol": "openid-connect",
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": false,
+      "fullScopeAllowed": true
+    }
+  ],
+  "users": [
+    {
+      "username": "service-account-amsadmin-api",
+      "enabled": true,
+      "serviceAccountClientId": "amsadmin-api",
+      "clientRoles": {
+        "realm-management": [
+          "manage-users",
+          "view-users",
+          "query-users",
+          "view-realm"
+        ]
+      }
+    },
+    {
+      "username": "admin@ams.test",
+      "email": "admin@ams.test",
+      "emailVerified": true,
+      "enabled": true,
+      "firstName": "Ada",
+      "lastName": "Admin",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "__LOCAL_USER_PASSWORD__",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "ADMIN"
+      ]
+    },
+    {
+      "username": "bdo@ams.test",
+      "email": "bdo@ams.test",
+      "emailVerified": true,
+      "enabled": true,
+      "firstName": "Bopha",
+      "lastName": "BDO",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "__LOCAL_USER_PASSWORD__",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "BDO"
+      ]
+    },
+    {
+      "username": "editor@ams.test",
+      "email": "editor@ams.test",
+      "emailVerified": true,
+      "enabled": true,
+      "firstName": "Ethan",
+      "lastName": "Editor",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "__LOCAL_USER_PASSWORD__",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "EDITOR"
+      ]
+    },
+    {
+      "username": "contributor@ams.test",
+      "email": "contributor@ams.test",
+      "emailVerified": true,
+      "enabled": true,
+      "firstName": "Chan",
+      "lastName": "Contributor",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "__LOCAL_USER_PASSWORD__",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "CONTRIBUTOR"
+      ]
+    },
+    {
+      "username": "partner@ams.test",
+      "email": "partner@ams.test",
+      "emailVerified": true,
+      "enabled": true,
+      "firstName": "Piseth",
+      "lastName": "Partner",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "__LOCAL_USER_PASSWORD__",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "PARTNER"
+      ]
+    }
+  ],
+  "smtpServer": {
+    "host": "__SMTP_HOST__",
+    "port": "__SMTP_PORT__",
+    "from": "noreply@amstravel.local",
+    "fromDisplayName": "AMS Travel",
+    "auth": "false",
+    "ssl": "false",
+    "starttls": "false",
+    "replyTo": ""
+  }
+}
