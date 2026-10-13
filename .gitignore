@@ -35,3 +35,9 @@ out/
 
 ### VS Code ###
 .vscode/
+
+# Claude Code: personal notes for whoever works here, never shared
+CLAUDE.local.md
+
+# The compose stack's own secrets and addresses (copied from deploy/.env.example)
+deploy/.env
