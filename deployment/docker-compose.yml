@@ -1,0 +1,422 @@
+name: ams-travel
+
+services:
+  liquibase:
+    image: liquibase/liquibase:4.33-alpine
+    container_name: amstravel-liquibase
+    profiles: ["tools"]
+    environment:
+      LIQUIBASE_COMMAND_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-ams_travel}
+      LIQUIBASE_COMMAND_USERNAME: ${POSTGRES_USER:-ams_user}
+      LIQUIBASE_COMMAND_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in deployment/.env}
+    volumes:
+      - ../src/main/resources/db/changelog:/liquibase/changelog
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - ams_network
+
+  postgres:
+    image: postgis/postgis:17-3.5-alpine
+    container_name: amstravel-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-ams_travel}
+      POSTGRES_USER: ${POSTGRES_USER:-ams_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in deployment/.env}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    networks:
+      - ams_network
+
+  # Keycloak's own database, separate from the catalogue's. Realms, users, and
+  # sessions have nothing to do with destinations, and keeping them apart means
+  # a catalogue restore never rolls back an account.
+  db-kcpg-master:
+    image: postgres:17.5-bullseye
+    container_name: amstravel-keycloak-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${KEYCLOAK_DB_NAME:-db_keycloak}
+      POSTGRES_USER: ${KEYCLOAK_DB_USER:?set KEYCLOAK_DB_USER in deployment/.env}
+      POSTGRES_PASSWORD: ${KEYCLOAK_DB_PASSWORD:?set KEYCLOAK_DB_PASSWORD in deployment/.env}
+    # 5401 rather than 5432: the catalogue Postgres already has that one.
+    ports:
+      - 5401:5432
+    volumes:
+      - postgres_master_vol:/var/lib/postgresql/data
+    # Keycloak 26 gives up and exits if the database is not accepting
+    # connections when it starts, so hold it back until this answers.
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    networks:
+      - ams_network
+
+  # The AMS Travel realm is imported when the Keycloak database is new. On
+  # later starts Keycloak keeps the realm stored in Postgres and skips it.
+  kc-master:
+    # Keycloak 26.3.1 plus the staff email-code step (keycloak stage of ../Dockerfile).
+    # The website and the dashboard send people to its own sign-in form (Authorization
+    # Code + PKCE), dressed by the CSS-only theme below.
+    build:
+      context: ..
+      dockerfile: Dockerfile
+      target: keycloak
+    image: ams-travel-keycloak:26.3.1
+    container_name: amstravel-keycloak
+    restart: unless-stopped
+    depends_on:
+      db-kcpg-master:
+        condition: service_healthy
+    # Ready when its management port says so (KC_HEALTH_ENABLED below). No curl
+    # in the image, so bash sends the request itself.
+    healthcheck:
+      test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/localhost/9000 && printf 'GET /health/ready HTTP/1.1\\r\\nHost: localhost\\r\\nConnection: close\\r\\n\\r\\n' >&3 && grep -q '\"status\": \"UP\"' <&3"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+    environment:
+      # Database Configuration
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://db-kcpg-master:5432/${KEYCLOAK_DB_NAME:-db_keycloak}
+      KC_DB_USERNAME: ${KEYCLOAK_DB_USER:?set KEYCLOAK_DB_USER in deployment/.env}
+      KC_DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD:?set KEYCLOAK_DB_PASSWORD in deployment/.env}
+
+      # Admin User # Temporary admin
+      # Written into the master realm on the very first start and never read
+      # again - once the account exists in Postgres, changing these two does
+      # nothing. Rotate the password in the console, or wipe the volume.
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KEYCLOAK_BOOTSTRAP_ADMIN_USERNAME:-admin}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_BOOTSTRAP_ADMIN_PASSWORD:?set KEYCLOAK_BOOTSTRAP_ADMIN_PASSWORD in deployment/.env}
+
+      # Production Settings
+      # Full URL rather than host + port: Keycloak 26 dropped KC_HOSTNAME_PORT
+      # and KC_HOSTNAME_STRICT_HTTPS, and takes the scheme and port from here.
+      KC_HOSTNAME: http://localhost:9090
+      KC_HOSTNAME_STRICT: "false"
+      KC_HTTP_ENABLED: "true"
+      # Listen on 9090 inside the container too, so the port is the same whether
+      # you dial it from the host or from another container - no 8080 anywhere.
+      KC_HTTP_PORT: 9090
+      KC_HEALTH_ENABLED: "true"
+    # 8443 is not published: start-dev serves plain HTTP only, so nothing
+    # would be listening on it.
+    ports:
+      - "9090:9090"
+    # The realms live in Keycloak's own database and every setting comes from the
+    # KC_ variables above. The one mount is the AMS Travel look for Keycloak's own
+    # pages: a CSS-only login theme, read-only (no templates, nothing else).
+    volumes:
+      - ../src/main/resources/login:/opt/keycloak/themes/amstravel/login:ro
+    networks:
+      - ams_network
+    command:
+      - start-dev
+
+  # There is no kc-setup service. Both realms live in Keycloak's own database,
+  # on a volume `docker compose down -v` cannot touch (see postgres_master_vol
+  # at the foot of this file), and they are configured in the Keycloak console.
+  # Nothing in this repository recreates them: if that volume is ever lost, the
+  # realms are rebuilt by hand.
+
+  redis:
+    image: redis:8-alpine
+    container_name: amstravel-redis
+    restart: unless-stopped
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:?set REDIS_PASSWORD in deployment/.env}
+    # Every setting on the command line, so redis needs no folder of its own:
+    # appendonly keeps the cache across a restart, and the cache holds derived
+    # data only, so when 256mb runs out the least recently used entry goes
+    # rather than the write being refused.
+    command:
+      - redis-server
+      - --appendonly
+      - "yes"
+      - --maxmemory
+      - 256mb
+      - --maxmemory-policy
+      - allkeys-lru
+      - --requirepass
+      - ${REDIS_PASSWORD:?set REDIS_PASSWORD in deployment/.env}
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a \"$$REDIS_PASSWORD\" ping | grep PONG"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 5s
+    networks:
+      - ams_network
+
+  # The stock image, pinned. It was built from source here until 2026-09-27,
+  # with `go install github.com/minio/minio@latest` — which reported its version
+  # as DEVELOPMENT.GOGET, took minutes, needed the Go module proxy, and could
+  # produce a different MinIO on any rebuild. Both were compared side by side
+  # and the published image is the same in every way that matters: the S3 API
+  # and the console both answer, and the licence is the same AGPLv3.
+  #
+  # Pinned by digest rather than to :latest, so every machine runs the same
+  # server. This one is RELEASE.2025-09-07T16-13-09Z.
+  minio:
+    image: minio/minio@sha256:14cea493d9a34af32f524e538b8346cf79f3321eff8e708c1e2960462bd8936e
+    container_name: amstravel-minio
+    restart: unless-stopped
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-ams_minio}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:?set MINIO_ROOT_PASSWORD in deployment/.env}
+    command: server /data --console-address ":9001"
+    ports:
+      - "${MINIO_API_PORT:-9000}:9000"
+      - "${MINIO_CONSOLE_PORT:-9001}:9001"
+    volumes:
+      - minio_data:/data
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:9000/minio/health/live"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    networks:
+      - ams_network
+
+  api:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+      target: runtime
+    container_name: amstravel-api
+    restart: unless-stopped
+    # Ready once a public endpoint answers 200, which takes about 15 seconds
+    # after the container starts. The image has bash but no curl, hence the raw
+    # request. The web apps wait for this rather than for the container.
+    healthcheck:
+      test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/localhost/8080 && printf 'GET /api/v1/regions HTTP/1.1\\r\\nHost: localhost\\r\\nConnection: close\\r\\n\\r\\n' >&3 && head -n 1 <&3 | grep -q ' 200'"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 30s
+    # In the order application.yml declares them, so the two files can be read
+    # side by side. Everything the API needs to reach another container is set
+    # here, because only here is it known that "postgres" and "minio" are host
+    # names rather than localhost.
+    environment:
+      # ---- spring.datasource -------------------------------------------------
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-ams_travel}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER:-ams_user}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in deployment/.env}
+
+      # ---- spring.jpa --------------------------------------------------------
+      # validate, never update: Liquibase owns the schema. With update,
+      # Hibernate alters tables behind the changelog and the two drift apart.
+      SPRING_JPA_HIBERNATE_DDL_AUTO: ${DDL_AUTO:-validate}
+      SPRING_JPA_OPEN_IN_VIEW: "false"
+
+      # ---- spring.liquibase and app.seed -------------------------------------
+      # The schema, then the catalogue. Seeding is skipped once any service
+      # reports rows, so a restart against a populated database does nothing.
+      # Both are on by default; they are named here because turning either off
+      # is an operational decision, not a code one.
+      LIQUIBASE_ENABLED: ${LIQUIBASE_ENABLED:-true}
+      SEED_CATALOG: ${SEED_CATALOG:-true}
+
+      # ---- server ------------------------------------------------------------
+      SERVER_PORT: 8080
+
+      # ---- media (MinIO) -----------------------------------------------------
+      # The endpoint is the service name: from inside this network MinIO is not
+      # on localhost. The credentials are the server's own root pair, set on the
+      # minio service above from the same two .env values.
+      MINIO_ENDPOINT: http://minio:9000
+      MINIO_ACCESS_KEY: ${MINIO_ROOT_USER:-ams_minio}
+      MINIO_SECRET_KEY: ${MINIO_ROOT_PASSWORD:?set MINIO_ROOT_PASSWORD in deployment/.env}
+      MINIO_BUCKET: ${MINIO_BUCKET:-ams-travel-images}
+      # Origin-relative on purpose: both web apps proxy this exact path, so one
+      # stored value works from a browser, from the image optimizer inside this
+      # network, and from a crawler — and no hostname is written into the rows.
+      IMAGE_PUBLIC_BASE_URL: ${IMAGE_PUBLIC_BASE_URL:-/api/v1/media/files}
+      MAX_IMAGE_SIZE: ${MAX_IMAGE_SIZE:-10MB}
+      MAX_UPLOAD_REQUEST_SIZE: ${MAX_UPLOAD_REQUEST_SIZE:-50MB}
+
+      # ---- spring.data.redis and spring.cache --------------------------------
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD:?set REDIS_PASSWORD in deployment/.env}
+      CACHE_TTL: ${CACHE_TTL:-10m}
+
+      # ---- app.cors ----------------------------------------------------------
+      # The two browser origins, from the same values the web apps are served
+      # at. Without this the API falls back to its own localhost defaults and
+      # silently stops matching as soon as either URL changes.
+      CORS_ALLOWED_ORIGINS: ${FRONTEND_PUBLIC_URL:-http://localhost:3000},${ADMIN_PUBLIC_URL:-http://localhost:3001}
+
+      # ---- app.security.oauth2 and keycloak ----------------------------------
+      OAUTH2_ENABLED: "true"
+      # Accounts and roles live in Keycloak, so the people screens go through
+      # its admin API — from here, with the Keycloak Admin Client, rather than
+      # from the browser-facing dashboard.
+      KEYCLOAK_ADMIN_ENABLED: "true"
+      # Where this container dials Keycloak: kc-master, not localhost.
+      KEYCLOAK_SERVER_URL: http://kc-master:9090
+      KEYCLOAK_REALM: amstravel
+      KEYCLOAK_BACKOFFICE_REALM: amsadmin
+      # The iss a token carries is the URL the BROWSER saw, which is not the one
+      # above — hence both, and hence these two set explicitly rather than
+      # derived from KEYCLOAK_SERVER_URL.
+      KEYCLOAK_ISSUER_URI: http://localhost:9090/realms/amstravel
+      KEYCLOAK_BACKOFFICE_ISSUER_URI: http://localhost:9090/realms/amsadmin
+      # The secret of each realm's own API client, which this API authenticates
+      # as. Nothing here reaches master: the API does not create realms.
+      KEYCLOAK_CUSTOMER_CLIENT_SECRET: ${KEYCLOAK_CUSTOMER_CLIENT_SECRET:?set it in deployment/.env}
+      KEYCLOAK_BACKOFFICE_CLIENT_SECRET: ${KEYCLOAK_BACKOFFICE_CLIENT_SECRET:?set it in deployment/.env}
+
+      # ---- app.audit ---------------------------------------------------------
+      AUDIT_ENABLED: ${AUDIT_ENABLED:-true}
+      # Nothing else deletes from system.audit_logs, so its size follows uptime
+      # rather than catalogue size. Entries older than this are dropped nightly;
+      # 0 keeps everything.
+      AUDIT_RETENTION_DAYS: ${AUDIT_RETENTION_DAYS:-365}
+
+      # ---- google.maps and osm.routing ---------------------------------------
+      # The Routes API server key for corridor roads; see .env.example. Empty
+      # works them out on OpenStreetMap instead.
+      GOOGLE_MAPS_API_KEY: ${GOOGLE_MAPS_API_KEY:-}
+      OSM_ROUTING_URL: ${OSM_ROUTING_URL:-https://routing.openstreetmap.de}
+
+      # Everything else application.yml reads has a default that is right
+      # wherever it runs and is tuning rather than deployment — the Popular and
+      # Recommended sizes, the badge radius, the season zone, the staff page
+      # limits, the CORS method and header lists, the two request timeouts, the
+      # audit cron. They are set in application.yml and nowhere else, on purpose:
+      # repeating a default here would only be a second place to change it.
+    ports:
+      - "${APP_PORT:-8080}:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      # Healthy, not merely started: the API's Keycloak client caches the token
+      # it is first given, so a call made while Keycloak is still coming up can
+      # leave the people screens answering 503 for a minute afterwards.
+      kc-master:
+        condition: service_healthy
+    networks:
+      - ams_network
+
+  frontend:
+    build:
+      context: ../../frontend/landing-page
+      dockerfile: Dockerfile
+    container_name: amstravel-frontend
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      NEXT_PUBLIC_SITE_URL: ${FRONTEND_PUBLIC_URL:-http://localhost:3000}
+      API_BASE_URL: http://api:8080/api/v1
+      # The same path the API stamps into every stored image URL. next.config
+      # rewrites it to API_BASE_URL above, which is what lets the server-side
+      # image optimizer reach the API while the browser stays on this origin.
+      GOOGLE_MAPS_EMBED_KEY: ${GOOGLE_MAPS_EMBED_KEY:-}
+      # The browser key corridor maps are drawn with, read at runtime; see .env.example.
+      NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: ${NEXT_PUBLIC_GOOGLE_MAPS_API_KEY:-}
+      NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID: ${NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID:-}
+      KEYCLOAK_ISSUER_URL: http://localhost:9090/realms/amstravel
+      KEYCLOAK_INTERNAL_URL: http://kc-master:9090/realms/amstravel
+      KEYCLOAK_CLIENT_ID: amstravel-frontend
+      # Server-side only (never NEXT_PUBLIC_): the code exchange, token refresh, sign-out.
+      KEYCLOAK_CLIENT_SECRET: ${KEYCLOAK_FRONTEND_CLIENT_SECRET:?set KEYCLOAK_FRONTEND_CLIENT_SECRET in deployment/.env}
+    ports:
+      - "${FRONTEND_PORT:-3000}:3000"
+    # Ready, not merely started: a page rendered before the API answers is an
+    # error page, and "connection refused" for the first 15 seconds of every
+    # restart reads as a broken site.
+    depends_on:
+      api:
+        condition: service_healthy
+      kc-master:
+        condition: service_healthy
+      # Sign-up and sign-in must already ask for the email code when the site opens.
+    networks:
+      - ams_network
+
+  admin-dashboard:
+    build:
+      context: ../../admin-dashboard
+      dockerfile: Dockerfile
+    container_name: amstravel-admin-dashboard
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      NEXT_PUBLIC_SITE_URL: ${ADMIN_PUBLIC_URL:-http://localhost:3001}
+      # The website, for links such as "Open on the website" beside a region's Historical coverage.
+      WEBSITE_URL: ${FRONTEND_PUBLIC_URL:-http://localhost:3000}
+      API_BASE_URL: http://api:8080/api/v1
+      NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: ${NEXT_PUBLIC_GOOGLE_MAPS_API_KEY:-}
+      NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID: ${NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID:-}
+      KEYCLOAK_ISSUER_URL: http://localhost:9090/realms/amsadmin
+      KEYCLOAK_INTERNAL_URL: http://kc-master:9090/realms/amsadmin
+      KEYCLOAK_CLIENT_ID: amsadmin-dashboard
+      # Server-side only (never NEXT_PUBLIC_): the code exchange, token refresh, sign-out.
+      KEYCLOAK_CLIENT_SECRET: ${KEYCLOAK_DASHBOARD_CLIENT_SECRET:?set KEYCLOAK_DASHBOARD_CLIENT_SECRET in deployment/.env}
+    ports:
+      - "${ADMIN_DASHBOARD_PORT:-3001}:3001"
+    # Ready, not merely started: a page rendered before the API answers is an
+    # error page, and "connection refused" for the first 15 seconds of every
+    # restart reads as a broken site.
+    depends_on:
+      api:
+        condition: service_healthy
+      kc-master:
+        condition: service_healthy
+      # Sign-up and sign-in must already ask for the email code when the site opens.
+    networks:
+      - ams_network
+
+volumes:
+  postgres_data:
+  minio_data:
+  # The identity database: both realms, every role and composite, the clients,
+  # the flows and the five desk accounts. It is the one volume here with no
+  # other copy — the catalogue rebuilds itself from the seed files, MinIO is
+  # repopulated on the same start, and Redis is only a cache.
+  #
+  # external, so that `docker compose down -v` LEAVES IT ALONE. That command
+  # destroyed these realms five times in two days; production never wipes an
+  # identity database, and now neither does this. Everything else is still
+  # reset by it.
+  #
+  # The cost: on a machine that has never run this stack, compose refuses to
+  # start until the volume exists. Once, by hand:
+  #   docker volume create ams-keycloak-master_postgres_master_vol
+  #
+  # The name is spelled out rather than left to the project prefix because it
+  # predates this compose project; ams-travel_postgres_master_vol would be a
+  # different, empty volume.
+  postgres_master_vol:
+    name: ams-keycloak-master_postgres_master_vol
+    external: true
+  redis_data:
+
+networks:
+  ams_network:
+    driver: bridge

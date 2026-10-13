@@ -1,0 +1,10 @@
+# Real credentials for the local stack — Postgres, the Keycloak admin account,
+# the MinIO root user, and Superset. Compose loads .env automatically from its
+# own directory, so the file has to sit here rather than somewhere already
+# ignored. .env.example is the copy that gets committed.
+.env
+.env.*
+!.env.example
+
+# Database dumps: personal data, never committed.
+backups/

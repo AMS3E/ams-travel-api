@@ -1,5 +1,5 @@
 # The AMS Travel API, and the Keycloak image with the staff email-code step.
-# Built from this folder (api/api) by deployment/docker-compose.yml:
+# Built from this folder by deployment/docker-compose.yml:
 #   docker compose build api         (target runtime)
 #   docker compose build kc-master   (target keycloak)
 
