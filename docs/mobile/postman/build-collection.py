@@ -140,7 +140,8 @@ def operation(method, path):
 
 def request(method, path, name, query, body):
     op = operation(method, path)
-    url_path = path.replace("{id}", "{{id}}").replace("{targetType}", "DESTINATION").replace("{targetId}", "{{destinationId}}") \
+    # {{baseUrl}} already ends in /api/v1, so the request path starts after it.
+    url_path = path.removeprefix("/api/v1").replace("{id}", "{{id}}").replace("{targetType}", "DESTINATION").replace("{targetId}", "{{destinationId}}") \
         .replace("{destinationId}", "{{destinationId}}").replace("{userBadgeId}", "{{userBadgeId}}")
     params = []
     declared = {p["name"]: p for p in op.get("parameters", []) if p.get("in") == "query"}
