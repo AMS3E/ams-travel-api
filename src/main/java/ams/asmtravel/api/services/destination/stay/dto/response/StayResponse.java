@@ -64,6 +64,7 @@ public record StayResponse(
         String facebookUrl,
         String licenseNumber,
         Integer yearOpened,
-        List<String> specialties
+        List<String> specialties,
+        List<String> weekendNights
 ) {
 }

@@ -67,6 +67,7 @@ public record StayRoomResponse(
         Integer childrenFreeUnderAge,
         BigDecimal weeklyPrice,
         BigDecimal monthlyPrice,
-        Integer depositPercent
+        Integer depositPercent,
+        BigDecimal weekendPrice
 ) {
 }

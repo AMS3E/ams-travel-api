@@ -84,7 +84,8 @@ public record StayRequest(
         @Size(max = 512) String facebookUrl,
         @Size(max = 100) String licenseNumber,
         @Min(1800) @Max(2100) Integer yearOpened,
-        List<@NotBlank @Size(max = 100) String> specialties
+        List<@NotBlank @Size(max = 100) String> specialties,
+        List<@Pattern(regexp = "MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY", message = "Name a night by its day, e.g. FRIDAY") String> weekendNights
 ) {
 
     static final String PIN_REQUIRED = "Put the stay on the map: travellers find it by its pin";

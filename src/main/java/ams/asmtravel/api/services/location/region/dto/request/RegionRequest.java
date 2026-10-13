@@ -1,5 +1,6 @@
 package ams.asmtravel.api.services.location.region.dto.request;
 
+import ams.asmtravel.api.services.media.dto.request.MediaKey;
 import ams.asmtravel.api.services.location.region.domain.RegionKind;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -12,6 +13,7 @@ import java.util.UUID;
 /**
  * @param code         such as {@code COASTAL-ISLAND}; null makes one from the name (new) or keeps it (edit)
  * @param kind         null keeps it (new: ZONE)
+ * @param coverKey     the uploaded picture's key; null keeps it, empty removes it
  * @param categoryIds  a tourism region's shelves, in order; null keeps them
  * @param tagIds       its filter chips, in order; null keeps them
  * @param isActive     null keeps it (new: active)
@@ -24,6 +26,7 @@ public record RegionRequest(
         RegionKind kind,
         UUID parentId,
         String description,
+        @MediaKey(allowEmpty = true, message = "Upload the picture first, then send its key") String coverKey,
         List<UUID> categoryIds,
         List<UUID> tagIds,
         List<UUID> interestIds,

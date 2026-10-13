@@ -76,6 +76,7 @@ public record StayRoomRequest(
         @Min(0) @Max(17) Integer childrenFreeUnderAge,
         @DecimalMin("0") @Digits(integer = 10, fraction = 2) BigDecimal weeklyPrice,
         @DecimalMin("0") @Digits(integer = 10, fraction = 2) BigDecimal monthlyPrice,
-        @Min(1) @Max(100) Integer depositPercent
+        @Min(1) @Max(100) Integer depositPercent,
+        @DecimalMin("0") @Digits(integer = 10, fraction = 2) BigDecimal weekendPrice
 ) {
 }

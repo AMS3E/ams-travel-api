@@ -172,6 +172,9 @@ public class RegionServiceImpl implements RegionService {
         region.setName(request.name().trim());
         region.setParentId(parentId);
         region.setDescription(request.description());
+        if (request.coverKey() != null) {
+            region.setCoverKey(request.coverKey().isBlank() ? null : request.coverKey().trim());
+        }
         if (request.kind() != null) {
             region.setKind(request.kind());
         }

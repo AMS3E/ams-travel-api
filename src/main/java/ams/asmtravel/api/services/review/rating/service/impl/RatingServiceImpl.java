@@ -9,6 +9,8 @@ import ams.asmtravel.api.services.destination.food.domain.FoodDeletingEvent;
 import ams.asmtravel.api.services.destination.food.service.FoodService;
 import ams.asmtravel.api.services.destination.stay.domain.StayDeletingEvent;
 import ams.asmtravel.api.services.destination.stay.service.StayService;
+import ams.asmtravel.api.services.corridor.domain.CorridorDeletingEvent;
+import ams.asmtravel.api.services.corridor.service.CorridorService;
 import ams.asmtravel.api.services.review.rating.domain.Rating;
 import ams.asmtravel.api.services.review.rating.domain.RatingStatus;
 import ams.asmtravel.api.services.review.rating.domain.RatingTargetType;
@@ -58,6 +60,7 @@ public class RatingServiceImpl implements RatingService {
     private final DestinationService destinationService;
     private final StayService stayService;
     private final FoodService foodService;
+    private final CorridorService corridorService;
 
     @Override
     @Transactional(readOnly = true)
@@ -201,6 +204,11 @@ public class RatingServiceImpl implements RatingService {
         ratingRepository.deleteByTarget(RatingTargetType.FOOD, event.foodId());
     }
 
+    @EventListener
+    public void onCorridorDeleting(CorridorDeletingEvent event) {
+        ratingRepository.deleteByTarget(RatingTargetType.CORRIDOR, event.corridorId());
+    }
+
     /** A new rating, or a deleted one brought back; either earns the day's point for the place when still due. */
     private Rating save(UUID userId, RatingTargetType targetType, UUID targetId, int stars, Optional<Rating> deleted) {
         if (!isPublished(targetType, targetId)) {
@@ -245,6 +253,7 @@ public class RatingServiceImpl implements RatingService {
             case DESTINATION -> destinationService.isPublished(targetId);
             case STAY -> stayService.isPublished(targetId);
             case FOOD -> foodService.isPublished(targetId);
+            case CORRIDOR -> corridorService.isPublished(targetId);
         };
     }
 

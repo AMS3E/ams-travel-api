@@ -2,6 +2,8 @@ package ams.asmtravel.api.services.review.review.dto.response;
 
 import ams.asmtravel.api.services.review.review.domain.ReviewStatus;
 import ams.asmtravel.api.services.review.review.domain.ReviewTargetType;
+import ams.asmtravel.api.services.review.review.domain.ReviewVisitType;
+import java.time.YearMonth;
 import ams.asmtravel.api.services.media.dto.response.MediaResponse;
 
 import java.time.Instant;
@@ -19,6 +21,8 @@ public record ReviewResponse(
         Integer rating,
         String title,
         String content,
+        ReviewVisitType visitType,
+        YearMonth visitedOn,
         ReviewStatus status,
         String moderationNote,
         Instant moderatedAt,

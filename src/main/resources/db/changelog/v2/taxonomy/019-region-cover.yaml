@@ -1,0 +1,14 @@
+# A tourism region has a cover picture: the app's Explore cards and the banner of
+# its page show it. Null until an editor chooses one.
+databaseChangeLog:
+  - changeSet:
+      id: v2-taxonomy-region-cover
+      author: ams-travel-v2
+      changes:
+        - addColumn:
+            schemaName: taxonomy
+            tableName: regions
+            columns:
+              - column: {name: cover_key, type: varchar(512)}
+      rollback:
+        - dropColumn: {schemaName: taxonomy, tableName: regions, columnName: cover_key}

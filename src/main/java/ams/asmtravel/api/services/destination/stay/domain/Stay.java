@@ -89,6 +89,10 @@ public class Stay {
     @JdbcTypeCode(SqlTypes.JSON)
     private List<String> amenities = new ArrayList<>();
 
+    /** The nights a room's weekend price applies to, named by the day they start; Friday and Saturday unless the host says otherwise. */
+    @JdbcTypeCode(SqlTypes.JSON)
+    private List<String> weekendNights = new ArrayList<>(List.of("FRIDAY", "SATURDAY"));
+
     /** Slugs from {@link StaySpecialties} for its kind of stay. */
     @JdbcTypeCode(SqlTypes.JSON)
     private List<String> specialties = new ArrayList<>();

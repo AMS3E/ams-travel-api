@@ -22,10 +22,12 @@ public interface PopularService {
     /**
      * Most-browsed published places lately.
      *
-     * @param regionId only this zone or tourism region; null for everywhere
-     * @param limit    how many; null for the configured size
+     * @param regionId    only this zone or tourism region; null for everywhere
+     * @param provinceId  only this province; null for everywhere
+     * @param interestIds only places with any of these interests; null or empty for all
+     * @param limit       how many; null for the configured size
      */
-    PopularResponse popular(UUID regionId, Integer limit);
+    PopularResponse popular(UUID regionId, UUID provinceId, Set<UUID> interestIds, Integer limit);
 
     // For other services.
 

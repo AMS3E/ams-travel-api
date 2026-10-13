@@ -10,6 +10,7 @@ public enum MediaType {
     STAY,
     FOOD,
     CORRIDOR,
+    REGION,
     PARTNER,
     VERIFICATION,
     GENERAL;

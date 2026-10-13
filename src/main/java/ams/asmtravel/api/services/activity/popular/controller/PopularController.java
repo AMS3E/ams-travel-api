@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Set;
 import java.util.UUID;
 
 /** Browse events and the homepage's Popular list. A signed-in visitor is read from the token. */
@@ -31,11 +32,13 @@ public class PopularController {
     private final PopularService popularService;
     private final UserService userService;
 
-    /** {@code ?regionId=} for one zone or tourism region, {@code ?limit=} for how many. */
+    /** {@code ?regionId=} for one zone or tourism region, {@code ?provinceId=} for one province, {@code ?interestIds=} for any of some interests, {@code ?limit=} for how many. */
     @GetMapping
     public PopularResponse popular(@RequestParam(required = false) UUID regionId,
+                                   @RequestParam(required = false) UUID provinceId,
+                                   @RequestParam(required = false) Set<UUID> interestIds,
                                    @RequestParam(required = false) @Min(1) @Max(50) Integer limit) {
-        return popularService.popular(regionId, limit);
+        return popularService.popular(regionId, provinceId, interestIds, limit);
     }
 
     @PostMapping("/events")

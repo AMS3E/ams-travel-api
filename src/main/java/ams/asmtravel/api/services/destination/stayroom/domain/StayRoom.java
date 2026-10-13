@@ -153,6 +153,10 @@ public class StayRoom {
     @Column(precision = 12, scale = 2)
     private BigDecimal highSeasonPrice;
 
+    /** What a night costs on the stay's weekend nights; null when the same as every night. */
+    @Column(precision = 12, scale = 2)
+    private BigDecimal weekendPrice;
+
     /** Whether the price includes VAT and accommodation tax. */
     @Column(nullable = false)
     private Boolean taxesIncluded = true;

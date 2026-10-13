@@ -1,6 +1,8 @@
 package ams.asmtravel.api.services.review.review.service.impl;
 
 import ams.asmtravel.api.services.authorization.domain.Authorities;
+import ams.asmtravel.api.services.corridor.domain.CorridorDeletingEvent;
+import ams.asmtravel.api.services.corridor.service.CorridorService;
 import ams.asmtravel.api.services.point.service.PointService;
 import ams.asmtravel.api.services.destination.destination.domain.DestinationDeletingEvent;
 import ams.asmtravel.api.services.destination.destination.service.DestinationService;
@@ -30,6 +32,8 @@ import ams.asmtravel.api.services.review.review.specification.ReviewSpecificatio
 import ams.asmtravel.api.services.point.domain.PointSourceType;
 import ams.asmtravel.api.services.user.user.domain.UserDeletingEvent;
 import ams.asmtravel.api.services.user.user.domain.UserSummary;
+import java.time.LocalDate;
+import java.time.YearMonth;
 import ams.asmtravel.api.services.user.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -76,6 +80,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final DestinationService destinationService;
     private final StayService stayService;
     private final FoodService foodService;
+    private final CorridorService corridorService;
     private final UserService userService;
     private final ReviewMapper mapper;
     private final ApplicationEventPublisher events;
@@ -171,6 +176,8 @@ public class ReviewServiceImpl implements ReviewService {
         review.setTargetId(request.targetId());
         review.setTitle(clean(request.title()));
         review.setContent(clean(request.content()));
+        review.setVisitType(request.visitType());
+        review.setVisitedOn(firstDay(request.visitedOn()));
         review.setStatus(ReviewStatus.PUBLISHED);
         review.setModeratedBy(null);
         review.setModeratedAt(null);
@@ -268,6 +275,11 @@ public class ReviewServiceImpl implements ReviewService {
         removeAll(reviewRepository.findByTargetTypeAndTargetId(ReviewTargetType.FOOD, event.foodId()));
     }
 
+    @EventListener
+    public void onCorridorDeleting(CorridorDeletingEvent event) {
+        removeAll(reviewRepository.findByTargetTypeAndTargetId(ReviewTargetType.CORRIDOR, event.corridorId()));
+    }
+
     /** The author's words, stars and photos; a null field keeps its value. */
     private void edit(Review review, UpdateReviewRequest request) {
         if (request.title() != null) {
@@ -275,6 +287,12 @@ public class ReviewServiceImpl implements ReviewService {
         }
         if (request.content() != null) {
             review.setContent(clean(request.content()));
+        }
+        if (request.visitType() != null) {
+            review.setVisitType(request.visitType());
+        }
+        if (request.visitedOn() != null) {
+            review.setVisitedOn(firstDay(request.visitedOn()));
         }
         if (request.photoKeys() != null) {
             photoService.replaceReviewPhotos(review.getId(), request.photoKeys());
@@ -335,6 +353,7 @@ public class ReviewServiceImpl implements ReviewService {
             case DESTINATION -> destinationService.isPublished(targetId);
             case STAY -> stayService.isPublished(targetId);
             case FOOD -> foodService.isPublished(targetId);
+            case CORRIDOR -> corridorService.isPublished(targetId);
         };
     }
 
@@ -352,6 +371,11 @@ public class ReviewServiceImpl implements ReviewService {
 
     private static RatingService.Rater rater(Review review) {
         return new RatingService.Rater(review.getUserId(), review.getTargetId());
+    }
+
+    /** The month of the visit is kept as its first day. */
+    private static LocalDate firstDay(YearMonth month) {
+        return month == null ? null : month.atDay(1);
     }
 
     private static String clean(String text) {

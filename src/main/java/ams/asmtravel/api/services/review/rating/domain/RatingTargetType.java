@@ -4,5 +4,6 @@ package ams.asmtravel.api.services.review.rating.domain;
 public enum RatingTargetType {
     DESTINATION,
     STAY,
-    FOOD
+    FOOD,
+    CORRIDOR
 }

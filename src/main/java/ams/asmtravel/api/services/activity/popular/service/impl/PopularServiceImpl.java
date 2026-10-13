@@ -76,16 +76,18 @@ public class PopularServiceImpl implements PopularService {
 
     @Override
     @Transactional(readOnly = true)
-    public PopularResponse popular(UUID regionId, Integer limit) {
+    public PopularResponse popular(UUID regionId, UUID provinceId, Set<UUID> interestIds, Integer limit) {
         if (regionId != null && !regionService.exists(regionId)) {
             throw new RegionNotFoundException();
         }
         int size = limit == null ? properties.size() : limit;
 
-        // Published places, only in the named zone or region if one is given.
+        // Published places, only those the filters keep: a zone or region, a province, any of some interests.
         Map<UUID, DestinationSummary> catalogue = new LinkedHashMap<>();
         destinationService.findPublishedSummaries().stream()
                 .filter(place -> regionId == null || place.inRegion(regionId))
+                .filter(place -> provinceId == null || provinceId.equals(place.provinceId()))
+                .filter(place -> interestIds == null || interestIds.isEmpty() || place.interestIds().stream().anyMatch(interestIds::contains))
                 .forEach(place -> catalogue.put(place.id(), place));
 
         // Whatever visitors browse most, published places only.

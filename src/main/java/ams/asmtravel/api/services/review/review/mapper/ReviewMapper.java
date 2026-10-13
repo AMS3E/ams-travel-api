@@ -22,6 +22,8 @@ public abstract class ReviewMapper {
     @Mapping(target = "userId", source = "review.userId")
     @Mapping(target = "authorName", source = "author.fullName")
     @Mapping(target = "authorAvatarUrl", expression = "java(author == null ? null : mediaService.url(author.avatarKey()))")
+    @Mapping(target = "visitType", source = "review.visitType")
+    @Mapping(target = "visitedOn", expression = "java(review.getVisitedOn() == null ? null : java.time.YearMonth.from(review.getVisitedOn()))")
     @Mapping(target = "photos", source = "photos")
     @Mapping(target = "rating", source = "rating")
     @Mapping(target = "createdAt", source = "review.createdAt")

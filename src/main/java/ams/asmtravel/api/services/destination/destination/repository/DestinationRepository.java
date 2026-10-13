@@ -4,6 +4,8 @@ import ams.asmtravel.api.services.destination.destination.domain.Destination;
 import ams.asmtravel.api.services.destination.destination.domain.ListingStatus;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,7 +15,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-public interface DestinationRepository extends JpaRepository<Destination, UUID> {
+public interface DestinationRepository extends JpaRepository<Destination, UUID>, JpaSpecificationExecutor<Destination> {
+    /** Up to a page of published places whose name contains the text, A to Z: the search box's suggestions. */
+    List<Destination> findByStatusAndNameContainingIgnoreCaseOrderByNameAsc(ListingStatus status, String name, Pageable pageable);
+
 
     /* Joins province and zone; collections load in batches. */
     @EntityGraph(attributePaths = {"province", "province.region"})

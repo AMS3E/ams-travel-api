@@ -99,7 +99,7 @@ class ServiceBoundaryTests {
     private static final Set<String> CONTRACT =
             Set.of("domain", "dto", "request", "response", "service", "exception");
     /** Features with no table of their own: they read Keycloak, MinIO, or other services' rows. */
-    private static final Set<String> TABLELESS = Set.of("admin", "realm", "recommendation");
+    private static final Set<String> TABLELESS = Set.of("admin", "realm", "recommendation", "search");
     private static final Pattern ENTITY = Pattern.compile("^@Entity\\b", Pattern.MULTILINE);
     private static final Pattern BASE_URL = Pattern.compile("^@RequestMapping\\(\"([^\"]+)\"\\)", Pattern.MULTILINE);
     /** The entity a repository is for, as {@code JpaRepository<Review, …>} or a query over it. */

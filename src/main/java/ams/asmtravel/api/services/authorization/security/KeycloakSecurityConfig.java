@@ -273,6 +273,9 @@ public class KeycloakSecurityConfig {
                 .requestMatchers("/api/v1/roles", "/api/v1/roles/**")
                         .hasAnyAuthority(Permissions.ROLE_ASSIGN, Permissions.FULL_CONTROL)
 
+                /* Search: what the app's search box, filters, lists and cards read; published places only. */
+                .requestMatchers(HttpMethod.GET, "/api/v1/search", "/api/v1/search/**").permitAll()
+
                 /* Seasons: public read, admin write; a person's own totals need a sign-in. */
                 .requestMatchers(HttpMethod.GET, "/api/v1/seasons/me/*").authenticated()
                 .requestMatchers(HttpMethod.GET, "/api/v1/seasons", "/api/v1/seasons/*").permitAll()
@@ -302,7 +305,8 @@ public class KeycloakSecurityConfig {
                         .hasAnyAuthority(Permissions.LISTING_EDIT_OWN, Permissions.DESTINATION_EDIT_ANY,
                                 Permissions.FULL_CONTROL)
 
-                /* Stay rooms: same editors as the stay. */
+                /* Stay rooms: same editors as the stay; the price preview is public. */
+                .requestMatchers(HttpMethod.GET, "/api/v1/stay-rooms/quote", "/api/v1/stay-rooms/*/quote").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/v1/stay-rooms", "/api/v1/stay-rooms/*").permitAll()
                 .requestMatchers("/api/v1/stay-rooms", "/api/v1/stay-rooms/*")
                         .hasAnyAuthority(Permissions.LISTING_EDIT_OWN, Permissions.DESTINATION_EDIT_ANY,

@@ -1,5 +1,10 @@
 package ams.asmtravel.api.services.destination.destination.service.impl;
 
+import ams.asmtravel.api.services.destination.destination.domain.DestinationSearch;
+import ams.asmtravel.api.services.destination.destination.specification.DestinationSpecification;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import ams.asmtravel.api.services.taxonomy.category.domain.CategoryDeletingEvent;
 import ams.asmtravel.api.services.taxonomy.category.service.CategoryService;
 import ams.asmtravel.api.services.destination.destination.domain.Destination;
@@ -77,6 +82,35 @@ public class DestinationServiceImpl implements DestinationService {
                     .stream().toList();
         }
         return destinationRepository.findAllByStatusOrderByNameAsc(ListingStatus.PUBLISHED).stream()
+                .map(mapper::toDestinationResponse)
+                .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<DestinationResponse> searchPublished(DestinationSearch search, Pageable pageable) {
+        return destinationRepository.findAll(DestinationSpecification.published(search), pageable).map(mapper::toDestinationResponse);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<DestinationResponse> findPublished(Collection<UUID> ids) {
+        if (ids == null || ids.isEmpty()) {
+            return List.of();
+        }
+        return destinationRepository.findAllByIdIn(ids).stream()
+                .filter(destination -> destination.getStatus() == ListingStatus.PUBLISHED)
+                .map(mapper::toDestinationResponse)
+                .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<DestinationResponse> suggestPublished(String text, int limit) {
+        if (text == null || text.isBlank() || limit < 1) {
+            return List.of();
+        }
+        return destinationRepository.findByStatusAndNameContainingIgnoreCaseOrderByNameAsc(ListingStatus.PUBLISHED, text.trim(), PageRequest.of(0, limit)).stream()
                 .map(mapper::toDestinationResponse)
                 .toList();
     }

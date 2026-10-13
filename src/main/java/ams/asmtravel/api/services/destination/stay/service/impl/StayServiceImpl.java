@@ -39,6 +39,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
 
@@ -280,6 +281,10 @@ public class StayServiceImpl implements StayService {
                     "No such specialty: " + String.join(", ", unknownSpecialties));
         }
         stay.setSpecialties(new ArrayList<>(specialties));
+        /* Null keeps the weekend nights (Friday and Saturday on a new stay); an empty list means no night costs more. */
+        if (request.weekendNights() != null) {
+            stay.setWeekendNights(new ArrayList<>(request.weekendNights().stream().map(night -> night.trim().toUpperCase(Locale.ROOT)).distinct().toList()));
+        }
         stay.setCoverKey(request.coverKey() == null || request.coverKey().isBlank() ? null : request.coverKey());
         stay.setAddress(request.address() == null || request.address().isBlank() ? null : request.address().trim());
         stay.setLatitude(request.latitude());

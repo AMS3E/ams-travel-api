@@ -16,6 +16,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.UUID;
 
 /** A visitor's review of a destination, stay or food, named by type and id. One per person per place. */
@@ -59,6 +60,14 @@ public class Review {
 
     @Column(length = 500)
     private String moderationNote;
+
+    /** Who the author travelled with, when they said. */
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20)
+    private ReviewVisitType visitType;
+
+    /** The month of the visit, kept as its first day; null when not said. */
+    private LocalDate visitedOn;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
