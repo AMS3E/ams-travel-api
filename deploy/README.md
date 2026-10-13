@@ -9,6 +9,5 @@ cp .env.example .env     # fill in the passwords
 docker compose up -d
 ```
 
-The full guide, written for the mobile team, is `../docs/mobile/README.md`. The same files serve a hosted
-deployment: set `KEYCLOAK_PUBLIC_URL`, `WEBSITE_URL`, `DASHBOARD_URL` to the public addresses and
-`KEYCLOAK_SSL_REQUIRED=external`, and replace Mailpit's SMTP settings in the realm files with a real mail server.
+The full guide, written for the mobile team, is `../docs/mobile/README.md`. For a server, use
+`docker-compose.dokploy.yml` with `.env.dokploy.example` and `dashboard.env.example`: the steps are in `DOKPLOY.md`.

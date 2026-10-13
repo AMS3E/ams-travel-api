@@ -361,11 +361,13 @@
   "smtpServer": {
     "host": "__SMTP_HOST__",
     "port": "__SMTP_PORT__",
-    "from": "noreply@amstravel.local",
-    "fromDisplayName": "AMS Travel",
-    "auth": "false",
-    "ssl": "false",
-    "starttls": "false",
+    "from": "__SMTP_FROM__",
+    "fromDisplayName": "__SMTP_FROM_NAME__",
+    "auth": "__SMTP_AUTH__",
+    "user": "__SMTP_USER__",
+    "password": "__SMTP_PASSWORD__",
+    "ssl": "__SMTP_SSL__",
+    "starttls": "__SMTP_STARTTLS__",
     "replyTo": ""
   }
 }
