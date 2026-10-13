@@ -1,5 +1,8 @@
 package ams.asmtravel.api.services.destination.destination.service;
 
+import ams.asmtravel.api.services.destination.destination.domain.DestinationSearch;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import ams.asmtravel.api.services.destination.destination.domain.Destination;
 import ams.asmtravel.api.services.destination.destination.domain.DestinationSummary;
 import ams.asmtravel.api.services.destination.destination.dto.request.DestinationRequest;
@@ -16,6 +19,15 @@ public interface DestinationService {
 
     /** Published places by name, or the one a slug names. */
     List<DestinationResponse> getPublished(String slug);
+
+    /** Published places matching the search, a page at a time in name order: the app's search and filtered lists. */
+    Page<DestinationResponse> searchPublished(DestinationSearch search, Pageable pageable);
+
+    /** The published places among these ids, in no particular order; unknown and unpublished ids are left out. */
+    List<DestinationResponse> findPublished(Collection<UUID> ids);
+
+    /** Up to {@code limit} published places whose name contains the text, A to Z. */
+    List<DestinationResponse> suggestPublished(String text, int limit);
 
     /** Published for anyone; unpublished only for desks that reach it; 404 otherwise. */
     DestinationResponse findById(UUID id);

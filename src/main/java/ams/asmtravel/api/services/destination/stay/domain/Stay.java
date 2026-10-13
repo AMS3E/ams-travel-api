@@ -2,6 +2,7 @@ package ams.asmtravel.api.services.destination.stay.domain;
 
 import ams.asmtravel.api.services.destination.destination.domain.Destination;
 import ams.asmtravel.api.services.destination.destination.domain.ListingStatus;
+import ams.asmtravel.api.services.location.province.domain.Province;
 import ams.asmtravel.api.services.taxonomy.interest.domain.Interest;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -67,6 +68,18 @@ public class Stay {
     @Column(columnDefinition = "text")
     private String description;
 
+    /** One line someone said about it, quoted at the top of its page on the app. */
+    @Column(length = 300)
+    private String slogan;
+
+    /** Who said it. */
+    @Column(length = 120)
+    private String sloganBy;
+
+    /** The stay's policies in the host's own words, as Markdown: check-in and check-out, children, pets, smoking, paying. */
+    @Column(columnDefinition = "text")
+    private String policies;
+
     @Column(precision = 12, scale = 2)
     private BigDecimal priceFrom;
 
@@ -75,6 +88,10 @@ public class Stay {
 
     @JdbcTypeCode(SqlTypes.JSON)
     private List<String> amenities = new ArrayList<>();
+
+    /** The nights a room's weekend price applies to, named by the day they start; Friday and Saturday unless the host says otherwise. */
+    @JdbcTypeCode(SqlTypes.JSON)
+    private List<String> weekendNights = new ArrayList<>(List.of("FRIDAY", "SATURDAY"));
 
     /** Slugs from {@link StaySpecialties} for its kind of stay. */
     @JdbcTypeCode(SqlTypes.JSON)
@@ -168,6 +185,11 @@ public class Stay {
 
     @Column(columnDefinition = "text")
     private String address;
+
+    /** The province the pin is in, when known. Travellers still find it by its pin. */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "province_id")
+    private Province province;
 
     @Column(precision = 10, scale = 7)
     private BigDecimal latitude;

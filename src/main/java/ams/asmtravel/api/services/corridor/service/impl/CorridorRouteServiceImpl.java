@@ -105,7 +105,7 @@ public class CorridorRouteServiceImpl implements CorridorRouteService {
         }
         // Drafts too, so routes from older leg logic get replaced.
         List<UUID> corridors = reading.execute(status -> corridorRepository
-                .findAllByOrderByIsFeaturedDescNameAsc().stream().map(Corridor::getId).toList());
+                .findAllByOrderByNameAsc().stream().map(Corridor::getId).toList());
         Objects.requireNonNullElse(corridors, List.<UUID>of()).forEach(this::calculateQuietly);
     }
 

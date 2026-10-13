@@ -1,0 +1,42 @@
+# A stay's and a food listing's slogan — one line someone said about it, quoted
+# at the top of its page on the app, with who said it — and the province each
+# is in, filled from its map pin. All optional: the pin stays how travellers
+# find them, and a deleted province leaves them in place.
+databaseChangeLog:
+  - changeSet:
+      id: v2-stay-food-slogan-province
+      author: ams-travel-v2
+      changes:
+        - addColumn:
+            schemaName: destination
+            tableName: destination_stays
+            columns:
+              - column: {name: slogan, type: varchar(300)}
+              - column: {name: slogan_by, type: varchar(120)}
+              - column: {name: province_id, type: uuid}
+        - addColumn:
+            schemaName: destination
+            tableName: destination_foods
+            columns:
+              - column: {name: slogan, type: varchar(300)}
+              - column: {name: slogan_by, type: varchar(120)}
+              - column: {name: province_id, type: uuid}
+        - addForeignKeyConstraint: {baseTableSchemaName: destination, baseTableName: destination_stays, baseColumnNames: province_id, constraintName: fk_destination_stays_province, referencedTableSchemaName: taxonomy, referencedTableName: provinces, referencedColumnNames: id, onDelete: SET NULL}
+        - addForeignKeyConstraint: {baseTableSchemaName: destination, baseTableName: destination_foods, baseColumnNames: province_id, constraintName: fk_destination_foods_province, referencedTableSchemaName: taxonomy, referencedTableName: provinces, referencedColumnNames: id, onDelete: SET NULL}
+      rollback:
+        - dropForeignKeyConstraint: {baseTableSchemaName: destination, baseTableName: destination_stays, constraintName: fk_destination_stays_province}
+        - dropForeignKeyConstraint: {baseTableSchemaName: destination, baseTableName: destination_foods, constraintName: fk_destination_foods_province}
+        - dropColumn:
+            schemaName: destination
+            tableName: destination_stays
+            columns:
+              - column: {name: slogan}
+              - column: {name: slogan_by}
+              - column: {name: province_id}
+        - dropColumn:
+            schemaName: destination
+            tableName: destination_foods
+            columns:
+              - column: {name: slogan}
+              - column: {name: slogan_by}
+              - column: {name: province_id}

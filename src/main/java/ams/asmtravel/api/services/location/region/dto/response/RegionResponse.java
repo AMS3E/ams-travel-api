@@ -21,6 +21,8 @@ public record RegionResponse(
         UUID parentId,
         String description,
         String historyIntro,
+        String coverKey,
+        String coverUrl,
         List<UUID> categoryIds,
         List<UUID> tagIds,
         List<UUID> interestIds,

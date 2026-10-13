@@ -23,6 +23,7 @@ public abstract class FoodMapper {
     protected MediaService mediaService;
 
     @Mapping(target = "destinationId", source = "destination.id")
+    @Mapping(target = "provinceId", source = "province.id")
     @Mapping(target = "coverUrl", expression = "java(mediaService.url(food.getCoverKey()))")
     @Mapping(target = "categoryIds", expression = "java(ids(food.getCategories(), Category::getId))")
     @Mapping(target = "tagIds", expression = "java(ids(food.getTags(), Tag::getId))")

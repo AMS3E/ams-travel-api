@@ -7,10 +7,16 @@ import ams.asmtravel.api.services.destination.destination.service.DestinationSer
 import ams.asmtravel.api.services.media.domain.MediaType;
 import ams.asmtravel.api.services.media.service.MediaService;
 import ams.asmtravel.api.services.publishing.service.PublishingService.Desk;
+import ams.asmtravel.api.services.review.review.domain.ReviewTargetType;
+import ams.asmtravel.api.services.review.review.dto.response.ReviewSummaryResponse;
+import ams.asmtravel.api.services.review.review.service.ReviewService;
 import ams.asmtravel.api.services.user.user.domain.UserDeletingEvent;
 import ams.asmtravel.api.services.user.user.domain.UserSummary;
 import ams.asmtravel.api.services.user.user.service.UserService;
+import ams.asmtravel.api.services.verification.config.VerificationProperties;
 import ams.asmtravel.api.services.verification.domain.DestinationVerification;
+import ams.asmtravel.api.services.verification.domain.Standing;
+import ams.asmtravel.api.services.verification.domain.VerificationBasis;
 import ams.asmtravel.api.services.verification.dto.request.VerificationRequest;
 import ams.asmtravel.api.services.verification.dto.response.VerificationResponse;
 import ams.asmtravel.api.services.verification.mapper.VerificationMapper;
@@ -28,14 +34,16 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
-/** Records verification decisions; checks access via {@link VerifierDesks} and the required evidence or reason. */
+/**
+ * Records verification decisions, checks access via {@link VerifierDesks} and what
+ * each basis needs, and reads the travellers' standing from the review service.
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -47,6 +55,8 @@ public class VerificationServiceImpl implements VerificationService {
     private final MediaService mediaService;
     private final VerifierDesks verifierDesks;
     private final VerificationMapper mapper;
+    private final ReviewService reviewService;
+    private final VerificationProperties properties;
 
     @Override
     @Transactional(readOnly = true)
@@ -61,15 +71,18 @@ public class VerificationServiceImpl implements VerificationService {
         if (reachable.isEmpty()) {
             return List.of();
         }
-        Map<UUID, DestinationVerification> latest = latestOf(reachable.stream().map(DestinationSummary::id).toList());
+        List<UUID> ids = reachable.stream().map(DestinationSummary::id).toList();
+        Map<UUID, DestinationVerification> latest = latestOf(ids);
+        Map<UUID, Standing> standings = standingsOf(ids);
         Map<UUID, UserSummary> deciders = userService.findSummaries(
                 latest.values().stream().map(DestinationVerification::getDecidedBy).toList());
         return reachable.stream()
                 .map(place -> {
                     DestinationVerification last = latest.get(place.id());
-                    return last == null
+                    VerificationResponse decision = last == null
                             ? mapper.undecided(place, deskOf.get(place.id()))
                             : mapper.toResponse(last, deskOf.get(place.id()), nameOf(deciders.get(last.getDecidedBy())));
+                    return mapper.standing(decision, standings.getOrDefault(place.id(), Standing.NONE));
                 })
                 .toList();
     }
@@ -90,16 +103,31 @@ public class VerificationServiceImpl implements VerificationService {
     @Transactional
     public VerificationResponse record(VerificationRequest request, UUID deciderId, Authentication authentication) {
         UUID destinationId = request.destinationId();
-        requireReach(destinationId, authentication);
+        Desk desk = requireReach(destinationId, authentication);
         boolean verified = request.verified();
+        VerificationBasis basis = verified ? request.basis() : null;
         String note = trimmedOrNull(request.note());
         String evidenceKey = trimmedOrNull(request.evidenceKey());
         String reference = trimmedOrNull(request.reference());
 
-        // Verifying needs the evidence file or at least its number.
-        if (verified && reference == null && evidenceKey == null) {
+        if (verified && basis == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    "Attach the invoice or receipt, or give its number, to verify");
+                    "Say what the verification rests on: an official site, a partnership, or a payment");
+        }
+        if (verified && !basis.filed()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Recommended by Traveler is earned from reviews; it cannot be filed");
+        }
+        // A paid or partner verification needs the paperwork, or at least its number.
+        if (verified && basis.needsPaperwork() && reference == null && evidenceKey == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, basis == VerificationBasis.PAID
+                    ? "Attach the invoice or receipt, or give its number, to verify"
+                    : "Attach the partnership agreement, or give its reference, to verify");
+        }
+        if (verified && basis == VerificationBasis.PARTNER && desk != Desk.PARTNER) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+                    "Only a partner's own listing is verified as a partner's; this one was written by "
+                            + (desk == Desk.CONTRIBUTOR ? "a contributor" : "our team"));
         }
         DestinationVerification last = latestOf(List.of(destinationId)).get(destinationId);
         if (!verified && (last == null || !last.getVerified())) {
@@ -116,6 +144,7 @@ public class VerificationServiceImpl implements VerificationService {
         DestinationVerification decision = new DestinationVerification();
         decision.setDestination(destinationService.getEntity(destinationId));
         decision.setVerified(verified);
+        decision.setBasis(basis);
         decision.setReference(reference);
         decision.setNote(note);
         decision.setEvidenceKey(evidenceKey);
@@ -129,16 +158,21 @@ public class VerificationServiceImpl implements VerificationService {
     @Transactional(readOnly = true)
     public List<VerificationResponse> findStatuses(List<UUID> destinationIds) {
         if (!destinationIds.isEmpty()) {
-            Map<UUID, DestinationVerification> latest = latestOf(destinationIds);
-            return destinationIds.stream().distinct().map(id -> mapper.publicStatus(id, latest.get(id))).toList();
+            List<UUID> ids = destinationIds.stream().distinct().toList();
+            Map<UUID, DestinationVerification> latest = latestOf(ids);
+            Map<UUID, Standing> standings = standingsOf(ids);
+            return ids.stream()
+                    .map(id -> mapper.publicStatus(id, latest.get(id), standings.getOrDefault(id, Standing.NONE)))
+                    .toList();
         }
-        Set<UUID> published = new HashSet<>();
-        destinationService.findPublishedSummaries().forEach(place -> published.add(place.id()));
+        // Every published place that is verified: by a desk's decision, or by its reviews.
+        List<UUID> published = destinationService.findPublishedSummaries().stream().map(DestinationSummary::id).toList();
         Map<UUID, DestinationVerification> latest = new HashMap<>();
         verificationRepository.findAllNewestFirst().forEach(decision -> latest.putIfAbsent(decision.getDestination().getId(), decision));
-        return latest.entrySet().stream()
-                .filter(entry -> published.contains(entry.getKey()) && entry.getValue().getVerified())
-                .map(entry -> mapper.publicStatus(entry.getKey(), entry.getValue()))
+        Map<UUID, Standing> standings = standingsOf(published);
+        return published.stream()
+                .map(id -> mapper.publicStatus(id, latest.get(id), standings.getOrDefault(id, Standing.NONE)))
+                .filter(VerificationResponse::verified)
                 .toList();
     }
 
@@ -155,14 +189,29 @@ public class VerificationServiceImpl implements VerificationService {
         }
     }
 
-    /** 404 if the place is missing; 403 if outside the caller's desks. */
-    private void requireReach(UUID destinationId, Authentication authentication) {
+    /** The place's desk; 404 if the place is missing, 403 if outside the caller's desks. */
+    private Desk requireReach(UUID destinationId, Authentication authentication) {
         DestinationSummary place = destinationService.findSummary(destinationId)
                 .orElseThrow(() -> new DestinationNotFoundException());
         Desk desk = desksOf(List.of(place)).get(place.id());
         if (!verifierDesks.desksOf(authentication).contains(desk)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Your desk does not verify this destination");
         }
+        return desk;
+    }
+
+    /** Each place's star ratings and whether they earn the travellers' seal; the review service answers 100 at a time. */
+    private Map<UUID, Standing> standingsOf(List<UUID> destinationIds) {
+        Map<UUID, Standing> standings = new HashMap<>();
+        VerificationProperties.TravelerSeal seal = properties.travelerSeal();
+        for (int from = 0; from < destinationIds.size(); from += 100) {
+            List<UUID> chunk = destinationIds.subList(from, Math.min(from + 100, destinationIds.size()));
+            for (ReviewSummaryResponse summary : reviewService.summaries(ReviewTargetType.DESTINATION, chunk)) {
+                standings.put(summary.targetId(), new Standing(summary.ratingCount(), summary.averageRating(),
+                        seal.earned(summary.ratingCount(), summary.averageRating())));
+            }
+        }
+        return standings;
     }
 
     /** Each place's desk, from its author's roles. */

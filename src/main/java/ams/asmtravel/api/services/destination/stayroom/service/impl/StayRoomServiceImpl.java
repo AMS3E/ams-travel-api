@@ -1,11 +1,23 @@
 package ams.asmtravel.api.services.destination.stayroom.service.impl;
 
+import ams.asmtravel.api.services.destination.stay.dto.response.StayResponse;
+import ams.asmtravel.api.services.destination.stayroom.domain.RoomQuote;
+import ams.asmtravel.api.services.destination.stayroom.dto.request.StayQuoteRequest;
+import ams.asmtravel.api.services.destination.stayroom.dto.response.RoomQuoteResponse;
+import ams.asmtravel.api.services.destination.stayroom.dto.response.StayQuoteResponse;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
+import java.util.Comparator;
+import java.util.EnumSet;
+import java.util.Locale;
+import java.util.Set;
 import ams.asmtravel.api.services.authorization.domain.Authorities;
 import ams.asmtravel.api.services.destination.destination.domain.ListingStatus;
 import ams.asmtravel.api.services.destination.stay.domain.Stay;
 import ams.asmtravel.api.services.destination.stay.domain.StaySavedEvent;
 import ams.asmtravel.api.services.destination.stay.service.StayService;
-import ams.asmtravel.api.services.destination.stayroom.domain.RoomAmenities;
 import ams.asmtravel.api.services.destination.stayroom.domain.RoomBathroom;
 import ams.asmtravel.api.services.destination.stayroom.domain.RoomPaymentTerms;
 import ams.asmtravel.api.services.destination.stayroom.domain.StayRoom;
@@ -15,6 +27,9 @@ import ams.asmtravel.api.services.destination.stayroom.exception.StayRoomNotFoun
 import ams.asmtravel.api.services.destination.stayroom.mapper.StayRoomMapper;
 import ams.asmtravel.api.services.destination.stayroom.repository.StayRoomRepository;
 import ams.asmtravel.api.services.destination.stayroom.service.StayRoomService;
+import ams.asmtravel.api.services.taxonomy.amenity.domain.AmenityDeletingEvent;
+import ams.asmtravel.api.services.taxonomy.amenity.domain.AmenityLevel;
+import ams.asmtravel.api.services.taxonomy.amenity.service.AmenityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpStatus;
@@ -32,9 +47,13 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class StayRoomServiceImpl implements StayRoomService {
 
+    private static final ZoneId CAMBODIA = ZoneId.of("Asia/Phnom_Penh");
+    private static final int MAX_QUOTE_NIGHTS = 30;
+
     private final StayRoomRepository roomRepository;
     private final StayRoomMapper mapper;
     private final StayService stayService;
+    private final AmenityService amenityService;
 
     @Override
     @Transactional(readOnly = true)
@@ -94,6 +113,16 @@ public class StayRoomServiceImpl implements StayRoomService {
     }
 
     /** After a stay edit, the rooms' "from" price wins over what the form sent. */
+    /** An amenity rooms still list cannot be deleted: retire it instead. */
+    @EventListener
+    public void onAmenityDeleting(AmenityDeletingEvent event) {
+        long listing = roomRepository.countByAmenity("%\"" + event.slug() + "\"%");
+        if (listing > 0) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                    listing + (listing == 1 ? " room still lists it" : " rooms still list it") + ": retire the amenity instead of deleting it");
+        }
+    }
+
     @EventListener
     public void onStaySaved(StaySavedEvent event) {
         refreshPrice(event.stayId());
@@ -125,10 +154,10 @@ public class StayRoomServiceImpl implements StayRoomService {
         room.setRoomView(request.view());
         room.setBathroom(request.bathroom() == null ? RoomBathroom.PRIVATE : request.bathroom());
 
-        /* Fixed list so amenities can be filtered. */
+        /* Amenities are the taxonomy's, offered in the room; unknown slugs are refused. */
         List<String> amenities = request.amenities() == null ? List.of()
                 : request.amenities().stream().map(String::trim).filter(one -> !one.isEmpty()).distinct().toList();
-        List<String> unknown = RoomAmenities.unknown(amenities);
+        List<String> unknown = amenityService.unknown(amenities, AmenityLevel.ROOM);
         if (!unknown.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No such room amenity: " + String.join(", ", unknown));
         }
@@ -147,6 +176,7 @@ public class StayRoomServiceImpl implements StayRoomService {
         room.setCotPrice(room.getCots() > 0 ? request.cotPrice() : null);
         room.setChildrenFreeUnderAge(request.childrenFreeUnderAge());
         room.setHighSeasonPrice(request.highSeasonPrice());
+        room.setWeekendPrice(request.weekendPrice());
         room.setTaxesIncluded(!Boolean.FALSE.equals(request.taxesIncluded()));
         room.setMinNights(orDefault(request.minNights(), 1));
         room.setWeeklyPrice(request.weeklyPrice());
@@ -190,6 +220,74 @@ public class StayRoomServiceImpl implements StayRoomService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You cannot change this listing's rooms");
         }
         return stayService.getEntity(stayId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public StayQuoteResponse quote(StayQuoteRequest request) {
+        if (request.stayId() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Name the stay: ?stayId=");
+        }
+        StayResponse stay = stayService.findById(request.stayId());
+        Dates dates = dates(request);
+        Set<DayOfWeek> weekend = weekendNights(stay.weekendNights());
+        List<RoomQuoteResponse> quotes = roomRepository.findByStayIdOrderBySortOrderAscCreatedAtAsc(stay.id()).stream()
+                .filter(room -> Boolean.TRUE.equals(room.getIsActive()))
+                .map(room -> quoted(RoomQuote.of(room, weekend, dates.checkIn(), dates.checkOut(), dates.rooms(), dates.adults(), dates.children()), stay.currency()))
+                .toList();
+        BigDecimal from = quotes.stream().filter(RoomQuoteResponse::bookable).map(RoomQuoteResponse::total)
+                .min(Comparator.naturalOrder()).orElse(null);
+        return new StayQuoteResponse(stay.id(), dates.checkIn(), dates.checkOut(), dates.nights(), dates.rooms(), dates.adults(),
+                dates.children(), stay.currency(), stay.weekendNights(), from, quotes);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public RoomQuoteResponse quoteRoom(UUID roomId, StayQuoteRequest request) {
+        StayRoom room = find(roomId);
+        StayResponse stay = stayService.findById(room.getStay().getId());
+        Dates dates = dates(request);
+        return quoted(RoomQuote.of(room, weekendNights(stay.weekendNights()), dates.checkIn(), dates.checkOut(),
+                dates.rooms(), dates.adults(), dates.children()), stay.currency());
+    }
+
+    /** The nights and guests asked for, with the defaults filled in and the limits kept. */
+    private record Dates(LocalDate checkIn, LocalDate checkOut, int nights, int rooms, int adults, int children) {
+    }
+
+    private static Dates dates(StayQuoteRequest request) {
+        LocalDate checkIn = request.checkIn() == null ? LocalDate.now(CAMBODIA) : request.checkIn();
+        LocalDate checkOut = request.checkOut() == null ? checkIn.plusDays(1) : request.checkOut();
+        long nights = ChronoUnit.DAYS.between(checkIn, checkOut);
+        if (nights < 1) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Check-out must come after check-in");
+        }
+        if (nights > MAX_QUOTE_NIGHTS) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A price preview covers at most " + MAX_QUOTE_NIGHTS + " nights");
+        }
+        return new Dates(checkIn, checkOut, (int) nights, orDefault(request.rooms(), 1), orDefault(request.adults(), 2),
+                orDefault(request.children(), 0));
+    }
+
+    private static Set<DayOfWeek> weekendNights(List<String> names) {
+        EnumSet<DayOfWeek> days = EnumSet.noneOf(DayOfWeek.class);
+        if (names != null) {
+            for (String name : names) {
+                try {
+                    days.add(DayOfWeek.valueOf(name.trim().toUpperCase(Locale.ROOT)));
+                } catch (IllegalArgumentException ignored) {
+                    // A night the host named wrongly counts as an ordinary one.
+                }
+            }
+        }
+        return days;
+    }
+
+    private static RoomQuoteResponse quoted(RoomQuote quote, String currency) {
+        return new RoomQuoteResponse(quote.roomId(), quote.name(), currency, quote.pricePerNight(), quote.weekendPrice(),
+                quote.nights().size(), quote.weekendNightCount(), quote.nights(), quote.total(), quote.fitsGuests(),
+                quote.enoughRooms(), quote.meetsMinNights(), quote.minNights(), quote.breakfastIncluded(), quote.taxesIncluded(),
+                quote.bookable());
     }
 
     private StayRoom find(UUID id) {

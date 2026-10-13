@@ -37,6 +37,10 @@ public interface StayRepository extends JpaRepository<Stay, UUID> {
 
     long countByStatus(ListingStatus status);
 
+    /** How many stays list an amenity slug; the needle is the quoted slug between wildcards. The JSON is read as text, which both databases allow. */
+    @Query(value = "SELECT count(*) FROM destination.destination_stays WHERE CAST(amenities AS varchar) LIKE :needle", nativeQuery = true)
+    long countByAmenity(@Param("needle") String needle);
+
     /** A deleted owner's stays stay listed with no owner. */
     @Modifying
     @Query("update Stay s set s.ownerUserId = null where s.ownerUserId = :ownerUserId")

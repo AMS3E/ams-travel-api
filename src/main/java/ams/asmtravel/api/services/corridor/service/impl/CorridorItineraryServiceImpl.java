@@ -79,7 +79,7 @@ public class CorridorItineraryServiceImpl implements CorridorItineraryService {
     @Transactional(readOnly = true)
     public List<CorridorStopResponse> getStops(UUID corridorId) {
         Set<UUID> visible = permission.canCurate(authentication()) ? null
-                : corridorRepository.findAllByStatusOrderByIsFeaturedDescNameAsc(CorridorStatus.PUBLISHED).stream()
+                : corridorRepository.findAllByStatusOrderByNameAsc(CorridorStatus.PUBLISHED).stream()
                 .map(Corridor::getId)
                 .collect(Collectors.toSet());
         List<CorridorStop> stops = corridorId == null

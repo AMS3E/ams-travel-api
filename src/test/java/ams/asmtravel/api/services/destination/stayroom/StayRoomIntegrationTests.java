@@ -237,6 +237,50 @@ class StayRoomIntegrationTests {
 
     /* ---------------------------------------------------------------------- */
 
+    @Test
+    void aStayIsPricedAsOneTotalWithItsWeekendNightsDearer() throws Exception {
+        person("host@villa.test");
+        RequestPostProcessor host = staff("host@villa.test", "PARTNER", "PERM_LISTING_EDIT_OWN", "PERM_LISTING_DELETE_OWN");
+        String stay = id(mvc.perform(post("/api/v1/stays").with(host).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"Rice Field Villa\",\"type\":\"VILLA\"," + PIN + "}"))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.weekendNights[0]").value("FRIDAY"))
+                .andExpect(jsonPath("$.weekendNights[1]").value("SATURDAY")));
+        String villa = id(room(host, "{\"stayId\":\"" + stay + "\",\"name\":\"Garden Villa\",\"roomType\":\"TWIN\","
+                + "\"singleBeds\":2,\"maxAdults\":2,\"maxChildren\":1,\"pricePerNight\":100,\"weekendPrice\":150}")
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.weekendPrice").value(150.0)));
+        // Friday 16 to Monday 19 October 2026: two weekend nights at 150, one Sunday night at 100.
+        mvc.perform(get("/api/v1/stay-rooms/quote").with(host).param("stayId", stay).param("checkIn", "2026-10-16").param("checkOut", "2026-10-19"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.nights").value(3))
+                .andExpect(jsonPath("$.currency").value("USD"))
+                .andExpect(jsonPath("$.fromTotal").value(400.0))
+                .andExpect(jsonPath("$.roomQuotes[0].weekendNightCount").value(2))
+                .andExpect(jsonPath("$.roomQuotes[0].total").value(400.0))
+                .andExpect(jsonPath("$.roomQuotes[0].perNight[0].weekend").value(true))
+                .andExpect(jsonPath("$.roomQuotes[0].perNight[2].weekend").value(false))
+                .andExpect(jsonPath("$.roomQuotes[0].bookable").value(true));
+        // Two rooms double the total; five adults do not fit in two rooms of two.
+        mvc.perform(get("/api/v1/stay-rooms/" + villa + "/quote").with(host).param("checkIn", "2026-10-16").param("checkOut", "2026-10-19")
+                        .param("rooms", "2").param("adults", "5"))
+                .andExpect(jsonPath("$.total").value(800.0))
+                .andExpect(jsonPath("$.fitsGuests").value(false))
+                .andExpect(jsonPath("$.bookable").value(false));
+        // The host counts Sunday nights as weekend too.
+        mvc.perform(put("/api/v1/stays/" + stay).with(host).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"Rice Field Villa\",\"type\":\"VILLA\"," + PIN + ",\"weekendNights\":[\"FRIDAY\",\"SATURDAY\",\"SUNDAY\"]}"))
+                .andExpect(jsonPath("$.weekendNights", hasSize(3)));
+        mvc.perform(get("/api/v1/stay-rooms/quote").with(host).param("stayId", stay).param("checkIn", "2026-10-16").param("checkOut", "2026-10-19"))
+                .andExpect(jsonPath("$.fromTotal").value(450.0));
+        // Check-out before check-in is refused, and so is a night with no such day.
+        mvc.perform(get("/api/v1/stay-rooms/quote").with(host).param("stayId", stay).param("checkIn", "2026-10-19").param("checkOut", "2026-10-16"))
+                .andExpect(status().isBadRequest());
+        mvc.perform(put("/api/v1/stays/" + stay).with(host).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"Rice Field Villa\",\"type\":\"VILLA\"," + PIN + ",\"weekendNights\":[\"FUNDAY\"]}"))
+                .andExpect(status().isBadRequest());
+    }
+
     private ResultActions room(RequestPostProcessor caller, String json) throws Exception {
         return mvc.perform(post("/api/v1/stay-rooms").with(caller).contentType(MediaType.APPLICATION_JSON).content(json));
     }

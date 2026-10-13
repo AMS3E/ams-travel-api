@@ -1,0 +1,21 @@
+# Weekend pricing for the app's price preview: a room may cost more on the nights
+# the stay counts as weekend (Friday and Saturday unless the host says otherwise),
+# and the app shows one total for the chosen nights, never a nightly price.
+databaseChangeLog:
+  - changeSet:
+      id: v2-destination-stay-weekend-price
+      author: ams-travel-v2
+      changes:
+        - addColumn:
+            schemaName: destination
+            tableName: destination_stays
+            columns:
+              - column: {name: weekend_nights, type: "${type.json}", defaultValue: '["FRIDAY","SATURDAY"]', constraints: {nullable: false}}
+        - addColumn:
+            schemaName: destination
+            tableName: destination_stay_rooms
+            columns:
+              - column: {name: weekend_price, type: "decimal(12,2)"}
+      rollback:
+        - dropColumn: {schemaName: destination, tableName: destination_stay_rooms, columnName: weekend_price}
+        - dropColumn: {schemaName: destination, tableName: destination_stays, columnName: weekend_nights}

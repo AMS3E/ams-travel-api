@@ -67,7 +67,6 @@ public class DestinationSeeder implements CatalogSeedContributor {
             destination.setLatitude(decimal(node, "latitude"));
             destination.setLongitude(decimal(node, "longitude"));
             destination.setCoverKey(context.imageKey(node));
-            destination.setIsFeatured(node.path("featured").asBoolean(false));
             destination.setProvince(context.require(Province.class, SeedJson.text(node, "provinceSlug"), "province"));
             destination.setCategories(new HashSet<>(context.resolve(Category.class, SeedJson.strings(node, "categorySlugs"))));
             destination.setTags(new HashSet<>(context.resolve(Tag.class, SeedJson.strings(node, "tagSlugs"))));

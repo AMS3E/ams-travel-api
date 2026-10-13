@@ -1,6 +1,9 @@
 package ams.asmtravel.api.services.review.review.dto.request;
 
 import ams.asmtravel.api.services.review.review.domain.ReviewStatus;
+import ams.asmtravel.api.services.review.review.domain.ReviewVisitType;
+import jakarta.validation.constraints.PastOrPresent;
+import java.time.YearMonth;
 import ams.asmtravel.api.services.media.dto.request.MediaKey;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -13,6 +16,8 @@ public record UpdateReviewRequest(
         @Min(1) @Max(5) Integer rating,
         @Size(max = 200) String title,
         @Size(max = 5000) String content,
+        ReviewVisitType visitType,
+        @PastOrPresent(message = "The visit cannot be in the future") YearMonth visitedOn,
         @Size(max = 6, message = "Up to six photos")
         List<@MediaKey(message = "Upload the photo first, then send its key") String> photoKeys,
         ReviewStatus status,

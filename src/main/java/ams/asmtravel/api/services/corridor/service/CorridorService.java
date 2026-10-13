@@ -10,7 +10,7 @@ import java.util.UUID;
 /** Corridor overview and publishing. Anyone reads published ones; only curators see drafts and write. */
 public interface CorridorService {
 
-    /** Published corridors, featured first (all for a curator); {@code slug} narrows to one. */
+    /** Published corridors (all for a curator); {@code slug} narrows to one. */
     List<CorridorResponse> getAll(String slug);
 
     /** @throws org.springframework.web.server.ResponseStatusException 404 if missing or a hidden draft */

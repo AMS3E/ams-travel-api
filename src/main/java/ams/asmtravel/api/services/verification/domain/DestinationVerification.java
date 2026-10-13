@@ -3,6 +3,8 @@ package ams.asmtravel.api.services.verification.domain;
 import ams.asmtravel.api.services.destination.destination.domain.Destination;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -38,6 +40,11 @@ public class DestinationVerification {
     /** True verifies or renews; false revokes. */
     @Column(nullable = false)
     private Boolean verified;
+
+    /** What the verification rests on; null on a revocation. */
+    @Enumerated(EnumType.STRING)
+    @Column(length = 30)
+    private VerificationBasis basis;
 
     /** Invoice or receipt number. */
     @Column(length = 120)

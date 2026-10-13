@@ -25,7 +25,6 @@ public record CorridorResponse(
         String coverKey,
         String coverUrl,
         CorridorStatus status,
-        Boolean isFeatured,
         Boolean isActive,
         Integer durationDays,
         Integer durationNights,

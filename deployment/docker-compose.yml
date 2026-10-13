@@ -71,11 +71,9 @@ services:
     # Keycloak 26.3.1 plus the staff email-code step (keycloak stage of ../Dockerfile).
     # The website and the dashboard send people to its own sign-in form (Authorization
     # Code + PKCE), dressed by the CSS-only theme below.
-    build:
-      context: ..
-      dockerfile: Dockerfile
-      target: keycloak
+    # Uses the image already built on this machine; --build does not rebuild it.
     image: ams-travel-keycloak:26.3.1
+    pull_policy: never
     container_name: amstravel-keycloak
     restart: unless-stopped
     depends_on:

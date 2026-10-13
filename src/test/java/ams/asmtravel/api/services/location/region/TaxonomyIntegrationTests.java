@@ -16,6 +16,8 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static ams.asmtravel.api.support.Callers.staff;
@@ -128,6 +130,26 @@ class TaxonomyIntegrationTests {
      * A tourism region added from the dashboard sends no code: it is made from
      * the name, cut at a word, numbered when taken, and kept by an edit.
      */
+    @Test
+    void aTourismRegionHasACoverPicture() throws Exception {
+        String key = "region/5d9a2d7e-0c2b-4f6a-9a0c-1f1e2d3c4b5a/angkor-at-dawn.jpg";
+        String region = create("/api/v1/regions", "{\"name\":\"Covered Region\",\"code\":\"COVER-1\",\"kind\":\"TOURISM\",\"coverKey\":\"" + key + "\"}");
+        mvc.perform(get("/api/v1/regions/" + region))
+                .andExpect(jsonPath("$.coverKey").value(key))
+                .andExpect(jsonPath("$.coverUrl").value(notNullValue()));
+        // A save that says nothing about the picture keeps it; an empty key removes it; a bad key is refused.
+        mvc.perform(put("/api/v1/regions/" + region).with(manager()).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"Covered Region\",\"code\":\"COVER-1\"}"))
+                .andExpect(jsonPath("$.coverKey").value(key));
+        mvc.perform(put("/api/v1/regions/" + region).with(manager()).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"Covered Region\",\"code\":\"COVER-1\",\"coverKey\":\"\"}"))
+                .andExpect(jsonPath("$.coverKey").value(nullValue()))
+                .andExpect(jsonPath("$.coverUrl").value(nullValue()));
+        mvc.perform(put("/api/v1/regions/" + region).with(manager()).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"Covered Region\",\"code\":\"COVER-1\",\"coverKey\":\"not a key\"}"))
+                .andExpect(status().isBadRequest());
+    }
+
     @Test
     void aNewRegionWithoutACodeIsGivenOneFromItsName() throws Exception {
         String spa = create("/api/v1/regions", "{\"name\":\"Wellness & Spa\",\"kind\":\"TOURISM\"}");
@@ -301,10 +323,9 @@ class TaxonomyIntegrationTests {
                         .content("{\"name\":\"Coastal Discovery\"}"))
                 .andExpect(status().isForbidden());
         String body = mvc.perform(post("/api/v1/corridors").with(curator()).contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"Coastal Discovery\",\"isFeatured\":true}"))
+                        .content("{\"name\":\"Coastal Discovery\"}"))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.slug").value("coastal-discovery"))
-                .andExpect(jsonPath("$.isFeatured").value(true))
                 .andExpect(jsonPath("$.coverUrl").isEmpty())
                 .andReturn().getResponse().getContentAsString();
         mvc.perform(get("/api/v1/corridor-destinations").param("corridorId", (String) JsonPath.read(body, "$.id")))

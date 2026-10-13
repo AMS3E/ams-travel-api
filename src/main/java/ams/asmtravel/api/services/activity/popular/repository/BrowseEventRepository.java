@@ -22,6 +22,16 @@ public interface BrowseEventRepository extends JpaRepository<BrowseEvent, Long> 
             """)
     List<BrowseTotal> totalsSince(Instant since);
 
+    /** Different signed-in visitors per place in a window, most first; {@code to} exclusive. */
+    @Query("""
+            select new ams.asmtravel.api.services.activity.popular.domain.BrowseTotal(e.destinationId, count(distinct e.userId))
+            from BrowseEvent e
+            where e.userId is not null and e.destinationId is not null and e.createdAt >= :from and e.createdAt < :to
+            group by e.destinationId
+            order by count(distinct e.userId) desc
+            """)
+    List<BrowseTotal> totalsBetween(Instant from, Instant to);
+
     /** Whether this visitor already opened this place in the window: the same day. */
     boolean existsByDestinationIdAndUserIdAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
             UUID destinationId, UUID userId, Instant from, Instant to);

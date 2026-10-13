@@ -1,11 +1,11 @@
 package ams.asmtravel.api.services.destination.stay.service.impl;
 
+import ams.asmtravel.api.services.location.province.service.ProvinceService;
 import ams.asmtravel.api.services.destination.destination.domain.DestinationDeletingEvent;
 import ams.asmtravel.api.services.destination.destination.domain.ListingStatus;
 import ams.asmtravel.api.services.destination.destination.domain.NearbyArea;
 import ams.asmtravel.api.services.destination.destination.service.DestinationService;
 import ams.asmtravel.api.services.destination.stay.domain.Stay;
-import ams.asmtravel.api.services.destination.stay.domain.StayAmenities;
 import ams.asmtravel.api.services.destination.stay.domain.StaySpecialties;
 import ams.asmtravel.api.services.destination.stay.domain.StayDeletingEvent;
 import ams.asmtravel.api.services.destination.stay.domain.StayVocabularies;
@@ -17,6 +17,9 @@ import ams.asmtravel.api.services.destination.stay.mapper.StayMapper;
 import ams.asmtravel.api.services.destination.stay.repository.StayRepository;
 import ams.asmtravel.api.services.destination.stay.security.StayPermissionEvaluator;
 import ams.asmtravel.api.services.destination.stay.service.StayService;
+import ams.asmtravel.api.services.taxonomy.amenity.domain.AmenityDeletingEvent;
+import ams.asmtravel.api.services.taxonomy.amenity.domain.AmenityLevel;
+import ams.asmtravel.api.services.taxonomy.amenity.service.AmenityService;
 import ams.asmtravel.api.services.taxonomy.interest.domain.InterestDeletingEvent;
 import ams.asmtravel.api.services.taxonomy.interest.service.InterestService;
 import ams.asmtravel.api.services.user.user.domain.UserDeletingEvent;
@@ -36,6 +39,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
 
@@ -47,9 +51,11 @@ public class StayServiceImpl implements StayService {
     static final int NEAR_LIMIT = 12;
 
     private final StayRepository stayRepository;
+    private final AmenityService amenityService;
     private final DestinationService destinationService;
     private final UserService userService;
     private final InterestService interestService;
+    private final ProvinceService provinceService;
     private final StayPermissionEvaluator permission;
     private final StayMapper mapper;
     private final ApplicationEventPublisher events;
@@ -172,6 +178,16 @@ public class StayServiceImpl implements StayService {
         stayRepository.releaseDestination(event.destinationId());
     }
 
+    /** An amenity stays still list cannot be deleted: retire it instead. */
+    @EventListener
+    public void onAmenityDeleting(AmenityDeletingEvent event) {
+        long listing = stayRepository.countByAmenity("%\"" + event.slug() + "\"%");
+        if (listing > 0) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                    listing + (listing == 1 ? " stay still lists it" : " stays still list it") + ": retire the amenity instead of deleting it");
+        }
+    }
+
     @EventListener
     public void onInterestDeleting(InterestDeletingEvent event) {
         stayRepository.unlinkInterest(event.interestId());
@@ -237,6 +253,10 @@ public class StayServiceImpl implements StayService {
         stay.setStarRating(request.starRating());
         stay.setShortDescription(blankToNull(request.shortDescription()));
         stay.setDescription(request.description());
+        stay.setSlogan(blankToNull(request.slogan()));
+        stay.setSloganBy(blankToNull(request.sloganBy()));
+        stay.setProvince(request.provinceId() == null ? null : provinceService.getEntity(request.provinceId()));
+        stay.setPolicies(blankToNull(request.policies()));
         stay.setCheckInFrom(request.checkInFrom());
         stay.setCheckOutUntil(request.checkOutUntil());
         stay.setPhone(blankToNull(request.phone()));
@@ -244,10 +264,10 @@ public class StayServiceImpl implements StayService {
         stay.setWebsite(blankToNull(request.website()));
         stay.setPriceFrom(request.priceFrom());
         stay.setCurrency(request.currency() == null || request.currency().isBlank() ? "USD" : request.currency());
-        /* Amenities come from a fixed list so they can be filtered; unknown slugs are refused. */
+        /* Amenities are the taxonomy's, offered at the property; unknown slugs are refused. */
         List<String> amenities = request.amenities() == null ? List.of()
                 : request.amenities().stream().map(String::trim).filter(one -> !one.isEmpty()).distinct().toList();
-        List<String> unknown = StayAmenities.unknown(amenities);
+        List<String> unknown = amenityService.unknown(amenities, AmenityLevel.PROPERTY);
         if (!unknown.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No such amenity: " + String.join(", ", unknown));
         }
@@ -261,6 +281,10 @@ public class StayServiceImpl implements StayService {
                     "No such specialty: " + String.join(", ", unknownSpecialties));
         }
         stay.setSpecialties(new ArrayList<>(specialties));
+        /* Null keeps the weekend nights (Friday and Saturday on a new stay); an empty list means no night costs more. */
+        if (request.weekendNights() != null) {
+            stay.setWeekendNights(new ArrayList<>(request.weekendNights().stream().map(night -> night.trim().toUpperCase(Locale.ROOT)).distinct().toList()));
+        }
         stay.setCoverKey(request.coverKey() == null || request.coverKey().isBlank() ? null : request.coverKey());
         stay.setAddress(request.address() == null || request.address().isBlank() ? null : request.address().trim());
         stay.setLatitude(request.latitude());

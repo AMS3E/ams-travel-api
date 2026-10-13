@@ -11,7 +11,6 @@ public record DestinationSummary(
         String name,
         String slug,
         ListingStatus status,
-        boolean featured,
         UUID createdBy,
         UUID provinceId,
         UUID regionId,

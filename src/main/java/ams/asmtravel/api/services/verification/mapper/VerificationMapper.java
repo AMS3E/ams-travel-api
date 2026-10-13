@@ -4,6 +4,8 @@ import ams.asmtravel.api.services.destination.destination.domain.DestinationSumm
 import ams.asmtravel.api.services.media.service.MediaService;
 import ams.asmtravel.api.services.publishing.service.PublishingService.Desk;
 import ams.asmtravel.api.services.verification.domain.DestinationVerification;
+import ams.asmtravel.api.services.verification.domain.Standing;
+import ams.asmtravel.api.services.verification.domain.VerificationBasis;
 import ams.asmtravel.api.services.verification.dto.response.VerificationResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -29,6 +31,10 @@ public abstract class VerificationMapper {
     @Mapping(target = "destinationStatus", source = "decision.destination.status")
     @Mapping(target = "desk", source = "desk")
     @Mapping(target = "verified", source = "decision.verified")
+    @Mapping(target = "basis", source = "decision.basis")
+    @Mapping(target = "travelerRecommended", ignore = true)
+    @Mapping(target = "ratingCount", ignore = true)
+    @Mapping(target = "averageRating", ignore = true)
     @Mapping(target = "reference", source = "decision.reference")
     @Mapping(target = "note", source = "decision.note")
     @Mapping(target = "evidenceKey", source = "decision.evidenceKey")
@@ -41,13 +47,34 @@ public abstract class VerificationMapper {
     /** Queue row for a place with no decision yet. */
     public VerificationResponse undecided(DestinationSummary place, Desk desk) {
         return new VerificationResponse(null, place.id(), place.name(), place.slug(), mediaService.url(place.coverKey()),
-                place.status(), desk, false, null, null, null, null, null, null, null);
+                place.status(), desk, false, null, null, null, null, null, null, null, null, null, null, null);
     }
 
-    /** Public status only: verified and since when. */
-    public VerificationResponse publicStatus(UUID destinationId, DestinationVerification latest) {
-        boolean verified = latest != null && Boolean.TRUE.equals(latest.getVerified());
-        return new VerificationResponse(null, destinationId, null, null, null, null, null, verified,
+    /**
+     * A queue row as the place stands now: the latest decision, and on top of
+     * it the travellers' seal, which verifies the place on its own.
+     */
+    public VerificationResponse standing(VerificationResponse latest, Standing standing) {
+        boolean decided = latest.verified();
+        return new VerificationResponse(latest.id(), latest.destinationId(), latest.destinationName(), latest.destinationSlug(),
+                latest.destinationCoverUrl(), latest.destinationStatus(), latest.desk(),
+                decided || standing.travelerRecommended(), basisOf(decided, latest.basis(), standing),
+                standing.travelerRecommended(), standing.ratingCount(), standing.averageRating(),
+                latest.reference(), latest.note(), latest.evidenceKey(), latest.evidenceUrl(),
+                latest.decidedBy(), latest.decidedByName(), latest.createdAt());
+    }
+
+    /** Public status only: verified, on what, the travellers' seal, and since when. */
+    public VerificationResponse publicStatus(UUID destinationId, DestinationVerification latest, Standing standing) {
+        boolean decided = latest != null && Boolean.TRUE.equals(latest.getVerified());
+        return new VerificationResponse(null, destinationId, null, null, null, null, null,
+                decided || standing.travelerRecommended(), basisOf(decided, latest == null ? null : latest.getBasis(), standing),
+                standing.travelerRecommended(), standing.ratingCount(), standing.averageRating(),
                 null, null, null, null, null, null, latest == null ? null : latest.getCreatedAt());
+    }
+
+    /** A desk's basis while its decision stands; the travellers' when only their reviews verify the place. */
+    private static VerificationBasis basisOf(boolean decided, VerificationBasis filed, Standing standing) {
+        return decided ? filed : standing.travelerRecommended() ? VerificationBasis.TRAVELER_SCORE : null;
     }
 }

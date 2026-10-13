@@ -5,6 +5,7 @@ import ams.asmtravel.api.services.activity.popular.dto.request.BrowseEventReques
 import ams.asmtravel.api.services.activity.popular.dto.response.PopularResponse;
 
 import java.time.Instant;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -19,17 +20,28 @@ public interface PopularService {
     boolean recordBrowse(UUID userId, UUID destinationId);
 
     /**
-     * Most-browsed published places lately, featured ones first.
+     * Most-browsed published places lately.
      *
-     * @param regionId only this zone or tourism region; null for everywhere
-     * @param limit    how many; null for the configured size
+     * @param regionId    only this zone or tourism region; null for everywhere
+     * @param provinceId  only this province; null for everywhere
+     * @param interestIds only places with any of these interests; null or empty for all
+     * @param limit       how many; null for the configured size
      */
-    PopularResponse popular(UUID regionId, Integer limit);
+    PopularResponse popular(UUID regionId, UUID provinceId, Set<UUID> interestIds, Integer limit);
 
     // For other services.
 
     /** Different signed-in visitors per place over Popular's window, most first. */
     List<BrowseTotal> recentTotals();
+
+    /** How many days that window spans, today included. */
+    int windowDays();
+
+    /** Different signed-in visitors per place in any window, most first; {@code to} exclusive. */
+    List<BrowseTotal> totalsBetween(Instant from, Instant to);
+
+    /** The zone a day is counted in: Cambodia. */
+    ZoneId zone();
 
     /** Places a visitor has opened, ever. */
     Set<UUID> browsedDestinationIds(UUID userId);

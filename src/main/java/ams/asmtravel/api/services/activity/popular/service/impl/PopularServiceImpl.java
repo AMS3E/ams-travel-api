@@ -24,8 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -33,7 +33,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-/** Browses and Popular, from published places only: featured first, then the most browsed. */
+/** Browses and Popular, from published places only, the most browsed first. */
 @Service
 @RequiredArgsConstructor
 public class PopularServiceImpl implements PopularService {
@@ -76,36 +76,27 @@ public class PopularServiceImpl implements PopularService {
 
     @Override
     @Transactional(readOnly = true)
-    public PopularResponse popular(UUID regionId, Integer limit) {
+    public PopularResponse popular(UUID regionId, UUID provinceId, Set<UUID> interestIds, Integer limit) {
         if (regionId != null && !regionService.exists(regionId)) {
             throw new RegionNotFoundException();
         }
         int size = limit == null ? properties.size() : limit;
 
-        // Published places, only in the named zone or region if one is given.
+        // Published places, only those the filters keep: a zone or region, a province, any of some interests.
         Map<UUID, DestinationSummary> catalogue = new LinkedHashMap<>();
         destinationService.findPublishedSummaries().stream()
                 .filter(place -> regionId == null || place.inRegion(regionId))
+                .filter(place -> provinceId == null || provinceId.equals(place.provinceId()))
+                .filter(place -> interestIds == null || interestIds.isEmpty() || place.interestIds().stream().anyMatch(interestIds::contains))
                 .forEach(place -> catalogue.put(place.id(), place));
 
-        List<BrowseTotal> totals = recentTotals();
-        Map<UUID, Long> browses = new LinkedHashMap<>();
-        totals.forEach(total -> browses.put(total.destinationId(), total.browses()));
-
-        // Featured first, the most browsed of them leading.
-        List<PopularPlace> places = new ArrayList<>(catalogue.values().stream()
-                .filter(DestinationSummary::featured)
-                .sorted(Comparator.comparingLong((DestinationSummary place) -> browses.getOrDefault(place.id(), 0L)).reversed())
-                .limit(size)
-                .map(place -> new PopularPlace(place.id(), browses.getOrDefault(place.id(), 0L), PopularReason.FEATURED))
-                .toList());
-        Set<UUID> listed = new HashSet<>(places.stream().map(PopularPlace::destinationId).toList());
-        // Then whatever visitors browse most.
-        for (BrowseTotal total : totals) {
+        // Whatever visitors browse most, published places only.
+        List<PopularPlace> places = new ArrayList<>();
+        for (BrowseTotal total : recentTotals()) {
             if (places.size() >= size) {
                 break;
             }
-            if (total.browses() > 0 && catalogue.containsKey(total.destinationId()) && !listed.contains(total.destinationId())) {
+            if (total.browses() > 0 && catalogue.containsKey(total.destinationId())) {
                 places.add(new PopularPlace(total.destinationId(), total.browses(), PopularReason.MOST_BROWSED));
             }
         }
@@ -117,6 +108,22 @@ public class PopularServiceImpl implements PopularService {
     public List<BrowseTotal> recentTotals() {
         LocalDate first = LocalDate.now(properties.zone()).minusDays(properties.days() - 1L);
         return eventRepository.totalsSince(first.atStartOfDay(properties.zone()).toInstant());
+    }
+
+    @Override
+    public int windowDays() {
+        return properties.days();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<BrowseTotal> totalsBetween(Instant from, Instant to) {
+        return eventRepository.totalsBetween(from, to);
+    }
+
+    @Override
+    public ZoneId zone() {
+        return properties.zone();
     }
 
     @Override

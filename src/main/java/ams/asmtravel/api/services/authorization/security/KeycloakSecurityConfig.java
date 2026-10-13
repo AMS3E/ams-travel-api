@@ -100,6 +100,17 @@ public class KeycloakSecurityConfig {
                 /* Admin dashboard overview: admin and editors. */
                 .requestMatchers(HttpMethod.GET, "/api/v1/admin/overview")
                         .hasAnyAuthority(Permissions.FULL_CONTROL, Permissions.REVIEW_MODERATE)
+                /* Destination Stats: ratings, browses and the Verified standing of every place; the editorial desks. */
+                .requestMatchers(HttpMethod.GET, "/api/v1/admin/destination-stats")
+                        .hasAnyAuthority(Permissions.FULL_CONTROL, Permissions.DESTINATION_EDIT_ANY)
+
+                /* Amenities: what a stay offers, at the property and in the room. */
+                .requestMatchers(HttpMethod.GET, "/api/v1/amenities", "/api/v1/amenities/*").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/v1/amenities")
+                        .hasAnyAuthority(Permissions.TAXONOMY_MANAGE, Permissions.FULL_CONTROL)
+                .requestMatchers(HttpMethod.PUT, "/api/v1/amenities/*")
+                        .hasAnyAuthority(Permissions.TAXONOMY_MANAGE, Permissions.FULL_CONTROL)
+                .requestMatchers(HttpMethod.DELETE, "/api/v1/amenities/*").hasAuthority(Permissions.FULL_CONTROL)
 
                 /* Building styles (heritage vocabulary). */
                 .requestMatchers(HttpMethod.GET, "/api/v1/historical-coverage/styles",
@@ -326,6 +337,9 @@ public class KeycloakSecurityConfig {
                 .requestMatchers("/api/v1/roles", "/api/v1/roles/**")
                         .hasAnyAuthority(Permissions.ROLE_ASSIGN, Permissions.FULL_CONTROL)
 
+                /* Search: what the app's search box, filters, lists and cards read; published places only. */
+                .requestMatchers(HttpMethod.GET, "/api/v1/search", "/api/v1/search/**").permitAll()
+
                 /* Seasons: public read, admin write; a person's own totals need a sign-in. */
                 .requestMatchers(HttpMethod.GET, "/api/v1/seasons/me/*").authenticated()
                 .requestMatchers(HttpMethod.GET, "/api/v1/seasons", "/api/v1/seasons/*").permitAll()
@@ -355,7 +369,8 @@ public class KeycloakSecurityConfig {
                         .hasAnyAuthority(Permissions.LISTING_EDIT_OWN, Permissions.DESTINATION_EDIT_ANY,
                                 Permissions.FULL_CONTROL)
 
-                /* Stay rooms: same editors as the stay. */
+                /* Stay rooms: same editors as the stay; the price preview is public. */
+                .requestMatchers(HttpMethod.GET, "/api/v1/stay-rooms/quote", "/api/v1/stay-rooms/*/quote").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/v1/stay-rooms", "/api/v1/stay-rooms/*").permitAll()
                 .requestMatchers("/api/v1/stay-rooms", "/api/v1/stay-rooms/*")
                         .hasAnyAuthority(Permissions.LISTING_EDIT_OWN, Permissions.DESTINATION_EDIT_ANY,

@@ -44,7 +44,6 @@ public abstract class DestinationMapper {
     @Mapping(target = "centuries", expression = "java(destination.getCenturies() == null ? List.of() : destination.getCenturies().stream().sorted().toList())")
     public abstract DestinationResponse toDestinationResponse(Destination destination);
 
-    @Mapping(target = "featured", source = "isFeatured")
     @Mapping(target = "provinceId", source = "province.id")
     @Mapping(target = "regionId", source = "province.region.id")
     @Mapping(target = "categoryIds", expression = "java(idSet(destination.getCategories(), Category::getId))")

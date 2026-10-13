@@ -96,11 +96,6 @@ public class DestinationPermissionEvaluator {
                 && isOwner(destination, authentication);
     }
 
-    /** Only the editorial desk may feature. */
-    public boolean canFeature(Authentication authentication) {
-        return canReadAll(authentication);
-    }
-
     private boolean writtenByPartner(Destination destination) {
         return destination.getCreatedBy() != null && userService.findSummary(destination.getCreatedBy())
                 .map(author -> author.roles().contains(RoleCode.PARTNER))

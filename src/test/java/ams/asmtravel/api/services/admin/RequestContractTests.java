@@ -1,7 +1,6 @@
 package ams.asmtravel.api.services.admin;
 
 import ams.asmtravel.api.services.destination.destination.domain.DestinationThemes;
-import ams.asmtravel.api.services.destination.stay.domain.StayAmenities;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -80,10 +79,8 @@ class RequestContractTests {
     void theFixedListsArePublishedWithTheSchemasThatUseThem() throws Exception {
         mvc.perform(get("/v3/api-docs"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.components.schemas.StayRequest.properties.amenities.items.enum")
-                        .value(hasSize(StayAmenities.ALL.size())))
-                .andExpect(jsonPath("$.components.schemas.StayRequest.properties.amenities.items.enum")
-                        .value(hasItem("wifi")))
+                /* Amenities are a taxonomy now (GET /api/v1/amenities), not a fixed enum in the schema. */
+                .andExpect(jsonPath("$.components.schemas.StayRequest.properties.amenities.items.enum").doesNotExist())
                 .andExpect(jsonPath("$.components.schemas.DestinationRequest.properties.theme.enum")
                         .value(hasSize(DestinationThemes.BY_THEME.size())))
                 .andExpect(jsonPath("$.components.schemas.FoodRequest.properties.cuisines.items.enum")

@@ -21,7 +21,7 @@ import java.util.UUID;
  * On an edit, a null list keeps the links and an empty one clears them.
  *
  * @param slug             blank: made from the name on create, kept on edit
- * @param isFeatured       used only from someone who may edit any destination
+ * @param slogan           one line someone said about it, quoted on its page; sloganBy says who
  * @param tourismRegionIds zones are refused
  * @param theme            main tourism region code, see {@link ams.asmtravel.api.services.destination.destination.domain.DestinationThemes}
  * @param centuries        1 to 21
@@ -33,12 +33,13 @@ public record DestinationRequest(
         @NotNull UUID provinceId,
         @Size(max = 500) String shortDescription,
         String description,
+        @Size(max = 300) String slogan,
+        @Size(max = 120) String sloganBy,
         @DecimalMin("-90") @DecimalMax("90") BigDecimal latitude,
         @DecimalMin("-180") @DecimalMax("180") BigDecimal longitude,
         String address,
         @MediaKey(allowEmpty = true, message = "Upload the cover first, then send its key")
         String coverKey,
-        Boolean isFeatured,
         Set<UUID> categoryIds,
         Set<UUID> tagIds,
         Set<UUID> interestIds,

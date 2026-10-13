@@ -116,7 +116,7 @@ public class StayRoom {
     @Column(nullable = false, length = 20)
     private RoomBathroom bathroom = RoomBathroom.PRIVATE;
 
-    /** Slugs from {@link RoomAmenities}. */
+    /** Slugs of the taxonomy's amenities offered in a room. */
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(nullable = false)
     private List<String> amenities = new ArrayList<>();
@@ -152,6 +152,10 @@ public class StayRoom {
     /** Night price from November to April; null when it is the same all year. */
     @Column(precision = 12, scale = 2)
     private BigDecimal highSeasonPrice;
+
+    /** What a night costs on the stay's weekend nights; null when the same as every night. */
+    @Column(precision = 12, scale = 2)
+    private BigDecimal weekendPrice;
 
     /** Whether the price includes VAT and accommodation tax. */
     @Column(nullable = false)

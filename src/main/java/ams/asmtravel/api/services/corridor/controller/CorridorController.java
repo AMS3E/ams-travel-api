@@ -50,7 +50,7 @@ public class CorridorController {
     public CorridorResponse create(Authentication authentication, @Valid @RequestBody CorridorRequest request) {
         return corridorService.create(request, authorOf(authentication));
     }
-    /** Published corridors, featured first (all for a curator); {@code ?slug=} finds one. */
+    /** Published corridors (all for a curator); {@code ?slug=} finds one. */
     @GetMapping
     public List<CorridorResponse> getAll(@RequestParam(required = false) String slug) {
         return corridorService.getAll(slug);

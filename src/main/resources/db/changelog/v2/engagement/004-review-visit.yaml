@@ -1,0 +1,17 @@
+# A review says who the author travelled with and in which month, as the app's
+# "Write a review" screen asks (Kind of visit; When did you visit?). Both optional;
+# the month is kept as its first day.
+databaseChangeLog:
+  - changeSet:
+      id: v2-engagement-review-visit
+      author: ams-travel-v2
+      changes:
+        - addColumn:
+            schemaName: engagement
+            tableName: reviews
+            columns:
+              - column: {name: visit_type, type: varchar(20)}
+              - column: {name: visited_on, type: date}
+      rollback:
+        - dropColumn: {schemaName: engagement, tableName: reviews, columnName: visited_on}
+        - dropColumn: {schemaName: engagement, tableName: reviews, columnName: visit_type}

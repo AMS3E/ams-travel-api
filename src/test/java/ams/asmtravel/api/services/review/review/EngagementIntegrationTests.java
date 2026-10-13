@@ -24,6 +24,7 @@ import java.util.Set;
 import static ams.asmtravel.api.support.Callers.contributor;
 import static ams.asmtravel.api.support.Callers.customer;
 import static ams.asmtravel.api.support.Callers.editor;
+import static ams.asmtravel.api.support.Callers.staff;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
@@ -31,6 +32,7 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -110,6 +112,35 @@ class EngagementIntegrationTests {
     }
 
     @Test
+    void aReviewSaysWhoCameAndWhenAndACorridorIsReviewedToo() throws Exception {
+        var curator = staff("curator@visit.test", "EDITOR", "PERM_CORRIDOR_CURATE");
+        String corridorId = JsonPath.read(mvc.perform(post("/api/v1/corridors").with(curator).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"Khmer Civilization\",\"slug\":\"khmer-civilization-visit\",\"shortDescription\":\"Temples\",\"description\":\"Angkor to Sambor Prei Kuk\"}"))
+                .andExpect(status().isCreated()).andReturn().getResponse().getContentAsString(), "$.id");
+        // Still a draft: nothing to review there.
+        mvc.perform(post("/api/v1/reviews").with(customer("walker@visit.test")).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"targetType\":\"CORRIDOR\",\"targetId\":\"" + corridorId + "\",\"rating\":5}"))
+                .andExpect(status().isNotFound());
+        mvc.perform(patch("/api/v1/corridors/" + corridorId + "/publish").with(curator)).andExpect(status().isOk());
+        mvc.perform(post("/api/v1/reviews").with(customer("walker@visit.test")).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"targetType\":\"CORRIDOR\",\"targetId\":\"" + corridorId + "\",\"rating\":5,\"title\":\"Three days well spent\","
+                                + "\"visitType\":\"FAMILY\",\"visitedOn\":\"2026-08\"}"))
+                .andExpect(status().is2xxSuccessful())
+                .andExpect(jsonPath("$.visitType").value("FAMILY"))
+                .andExpect(jsonPath("$.visitedOn").value("2026-08"));
+        nextRequest();
+        mvc.perform(get("/api/v1/ratings/summary").param("targetType", "CORRIDOR").param("targetIds", corridorId))
+                .andExpect(jsonPath("$[0].count").value(1))
+                .andExpect(jsonPath("$[0].average").value(5.0));
+        mvc.perform(get("/api/v1/reviews").param("targetType", "CORRIDOR").param("targetId", corridorId))
+                .andExpect(jsonPath("$.content[0].visitedOn").value("2026-08"));
+        // The visit cannot lie in the future.
+        mvc.perform(post("/api/v1/reviews").with(customer("dreamer@visit.test")).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"targetType\":\"DESTINATION\",\"targetId\":\"" + temple.getId() + "\",\"rating\":4,\"visitedOn\":\"2099-01\"}"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     void aVisitorSavesPlaces() throws Exception {
         RequestPostProcessor me = customer("saver@visit.test");
         String favorite = "{\"targetType\":\"DESTINATION\",\"targetId\":\"" + temple.getId() + "\"}";
@@ -157,44 +188,6 @@ class EngagementIntegrationTests {
                 .andExpect(jsonPath("$.personal").value(false))
                 .andExpect(jsonPath("$.destinations[0].destinationId").value(bayon.getId().toString()))
                 .andExpect(jsonPath("$.destinations[0].reason").value("MOST_BROWSED"));
-    }
-
-    /**
-     * Featured is an editor's promise: the place is on Popular and Recommended
-     * whatever its browses, and first. Browsing orders everything after it.
-     */
-    @Test
-    void aFeaturedPlaceIsAlwaysPopularAndRecommended() throws Exception {
-        Category temples = catalogue.category("Temples");
-        Destination bayon = catalogue.place(province, "Bayon", 13.4412, 103.8591, ListingStatus.PUBLISHED, null, Set.of(temples));
-        Destination kohKer = catalogue.place(province, "Koh Ker", 13.7840, 104.5390, ListingStatus.PUBLISHED, null, Set.of(temples));
-        kohKer.setIsFeatured(true);
-        for (String visitor : new String[] {"a@visit.test", "b@visit.test", "c@visit.test"}) {
-            browse(customer(visitor), bayon, null);
-        }
-        nextRequest();
-
-        // Never browsed, it still comes first; one spot is the featured place's.
-        mvc.perform(get("/api/v1/popular"))
-                .andExpect(jsonPath("$.destinations[0].destinationId").value(kohKer.getId().toString()))
-                .andExpect(jsonPath("$.destinations[0].reason").value("FEATURED"))
-                .andExpect(jsonPath("$.destinations[1].destinationId").value(bayon.getId().toString()))
-                .andExpect(jsonPath("$.destinations[1].reason").value("MOST_BROWSED"));
-        mvc.perform(get("/api/v1/popular").param("limit", "1"))
-                .andExpect(jsonPath("$.destinations", hasSize(1)))
-                .andExpect(jsonPath("$.destinations[0].destinationId").value(kohKer.getId().toString()));
-
-        mvc.perform(get("/api/v1/recommendations/for-you"))
-                .andExpect(jsonPath("$.destinations[0].destinationId").value(kohKer.getId().toString()))
-                .andExpect(jsonPath("$.destinations[0].reason").value("FEATURED"))
-                .andExpect(jsonPath("$.destinations[1].destinationId").value(bayon.getId().toString()));
-        // A visitor who has been there is still shown it: featured is not a guess about their taste.
-        browse(customer("a@visit.test"), kohKer, null);
-        nextRequest();
-        mvc.perform(get("/api/v1/recommendations/for-you").with(customer("a@visit.test")))
-                .andExpect(jsonPath("$.personal").value(true))
-                .andExpect(jsonPath("$.destinations[0].destinationId").value(kohKer.getId().toString()))
-                .andExpect(jsonPath("$.destinations[0].reason").value("FEATURED"));
     }
 
     /** A contributor hears when the desk answers their request. */

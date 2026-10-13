@@ -1,5 +1,9 @@
 package ams.asmtravel.api.services.destination.stayroom.controller;
 
+import ams.asmtravel.api.services.destination.stayroom.dto.request.StayQuoteRequest;
+import ams.asmtravel.api.services.destination.stayroom.dto.response.RoomQuoteResponse;
+import ams.asmtravel.api.services.destination.stayroom.dto.response.StayQuoteResponse;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import ams.asmtravel.api.services.destination.stayroom.dto.request.StayRoomRequest;
 import ams.asmtravel.api.services.destination.stayroom.dto.response.StayRoomResponse;
@@ -38,6 +42,18 @@ public class StayRoomController {
     @GetMapping("/{id}")
     public StayRoomResponse getById(@PathVariable UUID id) {
         return roomService.findById(id);
+    }
+
+    /** A price preview: every room on sale, priced for the dates and guests. {@code ?stayId=} is required; the dates default to tonight. */
+    @GetMapping("/quote")
+    public StayQuoteResponse quote(@Valid @ModelAttribute StayQuoteRequest request) {
+        return roomService.quote(request);
+    }
+
+    /** One room priced the same way. */
+    @GetMapping("/{id}/quote")
+    public RoomQuoteResponse quoteRoom(@PathVariable UUID id, @Valid @ModelAttribute StayQuoteRequest request) {
+        return roomService.quoteRoom(id, request);
     }
 
     /** Refused unless at least one bed count is set. */

@@ -30,9 +30,10 @@ import java.util.UUID;
  * @param destinationId optional; travellers find a listing by its map pin
  * @param ownerUserId  a partner may name only themselves, an editor anyone
  * @param latitude     required: the map pin is how travellers find it
+ * @param slogan       one line someone said about it, quoted on its page; sloganBy says who
+ * @param provinceId   the province the pin is in, filled from the pin on the dashboard; optional
  * @param openingHours day ({@code mon}…{@code sun}) to hours ({@code 07:00-22:00})
  * @param status       null keeps it (new is DRAFT); only an editor may set PUBLISHED
- * @param isFeatured   used only from an editor
  */
 public record FoodRequest(
         UUID destinationId,
@@ -43,6 +44,9 @@ public record FoodRequest(
         @NotNull FoodType type,
         @Size(max = 500) String shortDescription,
         String description,
+        @Size(max = 300) String slogan,
+        @Size(max = 120) String sloganBy,
+        UUID provinceId,
         String address,
         @NotNull(message = PIN_REQUIRED) @DecimalMin("-90") @DecimalMax("90") BigDecimal latitude,
         @NotNull(message = PIN_REQUIRED) @DecimalMin("-180") @DecimalMax("180") BigDecimal longitude,
@@ -58,7 +62,6 @@ public record FoodRequest(
         @MediaKey(allowEmpty = true, message = "Upload the cover first, then send its key")
         String coverKey,
         ListingStatus status,
-        Boolean isFeatured,
         Boolean isLocalSpecialty,
         Set<UUID> categoryIds,
         Set<UUID> tagIds,

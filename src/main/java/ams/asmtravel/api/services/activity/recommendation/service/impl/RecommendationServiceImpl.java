@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-/** Recommended, from published places and browsing; featured places always first. */
+/** Recommended, from published places and browsing. */
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -43,46 +43,35 @@ public class RecommendationServiceImpl implements RecommendationService {
         Map<UUID, Long> browses = browseHistory.recentBrowses();
         Set<UUID> browsed = userId == null ? Set.of() : browseHistory.browsedBy(userId);
         Taste taste = tasteOf(browsed, catalogue);
-        List<RankedDestination> ranked = featured(catalogue, browses, size);
-        Set<UUID> listed = new HashSet<>(ranked.stream().map(RankedDestination::destinationId).toList());
+        List<RankedDestination> ranked = new ArrayList<>();
 
         if (taste.isEmpty()) {
             for (Map.Entry<UUID, Long> entry : browses.entrySet()) {
                 if (ranked.size() >= size) {
                     break;
                 }
-                if (entry.getValue() > 0 && catalogue.containsKey(entry.getKey()) && !listed.contains(entry.getKey())) {
+                if (entry.getValue() > 0 && catalogue.containsKey(entry.getKey())) {
                     ranked.add(new RankedDestination(entry.getKey(), entry.getValue(), RecommendationReason.MOST_BROWSED));
                 }
             }
             return mapper.toResponse(false, ranked);
         }
 
-        // Then somewhere new to them, most like what they browse, then most browsed by everyone.
+        // Somewhere new to them, most like what they browse, then most browsed by everyone.
         Comparator<DestinationSummary> order = Comparator
                 .comparingInt((DestinationSummary place) -> match(taste, place)).reversed()
                 .thenComparing(Comparator.comparingLong((DestinationSummary place) -> browses.getOrDefault(place.id(), 0L))
                         .reversed())
                 .thenComparing(DestinationSummary::name);
         catalogue.values().stream()
-                .filter(place -> !browsed.contains(place.id()) && !listed.contains(place.id()))
+                .filter(place -> !browsed.contains(place.id()))
                 .filter(place -> match(taste, place) > 0)
                 .sorted(order)
-                .limit(Math.max(0, size - ranked.size()))
+                .limit(size)
                 .map(place -> new RankedDestination(place.id(), browses.getOrDefault(place.id(), 0L),
                         RecommendationReason.LIKE_YOUR_BROWSING))
                 .forEach(ranked::add);
         return mapper.toResponse(true, ranked);
-    }
-
-    /** Featured places lead every list, even ones already visited; the most browsed first. */
-    private static List<RankedDestination> featured(Map<UUID, DestinationSummary> catalogue, Map<UUID, Long> browses, int size) {
-        return new ArrayList<>(catalogue.values().stream()
-                .filter(DestinationSummary::featured)
-                .sorted(Comparator.comparingLong((DestinationSummary place) -> browses.getOrDefault(place.id(), 0L)).reversed())
-                .limit(size)
-                .map(place -> new RankedDestination(place.id(), browses.getOrDefault(place.id(), 0L), RecommendationReason.FEATURED))
-                .toList());
     }
 
     private static Taste tasteOf(Set<UUID> browsed, Map<UUID, DestinationSummary> catalogue) {

@@ -63,6 +63,10 @@ public class Region {
     @Column(columnDefinition = "text")
     private String historyIntro;
 
+    /** The picture on its card on Explore and the banner of its page in the app; null until one is chosen. */
+    @Column(length = 512)
+    private String coverKey;
+
     /** Its place among the regions of its kind, 0 for the first: Discover shows them in this order. */
     private Integer sortOrder;
 

@@ -23,7 +23,7 @@ import java.util.UUID;
  * A room, for create and edit. Counts and flags are boxed so a missing one gets its default, not a 400.
  *
  * @param stayId               fixed once the room exists
- * @param amenities            slugs from {@link ams.asmtravel.api.services.destination.stayroom.domain.RoomAmenities}
+ * @param amenities            slugs of the taxonomy's amenities offered in a room ({@code GET /api/v1/amenities?level=ROOM})
  * @param pricePerNight        the cheapest active room sets the stay's "from" price
  * @param freeCancellationDays null means non-refundable
  * @param photoKeys            photos from the stay's gallery; the first one leads
@@ -76,6 +76,7 @@ public record StayRoomRequest(
         @Min(0) @Max(17) Integer childrenFreeUnderAge,
         @DecimalMin("0") @Digits(integer = 10, fraction = 2) BigDecimal weeklyPrice,
         @DecimalMin("0") @Digits(integer = 10, fraction = 2) BigDecimal monthlyPrice,
-        @Min(1) @Max(100) Integer depositPercent
+        @Min(1) @Max(100) Integer depositPercent,
+        @DecimalMin("0") @Digits(integer = 10, fraction = 2) BigDecimal weekendPrice
 ) {
 }

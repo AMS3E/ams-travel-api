@@ -61,6 +61,14 @@ public class Destination {
     @Column(columnDefinition = "text")
     private String description;
 
+    /** One line someone said about it, quoted at the top of its page on the app. */
+    @Column(length = 300)
+    private String slogan;
+
+    /** Who said it. */
+    @Column(length = 120)
+    private String sloganBy;
+
     @Column(precision = 10, scale = 7)
     private BigDecimal latitude;
 
@@ -88,9 +96,6 @@ public class Destination {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)
     private ListingStatus status = ListingStatus.DRAFT;
-
-    @Column(nullable = false)
-    private Boolean isFeatured = false;
 
     /** Distinct visitors a day, from browse events. */
     @Column(nullable = false)

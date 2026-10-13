@@ -1,5 +1,10 @@
 package ams.asmtravel.api.services.destination.destination.service.impl;
 
+import ams.asmtravel.api.services.destination.destination.domain.DestinationSearch;
+import ams.asmtravel.api.services.destination.destination.specification.DestinationSpecification;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import ams.asmtravel.api.services.history.architecture.domain.ArchitectureStyleDeletingEvent;
 import ams.asmtravel.api.services.history.architecture.service.ArchitectureStyleService;
 import ams.asmtravel.api.services.taxonomy.category.domain.CategoryDeletingEvent;
@@ -90,6 +95,35 @@ public class DestinationServiceImpl implements DestinationService {
                 .toList();
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public Page<DestinationResponse> searchPublished(DestinationSearch search, Pageable pageable) {
+        return destinationRepository.findAll(DestinationSpecification.published(search), pageable).map(mapper::toDestinationResponse);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<DestinationResponse> findPublished(Collection<UUID> ids) {
+        if (ids == null || ids.isEmpty()) {
+            return List.of();
+        }
+        return destinationRepository.findAllByIdIn(ids).stream()
+                .filter(destination -> destination.getStatus() == ListingStatus.PUBLISHED)
+                .map(mapper::toDestinationResponse)
+                .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<DestinationResponse> suggestPublished(String text, int limit) {
+        if (text == null || text.isBlank() || limit < 1) {
+            return List.of();
+        }
+        return destinationRepository.findByStatusAndNameContainingIgnoreCaseOrderByNameAsc(ListingStatus.PUBLISHED, text.trim(), PageRequest.of(0, limit)).stream()
+                .map(mapper::toDestinationResponse)
+                .toList();
+    }
+
     /** An unpublished place outside the caller's desk is 404, not 403. */
     @Override
     @Transactional(readOnly = true)
@@ -118,7 +152,6 @@ public class DestinationServiceImpl implements DestinationService {
         apply(destination, request);
         destination.setStatus(ListingStatus.DRAFT);
         destination.setCreatedBy(authorId);
-        destination.setIsFeatured(permission.canFeature(authentication()) && Boolean.TRUE.equals(request.isFeatured()));
         destination = destinationRepository.save(destination);
         log.info("Destination {} ({}) drafted by {}", destination.getName(), destination.getId(), authorId);
         return mapper.toDestinationResponse(destination);
@@ -134,9 +167,6 @@ public class DestinationServiceImpl implements DestinationService {
         BigDecimal latitude = destination.getLatitude();
         BigDecimal longitude = destination.getLongitude();
         apply(destination, request);
-        if (request.isFeatured() != null && permission.canFeature(authentication())) {
-            destination.setIsFeatured(request.isFeatured());
-        }
         DestinationResponse saved = mapper.toDestinationResponse(destinationRepository.saveAndFlush(destination));
         if (!sameNumber(latitude, destination.getLatitude()) || !sameNumber(longitude, destination.getLongitude())) {
             events.publishEvent(new DestinationRelocatedEvent(id));
@@ -330,6 +360,8 @@ public class DestinationServiceImpl implements DestinationService {
         destination.setProvince(provinceService.getEntity(request.provinceId()));
         destination.setShortDescription(blankToNull(request.shortDescription()));
         destination.setDescription(blankToNull(request.description()));
+        destination.setSlogan(blankToNull(request.slogan()));
+        destination.setSloganBy(blankToNull(request.sloganBy()));
         destination.setLatitude(request.latitude());
         destination.setLongitude(request.longitude());
         destination.setAddress(blankToNull(request.address()));

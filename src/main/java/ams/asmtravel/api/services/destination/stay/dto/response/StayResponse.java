@@ -23,6 +23,10 @@ public record StayResponse(
         BigDecimal starRating,
         String shortDescription,
         String description,
+        String slogan,
+        String sloganBy,
+        UUID provinceId,
+        String policies,
         LocalTime checkInFrom,
         LocalTime checkOutUntil,
         String phone,
@@ -60,6 +64,7 @@ public record StayResponse(
         String facebookUrl,
         String licenseNumber,
         Integer yearOpened,
-        List<String> specialties
+        List<String> specialties,
+        List<String> weekendNights
 ) {
 }

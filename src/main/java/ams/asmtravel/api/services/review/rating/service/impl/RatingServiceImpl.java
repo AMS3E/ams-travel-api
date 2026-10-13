@@ -9,6 +9,8 @@ import ams.asmtravel.api.services.destination.food.domain.FoodDeletingEvent;
 import ams.asmtravel.api.services.destination.food.service.FoodService;
 import ams.asmtravel.api.services.destination.stay.domain.StayDeletingEvent;
 import ams.asmtravel.api.services.destination.stay.service.StayService;
+import ams.asmtravel.api.services.corridor.domain.CorridorDeletingEvent;
+import ams.asmtravel.api.services.corridor.service.CorridorService;
 import ams.asmtravel.api.services.review.rating.domain.Rating;
 import ams.asmtravel.api.services.review.rating.domain.RatingStatus;
 import ams.asmtravel.api.services.review.rating.domain.RatingTargetType;
@@ -36,6 +38,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.Instant;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -57,6 +60,7 @@ public class RatingServiceImpl implements RatingService {
     private final DestinationService destinationService;
     private final StayService stayService;
     private final FoodService foodService;
+    private final CorridorService corridorService;
 
     @Override
     @Transactional(readOnly = true)
@@ -75,6 +79,16 @@ public class RatingServiceImpl implements RatingService {
             throw new InvalidRatingException("Name a targetType and 1 to 100 targetIds");
         }
         return summariesOf(targetType, new LinkedHashSet<>(targetIds));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<RatingSummaryResponse> summariesBetween(RatingTargetType targetType, List<UUID> targetIds, Instant from, Instant to) {
+        if (targetType == null || targetIds == null || targetIds.isEmpty() || targetIds.size() > 100) {
+            throw new InvalidRatingException("Name a targetType and 1 to 100 targetIds");
+        }
+        Set<UUID> ids = new LinkedHashSet<>(targetIds);
+        return summariesOf(targetType, ids, ratingRepository.countStarsBetween(targetType, ids, from, to));
     }
 
     @Override
@@ -190,6 +204,11 @@ public class RatingServiceImpl implements RatingService {
         ratingRepository.deleteByTarget(RatingTargetType.FOOD, event.foodId());
     }
 
+    @EventListener
+    public void onCorridorDeleting(CorridorDeletingEvent event) {
+        ratingRepository.deleteByTarget(RatingTargetType.CORRIDOR, event.corridorId());
+    }
+
     /** A new rating, or a deleted one brought back; either earns the day's point for the place when still due. */
     private Rating save(UUID userId, RatingTargetType targetType, UUID targetId, int stars, Optional<Rating> deleted) {
         if (!isPublished(targetType, targetId)) {
@@ -215,8 +234,13 @@ public class RatingServiceImpl implements RatingService {
 
     /** One summary per place, in the order asked, unrated ones included; counted by the database. */
     private List<RatingSummaryResponse> summariesOf(RatingTargetType targetType, Collection<UUID> targetIds) {
+        return summariesOf(targetType, targetIds, ratingRepository.countStars(targetType, targetIds));
+    }
+
+    private List<RatingSummaryResponse> summariesOf(RatingTargetType targetType, Collection<UUID> targetIds,
+                                                    List<RatingRepository.StarCount> counts) {
         Map<UUID, Map<Integer, Long>> stars = new HashMap<>();
-        for (RatingRepository.StarCount count : ratingRepository.countStars(targetType, targetIds)) {
+        for (RatingRepository.StarCount count : counts) {
             stars.computeIfAbsent(count.getTargetId(), id -> new HashMap<>()).put(count.getStars().intValue(), count.getCount());
         }
         return targetIds.stream()
@@ -229,6 +253,7 @@ public class RatingServiceImpl implements RatingService {
             case DESTINATION -> destinationService.isPublished(targetId);
             case STAY -> stayService.isPublished(targetId);
             case FOOD -> foodService.isPublished(targetId);
+            case CORRIDOR -> corridorService.isPublished(targetId);
         };
     }
 

@@ -1,6 +1,8 @@
 package ams.asmtravel.api.services.review.review.service.impl;
 
 import ams.asmtravel.api.services.authorization.domain.Authorities;
+import ams.asmtravel.api.services.corridor.domain.CorridorDeletingEvent;
+import ams.asmtravel.api.services.corridor.service.CorridorService;
 import ams.asmtravel.api.services.point.service.PointService;
 import ams.asmtravel.api.services.destination.destination.domain.DestinationDeletingEvent;
 import ams.asmtravel.api.services.destination.destination.service.DestinationService;
@@ -30,6 +32,8 @@ import ams.asmtravel.api.services.review.review.specification.ReviewSpecificatio
 import ams.asmtravel.api.services.point.domain.PointSourceType;
 import ams.asmtravel.api.services.user.user.domain.UserDeletingEvent;
 import ams.asmtravel.api.services.user.user.domain.UserSummary;
+import java.time.LocalDate;
+import java.time.YearMonth;
 import ams.asmtravel.api.services.user.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -76,6 +80,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final DestinationService destinationService;
     private final StayService stayService;
     private final FoodService foodService;
+    private final CorridorService corridorService;
     private final UserService userService;
     private final ReviewMapper mapper;
     private final ApplicationEventPublisher events;
@@ -104,9 +109,26 @@ public class ReviewServiceImpl implements ReviewService {
             throw new InvalidReviewException("Name a targetType and 1 to 100 targetIds");
         }
         Set<UUID> ids = new LinkedHashSet<>(targetIds);
-        Map<UUID, Object[]> reviews = reviewRepository.summarize(targetType, ids).stream()
-                .collect(Collectors.toMap(row -> (UUID) row[0], Function.identity()));
-        Map<UUID, RatingSummaryResponse> ratings = ratingService.summaries(ratingTarget(targetType), List.copyOf(ids)).stream()
+        return summarize(targetType, ids, reviewRepository.summarize(targetType, ids),
+                ratingService.summaries(ratingTarget(targetType), List.copyOf(ids)));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ReviewSummaryResponse> summariesBetween(ReviewTargetType targetType, List<UUID> targetIds, Instant from, Instant to) {
+        if (targetType == null || targetIds == null || targetIds.isEmpty() || targetIds.size() > 100) {
+            throw new InvalidReviewException("Name a targetType and 1 to 100 targetIds");
+        }
+        Set<UUID> ids = new LinkedHashSet<>(targetIds);
+        return summarize(targetType, ids, reviewRepository.summarizeBetween(targetType, ids, from, to),
+                ratingService.summariesBetween(ratingTarget(targetType), List.copyOf(ids), from, to));
+    }
+
+    /** One summary per place asked for, in that order, from the grouped review rows and the rating summaries. */
+    private static List<ReviewSummaryResponse> summarize(ReviewTargetType targetType, Set<UUID> ids, List<Object[]> rows,
+                                                         List<RatingSummaryResponse> ratingSummaries) {
+        Map<UUID, Object[]> reviews = rows.stream().collect(Collectors.toMap(row -> (UUID) row[0], Function.identity()));
+        Map<UUID, RatingSummaryResponse> ratings = ratingSummaries.stream()
                 .collect(Collectors.toMap(RatingSummaryResponse::targetId, Function.identity()));
         return ids.stream().map(id -> {
             Object[] row = reviews.get(id);
@@ -154,6 +176,8 @@ public class ReviewServiceImpl implements ReviewService {
         review.setTargetId(request.targetId());
         review.setTitle(clean(request.title()));
         review.setContent(clean(request.content()));
+        review.setVisitType(request.visitType());
+        review.setVisitedOn(firstDay(request.visitedOn()));
         review.setStatus(ReviewStatus.PUBLISHED);
         review.setModeratedBy(null);
         review.setModeratedAt(null);
@@ -251,6 +275,11 @@ public class ReviewServiceImpl implements ReviewService {
         removeAll(reviewRepository.findByTargetTypeAndTargetId(ReviewTargetType.FOOD, event.foodId()));
     }
 
+    @EventListener
+    public void onCorridorDeleting(CorridorDeletingEvent event) {
+        removeAll(reviewRepository.findByTargetTypeAndTargetId(ReviewTargetType.CORRIDOR, event.corridorId()));
+    }
+
     /** The author's words, stars and photos; a null field keeps its value. */
     private void edit(Review review, UpdateReviewRequest request) {
         if (request.title() != null) {
@@ -258,6 +287,12 @@ public class ReviewServiceImpl implements ReviewService {
         }
         if (request.content() != null) {
             review.setContent(clean(request.content()));
+        }
+        if (request.visitType() != null) {
+            review.setVisitType(request.visitType());
+        }
+        if (request.visitedOn() != null) {
+            review.setVisitedOn(firstDay(request.visitedOn()));
         }
         if (request.photoKeys() != null) {
             photoService.replaceReviewPhotos(review.getId(), request.photoKeys());
@@ -318,6 +353,7 @@ public class ReviewServiceImpl implements ReviewService {
             case DESTINATION -> destinationService.isPublished(targetId);
             case STAY -> stayService.isPublished(targetId);
             case FOOD -> foodService.isPublished(targetId);
+            case CORRIDOR -> corridorService.isPublished(targetId);
         };
     }
 
@@ -335,6 +371,11 @@ public class ReviewServiceImpl implements ReviewService {
 
     private static RatingService.Rater rater(Review review) {
         return new RatingService.Rater(review.getUserId(), review.getTargetId());
+    }
+
+    /** The month of the visit is kept as its first day. */
+    private static LocalDate firstDay(YearMonth month) {
+        return month == null ? null : month.atDay(1);
     }
 
     private static String clean(String text) {

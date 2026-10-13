@@ -3,6 +3,7 @@ package ams.asmtravel.api.services.destination.food.domain;
 import ams.asmtravel.api.services.destination.destination.domain.Destination;
 import ams.asmtravel.api.services.destination.destination.domain.ListingStatus;
 import ams.asmtravel.api.services.taxonomy.category.domain.Category;
+import ams.asmtravel.api.services.location.province.domain.Province;
 import ams.asmtravel.api.services.taxonomy.interest.domain.Interest;
 import ams.asmtravel.api.services.taxonomy.tag.domain.Tag;
 import jakarta.persistence.Column;
@@ -68,8 +69,21 @@ public class Food {
     @Column(columnDefinition = "text")
     private String description;
 
+    /** One line someone said about it, quoted at the top of its page on the app. */
+    @Column(length = 300)
+    private String slogan;
+
+    /** Who said it. */
+    @Column(length = 120)
+    private String sloganBy;
+
     @Column(columnDefinition = "text")
     private String address;
+
+    /** The province the pin is in, when known. Travellers still find it by its pin. */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "province_id")
+    private Province province;
 
     @Column(precision = 10, scale = 7)
     private BigDecimal latitude;
@@ -177,9 +191,6 @@ public class Food {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)
     private ListingStatus status = ListingStatus.DRAFT;
-
-    @Column(nullable = false)
-    private Boolean isFeatured = false;
 
     @Column(nullable = false)
     private Boolean isLocalSpecialty = false;

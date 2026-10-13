@@ -55,7 +55,7 @@ class AccessRuleMatrixTests {
             "GET, /api/v1/stamps/me", "POST, /api/v1/stamps",
             "GET, /api/v1/notifications", "GET, /api/v1/favorites", "GET, /api/v1/reviews/me", "POST, /api/v1/reviews",
             "GET, /api/v1/destination-verifications/queue",
-            "GET, /api/v1/destination-verifications", "GET, /api/v1/admin/audit", "GET, /api/v1/admin/overview",
+            "GET, /api/v1/destination-verifications", "GET, /api/v1/admin/audit", "GET, /api/v1/admin/overview", "GET, /api/v1/admin/destination-stats",
             "GET, /api/v1/destinations/workspace", "GET, /api/v1/identities", "GET, /api/v1/user-roles",
             "GET, /api/v1/roles", "GET, /api/v1/permissions", "GET, /api/v1/staff", "POST, /api/v1/media/files",
             "GET, /api/v1/media/files/verification/" + ID + "/a.jpg"
@@ -67,7 +67,7 @@ class AccessRuleMatrixTests {
     /** What a visitor's account does not reach: the back office and every catalogue write. */
     @ParameterizedTest
     @CsvSource({
-            "GET, /api/v1/destination-verifications/queue", "GET, /api/v1/admin/audit", "GET, /api/v1/admin/overview",
+            "GET, /api/v1/destination-verifications/queue", "GET, /api/v1/admin/audit", "GET, /api/v1/admin/overview", "GET, /api/v1/admin/destination-stats",
             "GET, /api/v1/destinations/workspace", "POST, /api/v1/seasons", "POST, /api/v1/badges",
             "POST, /api/v1/historical-coverage/periods",
             "POST, /api/v1/historical-coverage/monarchs", "POST, /api/v1/destination-histories", "PUT, /api/v1/destination-monarchs/" + ID,

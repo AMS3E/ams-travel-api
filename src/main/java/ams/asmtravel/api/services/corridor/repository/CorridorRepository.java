@@ -13,10 +13,9 @@ import java.util.UUID;
 
 public interface CorridorRepository extends JpaRepository<Corridor, UUID> {
 
-    /** Featured first, then by name. */
-    List<Corridor> findAllByOrderByIsFeaturedDescNameAsc();
+    List<Corridor> findAllByOrderByNameAsc();
 
-    List<Corridor> findAllByStatusOrderByIsFeaturedDescNameAsc(CorridorStatus status);
+    List<Corridor> findAllByStatusOrderByNameAsc(CorridorStatus status);
 
     Optional<Corridor> findBySlug(String slug);
 

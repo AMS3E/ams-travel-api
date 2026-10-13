@@ -31,6 +31,9 @@ public interface ReviewService {
     /** Published review count and newest date per place, with the place's rating. */
     List<ReviewSummaryResponse> summaries(ReviewTargetType targetType, List<UUID> targetIds);
 
+    /** The same, counting only the reviews written and the stars given in a window; {@code to} exclusive. */
+    List<ReviewSummaryResponse> summariesBetween(ReviewTargetType targetType, List<UUID> targetIds, Instant from, Instant to);
+
     /** A published review for anybody; any other for its author or a moderator. */
     ReviewResponse findById(UUID id);
 

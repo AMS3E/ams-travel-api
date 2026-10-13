@@ -30,6 +30,9 @@ import java.util.UUID;
  * @param destinationId optional; travellers find a stay by its map pin
  * @param ownerUserId   a partner may name only themselves, an editor anyone
  * @param latitude      required: the map pin is how travellers find the stay
+ * @param slogan        one line someone said about it, quoted on its page; sloganBy says who
+ * @param provinceId    the province the pin is in, filled from the pin on the dashboard; optional
+ * @param policies      the stay's policies in the host's own words, as Markdown; optional
  * @param status        null keeps it (new is DRAFT); only an editor may set PUBLISHED
  * @param interestIds   Stays-group interests; null keeps them on an edit
  */
@@ -41,6 +44,10 @@ public record StayRequest(
         @DecimalMin("0") @DecimalMax("5") @Digits(integer = 1, fraction = 1) BigDecimal starRating,
         @Size(max = 500) String shortDescription,
         String description,
+        @Size(max = 300) String slogan,
+        @Size(max = 120) String sloganBy,
+        UUID provinceId,
+        String policies,
         LocalTime checkInFrom,
         LocalTime checkOutUntil,
         @Size(max = 50) String phone,
@@ -77,7 +84,8 @@ public record StayRequest(
         @Size(max = 512) String facebookUrl,
         @Size(max = 100) String licenseNumber,
         @Min(1800) @Max(2100) Integer yearOpened,
-        List<@NotBlank @Size(max = 100) String> specialties
+        List<@NotBlank @Size(max = 100) String> specialties,
+        List<@Pattern(regexp = "MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY", message = "Name a night by its day, e.g. FRIDAY") String> weekendNights
 ) {
 
     static final String PIN_REQUIRED = "Put the stay on the map: travellers find it by its pin";
