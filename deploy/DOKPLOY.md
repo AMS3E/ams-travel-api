@@ -15,6 +15,20 @@ About an hour, most of it the first image build.
 - **Server room**: the first deploy compiles the API, MinIO and Keycloak's build step on the server.
   About 4 GB of free memory and 10 GB of disk. If the build dies, see "If something fails" below.
 
+## 0b. How traffic reaches this Dokploy (learned 2026-10-13)
+
+The company's Dokploy sits **behind an nginx gateway** at `167.179.14.44`, the address `deploy.amskh.co`
+resolves to. The Dokploy server itself (`167.179.14.34`) is not reachable from the internet, and the
+gateway answers 403 or a redirect for any hostname it has not been told about. So for every new domain:
+
+- the DNS record points at the **gateway**, `167.179.14.44`, DNS only;
+- the admin adds the hostname on the gateway, forwarded to the Dokploy server, the same way as the existing sites;
+- Dokploy's "Validate DNS" keeps complaining that the record should point at `.34`; that is cosmetic.
+- Whether the domain cards in Dokploy have HTTPS on or off depends on where certificates live. Ask the admin
+  how the existing sites are set; if the gateway terminates HTTPS, switch HTTPS off on our three cards and
+  the gateway forwards plain HTTP to Dokploy. Keycloak still sees the public `https://` address through
+  the forwarded headers (`KC_PROXY_HEADERS=xforwarded`), so tokens stay correct either way.
+
 ## 1. The backend: a Compose service
 
 1. Project "Three E" → environment → **Create Service → Compose**. Name it `ams-travel-backend`.
@@ -22,7 +36,8 @@ About an hour, most of it the first image build.
    compose path `deploy/docker-compose.dokploy.yml`.
 3. **Environment** tab: paste `deploy/.env.dokploy.example` with every value filled in
    (your three domains, long random secrets, the mail account). Save.
-4. **Domains** tab, add two:
+4. **Domains** tab, add two. Before the first deploy the service list is empty ("Services not found"), because
+   Dokploy has not cloned the repo yet: press **Manual** and type the service name.
    - the API domain → service `api`, container port `8080`, HTTPS on (Let's Encrypt);
    - the Keycloak domain → service `keycloak`, container port `8080`, HTTPS on.
    The Keycloak domain must be exactly the `KEYCLOAK_PUBLIC_URL` of the environment, since tokens carry it.
@@ -36,8 +51,9 @@ About an hour, most of it the first image build.
 ## 2. The CMS: an Application service
 
 1. **Create Service → Application**. Name it `ams-travel-cms`.
-2. Provider: GitHub, repository `AMS3E/ams-travel-admin-dashboard`, branch `kimleng`,
-   build type **Dockerfile** (the repo's own, at its root).
+2. Provider: GitHub, repository `AMS3E/ams-travel-admin-dashboard`, branch `kimleng`, **Build Path `/`**
+   (the folder to build from, not the Dockerfile). Save, then under Build Type pick **Dockerfile** and leave
+   its three fields empty (defaults: `Dockerfile`, context `.`, last stage).
 3. **Environment**: paste `deploy/dashboard.env.example` filled in: your domains, and
    `KEYCLOAK_CLIENT_SECRET` = the `AMSADMIN_DASHBOARD_SECRET` of the backend.
 4. **Domains**: the CMS domain → container port `3001`, HTTPS on. It must equal `DASHBOARD_URL` of the
