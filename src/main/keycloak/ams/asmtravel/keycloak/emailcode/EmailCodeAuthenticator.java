@@ -134,7 +134,7 @@ public class EmailCodeAuthenticator implements Authenticator {
         // Nothing held.
     }
 
-    /** A fresh code, remembered in the session and sent by the realm's SMTP server. False when the mail could not go. */
+    /** A fresh code, remembered in the session and sent by the realm's SMTP server as the AMS Travel mail. False when the mail could not go. */
     private boolean send(AuthenticationFlowContext context, UserModel user, String email, Settings settings) {
         String code = String.format("%06d", RANDOM.nextInt(1_000_000));
         AuthenticationSessionModel session = context.getAuthenticationSession();
@@ -143,12 +143,9 @@ public class EmailCodeAuthenticator implements Authenticator {
         session.setAuthNote(NOTE_EXPIRES, String.valueOf(now + settings.ttlMinutes * 60L));
         session.setAuthNote(NOTE_SENT, String.valueOf(now));
         session.setAuthNote(NOTE_ATTEMPTS, "0");
-        String subject = "Your AMS Travel verification code: " + code;
-        String text = "Your verification code is " + code + ".\n\nIt expires in " + settings.ttlMinutes
-                + " minutes. If you did not ask for it, ignore this email.";
-        String html = "<p>Your verification code is</p>"
-                + "<p style=\"font-size:28px;letter-spacing:6px;font-weight:bold\">" + code + "</p>"
-                + "<p>It expires in " + settings.ttlMinutes + " minutes. If you did not ask for it, ignore this email.</p>";
+        String subject = EmailCodeMessage.subject(code);
+        String text = EmailCodeMessage.text(code, settings.ttlMinutes);
+        String html = EmailCodeMessage.html(code, settings.ttlMinutes);
         try {
             context.getSession().getProvider(EmailSenderProvider.class)
                     .send(context.getRealm().getSmtpConfig(), user, subject, text, html);
