@@ -90,8 +90,17 @@ Two choices for the catalogue the hosted CMS starts with:
 - **Accounts.** The realms come with the test accounts (`admin@ams.test`, `bdo@`, `editor@`,
   `contributor@`, `partner@`, `visitor@`) on `LOCAL_USER_PASSWORD`. Create the real staff in the Keycloak
   console (realm `amsadmin`, Users), give them a desk role, then delete the test accounts you do not use.
-- **Mail.** Register a traveller once at `https://<auth domain>/realms/amstravel/account` to see the code
+  Every staff sign-in asks for a six-digit code sent to the account's email address (since 2026-10-14), so
+  each real account needs a mailbox its owner reads; the test accounts' `@ams.test` addresses receive nothing.
+- **Mail.** Both realms need the mail server: `amstravel` sends the registration codes, `amsadmin` the staff
+  sign-in codes. Register a traveller once at `https://<auth domain>/realms/amstravel/account` to see the code
   arrive. A Gmail app password allows about 500 mails a day; move to a mail service before launch.
+- **A realm imported before 2026-10-14** still signs staff in with the password alone: Keycloak imports a
+  realm once. Run `local/keycloak-staff-code-flow.sh` against the auth domain with the admin login (it creates
+  the flow "browser with email code", binds it, switches on brute-force protection and the 30-minute idle
+  timeout, and can set the mail server). Or build it in the console: Authentication → Create flow → Cookie
+  (Alternative), Identity Provider Redirector (Alternative), a sub-flow (Alternative) holding Username Password
+  Form (Required) and Email code (Required) → Bind flow → Browser flow.
 - **Backups.** The data lives in the Docker volumes `postgres-data` and `minio-data` of the compose
   service. Dokploy's volume backups, or a nightly `pg_dump` and `rclone sync` of the bucket, cover both.
 - **Updates.** Push to `kimleng`, press Deploy on each service. Database changes run by themselves (Liquibase).

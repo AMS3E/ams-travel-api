@@ -27,7 +27,8 @@ You then have:
 
 The catalogue starts seeded (published places, tourism regions, provinces, corridors, amenities); stays,
 food places and reviews start empty. The traveller `visitor@ams.test` and the staff `admin@ams.test` exist
-with the `LOCAL_USER_PASSWORD` of `.env`.
+with the `LOCAL_USER_PASSWORD` of `.env`. Signing in as staff asks for a six-digit code after the password;
+Mailpit has it.
 
 Stop with `docker compose down`; start again with `docker compose up -d`. `docker compose down -v`
 wipes the databases and the pictures, and the next start seeds everything again.
