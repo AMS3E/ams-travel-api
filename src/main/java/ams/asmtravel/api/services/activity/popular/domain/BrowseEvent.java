@@ -2,6 +2,8 @@ package ams.asmtravel.api.services.activity.popular.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -18,7 +20,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
 
-/** A page a visitor opened. Rows outlive the place and the person, so counts stay. */
+/** One opening of a place's page by a visitor, signed in or not. */
 @Entity
 @NoArgsConstructor
 @Getter
@@ -30,11 +32,14 @@ public class BrowseEvent {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /** The signed-in visitor, if there was one. */
     private UUID userId;
 
-    /** The place opened, when the event is about one. */
-    private UUID destinationId;
+    /** The kind of page opened; every row before the Popular page counted stays and food was a destination's. */
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private BrowseTarget targetType = BrowseTarget.DESTINATION;
+
+    private UUID targetId;
 
     @Column(nullable = false, length = 50)
     private String eventType;

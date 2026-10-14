@@ -4,6 +4,8 @@ import ams.asmtravel.api.services.media.dto.request.MediaKey;
 import ams.asmtravel.api.services.user.user.domain.UserStatus;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
+
+import java.util.UUID;
 import lombok.Builder;
 
 
@@ -14,6 +16,8 @@ public record UserRequest(
         @Size(max = 50) String phone,
         @MediaKey(allowEmpty = true, message = "Upload the picture first, then send its key")
         String avatarKey,
+        /** The province or capital the traveller lives in; on {@code PUT /users/me} null clears it. */
+        UUID homeProvinceId,
         @Size(min = 8, max = 128, message = "Use at least eight characters") String password,
         UserStatus status,
         Boolean temporaryPassword

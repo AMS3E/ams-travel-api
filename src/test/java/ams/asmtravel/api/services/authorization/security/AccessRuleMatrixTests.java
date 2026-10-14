@@ -41,7 +41,9 @@ class AccessRuleMatrixTests {
             "/api/v1/badges/shared/" + ID, "/api/v1/destination-verifications/status",
             "/api/v1/historical-coverage/periods", "/api/v1/historical-coverage/monarchs", "/api/v1/historical-coverage/styles", "/api/v1/historical-coverage/religions",
             "/api/v1/destination-histories", "/api/v1/destination-monarchs", "/api/v1/ratings?targetType=DESTINATION&targetIds=" + ID,
-            "/api/v1/reviews?targetType=DESTINATION&targetId=" + ID, "/api/v1/media?ownerType=STAY&ownerId=" + ID
+            "/api/v1/reviews?targetType=DESTINATION&targetId=" + ID, "/api/v1/media?ownerType=STAY&ownerId=" + ID,
+            "/api/v1/media?ownerType=CORRIDOR", "/api/v1/search/by-province", "/api/v1/badges/shared/" + ID + "/page",
+            "/api/v1/popular?type=STAY"
     })
     void anyoneReads(String path) throws Exception {
         assertThat(status(HttpMethod.GET, path, false)).isNotIn(401, 403);

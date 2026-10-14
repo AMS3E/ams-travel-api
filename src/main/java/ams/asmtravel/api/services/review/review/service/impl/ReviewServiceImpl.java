@@ -88,10 +88,10 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     @Transactional(readOnly = true)
     public Page<ReviewResponse> getAll(ReviewTargetType targetType, UUID targetId, ReviewStatus status, UUID userId,
-                                       Pageable pageable) {
+                                       Set<Integer> stars, Pageable pageable) {
         boolean onePlace = targetType != null && targetId != null;
         if (isModerator()) {
-            return respond(reviewRepository.findAll(ReviewSpecification.of(targetType, targetId, status, userId), pageable));
+            return respond(reviewRepository.findAll(ReviewSpecification.of(targetType, targetId, status, userId, stars), pageable));
         }
         if (!onePlace) {
             if (!(Authorities.current() instanceof JwtAuthenticationToken)) {
@@ -99,7 +99,7 @@ public class ReviewServiceImpl implements ReviewService {
             }
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Only a moderator sees every review; name a place");
         }
-        return respond(reviewRepository.findAll(ReviewSpecification.publishedOf(targetType, targetId), pageable));
+        return respond(reviewRepository.findAll(ReviewSpecification.publishedOf(targetType, targetId, stars), pageable));
     }
 
     @Override
@@ -153,8 +153,8 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<ReviewResponse> findMine(UUID userId, Pageable pageable) {
-        return respond(reviewRepository.findByUserIdAndStatusNot(userId, ReviewStatus.DELETED, pageable));
+    public Page<ReviewResponse> findMine(UUID userId, Set<Integer> stars, Pageable pageable) {
+        return respond(reviewRepository.findAll(ReviewSpecification.mine(userId, stars), pageable));
     }
 
     @Override

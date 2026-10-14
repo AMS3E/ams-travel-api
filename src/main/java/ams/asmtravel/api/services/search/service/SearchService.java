@@ -2,6 +2,7 @@ package ams.asmtravel.api.services.search.service;
 
 import ams.asmtravel.api.services.search.domain.SearchType;
 import ams.asmtravel.api.services.search.dto.request.SearchRequest;
+import ams.asmtravel.api.services.search.dto.response.ProvinceGroupResponse;
 import ams.asmtravel.api.services.search.dto.response.SearchHitResponse;
 import ams.asmtravel.api.services.search.dto.response.SuggestionResponse;
 import org.springframework.data.domain.Page;
@@ -15,6 +16,9 @@ public interface SearchService {
 
     /** A page of cards matching the request; the page size is capped at 100. */
     Page<SearchHitResponse> search(SearchRequest request, Pageable pageable);
+
+    /** The same search, grouped by province: each province's first {@code perProvince} cards and its total. */
+    List<ProvinceGroupResponse> byProvince(SearchRequest request, int perProvince);
 
     /** Up to {@code limit} names containing the text, those starting with it first. */
     List<SuggestionResponse> suggest(String text, int limit);

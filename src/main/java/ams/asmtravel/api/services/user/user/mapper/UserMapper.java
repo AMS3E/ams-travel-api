@@ -3,6 +3,7 @@ package ams.asmtravel.api.services.user.user.mapper;
 import ams.asmtravel.api.services.authorization.role.domain.RoleCode;
 import ams.asmtravel.api.services.media.service.MediaService;
 import ams.asmtravel.api.services.user.user.domain.TokenIdentity;
+import ams.asmtravel.api.services.user.user.domain.ProfileCompletion;
 import ams.asmtravel.api.services.user.user.domain.User;
 import ams.asmtravel.api.services.user.user.domain.UserSummary;
 import ams.asmtravel.api.services.user.user.dto.response.UserResponse;
@@ -18,7 +19,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", imports = ProfileCompletion.class)
 public abstract class UserMapper {
 
     private static final String ROLE_PREFIX = "ROLE_";
@@ -28,9 +29,12 @@ public abstract class UserMapper {
     protected MediaService mediaService;
 
     /** @param roles the roles held, from the userrole service */
+    @Mapping(target = "id", source = "user.id")
     @Mapping(target = "avatarUrl", expression = "java(mediaService.url(user.getAvatarKey()))")
     @Mapping(target = "roles", expression = "java(roleNames(roles))")
-    public abstract UserResponse toResponse(User user, Set<RoleCode> roles);
+    @Mapping(target = "homeProvinceName", source = "homeProvinceName")
+    @Mapping(target = "profileCompletion", expression = "java(ProfileCompletion.of(user))")
+    public abstract UserResponse toResponse(User user, Set<RoleCode> roles, String homeProvinceName);
 
     @Mapping(target = "roles", source = "roles")
     public abstract UserSummary toSummary(User user, Set<RoleCode> roles);

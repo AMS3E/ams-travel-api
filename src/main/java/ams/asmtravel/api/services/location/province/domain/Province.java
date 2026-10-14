@@ -15,6 +15,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
 
@@ -42,6 +43,17 @@ public class Province {
 
     @Column(nullable = false)
     private Boolean isActive = true;
+
+    /** The picture on its card in the app's "Explore by Provinces" row; null until an editor chooses one. */
+    @Column(length = 512)
+    private String coverKey;
+
+    /** Its centre, the marker the Map screen puts on it: the capital town, as seeded, or where an editor moved it. */
+    @Column(precision = 10, scale = 7)
+    private BigDecimal latitude;
+
+    @Column(precision = 10, scale = 7)
+    private BigDecimal longitude;
 
     /** Who made it, from their account; null for the 25 the seed wrote. */
     @Column(name = "created_by")

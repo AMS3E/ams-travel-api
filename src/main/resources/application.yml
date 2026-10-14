@@ -156,6 +156,10 @@ app:
     # stamp. Wide enough for a temple complex's car park, narrow enough that a
     # stamp still means you went.
     stamp-radius-meters: ${STAMP_RADIUS_METERS:1000}
+    share:
+      # The API's public origin: an earned badge's shareUrl is this plus
+      # /share/badges/{userBadgeId}, the page Facebook reads its card from.
+      public-url: ${API_PUBLIC_URL:http://localhost:8080}
   seasons:
     # Season boundaries are calendar dates in Cambodia. Reading "today" in the
     # server's zone would move the changeover by the UTC offset.

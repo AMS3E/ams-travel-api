@@ -1,0 +1,28 @@
+# A province has a cover picture (the app's "Explore by Provinces" cards) and a
+# centre, as a tourism region now has a centre too: the Map screen puts one
+# marker per province and per region. All null until an editor fills them;
+# 021 seeds the 25 provinces' centres.
+databaseChangeLog:
+  - changeSet:
+      id: v2-taxonomy-province-cover-centre
+      author: ams-travel-v2
+      changes:
+        - addColumn:
+            schemaName: taxonomy
+            tableName: provinces
+            columns:
+              - column: {name: cover_key, type: varchar(512)}
+              - column: {name: latitude, type: "decimal(10,7)"}
+              - column: {name: longitude, type: "decimal(10,7)"}
+        - addColumn:
+            schemaName: taxonomy
+            tableName: regions
+            columns:
+              - column: {name: latitude, type: "decimal(10,7)"}
+              - column: {name: longitude, type: "decimal(10,7)"}
+      rollback:
+        - dropColumn: {schemaName: taxonomy, tableName: regions, columnName: longitude}
+        - dropColumn: {schemaName: taxonomy, tableName: regions, columnName: latitude}
+        - dropColumn: {schemaName: taxonomy, tableName: provinces, columnName: longitude}
+        - dropColumn: {schemaName: taxonomy, tableName: provinces, columnName: latitude}
+        - dropColumn: {schemaName: taxonomy, tableName: provinces, columnName: cover_key}

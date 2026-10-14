@@ -2,6 +2,10 @@ package ams.asmtravel.api.services.favorite.service.impl;
 
 import ams.asmtravel.api.services.corridor.domain.CorridorDeletingEvent;
 import ams.asmtravel.api.services.corridor.service.CorridorService;
+import ams.asmtravel.api.services.location.province.domain.ProvinceDeletingEvent;
+import ams.asmtravel.api.services.location.province.service.ProvinceService;
+import ams.asmtravel.api.services.location.region.domain.RegionDeletingEvent;
+import ams.asmtravel.api.services.location.region.service.RegionService;
 import ams.asmtravel.api.services.destination.destination.domain.DestinationDeletingEvent;
 import ams.asmtravel.api.services.destination.destination.service.DestinationService;
 import ams.asmtravel.api.services.favorite.domain.Favorite;
@@ -37,6 +41,8 @@ public class FavoriteServiceImpl implements FavoriteService {
     private final StayService stayService;
     private final FoodService foodService;
     private final CorridorService corridorService;
+    private final RegionService regionService;
+    private final ProvinceService provinceService;
     private final FavoriteMapper mapper;
 
     @Override
@@ -101,12 +107,24 @@ public class FavoriteServiceImpl implements FavoriteService {
         favoriteRepository.deleteByTarget(FavoriteTarget.CORRIDOR, event.corridorId());
     }
 
+    @EventListener
+    public void onRegionDeleting(RegionDeletingEvent event) {
+        favoriteRepository.deleteByTarget(FavoriteTarget.REGION, event.regionId());
+    }
+
+    @EventListener
+    public void onProvinceDeleting(ProvinceDeletingEvent event) {
+        favoriteRepository.deleteByTarget(FavoriteTarget.PROVINCE, event.provinceId());
+    }
+
     private boolean exists(FavoriteTarget targetType, UUID targetId) {
         return switch (targetType) {
             case DESTINATION -> destinationService.isPublished(targetId);
             case STAY -> stayService.isPublished(targetId);
             case FOOD -> foodService.isPublished(targetId);
             case CORRIDOR -> corridorService.isPublished(targetId);
+            case REGION -> regionService.exists(targetId);
+            case PROVINCE -> provinceService.exists(targetId);
         };
     }
 }

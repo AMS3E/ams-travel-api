@@ -1,6 +1,7 @@
 package ams.asmtravel.api.services.activity.popular.repository;
 
 import ams.asmtravel.api.services.activity.popular.domain.BrowseEvent;
+import ams.asmtravel.api.services.activity.popular.domain.BrowseTarget;
 import ams.asmtravel.api.services.activity.popular.domain.BrowseTotal;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -12,45 +13,42 @@ import java.util.UUID;
 
 public interface BrowseEventRepository extends JpaRepository<BrowseEvent, Long> {
 
-    /** Different signed-in visitors per place since a moment, most first. */
+    /** Different signed-in visitors per place of one kind since a moment, most first. */
     @Query("""
-            select new ams.asmtravel.api.services.activity.popular.domain.BrowseTotal(e.destinationId, count(distinct e.userId))
+            select new ams.asmtravel.api.services.activity.popular.domain.BrowseTotal(e.targetId, count(distinct e.userId))
             from BrowseEvent e
-            where e.userId is not null and e.destinationId is not null and e.createdAt >= :since
-            group by e.destinationId
+            where e.userId is not null and e.targetType = :type and e.targetId is not null and e.createdAt >= :since
+            group by e.targetId
             order by count(distinct e.userId) desc
             """)
-    List<BrowseTotal> totalsSince(Instant since);
+    List<BrowseTotal> totalsSince(BrowseTarget type, Instant since);
 
-    /** Different signed-in visitors per place in a window, most first; {@code to} exclusive. */
     @Query("""
-            select new ams.asmtravel.api.services.activity.popular.domain.BrowseTotal(e.destinationId, count(distinct e.userId))
+            select new ams.asmtravel.api.services.activity.popular.domain.BrowseTotal(e.targetId, count(distinct e.userId))
             from BrowseEvent e
-            where e.userId is not null and e.destinationId is not null and e.createdAt >= :from and e.createdAt < :to
-            group by e.destinationId
+            where e.userId is not null and e.targetType = :type and e.targetId is not null
+              and e.createdAt >= :from and e.createdAt < :to
+            group by e.targetId
             order by count(distinct e.userId) desc
             """)
-    List<BrowseTotal> totalsBetween(Instant from, Instant to);
+    List<BrowseTotal> totalsBetween(BrowseTarget type, Instant from, Instant to);
 
-    /** Whether this visitor already opened this place in the window: the same day. */
-    boolean existsByDestinationIdAndUserIdAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
-            UUID destinationId, UUID userId, Instant from, Instant to);
+    boolean existsByTargetTypeAndTargetIdAndUserIdAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
+            BrowseTarget targetType, UUID targetId, UUID userId, Instant from, Instant to);
 
-    /** The same for an anonymous visitor, known only by the website's session. */
-    boolean existsByDestinationIdAndSessionIdAndUserIdIsNullAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
-            UUID destinationId, String sessionId, Instant from, Instant to);
+    boolean existsByTargetTypeAndTargetIdAndSessionIdAndUserIdIsNullAndCreatedAtGreaterThanEqualAndCreatedAtLessThan(
+            BrowseTarget targetType, UUID targetId, String sessionId, Instant from, Instant to);
 
-    /** When a visitor opened which places, in a window: what the Browser badge counts. */
     @Query("""
             select e from BrowseEvent e
-            where e.userId = :userId and e.destinationId is not null and e.createdAt >= :from and e.createdAt < :to
+            where e.userId = :userId and e.targetType = :type and e.targetId is not null
+              and e.createdAt >= :from and e.createdAt < :to
             """)
-    List<BrowseEvent> findByUserBetween(UUID userId, Instant from, Instant to);
+    List<BrowseEvent> findByUserBetween(UUID userId, BrowseTarget type, Instant from, Instant to);
 
-    @Query("select distinct e.destinationId from BrowseEvent e where e.userId = :userId and e.destinationId is not null")
-    List<UUID> findBrowsedDestinationIds(UUID userId);
+    @Query("select distinct e.targetId from BrowseEvent e where e.userId = :userId and e.targetType = :type and e.targetId is not null")
+    List<UUID> findBrowsedTargetIds(UUID userId, BrowseTarget type);
 
-    /** A deleted person's browses stay, with nobody behind them. */
     @Modifying
     @Query("update BrowseEvent e set e.userId = null where e.userId = :userId")
     int forgetUser(UUID userId);

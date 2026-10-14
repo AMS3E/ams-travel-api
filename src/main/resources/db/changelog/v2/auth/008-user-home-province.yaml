@@ -1,0 +1,25 @@
+# A traveller names the province or capital they live in: the line under the
+# name on the Profile screen and the "Province / Capital" picker of Account
+# info. Optional; a deleted province leaves it empty.
+databaseChangeLog:
+  - changeSet:
+      id: v2-auth-user-home-province
+      author: ams-travel-v2
+      changes:
+        - addColumn:
+            schemaName: auth
+            tableName: users
+            columns:
+              - column: {name: home_province_id, type: uuid}
+        - addForeignKeyConstraint:
+            baseTableSchemaName: auth
+            baseTableName: users
+            baseColumnNames: home_province_id
+            constraintName: fk_users_home_province
+            referencedTableSchemaName: taxonomy
+            referencedTableName: provinces
+            referencedColumnNames: id
+            onDelete: SET NULL
+      rollback:
+        - dropForeignKeyConstraint: {baseTableSchemaName: auth, baseTableName: users, constraintName: fk_users_home_province}
+        - dropColumn: {schemaName: auth, tableName: users, columnName: home_province_id}

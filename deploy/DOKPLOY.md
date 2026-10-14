@@ -42,6 +42,8 @@ gateway answers 403 or a redirect for any hostname it has not been told about. S
    - the API domain → service `api`, container port `8080`, HTTPS on (Let's Encrypt);
    - the Keycloak domain → service `keycloak`, container port `8080`, HTTPS on.
    The Keycloak domain must be exactly the `KEYCLOAK_PUBLIC_URL` of the environment, since tokens carry it.
+   The API domain is also the environment's `API_PUBLIC_URL` (added 2026-10-14): an earned badge's share
+   link starts with it, so without the variable the links point at localhost.
 5. **Deploy**. Watch the logs: `keycloak` imports the two realms once, `api` runs the schema and, with
    `SEED_CATALOG=true`, seeds the catalogue with pictures. Done when both report healthy.
 6. Check in a browser:

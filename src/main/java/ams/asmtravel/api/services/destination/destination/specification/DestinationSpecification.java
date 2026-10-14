@@ -3,13 +3,19 @@ package ams.asmtravel.api.services.destination.destination.specification;
 import ams.asmtravel.api.services.destination.destination.domain.Destination;
 import ams.asmtravel.api.services.destination.destination.domain.DestinationSearch;
 import ams.asmtravel.api.services.destination.destination.domain.ListingStatus;
+import ams.asmtravel.api.services.review.rating.domain.Rating;
+import ams.asmtravel.api.services.review.rating.domain.RatingStatus;
+import ams.asmtravel.api.services.review.rating.domain.RatingTargetType;
+import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.Subquery;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.Collection;
 import java.util.Locale;
 import java.util.UUID;
 
-/** The app's search over published places, as a database query; every filter is optional. */
+/** The published catalogue narrowed by the app's search box and chips. */
 public final class DestinationSpecification {
 
     private DestinationSpecification() {
@@ -19,14 +25,14 @@ public final class DestinationSpecification {
         return Specification.allOf(
                 (root, query, builder) -> builder.equal(root.get("status"), ListingStatus.PUBLISHED),
                 words(search.q()),
-                inProvince(search.provinceId()),
-                linkedTo("tourismRegions", search.regionId()),
+                inProvinces(search.provinceIds()),
+                inRegions(search.regionIds()),
                 anyOf("categories", search.categoryIds()),
                 anyOf("tags", search.tagIds()),
-                anyOf("interests", search.interestIds()));
+                anyOf("interests", search.interestIds()),
+                travelerSeal(search.seal()));
     }
 
-    /** The words anywhere in the name, the short description or the address, whatever the case. */
     private static Specification<Destination> words(String q) {
         return (root, query, builder) -> {
             if (q == null || q.isBlank()) {
@@ -40,18 +46,21 @@ public final class DestinationSpecification {
         };
     }
 
-    private static Specification<Destination> inProvince(UUID provinceId) {
-        return (root, query, builder) -> provinceId == null ? null : builder.equal(root.get("province").get("id"), provinceId);
+    private static Specification<Destination> inProvinces(Collection<UUID> provinceIds) {
+        return (root, query, builder) -> provinceIds == null || provinceIds.isEmpty() ? null
+                : root.get("province").get("id").in(provinceIds);
     }
 
-    /** Shelved in the one region: a join, so the page is counted and cut on distinct places. */
-    private static Specification<Destination> linkedTo(String relation, UUID id) {
+    /** In a zone through its province, or shelved in a tourism region: either way the region matches. */
+    private static Specification<Destination> inRegions(Collection<UUID> regionIds) {
         return (root, query, builder) -> {
-            if (id == null) {
+            if (regionIds == null || regionIds.isEmpty()) {
                 return null;
             }
             query.distinct(true);
-            return builder.equal(root.join(relation).get("id"), id);
+            return builder.or(
+                    root.get("province").get("region").get("id").in(regionIds),
+                    root.join("tourismRegions", JoinType.LEFT).get("id").in(regionIds));
         };
     }
 
@@ -62,6 +71,30 @@ public final class DestinationSpecification {
             }
             query.distinct(true);
             return root.join(relation).get("id").in(ids);
+        };
+    }
+
+    /** Enough active star ratings at a high enough average: the same bar the Verified standing reads. */
+    private static Specification<Destination> travelerSeal(DestinationSearch.Seal seal) {
+        return (root, query, builder) -> {
+            if (seal == null) {
+                return null;
+            }
+            Subquery<Long> count = query.subquery(Long.class);
+            Root<Rating> counted = count.from(Rating.class);
+            count.select(builder.count(counted)).where(
+                    builder.equal(counted.get("targetType"), RatingTargetType.DESTINATION),
+                    builder.equal(counted.get("targetId"), root.get("id")),
+                    builder.equal(counted.get("status"), RatingStatus.ACTIVE));
+            Subquery<Double> average = query.subquery(Double.class);
+            Root<Rating> averaged = average.from(Rating.class);
+            average.select(builder.avg(averaged.<Short>get("stars"))).where(
+                    builder.equal(averaged.get("targetType"), RatingTargetType.DESTINATION),
+                    builder.equal(averaged.get("targetId"), root.get("id")),
+                    builder.equal(averaged.get("status"), RatingStatus.ACTIVE));
+            return builder.and(
+                    builder.greaterThanOrEqualTo(count, seal.minRatings()),
+                    builder.greaterThanOrEqualTo(average, seal.minAverage().doubleValue()));
         };
     }
 }

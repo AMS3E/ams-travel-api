@@ -21,6 +21,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -65,6 +66,13 @@ public class Region {
 
     /** Its place among the regions of its kind, 0 for the first: Discover shows them in this order. */
     private Integer sortOrder;
+
+    /** Its centre on the Map screen, when an editor set one; otherwise the response answers the middle of its places. */
+    @Column(precision = 10, scale = 7)
+    private BigDecimal latitude;
+
+    @Column(precision = 10, scale = 7)
+    private BigDecimal longitude;
 
     @Column(nullable = false)
     private Boolean isActive = true;

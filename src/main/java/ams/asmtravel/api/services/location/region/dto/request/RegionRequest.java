@@ -2,11 +2,14 @@ package ams.asmtravel.api.services.location.region.dto.request;
 
 import ams.asmtravel.api.services.media.dto.request.MediaKey;
 import ams.asmtravel.api.services.location.region.domain.RegionKind;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,6 +34,9 @@ public record RegionRequest(
         List<UUID> tagIds,
         List<UUID> interestIds,
         Boolean isActive,
-        @PositiveOrZero Integer sortOrder
+        @PositiveOrZero Integer sortOrder,
+        /** Its centre on the Map screen, with {@code longitude}: both or neither; neither keeps the current one. */
+        @DecimalMin("-90") @DecimalMax("90") BigDecimal latitude,
+        @DecimalMin("-180") @DecimalMax("180") BigDecimal longitude
 ) {
 }

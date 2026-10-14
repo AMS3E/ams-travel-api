@@ -1,5 +1,6 @@
 package ams.asmtravel.api.services.user.preference.dto.request;
 
+import ams.asmtravel.api.services.user.preference.domain.DistanceUnit;
 import ams.asmtravel.api.services.user.preference.domain.Theme;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -20,6 +21,8 @@ public record PreferenceRequest(
         UUID preferredRegionId,
         @NotNull Boolean notificationEmail,
         @NotNull Boolean notificationPush,
-        @NotNull Theme theme
+        @NotNull Theme theme,
+        /** KM or MI; left out, kilometres. */
+        DistanceUnit distanceUnit
 ) {
 }

@@ -27,6 +27,8 @@ public interface CorridorStopRepository extends JpaRepository<CorridorStop, UUID
             select s from CorridorStop s
             join fetch s.day d
             join fetch s.destination place
+            left join fetch place.province province
+            left join fetch province.region
             order by d.corridor.id, d.dayNumber, s.stopOrder
             """)
     List<CorridorStop> findAllInTravelOrder();

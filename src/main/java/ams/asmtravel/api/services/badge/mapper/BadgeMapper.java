@@ -41,5 +41,6 @@ public interface BadgeMapper {
     @Mapping(target = "progress", source = "userBadge.progress")
     @Mapping(target = "seasonId", source = "userBadge.seasonId")
     @Mapping(target = "earnedAt", source = "userBadge.earnedAt")
-    UserBadgeResponse toUserBadgeResponse(UserBadge userBadge, String seasonName, String holderName);
+    @Mapping(target = "shareUrl", source = "shareUrl")
+    UserBadgeResponse toUserBadgeResponse(UserBadge userBadge, String seasonName, String holderName, String shareUrl);
 }

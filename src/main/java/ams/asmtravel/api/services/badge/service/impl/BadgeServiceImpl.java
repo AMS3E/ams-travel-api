@@ -3,6 +3,7 @@ package ams.asmtravel.api.services.badge.service.impl;
 import ams.asmtravel.api.services.activity.popular.service.PopularService;
 import ams.asmtravel.api.services.activity.stamp.domain.StampCollectedEvent;
 import ams.asmtravel.api.services.activity.stamp.service.StampService;
+import ams.asmtravel.api.services.badge.config.BadgeProperties;
 import ams.asmtravel.api.services.badge.domain.Badge;
 import ams.asmtravel.api.services.badge.domain.BadgeLevel;
 import ams.asmtravel.api.services.badge.domain.BadgeStatus;
@@ -77,12 +78,14 @@ public class BadgeServiceImpl implements BadgeService {
     private final ObjectProvider<StampService> stampService;
     private final ApplicationEventPublisher events;
     private final TransactionTemplate newTransaction;
+    private final BadgeProperties properties;
 
     public BadgeServiceImpl(BadgeRepository badgeRepository, UserBadgeRepository userBadgeRepository, BadgeMapper mapper,
                             SeasonService seasonService, PointService pointService, ReviewService reviewService,
                             PopularService popularService, DestinationService destinationService, UserService userService,
                             ObjectProvider<StampService> stampService, ApplicationEventPublisher events,
-                            PlatformTransactionManager transactionManager) {
+                            PlatformTransactionManager transactionManager, BadgeProperties properties) {
+        this.properties = properties;
         this.badgeRepository = badgeRepository;
         this.userBadgeRepository = userBadgeRepository;
         this.mapper = mapper;
@@ -289,7 +292,7 @@ public class BadgeServiceImpl implements BadgeService {
     private BadgeProgressResponse respond(UUID userId, SeasonResponse season, List<UserBadgeResponse> earned,
                                           Boolean browseCounted) {
         if (season == null) {
-            return new BadgeProgressResponse(null, null, List.of(), List.of(), earned, browseCounted);
+            return new BadgeProgressResponse(null, null, List.of(), List.of(), earned, browseCounted, null);
         }
         List<UserBadge> rows = userBadgeRepository.findByUserIdAndSeasonIdOrderByUpdatedAtDesc(userId, season.id());
         List<Badge> ladders = badgeRepository.findByStatusAndTypeInOrderByThresholdAsc(BadgeStatus.ACTIVE,
@@ -299,7 +302,30 @@ public class BadgeServiceImpl implements BadgeService {
                 .filter(BadgeType::hasLevels)
                 .map(type -> track(type, ladders, byBadge))
                 .toList();
-        return new BadgeProgressResponse(season.id(), season.name(), tracks, respond(rows, false), earned, browseCounted);
+        return new BadgeProgressResponse(season.id(), season.name(), tracks, respond(rows, false), earned, browseCounted,
+                percentile(userId, season.id()));
+    }
+
+    /**
+     * Where a person stands among the season's active members, as "top N%": members ranked by badges
+     * earned, then by progress added up over every ladder; the person's rank over the active count,
+     * rounded up. Null for someone with no activity yet, and no rank to speak of.
+     */
+    private Integer percentile(UUID userId, UUID seasonId) {
+        record Score(UUID userId, long earned, long progress) {
+        }
+        List<Score> active = userBadgeRepository.activityIn(seasonId).stream()
+                .map(row -> new Score((UUID) row[0], ((Number) row[1]).longValue(), ((Number) row[2]).longValue()))
+                .filter(score -> score.earned() > 0 || score.progress() > 0)
+                .toList();
+        Score mine = active.stream().filter(score -> score.userId().equals(userId)).findFirst().orElse(null);
+        if (mine == null) {
+            return null;
+        }
+        long ahead = active.stream()
+                .filter(other -> other.earned() > mine.earned() || (other.earned() == mine.earned() && other.progress() > mine.progress()))
+                .count();
+        return (int) Math.max(1, Math.ceil(100.0 * (ahead + 1) / active.size()));
     }
 
     /** One ladder: the stored progress, the highest level unlocked, and what the next one takes. */
@@ -342,7 +368,8 @@ public class BadgeServiceImpl implements BadgeService {
                 : Map.of();
         return rows.stream()
                 .map(row -> mapper.toUserBadgeResponse(row, seasons.get(row.getSeasonId()),
-                        withHolder && holders.containsKey(row.getUserId()) ? holders.get(row.getUserId()).fullName() : null))
+                        withHolder && holders.containsKey(row.getUserId()) ? holders.get(row.getUserId()).fullName() : null,
+                        row.getEarnedAt() == null ? null : properties.shareUrl(row.getId())))
                 .toList();
     }
 

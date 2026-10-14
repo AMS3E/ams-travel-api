@@ -3,6 +3,7 @@ package ams.asmtravel.api.services.media.service.impl;
 import ams.asmtravel.api.services.authorization.domain.Authorities;
 import ams.asmtravel.api.services.authorization.domain.Permissions;
 import ams.asmtravel.api.services.destination.destination.domain.DestinationDeletingEvent;
+import ams.asmtravel.api.services.corridor.service.CorridorService;
 import ams.asmtravel.api.services.destination.destination.service.DestinationService;
 import ams.asmtravel.api.services.destination.food.domain.FoodDeletingEvent;
 import ams.asmtravel.api.services.destination.food.service.FoodService;
@@ -68,6 +69,7 @@ public class MediaServiceImpl implements MediaService {
     private final ObjectProvider<DestinationService> destinationService;
     private final ObjectProvider<StayService> stayService;
     private final ObjectProvider<FoodService> foodService;
+    private final ObjectProvider<CorridorService> corridorService;
 
     // Files
 
@@ -357,8 +359,13 @@ public class MediaServiceImpl implements MediaService {
                 yield new Owner(owners::exists, owners::canWrite, owners::isPublished,
                         id -> owners.getEntity(id).getCoverKey(), owners::setCover);
             }
+            case CORRIDOR -> {
+                CorridorService owners = corridorService.getObject();
+                yield new Owner(owners::exists, owners::canWrite, owners::isPublished,
+                        id -> owners.getEntity(id).getCoverKey(), owners::setCover);
+            }
             default -> throw new InvalidMediaException(
-                    "Galleries are DESTINATION, STAY and FOOD; review photos come with their review");
+                    "Galleries are DESTINATION, STAY, FOOD and CORRIDOR; review photos come with their review");
         };
     }
 

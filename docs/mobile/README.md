@@ -68,6 +68,9 @@ code. A ready traveller exists too, `visitor@ams.test`; ask Kimleng for its pass
   or log.
 - **Ids** are UUIDs, **dates** are ISO (`2026-10-14`, months `2026-10`), **money** is `priceFrom` plus
   `currency`.
+- **Several ids** go comma-separated (`provinceIds=a,b`, `regionIds=`, `interestIds=`); `provinceId=` and
+  `regionId=` still take one. **Hours** are `{"mon": "07:00-22:00", …}`, `closed` or no key for a shut day,
+  and every food answer carries `openNow` and `todayHours` computed in Cambodia time.
 - **Lists are made of one card**: `GET /search` and `GET /search/cards` return the same card for a place,
   a stay, a food place or a corridor; a row never needs a second call (see `screens-to-api.md`).
 

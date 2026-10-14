@@ -49,6 +49,9 @@ public class User {
     @Column(length = 50)
     private String phone;
 
+    /** The province or capital the traveller lives in, from the taxonomy; null until chosen, cleared with the province. */
+    private UUID homeProvinceId;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)
     private UserStatus status = UserStatus.ACTIVE;

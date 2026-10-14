@@ -1,0 +1,14 @@
+# The unit distances are shown in (Preferences → Unit): kilometres or miles.
+# Kept with the other preferences so it follows the traveller to another phone.
+databaseChangeLog:
+  - changeSet:
+      id: v2-auth-preference-distance-unit
+      author: ams-travel-v2
+      changes:
+        - addColumn:
+            schemaName: auth
+            tableName: user_preferences
+            columns:
+              - column: {name: distance_unit, type: varchar(5), defaultValue: KM, constraints: {nullable: false}}
+      rollback:
+        - dropColumn: {schemaName: auth, tableName: user_preferences, columnName: distance_unit}

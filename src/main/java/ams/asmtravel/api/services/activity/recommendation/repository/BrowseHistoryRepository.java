@@ -21,7 +21,7 @@ public class BrowseHistoryRepository {
     public Map<UUID, Long> recentBrowses() {
         Map<UUID, Long> browses = new LinkedHashMap<>();
         for (BrowseTotal total : popularService.recentTotals()) {
-            browses.put(total.destinationId(), total.browses());
+            browses.put(total.targetId(), total.browses());
         }
         return browses;
     }

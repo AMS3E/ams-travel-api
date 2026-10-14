@@ -37,6 +37,12 @@ public record SearchHitResponse(
         boolean travelerRecommended,
         BigDecimal priceFrom,
         String currency,
-        Integer durationDays
+        Integer durationDays,
+        /** Food places: open at this moment in Cambodia (null when no hours are known) and today's line. */
+        Boolean openNow,
+        String todayHours,
+        /** Corridors: the stops in travel order, and the whole route Google-encoded once calculated. */
+        List<String> stopNames,
+        String encodedPolyline
 ) {
 }

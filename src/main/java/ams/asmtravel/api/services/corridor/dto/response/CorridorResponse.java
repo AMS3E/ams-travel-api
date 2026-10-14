@@ -43,6 +43,14 @@ public record CorridorResponse(
         Instant createdAt,
         Instant updatedAt,
         List<UUID> interestIds,
-        Integer sortOrder
+        Integer sortOrder,
+        /** The whole route, Google-encoded, when it has been calculated: one line on the country map. */
+        String encodedPolyline,
+        /** Its stops in travel order: the names under the card, and what the province and region filters read. */
+        List<String> stopNames,
+        List<UUID> stopDestinationIds,
+        List<UUID> stopProvinceIds,
+        /** The zones of its stops' provinces and the tourism regions its stops are shelved in. */
+        List<UUID> stopRegionIds
 ) {
 }

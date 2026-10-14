@@ -31,6 +31,10 @@ public record FoodResponse(
         BigDecimal priceFrom,
         String currency,
         Map<String, String> openingHours,
+        /** Open at this moment in Cambodia; null when no hours are known. */
+        Boolean openNow,
+        /** Today's line, {@code 07:00-22:00} or {@code closed}; null when no hours are known. */
+        String todayHours,
         String phone,
         String contactEmail,
         String website,

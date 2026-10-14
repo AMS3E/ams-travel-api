@@ -18,6 +18,11 @@ public record UserResponse(
         String avatarKey,
         String avatarUrl,
         String phone,
+        /** The province or capital the traveller lives in, and its name; null until chosen. */
+        UUID homeProvinceId,
+        String homeProvinceName,
+        /** 0 to 100: name, email, phone, picture and home province count a fifth each. */
+        int profileCompletion,
         UserStatus status,
         Instant lastLoginAt,
         Instant createdAt,

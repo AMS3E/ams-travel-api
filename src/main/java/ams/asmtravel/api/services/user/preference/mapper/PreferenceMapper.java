@@ -15,5 +15,6 @@ public interface PreferenceMapper {
     @Mapping(target = "userId", ignore = true)
     @Mapping(target = "user", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "distanceUnit", source = "distanceUnit", defaultValue = "KM")
     void update(PreferenceRequest request, @MappingTarget UserPreferences preferences);
 }
