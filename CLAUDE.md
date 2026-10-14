@@ -43,7 +43,7 @@ If a `CLAUDE.local.md` next to this file says you are working with Kimleng, skip
 ## Where things are
 - `deploy/`: the Docker Compose stack (Postgres, Keycloak with the realm files in `deploy/keycloak/realms`, MinIO, Mailpit, the API, optionally the dashboard). The realm files carry placeholders that `deploy/keycloak/entrypoint.sh` (compose) or `local/run-keycloak.sh` (Kimleng's Mac) fill from the environment.
 - `src/main/keycloak/`: the Keycloak email-code step (`ams-email-code`), compiled into the Keycloak image by the Dockerfile; `src/main/resources/login/` is the login theme.
-- `docs/mobile/`: what the mobile team reads: the setup guide, the screen-by-screen endpoint map, the Insomnia/Postman collection and the Claude Code prompt. Keep `screens-to-api.md` and `postman/build-collection.py` in step with API changes.
+- `docs/mobile/`: what the mobile team reads: the integration guide for the hosted API (nothing local in there; running the stack on a machine is `deploy/README.md`), the screen-by-screen endpoint map, the Insomnia/Postman collection, the Claude Code prompt, and `API-REQUESTS.md`, the gap-report template the app repo copies: the app never patches around a missing field or endpoint, it writes an entry there, and Kimleng brings the file to whoever changes the API. Keep `screens-to-api.md` and `postman/build-collection.py` in step with API changes.
 
 ## Schema rules
 - Hibernate runs with `ddl-auto: validate`: an entity and its table must match or the app refuses to start.

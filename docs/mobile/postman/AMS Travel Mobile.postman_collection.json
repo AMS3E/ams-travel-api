@@ -1,8 +1,8 @@
 {
   "info": {
-    "_postman_id": "24c26445-4953-4dbc-836e-c4f334b64f3f",
+    "_postman_id": "5c331edb-3e3c-41bc-b003-b1787825f1a6",
     "name": "AMS Travel Mobile",
-    "description": "The AMS Travel API as the mobile app uses it, one folder per screen. Built by local/postman/build-collection.py from the API's OpenAPI description on 2026-10-12. Reads marked public need no token; the rest send the visitor's bearer token from {{token}}. See local/docs/mobile-screens-to-api.md for what each screen needs.",
+    "description": "The AMS Travel API as the mobile app uses it, one folder per screen. Built by docs/mobile/postman/build-collection.py from the API's OpenAPI description on 2026-10-14. Reads marked public need no token; the rest send the traveller's bearer token from {{token}}. See docs/mobile/screens-to-api.md for what each screen needs.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "auth": {
@@ -18,7 +18,7 @@
   "variable": [
     {
       "key": "baseUrl",
-      "value": "http://localhost:8080/api/v1"
+      "value": "https://api.travel.ams.com.kh/api/v1"
     }
   ],
   "item": [
@@ -26,7 +26,7 @@
       "name": "0 · Sign in (Keycloak)",
       "item": [
         {
-          "name": "Get a visitor token (password grant on the local realm)",
+          "name": "Get a traveller token (password grant, testing shortcut)",
           "event": [
             {
               "listen": "test",
@@ -85,7 +85,7 @@
                 }
               ]
             },
-            "description": "Local development only: the app itself signs in through Keycloak's pages with the public client amstravel-web (PKCE). Fill username and password in the environment; the test script stores the token for every other request."
+            "description": "Testing shortcut only: the app itself signs in through Keycloak's pages with the public client amstravel-mobile (PKCE). Fill username and password in the environment; the test script stores the token for every other request."
           },
           "response": []
         }
@@ -109,7 +109,10 @@
               ],
               "query": []
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            }
           },
           "response": []
         },
@@ -135,7 +138,10 @@
                 }
               ]
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            }
           },
           "response": []
         },
@@ -179,7 +185,10 @@
                 }
               ]
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            }
           },
           "response": []
         },
@@ -212,7 +221,10 @@
                 }
               ]
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            }
           },
           "response": []
         },
@@ -237,7 +249,10 @@
               ],
               "query": []
             },
-            "description": "\n\nNeeds the visitor's token.",
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            },
             "body": {
               "mode": "raw",
               "raw": "{\n  \"destinationId\": \"{{destinationId}}\",\n  \"eventType\": \"VIEW\",\n  \"sessionId\": \"device-session-1\"\n}",
@@ -278,7 +293,7 @@
                 }
               ]
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nNeeds the traveller's token."
           },
           "response": []
         }
@@ -357,7 +372,10 @@
                 }
               ]
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            }
           },
           "response": []
         },
@@ -425,7 +443,10 @@
                 }
               ]
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            }
           },
           "response": []
         },
@@ -458,7 +479,10 @@
                 }
               ]
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            }
           },
           "response": []
         },
@@ -503,7 +527,10 @@
                 }
               ]
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            }
           },
           "response": []
         },
@@ -522,7 +549,10 @@
               ],
               "query": []
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            }
           },
           "response": []
         },
@@ -541,7 +571,10 @@
               ],
               "query": []
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            }
           },
           "response": []
         },
@@ -560,7 +593,10 @@
               ],
               "query": []
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            }
           },
           "response": []
         }
@@ -585,7 +621,10 @@
               ],
               "query": []
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            }
           },
           "response": []
         },
@@ -653,7 +692,10 @@
                 }
               ]
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            }
           },
           "response": []
         }
@@ -678,7 +720,10 @@
               ],
               "query": []
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            }
           },
           "response": []
         },
@@ -710,7 +755,10 @@
                 }
               ]
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            }
           },
           "response": []
         },
@@ -743,7 +791,10 @@
                 }
               ]
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            }
           },
           "response": []
         },
@@ -776,7 +827,10 @@
                 }
               ]
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            }
           },
           "response": []
         },
@@ -832,7 +886,10 @@
                 }
               ]
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            }
           },
           "response": []
         },
@@ -856,7 +913,7 @@
               ],
               "query": []
             },
-            "description": "\n\nNeeds the visitor's token.",
+            "description": "\n\nNeeds the traveller's token.",
             "body": {
               "mode": "raw",
               "raw": "{\n  \"targetType\": \"DESTINATION\",\n  \"targetId\": \"{{destinationId}}\"\n}",
@@ -886,7 +943,7 @@
               ],
               "query": []
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nNeeds the traveller's token."
           },
           "response": []
         },
@@ -913,7 +970,7 @@
                 }
               ]
             },
-            "description": "\n\nNeeds the visitor's token.",
+            "description": "\n\nNeeds the traveller's token.",
             "body": {
               "mode": "formdata",
               "formdata": [
@@ -947,7 +1004,7 @@
               ],
               "query": []
             },
-            "description": "\n\nNeeds the visitor's token.",
+            "description": "\n\nNeeds the traveller's token.",
             "body": {
               "mode": "raw",
               "raw": "{\n  \"targetType\": \"DESTINATION\",\n  \"targetId\": \"{{destinationId}}\",\n  \"rating\": 5,\n  \"title\": \"Breathtaking sunrise\",\n  \"content\": \"Arrive before five and walk the west causeway.\",\n  \"visitType\": \"FAMILY\",\n  \"visitedOn\": \"2026-08\",\n  \"photoKeys\": []\n}",
@@ -978,7 +1035,7 @@
               ],
               "query": []
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nNeeds the traveller's token."
           },
           "response": []
         },
@@ -1002,7 +1059,7 @@
               ],
               "query": []
             },
-            "description": "\n\nNeeds the visitor's token.",
+            "description": "\n\nNeeds the traveller's token.",
             "body": {
               "mode": "raw",
               "raw": "{\n  \"destinationId\": \"{{destinationId}}\",\n  \"latitude\": 13.4125,\n  \"longitude\": 103.867\n}",
@@ -1060,7 +1117,10 @@
                 }
               ]
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            }
           },
           "response": []
         }
@@ -1085,7 +1145,10 @@
               ],
               "query": []
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            }
           },
           "response": []
         },
@@ -1117,7 +1180,10 @@
                 }
               ]
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            }
           },
           "response": []
         },
@@ -1143,7 +1209,10 @@
                 }
               ]
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            }
           },
           "response": []
         },
@@ -1200,7 +1269,10 @@
                 }
               ]
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            }
           },
           "response": []
         },
@@ -1258,7 +1330,10 @@
                 }
               ]
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            }
           },
           "response": []
         },
@@ -1284,7 +1359,10 @@
                 }
               ]
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            }
           },
           "response": []
         },
@@ -1304,7 +1382,10 @@
               ],
               "query": []
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            }
           },
           "response": []
         },
@@ -1342,7 +1423,10 @@
                 }
               ]
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            }
           },
           "response": []
         },
@@ -1374,7 +1458,10 @@
                 }
               ]
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            }
           },
           "response": []
         }
@@ -1398,7 +1485,10 @@
               ],
               "query": []
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            }
           },
           "response": []
         },
@@ -1466,7 +1556,10 @@
                 }
               ]
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            }
           },
           "response": []
         }
@@ -1516,7 +1609,10 @@
                 }
               ]
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            }
           },
           "response": []
         },
@@ -1537,7 +1633,10 @@
               ],
               "query": []
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            }
           },
           "response": []
         }
@@ -1604,7 +1703,10 @@
                 }
               ]
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            }
           },
           "response": []
         },
@@ -1624,7 +1726,10 @@
               ],
               "query": []
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            }
           },
           "response": []
         },
@@ -1645,7 +1750,10 @@
               ],
               "query": []
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            }
           },
           "response": []
         },
@@ -1677,7 +1785,10 @@
                 }
               ]
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            }
           },
           "response": []
         },
@@ -1721,7 +1832,10 @@
                 }
               ]
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            }
           },
           "response": []
         },
@@ -1745,7 +1859,7 @@
               ],
               "query": []
             },
-            "description": "\n\nNeeds the visitor's token.",
+            "description": "\n\nNeeds the traveller's token.",
             "body": {
               "mode": "raw",
               "raw": "{\n  \"targetType\": \"CORRIDOR\",\n  \"targetId\": \"{{corridorId}}\"\n}",
@@ -1778,7 +1892,7 @@
               ],
               "query": []
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nNeeds the traveller's token."
           },
           "response": []
         },
@@ -1811,7 +1925,10 @@
                 }
               ]
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            }
           },
           "response": []
         }
@@ -1848,7 +1965,7 @@
                 }
               ]
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nNeeds the traveller's token."
           },
           "response": []
         },
@@ -1869,7 +1986,7 @@
               ],
               "query": []
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nNeeds the traveller's token."
           },
           "response": []
         },
@@ -1889,7 +2006,7 @@
               ],
               "query": []
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nNeeds the traveller's token."
           },
           "response": []
         },
@@ -1909,7 +2026,7 @@
               ],
               "query": []
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nNeeds the traveller's token."
           },
           "response": []
         }
@@ -1934,7 +2051,7 @@
               ],
               "query": []
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nNeeds the traveller's token."
           },
           "response": []
         },
@@ -1959,7 +2076,7 @@
               ],
               "query": []
             },
-            "description": "\n\nNeeds the visitor's token.",
+            "description": "\n\nNeeds the traveller's token.",
             "body": {
               "mode": "raw",
               "raw": "{\n  \"fullName\": \"Dara Sok\",\n  \"phone\": \"+855 12 345 678\",\n  \"avatarKey\": \"\"\n}",
@@ -1995,7 +2112,7 @@
                 }
               ]
             },
-            "description": "\n\nNeeds the visitor's token.",
+            "description": "\n\nNeeds the traveller's token.",
             "body": {
               "mode": "formdata",
               "formdata": [
@@ -2038,7 +2155,7 @@
                 }
               ]
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nNeeds the traveller's token."
           },
           "response": []
         },
@@ -2058,7 +2175,7 @@
               ],
               "query": []
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nNeeds the traveller's token."
           },
           "response": []
         },
@@ -2085,7 +2202,7 @@
                 }
               ]
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nNeeds the traveller's token."
           },
           "response": []
         }
@@ -2122,7 +2239,10 @@
                 }
               ]
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            }
           },
           "response": []
         },
@@ -2150,7 +2270,7 @@
                 }
               ]
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nNeeds the traveller's token."
           },
           "response": []
         },
@@ -2171,7 +2291,7 @@
               ],
               "query": []
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nNeeds the traveller's token."
           },
           "response": []
         },
@@ -2192,7 +2312,10 @@
               ],
               "query": []
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            }
           },
           "response": []
         },
@@ -2212,7 +2335,10 @@
               ],
               "query": []
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            }
           },
           "response": []
         },
@@ -2233,7 +2359,7 @@
               ],
               "query": []
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nNeeds the traveller's token."
           },
           "response": []
         }
@@ -2258,7 +2384,10 @@
               ],
               "query": []
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            }
           },
           "response": []
         },
@@ -2283,7 +2412,7 @@
               ],
               "query": []
             },
-            "description": "\n\nNeeds the visitor's token.",
+            "description": "\n\nNeeds the traveller's token.",
             "body": {
               "mode": "raw",
               "raw": "{\n  \"rating\": 4,\n  \"title\": \"Still breathtaking\",\n  \"content\": \"Second visit, just as good.\",\n  \"visitType\": \"COUPLES\",\n  \"visitedOn\": \"2026-09\"\n}",
@@ -2312,7 +2441,7 @@
               ],
               "query": []
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nNeeds the traveller's token."
           },
           "response": []
         }
@@ -2337,7 +2466,7 @@
               ],
               "query": []
             },
-            "description": "\n\nNeeds the visitor's token."
+            "description": "\n\nNeeds the traveller's token."
           },
           "response": []
         },
@@ -2362,7 +2491,7 @@
               ],
               "query": []
             },
-            "description": "\n\nNeeds the visitor's token.",
+            "description": "\n\nNeeds the traveller's token.",
             "body": {
               "mode": "raw",
               "raw": "{\n  \"preferredLanguage\": \"en\",\n  \"preferredCurrency\": \"USD\",\n  \"preferredRegionId\": null,\n  \"notificationEmail\": true,\n  \"notificationPush\": true\n}",

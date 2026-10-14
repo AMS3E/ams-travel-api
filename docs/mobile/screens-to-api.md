@@ -1,6 +1,6 @@
 # Mobile app screens → API
 
-Written 2026-10-12 and updated the same day after the server search, the price preview, the region cover and the review visit fields were built. The seed for the Postman collection (`docs/mobile/postman/`). Source: the Figma "High Fidelity Version 3" screens saved in the Figma "High Fidelity Version 3" (ask Kimleng for the screens), checked against `ams-travel-api` main. Base URL `http://localhost:8080/api/v1`. "Public" means no token. Everything else needs a Keycloak access token from the `amstravel` realm (public client `amstravel-web`, PKCE). The Menu screen is out of scope by Kimleng's decision.
+Written 2026-10-12 after the server search, the price preview, the region cover and the review visit fields were built; updated 2026-10-14 for the hosted API. The seed for the Postman collection (`postman/`). Source: the Figma "High Fidelity Version 3" screens (ask Kimleng for them), checked against the API on branch `kimleng`. Base URL `https://api.travel.ams.com.kh/api/v1`; the paths below are relative to it. "Public" means no token. Everything else needs a Keycloak access token from the `amstravel` realm (public client `amstravel-mobile`, PKCE; see `README.md`). The Menu screen is out of scope by Kimleng's decision.
 
 Paged answers look like `{"content": [...], "page": {"size": 20, "number": 0, "totalElements": 61, "totalPages": 4}}`.
 
@@ -13,7 +13,7 @@ Legend: ✅ exists and fits · ⚠️ exists with a gap · ❌ nothing behind it
 | Register, Log in, Forgot password | Keycloak `amstravel` realm: registration on, login with email on, reset on | ✅ through Keycloak's pages |
 | Continue with Google | a Keycloak identity provider, once a Google OAuth client exists | ⚠️ not configured yet |
 | Continue with Apple | dropped | out of scope |
-| Verify OTP (6-digit email code) | the email-code authenticator the API Dockerfile builds from `src/main/keycloak`, plus SMTP in the realm; both came with the deployment folder and are not in the repo yet | ❌ skipped for now |
+| Verify OTP (6-digit email code) | Keycloak's registration flow ends with the email-code step (`src/main/keycloak`): the code is emailed to the address typed, entered on Keycloak's page; resend after 60 s, 5 tries, valid 5 minutes | ✅ through Keycloak's pages |
 | Explore as Guest | every read marked public below | ✅ |
 | After sign-in | `GET /users/me`, `GET /preferences/me` | ✅ |
 
@@ -183,6 +183,6 @@ Static text and links. No endpoint; ship them in the app, or add a small setting
 - Food: 40+ fields served, about 10 read by the design. Stay: 20 policy fields served, the design shows one policies box plus check-in/out. Room: 50 fields served, about 10 read. The Postman collection documents what the app reads.
 - Preferences `theme`, `preferredRegionId`.
 
-## Live data today (local database)
+## Content on the server today (2026-10-14)
 
-61 published destinations, 122 media items, 5 corridors, 25 provinces, 9 tourism regions, 33 interests in 6 groups, 12 badge definitions, 4 seasons. Zero stays, zero foods, zero reviews, zero ratings, five users. Every stay, food, review and seal screen is empty until that content exists.
+59 published destinations with covers, 5 corridors, 25 provinces, 14 tourism regions, 33 interests in 6 groups, 65 categories, 53 tags, 72 amenities, 12 badge definitions, 4 seasons. Zero stays, zero foods, zero reviews, zero ratings. Every stay, food, review and seal screen is empty until the staff add that content in the CMS.

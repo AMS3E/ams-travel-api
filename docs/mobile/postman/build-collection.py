@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
-"""Builds the mobile team's Postman collection from the running API's OpenAPI description.
+"""Builds the mobile team's Postman collection from the API's OpenAPI description.
 
-Usage: python3 build-collection.py [openapi.json]   (fetches http://localhost:8080/v3/api-docs when no file is given)
-Writes "AMS Travel Mobile.postman_collection.json" and "Local.postman_environment.json" next to this script.
-Folders follow the app's screens (see ../docs/mobile-screens-to-api.md); every request reads {{baseUrl}} and sends {{token}}.
+Usage: python3 build-collection.py [openapi.json]   (fetches https://api.travel.ams.com.kh/v3/api-docs when no file is given)
+Writes "AMS Travel Mobile.postman_collection.json" and "AMS Travel.postman_environment.json" next to this script.
+Folders follow the app's screens (see ../screens-to-api.md); every request reads {{baseUrl}} and sends {{token}}.
 """
 import json, sys, urllib.request, os, uuid
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-spec = json.load(open(sys.argv[1])) if len(sys.argv) > 1 else json.load(urllib.request.urlopen("http://localhost:8080/v3/api-docs"))
+spec = json.load(open(sys.argv[1])) if len(sys.argv) > 1 else json.load(urllib.request.urlopen("https://api.travel.ams.com.kh/v3/api-docs"))
 schemas = spec.get("components", {}).get("schemas", {})
 
 # (folder, [(method, path, name, {query overrides}, body override or None)])
@@ -119,6 +119,8 @@ PUBLIC_GET_PREFIXES = ("/api/v1/search", "/api/v1/destinations", "/api/v1/stays"
                        "/api/v1/regions", "/api/v1/provinces", "/api/v1/categories", "/api/v1/tags", "/api/v1/interests", "/api/v1/amenities",
                        "/api/v1/media", "/api/v1/popular", "/api/v1/reviews", "/api/v1/ratings", "/api/v1/destination-verifications/status",
                        "/api/v1/badges", "/api/v1/seasons")
+# Writes the API accepts without a token (a browse can be reported by a guest).
+PUBLIC_WRITES = {("POST", "/api/v1/popular/events")}
 
 def example_for(schema, depth=0):
     """A plausible body from a component schema: one value per first-level property."""
@@ -150,7 +152,10 @@ def request(method, path, name, query, body):
     for key, p in declared.items():
         if key not in query and key not in ("page", "size", "sort"):
             params.append({"key": key, "value": "", "disabled": True, "description": p.get("description", "")})
-    public = method == "GET" and url_path.startswith(PUBLIC_GET_PREFIXES) and "/me" not in url_path
+    # Judged on the full path, before /api/v1 is stripped: the prefixes carry it.
+    mine = path.endswith("/me") or "/me/" in path   # the traveller's own things ("/media" is not that)
+    public = (method == "GET" and path.startswith(PUBLIC_GET_PREFIXES) and not mine) \
+        or (method, path) in PUBLIC_WRITES
     req = {
         "name": name,
         "request": {
@@ -158,7 +163,7 @@ def request(method, path, name, query, body):
             "header": [],
             "url": {"raw": "{{baseUrl}}" + url_path + ("?" + "&".join(f"{p['key']}={p['value']}" for p in params if not p["disabled"]) if any(not p["disabled"] for p in params) else ""),
                     "host": ["{{baseUrl}}"], "path": [s for s in url_path.strip("/").split("/")], "query": params},
-            "description": (op.get("summary") or op.get("description") or "") + ("\n\nPublic: no token needed." if public else "\n\nNeeds the visitor's token."),
+            "description": (op.get("summary") or op.get("description") or "") + ("\n\nPublic: no token needed." if public else "\n\nNeeds the traveller's token."),
         },
         "response": [],
     }
@@ -176,7 +181,7 @@ def request(method, path, name, query, body):
     return req
 
 token_request = {
-    "name": "Get a visitor token (password grant on the local realm)",
+    "name": "Get a traveller token (password grant, testing shortcut)",
     "event": [{"listen": "test", "script": {"type": "text/javascript", "exec": [
         "const body = pm.response.json();",
         "if (body.access_token) { pm.environment.set('token', body.access_token); pm.test('token stored in the environment', () => true); }",
@@ -188,17 +193,17 @@ token_request = {
         "body": {"mode": "urlencoded", "urlencoded": [
             {"key": "grant_type", "value": "password"}, {"key": "client_id", "value": "local-cli"},
             {"key": "username", "value": "{{username}}"}, {"key": "password", "value": "{{password}}"}]},
-        "description": "Local development only: the app itself signs in through Keycloak's pages with the public client amstravel-web (PKCE). Fill username and password in the environment; the test script stores the token for every other request.",
+        "description": "Testing shortcut only: the app itself signs in through Keycloak's pages with the public client amstravel-mobile (PKCE). Fill username and password in the environment; the test script stores the token for every other request.",
     },
     "response": [],
 }
 
 collection = {
     "info": {"_postman_id": str(uuid.uuid4()), "name": "AMS Travel Mobile",
-             "description": "The AMS Travel API as the mobile app uses it, one folder per screen. Built by local/postman/build-collection.py from the API's OpenAPI description on 2026-10-12. Reads marked public need no token; the rest send the visitor's bearer token from {{token}}. See local/docs/mobile-screens-to-api.md for what each screen needs.",
+             "description": "The AMS Travel API as the mobile app uses it, one folder per screen. Built by docs/mobile/postman/build-collection.py from the API's OpenAPI description on 2026-10-14. Reads marked public need no token; the rest send the traveller's bearer token from {{token}}. See docs/mobile/screens-to-api.md for what each screen needs.",
              "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"},
     "auth": {"type": "bearer", "bearer": [{"key": "token", "value": "{{token}}", "type": "string"}]},
-    "variable": [{"key": "baseUrl", "value": "http://localhost:8080/api/v1"}],
+    "variable": [{"key": "baseUrl", "value": "https://api.travel.ams.com.kh/api/v1"}],
     "item": [],
 }
 for folder, requests in SCREENS:
@@ -206,10 +211,10 @@ for folder, requests in SCREENS:
     collection["item"].append({"name": folder, "item": items})
 
 environment = {
-    "id": str(uuid.uuid4()), "name": "AMS Travel · Local",
+    "id": str(uuid.uuid4()), "name": "AMS Travel",
     "values": [
-        {"key": "baseUrl", "value": "http://localhost:8080/api/v1", "enabled": True},
-        {"key": "keycloakUrl", "value": "http://localhost:9090", "enabled": True},
+        {"key": "baseUrl", "value": "https://api.travel.ams.com.kh/api/v1", "enabled": True},
+        {"key": "keycloakUrl", "value": "https://auth.travel.ams.com.kh", "enabled": True},
         {"key": "username", "value": "visitor@ams.test", "enabled": True},
         {"key": "password", "value": "", "enabled": True, "type": "secret"},
         {"key": "token", "value": "", "enabled": True, "type": "secret"},
@@ -224,7 +229,7 @@ environment = {
     "_postman_variable_scope": "environment",
 }
 json.dump(collection, open(os.path.join(HERE, "AMS Travel Mobile.postman_collection.json"), "w"), indent=2, ensure_ascii=False)
-json.dump(environment, open(os.path.join(HERE, "Local.postman_environment.json"), "w"), indent=2, ensure_ascii=False)
+json.dump(environment, open(os.path.join(HERE, "AMS Travel.postman_environment.json"), "w"), indent=2, ensure_ascii=False)
 total = sum(len(f["item"]) for f in collection["item"])
 missing = [(m, p) for _, reqs in SCREENS for (m, p, *_rest) in reqs if not operation(m, p)]
 print(f"{len(collection['item'])} folders, {total} requests; not in the OpenAPI description: {missing}")

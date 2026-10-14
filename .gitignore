@@ -41,3 +41,8 @@ CLAUDE.local.md
 
 # The compose stack's own secrets and addresses (copied from deploy/.env.example)
 deploy/.env
+deploy/.env.dokploy
+deploy/dashboard.env
+
+# Finder droppings
+.DS_Store

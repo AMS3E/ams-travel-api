@@ -1,53 +1,24 @@
-# AMS Travel: the backend on your machine, for the mobile app
+# AMS Travel API: mobile integration
 
-Everything the app talks to runs on your own computer from this repo: the API, Keycloak (sign-in),
-Postgres, MinIO (pictures) and Mailpit (a local inbox that catches every email). Nothing needs an
-account anywhere. Read `screens-to-api.md` for what each screen calls, and `postman/` for a ready
-collection to try the calls in Insomnia or Postman.
+The backend the app talks to runs on the company server. There is nothing to install and nothing to run
+on your machine. Read this file first, then `screens-to-api.md` for what each screen calls, and import
+`postman/` into Insomnia or Postman to try every call before you write it.
 
-## 1. Set up, once
+## 1. Addresses
 
-1. Install **Docker Desktop** (Mac or Windows) and start it.
-2. Clone this repo, branch `kimleng`, and open a terminal in its `deploy/` folder.
-3. `cp .env.example .env` (Windows PowerShell: `Copy-Item .env.example .env`), open `.env` and fill in the
-   passwords at the top with anything you like, 16 characters or more. Leave the rest.
-4. `docker compose up -d`. The first run builds the images and takes ten to fifteen minutes: the API is
-   compiled, and so is MinIO, because MinIO no longer publishes ready images for its community edition. Watch with
-   `docker compose logs -f api` until it says the catalogue was seeded; `docker compose ps` shows every
-   service as healthy when it is ready.
+| Piece | Address |
+| --- | --- |
+| API base URL | https://api.travel.ams.com.kh/api/v1 |
+| API reference (Swagger UI) | https://api.travel.ams.com.kh/swagger-ui/index.html |
+| Sign-in (Keycloak issuer) | https://auth.travel.ams.com.kh/realms/amstravel |
+| CMS, staff only | https://cms.travel.ams.com.kh |
 
-You then have, on your machine:
+The same server is where new versions of the API are deployed. It is unavailable for a few minutes during
+a deploy, and Kimleng tells you before pressing the button. Its content is the seeded catalogue plus what the
+staff add in the CMS. Whatever your testing creates (accounts, favourites, reviews, check-ins) stays there
+until launch, when the traveller data is wiped.
 
-| What | Address | Notes |
-| --- | --- | --- |
-| The API | http://localhost:8080/api/v1 | its own docs at http://localhost:8080/swagger-ui.html |
-| Keycloak | http://localhost:9090 | admin console with `KEYCLOAK_ADMIN_USER` / `KEYCLOAK_ADMIN_PASSWORD` from `.env` |
-| Mailpit, the inbox | http://localhost:8025 | every verification code and password reset lands here |
-| MinIO console | http://localhost:9001 | pictures; `MINIO_ROOT_USER` / `MINIO_ROOT_PASSWORD` |
-| Postgres | localhost:5432 | database `ams_travel`, user `ams_user`, password `APP_DB_PASSWORD` |
-
-The catalogue starts with 61 published places, 9 tourism regions, 25 provinces, 5 corridors and the
-amenities. Stays, food places and reviews start empty.
-
-Stop with `docker compose down`; start again with `docker compose up -d`. `docker compose down -v`
-wipes the databases and the pictures, and the next start seeds everything again.
-
-## 2. Reaching it from the emulator or a phone
-
-Inside an emulator, `localhost` is the emulator itself, not your computer:
-
-| Where the app runs | API base URL | Keycloak address |
-| --- | --- | --- |
-| iOS simulator | http://localhost:8080/api/v1 | http://localhost:9090 |
-| Android emulator | http://10.0.2.2:8080/api/v1 | http://10.0.2.2:9090 |
-| A phone on the same Wi-Fi | http://YOUR-IP:8080/api/v1 | http://YOUR-IP:9090 |
-
-Keycloak must know the address the app uses, because the tokens it issues carry it and the API checks
-it. Set `KEYCLOAK_PUBLIC_URL` in `deploy/.env` to that address (for Android `http://10.0.2.2:9090`),
-then `docker compose up -d` again. Picture links in API answers are relative paths; the app puts its
-base URL in front of them.
-
-## 3. Guest and signed-in
+## 2. Guest and signed-in
 
 A guest needs no token: every read the app makes is public (search, places, stays, food, corridors,
 regions, provinces, interests, popular, nearby, the price quote, galleries). Browses can be reported
@@ -56,7 +27,7 @@ without signing in too.
 A signed-in traveller sends `Authorization: Bearer <access token>` on every request. The first request
 with a new token creates the traveller's row in the API by itself; nothing to register on the API side.
 
-### Signing in from the app
+## 3. Signing in from the app
 
 The app signs in through Keycloak's own pages with the standard **authorization code + PKCE** flow,
 using the system browser. Use AppAuth (`react-native-app-auth`, `flutter_appauth`, AppAuth-iOS,
@@ -64,39 +35,57 @@ AppAuth-Android) with these values:
 
 | Setting | Value |
 | --- | --- |
-| Issuer / discovery | `<Keycloak address>/realms/amstravel` (its `.well-known/openid-configuration` is served) |
+| Issuer / discovery | `https://auth.travel.ams.com.kh/realms/amstravel` (its `.well-known/openid-configuration` is served) |
 | Client id | `amstravel-mobile` |
 | Redirect URI | `amstravel://callback` (register the `amstravel` URL scheme in the app) |
 | Scopes | `openid profile email offline_access` |
 | PKCE | S256, required |
 
 Keycloak's pages handle sign-in, **registration**, forgot-password, and the **six-digit email code**
-after registration (the app's Verify OTP screen): the code arrives in Mailpit at http://localhost:8025.
-The pages carry the AMS Travel look. To open registration directly, send the user to the issuer's
-`/protocol/openid-connect/registrations` endpoint with the same parameters as the authorize call.
+after registration (the app's Verify OTP screen). The code is emailed to the address the traveller typed,
+so register with an inbox you can read; Gmail's `name+anything@gmail.com` aliases give you as many test
+accounts as you need from one inbox. The pages carry the AMS Travel look. To open registration directly,
+send the user to the issuer's `/protocol/openid-connect/registrations` endpoint with the same parameters
+as the authorize call.
 
 Refresh tokens come back with the token; refresh at `<issuer>/protocol/openid-connect/token`
 (`grant_type=refresh_token`). Sign out with the `end_session_endpoint` from the discovery document.
+An expired or missing token gets a `401`; a token without the right to do something gets a `403`.
 
-### Test accounts
+## 4. Test accounts
 
-`visitor@ams.test` is a traveller; the password is the `LOCAL_USER_PASSWORD` you set in `.env`.
-Registering new accounts works the same as in the real app. The staff accounts (`admin@ams.test` and
-others) belong to the back-office realm `amsadmin` and are not for the app.
+Register your own traveller through the app's flow: that is the real path, and it exercises the email
+code. A ready traveller exists too, `visitor@ams.test`; ask Kimleng for its password. The staff accounts
+(`admin@ams.test` and others) belong to the back-office realm `amsadmin` and are not for the app.
 
-### Trying calls without the app
+## 5. Conventions of the API
 
-Insomnia or Postman: import `postman/` (see its README). Its "Get a visitor token" request uses a
-development shortcut, the password grant on the `local-cli` client, so you can test signed-in calls
-without the app's sign-in screen.
+- **Paging**: list answers are `{"content": [...], "page": {"size", "number", "totalElements", "totalPages"}}`;
+  ask for a page with `page` (from 0) and `size`.
+- **Pictures**: every picture link is a path such as `/api/v1/media/files/general/.../photo.jpg`. Put the
+  server origin `https://api.travel.ams.com.kh` in front of it (the origin, not the base URL).
+- **Errors**: a problem JSON `{"title", "status", "detail", "instance"}`; `detail` is the sentence to show
+  or log.
+- **Ids** are UUIDs, **dates** are ISO (`2026-10-14`, months `2026-10`), **money** is `priceFrom` plus
+  `currency`.
+- **Lists are made of one card**: `GET /search` and `GET /search/cards` return the same card for a place,
+  a stay, a food place or a corridor; a row never needs a second call (see `screens-to-api.md`).
 
-## 4. The dashboard (CMS), optional
+## 6. Trying calls without the app
 
-To add or edit content locally, clone `ams-travel-admin-dashboard` next to this repo (same parent
-folder) and run `docker compose --profile cms up -d`. It opens at http://localhost:3001 with the
-staff account `admin@ams.test` and the same `LOCAL_USER_PASSWORD`.
+Import `postman/` into Insomnia or Postman (see its README) and pick the environment "AMS Travel". Its
+"Get a traveller token" request is a testing shortcut (password grant on the `local-cli` client) so you can
+try signed-in calls without the app's sign-in screen; the app itself always goes through Keycloak's pages.
 
-## 5. Working with Claude Code
+## 7. When the API does not fit a screen
 
-This repo has a `CLAUDE.md` with the rules of the code. For the app work, paste the prompt in
-`CLAUDE-PROMPT.md` into Claude Code as your first message, from your app's own repo folder.
+The app follows the Figma screens, the API follows its data model, and they will disagree in places. Do not
+patch around a gap on the phone: write it into `API-REQUESTS.md` (copy the template from this folder into
+the root of the app repo), one entry per need in the shape it shows, and send that file to Kimleng. The
+backend answers each entry in its Status line, and the file comes back. Claude Code is told the same in
+`CLAUDE-PROMPT.md`.
+
+## 8. Working with Claude Code
+
+Put this folder inside your app's repo as `api-docs/`, open Claude Code from the app's repo, and paste the
+prompt in `CLAUDE-PROMPT.md` as your first message. Nothing from the backend runs on your machine.

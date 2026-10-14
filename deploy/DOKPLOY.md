@@ -24,10 +24,11 @@ gateway answers 403 or a redirect for any hostname it has not been told about. S
 - the DNS record points at the **gateway**, `167.179.14.44`, DNS only;
 - the admin adds the hostname on the gateway, forwarded to the Dokploy server, the same way as the existing sites;
 - Dokploy's "Validate DNS" keeps complaining that the record should point at `.34`; that is cosmetic.
-- Whether the domain cards in Dokploy have HTTPS on or off depends on where certificates live. Ask the admin
-  how the existing sites are set; if the gateway terminates HTTPS, switch HTTPS off on our three cards and
-  the gateway forwards plain HTTP to Dokploy. Keycloak still sees the public `https://` address through
-  the forwarded headers (`KC_PROXY_HEADERS=xforwarded`), so tokens stay correct either way.
+- **HTTPS stays ON on all three domain cards.** The gateway holds its own certificate (a Let's Encrypt
+  wildcard for `*.travel.ams.com.kh`) and forwards to Dokploy's *HTTPS* entrypoint. A card with HTTPS off
+  only exists on Dokploy's HTTP entrypoint, so every request for it comes back as a plain
+  "404 page not found" (seen 2026-10-14 on the CMS). Switch HTTPS on, save, redeploy, and it answers.
+  Keycloak sees the public `https://` address through the forwarded headers (`KC_PROXY_HEADERS=xforwarded`).
 
 ## 1. The backend: a Compose service
 
