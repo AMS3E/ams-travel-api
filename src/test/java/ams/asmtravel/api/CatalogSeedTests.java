@@ -84,6 +84,10 @@ class CatalogSeedTests {
                 + "(select 1 from taxonomy.region_interests ri where ri.interest_id = i.id)")).isZero();
         // A Tourism Corridors interest is a corridor's instead: each corridor is under its own.
         assertThat(count("taxonomy.interests where group_name = 'Tourism Corridors'")).isEqualTo(5);
+        // Every interest has its picture (2026-10-16); every tourism region its map picture, and three carry the AMS Travel badge.
+        assertThat(count("taxonomy.interests where cover_key is null")).isZero();
+        assertThat(count("taxonomy.regions where kind = 'TOURISM' and map_key is null")).isZero();
+        assertThat(count("taxonomy.regions where ams_recommended")).isEqualTo(3);
         assertThat(count("taxonomy.corridor_interests")).isEqualTo(nested(CorridorSeeder.class, "corridors.json", "interests")).isEqualTo(5);
         assertThat(count("taxonomy.interests i where i.group_name = 'Tourism Corridors' and not exists "
                 + "(select 1 from taxonomy.corridor_interests ci where ci.interest_id = i.id)")).isZero();

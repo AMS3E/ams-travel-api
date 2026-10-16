@@ -12,6 +12,7 @@ public enum MediaType {
     CORRIDOR,
     REGION,
     PROVINCE,
+    INTEREST,
     PARTNER,
     VERIFICATION,
     GENERAL;

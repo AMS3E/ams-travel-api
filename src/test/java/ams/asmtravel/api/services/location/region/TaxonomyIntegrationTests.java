@@ -151,6 +151,68 @@ class TaxonomyIntegrationTests {
     }
 
     @Test
+    void anInterestHasAPictureAndKeepsItsIcon() throws Exception {
+        String key = "interest/5d9a2d7e-0c2b-4f6a-9a0c-1f1e2d3c4b5a/waterfall.jpg";
+        String interest = create("/api/v1/interests",
+                "{\"name\":\"Pictured Interest\",\"groupName\":\"Attraction Sites\",\"iconKey\":\"waves\",\"coverKey\":\"" + key + "\"}");
+        mvc.perform(get("/api/v1/interests/" + interest))
+                .andExpect(jsonPath("$.coverKey").value(key))
+                .andExpect(jsonPath("$.coverUrl").value(notNullValue()));
+        // A save that names neither keeps both; an empty key removes the picture; a bad key is refused.
+        mvc.perform(put("/api/v1/interests/" + interest).with(manager()).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"Pictured Interest\",\"groupName\":\"Attraction Sites\"}"))
+                .andExpect(jsonPath("$.coverKey").value(key))
+                .andExpect(jsonPath("$.iconKey").value("waves"));
+        mvc.perform(put("/api/v1/interests/" + interest).with(manager()).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"Pictured Interest\",\"groupName\":\"Attraction Sites\",\"coverKey\":\"\"}"))
+                .andExpect(jsonPath("$.coverKey").value(nullValue()))
+                .andExpect(jsonPath("$.coverUrl").value(nullValue()));
+        mvc.perform(put("/api/v1/interests/" + interest).with(manager()).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"Pictured Interest\",\"coverKey\":\"not a key\"}"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void aTourismRegionHasAMapPictureAndKeepsItsCentre() throws Exception {
+        String key = "region/5d9a2d7e-0c2b-4f6a-9a0c-1f1e2d3c4b5a/angkor-map.jpg";
+        String region = create("/api/v1/regions",
+                "{\"name\":\"Mapped Region\",\"code\":\"MAPPED-1\",\"kind\":\"TOURISM\",\"latitude\":13.4125,\"longitude\":103.867}");
+        mvc.perform(get("/api/v1/regions/" + region)).andExpect(jsonPath("$.mapUrl").value(nullValue()));
+        // The form sends the picture and no centre: the picture is kept, the centre too.
+        mvc.perform(put("/api/v1/regions/" + region).with(manager()).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"Mapped Region\",\"code\":\"MAPPED-1\",\"mapKey\":\"" + key + "\"}"))
+                .andExpect(jsonPath("$.mapKey").value(key))
+                .andExpect(jsonPath("$.mapUrl").value(notNullValue()))
+                .andExpect(jsonPath("$.latitude").value(13.4125))
+                .andExpect(jsonPath("$.centreSet").value(true));
+        mvc.perform(put("/api/v1/regions/" + region).with(manager()).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"Mapped Region\",\"code\":\"MAPPED-1\"}"))
+                .andExpect(jsonPath("$.mapKey").value(key));
+        mvc.perform(put("/api/v1/regions/" + region).with(manager()).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"Mapped Region\",\"code\":\"MAPPED-1\",\"mapKey\":\"\"}"))
+                .andExpect(jsonPath("$.mapUrl").value(nullValue()));
+        mvc.perform(put("/api/v1/regions/" + region).with(manager()).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"Mapped Region\",\"code\":\"MAPPED-1\",\"mapKey\":\"not a key\"}"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void aTourismRegionCanBeRecommendedByAmsTravel() throws Exception {
+        String region = create("/api/v1/regions", "{\"name\":\"Marked Region\",\"code\":\"MARKED-1\",\"kind\":\"TOURISM\"}");
+        mvc.perform(get("/api/v1/regions/" + region)).andExpect(jsonPath("$.amsRecommended").value(false));
+        mvc.perform(put("/api/v1/regions/" + region).with(manager()).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"Marked Region\",\"code\":\"MARKED-1\",\"amsRecommended\":true}"))
+                .andExpect(jsonPath("$.amsRecommended").value(true));
+        // A save that says nothing about it keeps it; false takes it off.
+        mvc.perform(put("/api/v1/regions/" + region).with(manager()).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"Marked Region\",\"code\":\"MARKED-1\"}"))
+                .andExpect(jsonPath("$.amsRecommended").value(true));
+        mvc.perform(put("/api/v1/regions/" + region).with(manager()).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"Marked Region\",\"code\":\"MARKED-1\",\"amsRecommended\":false}"))
+                .andExpect(jsonPath("$.amsRecommended").value(false));
+    }
+
+    @Test
     void aNewRegionWithoutACodeIsGivenOneFromItsName() throws Exception {
         String spa = create("/api/v1/regions", "{\"name\":\"Wellness & Spa\",\"kind\":\"TOURISM\"}");
         mvc.perform(get("/api/v1/regions/" + spa))

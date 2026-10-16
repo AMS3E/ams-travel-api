@@ -39,9 +39,13 @@ public class Interest {
     @Column(length = 60)
     private String groupName;
 
-    /** An icon's name, not an upload. */
+    /** An icon's name, not an upload; no longer edited, kept for clients that still draw it. */
     @Column(length = 512)
     private String iconKey;
+
+    /** Its uploaded picture (folder {@code interest}); null until one is chosen. */
+    @Column(length = 512)
+    private String coverKey;
 
     /** Its place in its group, 0 for the first: the Explore shelf shows the group in this order. */
     private Integer sortOrder;

@@ -1,6 +1,7 @@
 package ams.asmtravel.api.services.user.user.service;
 
 import ams.asmtravel.api.services.authorization.role.domain.RoleCode;
+import ams.asmtravel.api.services.user.user.domain.StaffProfile;
 import ams.asmtravel.api.services.user.user.domain.User;
 import ams.asmtravel.api.services.user.user.domain.UserSummary;
 import ams.asmtravel.api.services.user.user.dto.response.AuthorResponse;
@@ -79,6 +80,16 @@ public interface UserService {
 
     /** Makes the mirrored roles of the person behind a staff account match Keycloak's, if they have signed in. */
     void mirrorBackofficeRoles(String keycloakId, Set<RoleCode> roles);
+
+    /** The phone and photo kept here for staff accounts, by Keycloak id; an account never signed in has none. */
+    Map<UUID, StaffProfile> findStaffProfiles(Collection<UUID> keycloakIds);
+
+    /**
+     * Keeps the person behind a staff account in step with an edit made in Keycloak: name and e-mail mirrored,
+     * phone and photo stored (empty removes them). An account never signed in gets its person now, as the first
+     * sign-in would make it, so the edit sticks.
+     */
+    void mirrorStaffProfile(String keycloakId, String email, String fullName, String phone, String avatarKey);
 
     /** How many there are: a tile on the admin overview. */
     long count();

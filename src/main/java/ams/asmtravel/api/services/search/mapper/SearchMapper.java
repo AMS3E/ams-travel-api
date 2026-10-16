@@ -31,7 +31,7 @@ public interface SearchMapper {
                 verification != null && verification.verified(),
                 verification == null || verification.basis() == null ? null : verification.basis().name(),
                 verification != null && Boolean.TRUE.equals(verification.travelerRecommended()),
-                null, null, null, null, null, null, null);
+                null, null, null, null, null, null, null, null);
     }
 
     default SearchHitResponse toHit(StayResponse stay, Map<UUID, String> provinceNames, ReviewSummaryResponse review) {
@@ -40,7 +40,7 @@ public interface SearchMapper {
                 List.of(), List.of(), ids(stay.interestIds()), List.of(),
                 review == null ? null : review.averageRating(), review == null ? 0 : review.ratingCount(),
                 review == null ? 0 : review.reviewCount(), false, null, false,
-                stay.priceFrom(), stay.currency(), null, null, null, null, null);
+                stay.priceFrom(), stay.currency(), null, null, null, null, null, null);
     }
 
     default SearchHitResponse toHit(FoodResponse food, Map<UUID, String> provinceNames, Map<UUID, String> categoryNames,
@@ -51,7 +51,7 @@ public interface SearchMapper {
                 categoryIds, names(categoryIds, categoryNames), ids(food.interestIds()), List.of(),
                 review == null ? null : review.averageRating(), review == null ? 0 : review.ratingCount(),
                 review == null ? 0 : review.reviewCount(), false, null, false,
-                food.priceFrom(), food.currency(), null, food.openNow(), food.todayHours(), null, null);
+                food.priceFrom(), food.currency(), null, food.openNow(), food.todayHours(), null, null, null);
     }
 
     default SearchHitResponse toHit(CorridorResponse corridor, ReviewSummaryResponse review) {
@@ -60,7 +60,7 @@ public interface SearchMapper {
                 List.of(), List.of(), ids(corridor.interestIds()), List.of(),
                 review == null ? null : review.averageRating(), review == null ? 0 : review.ratingCount(),
                 review == null ? 0 : review.reviewCount(), false, null, false,
-                null, null, corridor.durationDays(), null, null, corridor.stopNames(), corridor.encodedPolyline());
+                null, null, corridor.durationDays(), null, null, corridor.stopNames(), corridor.encodedPolyline(), null);
     }
 
     static List<UUID> ids(Collection<UUID> ids) {

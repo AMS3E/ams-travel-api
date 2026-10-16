@@ -26,10 +26,15 @@ public record RegionResponse(
         String description,
         String coverKey,
         String coverUrl,
+        /** The Map panel picture on its page in the app, in place of the interactive map; null until one is uploaded. */
+        String mapKey,
+        String mapUrl,
         List<UUID> categoryIds,
         List<UUID> tagIds,
         List<UUID> interestIds,
         Boolean isActive,
+        /** Recommended by AMS Travel: staff chose it, and the app shows the badge on its card. */
+        boolean amsRecommended,
         Integer sortOrder,
         BigDecimal latitude,
         BigDecimal longitude,

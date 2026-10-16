@@ -137,6 +137,13 @@ public class RegionServiceImpl implements RegionService {
 
     @Override
     @Transactional(readOnly = true)
+    public boolean isTourismCode(String code) {
+        return code != null && !code.isBlank()
+                && regionRepository.existsByKindAndCodeIgnoreCase(RegionKind.TOURISM, code.trim());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public Region getEntity(UUID id) {
         if (id == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A region is required");
@@ -182,6 +189,9 @@ public class RegionServiceImpl implements RegionService {
         if (request.coverKey() != null) {
             region.setCoverKey(request.coverKey().isBlank() ? null : request.coverKey().trim());
         }
+        if (request.mapKey() != null) {
+            region.setMapKey(request.mapKey().isBlank() ? null : request.mapKey().trim());
+        }
         if (request.latitude() != null || request.longitude() != null) {
             if (request.latitude() == null || request.longitude() == null) {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A centre needs both a latitude and a longitude");
@@ -191,6 +201,9 @@ public class RegionServiceImpl implements RegionService {
         }
         if (request.kind() != null) {
             region.setKind(request.kind());
+        }
+        if (request.amsRecommended() != null) {
+            region.setAmsRecommended(request.amsRecommended());
         }
         /* Null keeps the links, so a client that does not send them cannot empty them. */
         if (request.categoryIds() != null || region.getId() == null) {

@@ -181,6 +181,31 @@ class DestinationIntegrationTests {
         mvc.perform(get("/api/v1/destinations/" + id).with(editor())).andExpect(jsonPath("$.tourismRegionIds", hasSize(0)));
     }
 
+    /** A tourism region made in the dashboard is a theme too: it has no specialties of its own. */
+    @Test
+    void anAttractionCanBeListedInANewTourismRegion() throws Exception {
+        Region silk = new Region();
+        silk.setName("Silk Road Weaving");
+        silk.setCode("SILK-ROAD");
+        silk.setKind(RegionKind.TOURISM);
+        silk = regions.save(silk);
+        String id = create(owner(), "{\"name\":\"Koh Dach Silk Island\",\"provinceId\":\"" + province.getId()
+                + "\",\"theme\":\"SILK-ROAD\",\"tourismRegionIds\":[\"" + silk.getId() + "\"]}");
+        mvc.perform(get("/api/v1/destinations/" + id).with(editor()))
+                .andExpect(jsonPath("$.theme").value("SILK-ROAD"))
+                .andExpect(jsonPath("$.tourismRegionIds", contains(silk.getId().toString())));
+        // A zone the provinces sit in is not a theme.
+        Region zone = new Region();
+        zone.setName("Far North Zone");
+        zone.setCode("FAR-NORTH");
+        zone.setKind(RegionKind.ZONE);
+        regions.save(zone);
+        mvc.perform(post("/api/v1/destinations").with(owner()).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"Zoned Temple\",\"provinceId\":\"" + province.getId() + "\",\"theme\":\"FAR-NORTH\"}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.detail").value("No such theme: FAR-NORTH"));
+    }
+
     /** An attraction's theme and what only it has: a beach's white sand and calm water. Left out of an edit, both stand. */
     @Test
     void anAttractionKeepsItsThemeAndWhatOnlyItHas() throws Exception {

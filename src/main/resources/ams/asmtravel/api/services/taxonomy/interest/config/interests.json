@@ -4,230 +4,263 @@
     "name": "Historical Sites",
     "description": "Temples, royal capitals and ruins from twelve centuries of Khmer history.",
     "group": "Attraction Sites",
-    "icon": "temple"
+    "icon": "temple",
+    "image": "angkor-wat-3.jpg"
   },
   {
     "slug": "culture",
     "name": "Culture",
     "description": "Museums, living crafts, indigenous communities and the arts of modern Cambodia.",
     "group": "Attraction Sites",
-    "icon": "sparkles"
+    "icon": "sparkles",
+    "image": "national-museum-3.jpg"
   },
   {
     "slug": "national-parks",
     "name": "National Parks",
     "description": "Protected forest, wildlife sanctuaries, and highland plateaus.",
     "group": "Attraction Sites",
-    "icon": "tree"
+    "icon": "tree",
+    "image": "kirirom-national-park-3.jpg"
   },
   {
     "slug": "cave",
     "name": "Cave",
     "description": "Limestone caves with hilltop shrines, ancient carvings and bats at dusk.",
     "group": "Attraction Sites",
-    "icon": "mountain"
+    "icon": "mountain",
+    "image": "phnom-chhnork-cave-3.jpg"
   },
   {
     "slug": "luxury-hotel",
     "name": "Luxury Hotel",
     "description": "Five-star stays from the gulf islands to the Bokor plateau.",
     "group": "Stays",
-    "icon": "building"
+    "icon": "building",
+    "image": "stay-chaktomuk-sky-residences-1.jpg"
   },
   {
     "slug": "homestay",
     "name": "Homestay",
     "description": "Sleep in a village house and live the local rhythm.",
     "group": "Stays",
-    "icon": "home"
+    "icon": "home",
+    "image": "stay-kampong-phluk-homestay-1.jpg"
   },
   {
     "slug": "resorts",
     "name": "Resorts",
     "description": "Resort stays with a pool, a spa or a golf course close by.",
     "group": "Stays",
-    "icon": "sun"
+    "icon": "sun",
+    "image": "stay-otres-beach-resort-1.jpg"
   },
   {
     "slug": "private-island",
     "name": "Private Island",
     "description": "A whole island to yourself in the Gulf of Thailand.",
     "group": "Stays",
-    "icon": "waves"
+    "icon": "waves",
+    "image": "song-saa-private-island-3.jpg"
   },
   {
     "slug": "eco-lodge",
     "name": "Eco Lodge",
     "description": "Low-impact lodges run with the communities around them.",
     "group": "Stays",
-    "icon": "leaf"
+    "icon": "leaf",
+    "image": "stay-kulen-hills-eco-lodge-1.jpg"
   },
   {
     "slug": "restaurants",
     "name": "Restaurants",
     "description": "Khmer kitchens and fine dining worth planning a day around.",
     "group": "Food",
-    "icon": "utensils"
+    "icon": "utensils",
+    "image": "food-royal-khmer-dining-1.jpg"
   },
   {
     "slug": "markets",
     "name": "Markets",
     "description": "Produce, crab and night markets — where the country shops and eats.",
     "group": "Food",
-    "icon": "utensils"
+    "icon": "utensils",
+    "image": "central-market-3.jpg"
   },
   {
     "slug": "drinks",
     "name": "Drinks",
     "description": "Highland coffee, city cafés, rice wine and rooftop bars.",
     "group": "Food",
-    "icon": "sparkles"
+    "icon": "sparkles",
+    "image": "food-sisowath-sunset-bar-1.jpg"
   },
   {
     "slug": "streetfood",
     "name": "Streetfood",
     "description": "Noodle stalls, grills and riverfront snacks.",
     "group": "Food",
-    "icon": "utensils"
+    "icon": "utensils",
+    "image": "food-kampot-night-market-bites-1.jpg"
   },
   {
     "slug": "traditional-food",
     "name": "Traditional Food",
     "description": "Amok, num banh chok, pepper and palm sugar — tasted where they are made.",
     "group": "Food",
-    "icon": "utensils"
+    "icon": "utensils",
+    "image": "food-preah-dak-num-banh-chok-1.jpg"
   },
   {
     "slug": "skybar",
     "name": "Skybar",
     "description": "Rooftop bars above the capital's skyline.",
     "group": "Food",
-    "icon": "building"
+    "icon": "building",
+    "image": "sora-sky-bar-3.jpg"
   },
   {
     "slug": "beaches-islands",
     "name": "Beaches & Island",
     "description": "Gulf islands, sandbars, and long empty shorelines.",
     "group": "Water",
-    "icon": "sun"
+    "icon": "sun",
+    "image": "koh-rong-3.jpg"
   },
   {
     "slug": "waterfalls",
     "name": "Waterfalls",
     "description": "Two-tier falls, monsoon cascades, and swimmable pools.",
     "group": "Water",
-    "icon": "waves"
+    "icon": "waves",
+    "image": "bou-sra-waterfall-3.jpg"
   },
   {
     "slug": "floating-village",
     "name": "Floating Village",
     "description": "Stilt houses and floating homes on the Tonle Sap.",
     "group": "Water",
-    "icon": "home"
+    "icon": "home",
+    "image": "tonle-sap-floating-village-3.jpg"
   },
   {
     "slug": "diving",
     "name": "Diving",
     "description": "Reefs, coral gardens and snorkelling off the islands.",
     "group": "Activities & Experiences",
-    "icon": "waves"
+    "icon": "waves",
+    "image": "koh-tang-3.jpg"
   },
   {
     "slug": "kayak",
     "name": "Kayak",
     "description": "Paddle mangroves, rivers and island coves.",
     "group": "Activities & Experiences",
-    "icon": "waves"
+    "icon": "waves",
+    "image": "peam-krasop-mangrove-3.jpg"
   },
   {
     "slug": "bird-sanctuary",
     "name": "Bird Sanctuary",
     "description": "Wetlands where storks, pelicans and cranes gather.",
     "group": "Activities & Experiences",
-    "icon": "leaf"
+    "icon": "leaf",
+    "image": "prek-toal-bird-sanctuary-3.jpg"
   },
   {
     "slug": "wildlife",
     "name": "Wildlife",
     "description": "Elephants, river dolphins and the forest animals of the highlands.",
     "group": "Activities & Experiences",
-    "icon": "tree"
+    "icon": "tree",
+    "image": "elephant-valley-project-3.jpg"
   },
   {
     "slug": "hiking-trekking",
     "name": "Hiking/Trekking",
     "description": "Ridge trails, jungle treks and summit walks.",
     "group": "Activities & Experiences",
-    "icon": "mountain"
+    "icon": "mountain",
+    "image": "cardamom-mountains-3.jpg"
   },
   {
     "slug": "fishing",
     "name": "Fishing",
     "description": "Fishing villages and rivers where the catch still shapes the day.",
     "group": "Activities & Experiences",
-    "icon": "waves"
+    "icon": "waves",
+    "image": "kampong-khleang-3.jpg"
   },
   {
     "slug": "camping",
     "name": "Camping",
     "description": "Nights in the forest and under the highland sky.",
     "group": "Activities & Experiences",
-    "icon": "tree"
+    "icon": "tree",
+    "image": "virachey-national-park-3.jpg"
   },
   {
     "slug": "viewpoint",
     "name": "Viewpoint",
     "description": "Sunrise summits, sunset ridges and wide Cambodian landscapes.",
     "group": "Activities & Experiences",
-    "icon": "camera"
+    "icon": "camera",
+    "image": "bokor-mountain-3.jpg"
   },
   {
     "slug": "cruise",
     "name": "Cruise",
     "description": "Boat trips on the Mekong, the Tonle Sap and the gulf.",
     "group": "Activities & Experiences",
-    "icon": "route"
+    "icon": "route",
+    "image": "mekong-discovery-trail-3.jpg"
   },
   {
     "slug": "shopping",
     "name": "Shopping",
     "description": "Markets, craft quarters and the capital's shopping streets.",
     "group": "Activities & Experiences",
-    "icon": "briefcase"
+    "icon": "briefcase",
+    "image": "russian-market-3.jpg"
   },
   {
     "slug": "khmer-civilization",
     "name": "Khmer Civilization",
     "description": "Trails through the royal capitals of the Khmer empire, from Angkor to the Chaktomuk river junction.",
     "group": "Tourism Corridors",
-    "icon": "temple"
+    "icon": "temple",
+    "image": "bayon-temple-3.jpg"
   },
   {
     "slug": "mekong-civilization",
     "name": "Mekong Civilization",
     "description": "Journeys on the Tonle Sap and the Mekong: floating villages, river islands and the dolphins upriver.",
     "group": "Tourism Corridors",
-    "icon": "waves"
+    "icon": "waves",
+    "image": "kampi-dolphin-pool-3.jpg"
   },
   {
     "slug": "coastal-discovery",
     "name": "Coastal Discovery",
     "description": "Road trips down the gulf coast, from the pepper farms and crab markets to the islands.",
     "group": "Tourism Corridors",
-    "icon": "sun"
+    "icon": "sun",
+    "image": "koh-rong-sanloem-3.jpg"
   },
   {
     "slug": "mountain-adventure",
     "name": "Mountain Adventure",
     "description": "Routes into the Cardamom Mountains: rainforest, waterfalls and the Bokor plateau.",
     "group": "Tourism Corridors",
-    "icon": "mountain"
+    "icon": "mountain",
+    "image": "phnom-kulen-3.jpg"
   },
   {
     "slug": "khmer-culinary",
     "name": "Khmer Culinary",
     "description": "Food trails to cook, taste and shop the Khmer table, from the market to the farm.",
     "group": "Tourism Corridors",
-    "icon": "utensils"
+    "icon": "utensils",
+    "image": "kep-crab-market-3.jpg"
   }
 ]

@@ -1,6 +1,7 @@
 package ams.asmtravel.api.services.user.user.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import ams.asmtravel.api.services.user.user.dto.request.StaffProfileRequest;
 import ams.asmtravel.api.services.user.user.dto.request.StaffRequest;
 import ams.asmtravel.api.services.user.user.dto.response.StaffResponse;
 import ams.asmtravel.api.services.user.user.service.StaffService;
@@ -45,6 +46,12 @@ public class StaffController {
     @PostMapping
     public StaffResponse create(@Valid @RequestBody StaffRequest request) {
         return keycloakUserService.create(request);
+    }
+
+    /** Edits the name, e-mail, phone, photo and whether the account may sign in; roles and password stay. */
+    @PutMapping("/{id}")
+    public StaffResponse update(@PathVariable String id, @Valid @RequestBody StaffProfileRequest request) {
+        return keycloakUserService.update(id, request);
     }
 
     /** Sets the complete set of back-office roles, adding and revoking to match. */

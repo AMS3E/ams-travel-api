@@ -26,11 +26,13 @@ public abstract class RegionMapper {
 
     @Mapping(target = "id", source = "region.id")
     @Mapping(target = "coverUrl", expression = "java(mediaService.url(region.getCoverKey()))")
+    @Mapping(target = "mapUrl", expression = "java(mediaService.url(region.getMapKey()))")
     @Mapping(target = "categoryIds", expression = "java(inOrder(region.getCategories(), Category::getId))")
     @Mapping(target = "tagIds", expression = "java(inOrder(region.getTags(), Tag::getId))")
     @Mapping(target = "interestIds", expression = "java(ids(region.getInterests(), Interest::getId))")
     @Mapping(target = "latitude", expression = "java(region.getLatitude() != null || bounds == null ? region.getLatitude() : bounds.centreLatitude())")
     @Mapping(target = "longitude", expression = "java(region.getLongitude() != null || bounds == null ? region.getLongitude() : bounds.centreLongitude())")
+    @Mapping(target = "amsRecommended", expression = "java(Boolean.TRUE.equals(region.getAmsRecommended()))")
     @Mapping(target = "centreSet", expression = "java(region.getLatitude() != null && region.getLongitude() != null)")
     @Mapping(target = "bounds", source = "bounds")
     public abstract RegionResponse toRegionResponse(Region region, GeoBounds bounds);

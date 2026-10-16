@@ -251,7 +251,7 @@ The backend writes only the Status line: `built YYYY-MM-DD, <endpoint or field>`
 - **Needed:** the card (`PlaceCard`, as `GET /search/cards`) for each, e.g. `GET /search?type=STAY&near={destinationId}` → `{content, page}` of cards, nearest first
 - **Why:** every list is made of the card; with details the stay rows have no score and would need a `GET /ratings/summary` per row
 - **Blocks the screen:** no, the rows show photo, name and the stay type (food: its own averageRating, reviewCount, priceRange)
-- **Status:** built 2026-10-14, `GET /search?type=STAY&near={destinationId}` and `type=FOOD&near=` → `{content, page}` of cards nearest first (the Nearby radius, the stay card has no rating until stays are reviewed, then it does); also `type=DESTINATION&near=` (attractions within 25 km, nearest first) and `type=CORRIDOR&near=` (corridors stopping there); the other filters still apply
+- **Status:** built 2026-10-14, `GET /search?type=STAY&near={destinationId}` and `type=FOOD&near=` → `{content, page}` of cards nearest first (the Nearby radius, the stay card has no rating until stays are reviewed, then it does); also `type=DESTINATION&near=` (attractions within 25 km, nearest first) and `type=CORRIDOR&near=` (corridors stopping there); the other filters still apply. 2026-10-16: `radiusKm=` (0.1 to 50) narrows or widens the attraction radius, and each attraction card found around a destination carries `distanceMeters`
 
 ### R-042 · All reviews · filter by star rating
 - **Screen:** Reviews (Show all), list

@@ -14,6 +14,10 @@ public record StaffResponse(
         String lastName,
         boolean enabled,
         Set<RoleCode> roles,
-        Instant createdAt
+        Instant createdAt,
+        /** From the person's profile here; null until they have one. */
+        String phone,
+        String avatarKey,
+        String avatarUrl
 ) {
 }
