@@ -116,6 +116,9 @@ services:
       GOOGLE_MAPS_API_KEY: ${GOOGLE_MAPS_API_KEY:-}
       # The API's public origin, e.g. https://api.travel.ams.com.kh: a badge's share page link starts with it.
       API_PUBLIC_URL: ${API_PUBLIC_URL:-http://localhost:8080}
+      # A staging reset: a token never used before (the date does well) wipes the seeded catalogue, staff edits to those
+      # rows included, and seeds it afresh on the next start. Leave it empty once the content is real.
+      SEED_RESET_TOKEN: ${SEED_RESET_TOKEN:-}
     networks:
       - default
       - dokploy-network

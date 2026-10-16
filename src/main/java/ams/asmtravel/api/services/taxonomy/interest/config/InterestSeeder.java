@@ -49,4 +49,10 @@ public class InterestSeeder implements CatalogSeedContributor {
         }
         log.info("Seeded {} interests", rows.size());
     }
+
+    @Override
+    public void wipe() {
+        interestRepository.deleteAll();
+        interestRepository.flush();
+    }
 }

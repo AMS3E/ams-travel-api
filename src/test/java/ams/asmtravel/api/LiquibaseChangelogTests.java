@@ -47,8 +47,8 @@ class LiquibaseChangelogTests {
         // the four galleries became one media table, and ratings got their own; points and
         // season progress are three more, and six badge tables became three. The history
         // schema and its ten tables went with the History & Heritage module (2026-10-08);
-        // the amenities taxonomy is one more.
-        assertThat(tables).hasSize(41 - 2 + 1 + 1 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 - 4 + 1 + 1 + 3 - 3 + 1);
+        // the amenities taxonomy is one more; system.seed_runs (2026-10-14) another.
+        assertThat(tables).hasSize(41 - 2 + 1 + 1 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 - 4 + 1 + 1 + 3 - 3 + 1 + 1);
         assertThat(tables).contains("taxonomy.region_interests", "taxonomy.corridor_interests", "taxonomy.amenities");
         assertThat(tables).doesNotContain("history.destination_history", "history.destination_periods");
         assertThat(tables).contains("publishing.destination_verifications", "gamification.seasons",

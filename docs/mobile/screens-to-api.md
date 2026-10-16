@@ -204,6 +204,14 @@ Static text and links. No endpoint; ship them in the app, or add a small setting
 - Food: 40+ fields served, about 10 read by the design. Stay: 20 policy fields served, the design shows one policies box plus check-in/out. Room: 50 fields served, about 10 read. The Postman collection documents what the app reads.
 - Preferences `theme`, `preferredRegionId`.
 
-## Content on the server today (2026-10-14)
+## Content on the server today (staging seed of 2026-10-14)
 
-59 published destinations with covers, 5 corridors, 25 provinces, 14 tourism regions, 33 interests in 6 groups, 65 categories, 53 tags, 72 amenities, 12 badge definitions, 4 seasons. Zero stays, zero foods, zero reviews, zero ratings. Every stay, food, review and seal screen is empty until the staff add that content in the CMS.
+The staging server is seeded with a full, lively catalogue, so every screen has something to show: 59 published
+attractions with long descriptions, slogans and galleries of 3 to 5 photos; 5 corridors with itineraries and
+galleries; 25 provinces with a cover, a centre and counts; 14 tourism regions and zones with covers; 33 interests
+in 6 groups, 65 categories, 53 tags, 72 amenities; 20 sample stays with 56 rooms and price previews; 25 sample
+food places with opening hours; 24 sample travellers with 193 published reviews and ratings over the last five
+months, browses over the last month (so Popular is real), and 12 Verified decisions; 12 badge definitions and
+4 seasons. The stays, food places, travellers and reviews are fictional staging content; photos come from
+Wikimedia Commons, credited in each gallery caption. A reset reseeds all of it: nothing you create on the staging
+server is kept across one.

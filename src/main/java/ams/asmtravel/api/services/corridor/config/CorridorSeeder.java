@@ -64,4 +64,10 @@ public class CorridorSeeder implements CatalogSeedContributor {
     private static BigDecimal decimal(JsonNode node, String field) {
         return node.hasNonNull(field) ? node.get(field).decimalValue() : null;
     }
+
+    @Override
+    public void wipe() {
+        corridorRepository.deleteAll();
+        corridorRepository.flush();
+    }
 }

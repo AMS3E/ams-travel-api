@@ -45,4 +45,10 @@ public class CategorySeeder implements CatalogSeedContributor {
         }
         log.info("Seeded {} categories", rows.size());
     }
+
+    @Override
+    public void wipe() {
+        categoryRepository.deleteAll();
+        categoryRepository.flush();
+    }
 }

@@ -5,6 +5,10 @@ import ams.asmtravel.api.services.admin.domain.CatalogSeedContributor;
 import ams.asmtravel.api.services.admin.domain.SeedImages;
 import ams.asmtravel.api.services.admin.domain.SeedJson;
 import ams.asmtravel.api.services.destination.destination.domain.Destination;
+import java.util.UUID;
+import ams.asmtravel.api.services.destination.stay.domain.Stay;
+import ams.asmtravel.api.services.destination.food.domain.Food;
+import ams.asmtravel.api.services.corridor.domain.Corridor;
 import ams.asmtravel.api.services.media.client.MinioStorageClient;
 import ams.asmtravel.api.services.media.domain.Media;
 import ams.asmtravel.api.services.media.domain.MediaType;
@@ -87,11 +91,14 @@ public class MinioConfig {
         };
     }
 
-    /** Each seeded destination's gallery; the item that is its cover is marked so. */
+    /**
+     * Every seeded gallery, whatever kind of place owns it: attractions, stays, food places and
+     * corridors, each item with its caption (the photographer's credit included) and the one that is
+     * the cover marked so.
+     */
     @Bean
     CatalogSeedContributor mediaGallerySeed(MediaRepository mediaRepository, ObjectMapper objectMapper) {
         return new CatalogSeedContributor() {
-
             @Override
             public int getOrder() {
                 return DETAILS;
@@ -105,10 +112,12 @@ public class MinioConfig {
             @Override
             public void seed(CatalogSeedContext context) {
                 int written = 0;
-                for (JsonNode gallery : SeedJson.rows(objectMapper, MinioConfig.class, "destination-media.json")) {
-                    Destination destination = context.find(Destination.class, SeedJson.text(gallery, "destinationSlug"));
-                    if (destination == null) {
-                        log.warn("Gallery for unknown destination {}", SeedJson.text(gallery, "destinationSlug"));
+                for (JsonNode gallery : SeedJson.rows(objectMapper, MinioConfig.class, "galleries.json")) {
+                    MediaType ownerType = SeedJson.enumValue(gallery, "ownerType", MediaType.class);
+                    String owner = SeedJson.text(gallery, "owner");
+                    UUID ownerId = ownerOf(context, ownerType, owner);
+                    if (ownerId == null) {
+                        log.warn("Gallery for unknown {} {}", ownerType, owner);
                         continue;
                     }
                     for (JsonNode item : SeedJson.array(gallery, "media")) {
@@ -117,8 +126,7 @@ public class MinioConfig {
                             continue;
                         }
                         Integer sortOrder = SeedJson.integer(item, "sortOrder");
-                        Media media = new Media(MediaType.DESTINATION, destination.getId(), key,
-                                sortOrder == null ? 0 : sortOrder);
+                        Media media = new Media(ownerType, ownerId, key, sortOrder == null ? 0 : sortOrder);
                         media.setCaption(SeedJson.text(item, "caption"));
                         media.setIsCover(item.path("cover").asBoolean(false));
                         mediaRepository.save(media);
@@ -126,6 +134,28 @@ public class MinioConfig {
                     }
                 }
                 log.info("Seeded {} gallery items", written);
+            }
+
+            @Override
+            public void wipe() {
+                mediaRepository.deleteAllInBatch();
+            }
+
+            private UUID ownerOf(CatalogSeedContext context, MediaType ownerType, String owner) {
+                if (ownerType == null || owner == null) {
+                    return null;
+                }
+                return switch (ownerType) {
+                    case DESTINATION -> idOf(context.find(Destination.class, owner), Destination::getId);
+                    case STAY -> idOf(context.find(Stay.class, owner), Stay::getId);
+                    case FOOD -> idOf(context.find(Food.class, owner), Food::getId);
+                    case CORRIDOR -> idOf(context.find(Corridor.class, owner), Corridor::getId);
+                    default -> null;
+                };
+            }
+
+            private <T> UUID idOf(T row, java.util.function.Function<T, UUID> id) {
+                return row == null ? null : id.apply(row);
             }
         };
     }

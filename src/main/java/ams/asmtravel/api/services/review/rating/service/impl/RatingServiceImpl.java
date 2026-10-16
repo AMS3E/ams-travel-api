@@ -269,4 +269,10 @@ public class RatingServiceImpl implements RatingService {
                 .filter(rating -> rating.getStatus() == RatingStatus.ACTIVE)
                 .orElseThrow(RatingNotFoundException::new);
     }
+
+    @Override
+    @Transactional
+    public void deleteAll() {
+        ratingRepository.deleteAllInBatch();
+    }
 }

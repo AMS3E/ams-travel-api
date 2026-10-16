@@ -48,6 +48,7 @@ public class RegionSeeder implements CatalogSeedContributor {
             region.setCode(SeedJson.text(node, "code"));
             region.setName(SeedJson.text(node, "name"));
             region.setDescription(SeedJson.text(node, "description"));
+            region.setCoverKey(context.imageKey(node));
             String kind = SeedJson.text(node, "kind");
             region.setKind(kind == null ? RegionKind.ZONE : RegionKind.valueOf(kind));
             region.setSortOrder(numbered.merge(region.getKind(), 1, Integer::sum) - 1);
@@ -58,5 +59,11 @@ public class RegionSeeder implements CatalogSeedContributor {
             context.publish(Region.class, region.getCode(), regionRepository.save(region));
         }
         log.info("Seeded {} regions", regions.size());
+    }
+
+    @Override
+    public void wipe() {
+        regionRepository.deleteAll();
+        regionRepository.flush();
     }
 }

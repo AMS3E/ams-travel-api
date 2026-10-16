@@ -169,6 +169,11 @@ app:
     # Seeding is skipped against an already-populated database, so this is
     # safe to leave on.
     catalog: ${SEED_CATALOG:true}
+    # A staging reset: name a token nobody used before (the date does well) and
+    # the next start wipes everything the seed wrote, staff edits to those rows
+    # included, and seeds the catalogue afresh. The token is recorded, so it
+    # never wipes twice; leave it empty on a server whose content is real.
+    reset-token: ${SEED_RESET_TOKEN:}
 
 # The media service, with its settings under media.* like the reference
 # project's. The reference keeps uploads in a folder (media.server-path); these

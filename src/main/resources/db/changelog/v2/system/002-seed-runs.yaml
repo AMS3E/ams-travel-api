@@ -1,0 +1,15 @@
+# Which seed resets ran: app.seed.reset-token names one, and a token recorded here never wipes
+# the catalogue again, so the variable can stay set after the deploy it was meant for.
+databaseChangeLog:
+  - changeSet:
+      id: v2-system-seed-runs
+      author: ams-travel-v2
+      changes:
+        - createTable:
+            schemaName: system
+            tableName: seed_runs
+            columns:
+              - column: {name: token, type: varchar(100), constraints: {primaryKey: true, primaryKeyName: seed_runs_pkey, nullable: false}}
+              - column: {name: ran_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+      rollback:
+        - dropTable: {schemaName: system, tableName: seed_runs}

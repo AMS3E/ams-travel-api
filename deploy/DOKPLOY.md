@@ -33,7 +33,7 @@ gateway answers 403 or a redirect for any hostname it has not been told about. S
 ## 1. The backend: a Compose service
 
 1. Project "Three E" → environment → **Create Service → Compose**. Name it `ams-travel-backend`.
-2. Provider: GitHub, repository `AMS3E/ams-travel-api`, branch `kimleng`,
+2. Provider: GitHub, repository `AMS3E/ams-travel-api`, branch `staging` (the branch the testing server runs; `kimleng` is the working branch it is cut from),
    compose path `deploy/docker-compose.dokploy.yml`.
 3. **Environment** tab: paste `deploy/.env.dokploy.example` with every value filled in
    (your three domains, long random secrets, the mail account). Save.
@@ -44,6 +44,9 @@ gateway answers 403 or a redirect for any hostname it has not been told about. S
    The Keycloak domain must be exactly the `KEYCLOAK_PUBLIC_URL` of the environment, since tokens carry it.
    The API domain is also the environment's `API_PUBLIC_URL` (added 2026-10-14): an earned badge's share
    link starts with it, so without the variable the links point at localhost.
+   `SEED_RESET_TOKEN` (added 2026-10-14) is for the staging catalogue only: set it to a token nobody used
+   before, redeploy, and the API wipes everything the seed wrote (staff edits to those rows included) and
+   seeds the lively catalogue afresh; the token is remembered, so it never wipes twice.
 5. **Deploy**. Watch the logs: `keycloak` imports the two realms once, `api` runs the schema and, with
    `SEED_CATALOG=true`, seeds the catalogue with pictures. Done when both report healthy.
 6. Check in a browser:

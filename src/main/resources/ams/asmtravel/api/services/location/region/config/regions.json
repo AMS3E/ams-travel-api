@@ -3,31 +3,36 @@
     "code": "CAPITAL",
     "name": "Phnom Penh & Central Plains",
     "description": "The capital at the meeting of four rivers, and the rice plains, silk islands and palm-sugar country around it.",
-    "kind": "ZONE"
+    "kind": "ZONE",
+    "image": "royal-palace.jpg"
   },
   {
     "code": "ANGKOR",
     "name": "Angkor & the Tonle Sap",
     "description": "The temples of Angkor and the great lake whose flood feeds the country, from Siem Reap to Battambang and the western hills.",
-    "kind": "ZONE"
+    "kind": "ZONE",
+    "image": "angkor-wat.jpg"
   },
   {
     "code": "NORTHEAST",
     "name": "Northeast Highlands",
     "description": "Cliff-top temples, crater lakes, river dolphins and the forests of the Bunong, Jarai and Kreung peoples.",
-    "kind": "ZONE"
+    "kind": "ZONE",
+    "image": "yeak-laom-lake.jpg"
   },
   {
     "code": "MEKONG",
     "name": "Mekong Lowlands",
     "description": "River towns, rubber plantations and the paddy fields east of the Mekong, down to the Vietnamese border.",
-    "kind": "ZONE"
+    "kind": "ZONE",
+    "image": "mekong-discovery-trail.jpg"
   },
   {
     "code": "COAST",
     "name": "South Coast",
     "description": "Pepper farms, crab markets, the Cardamom rainforest and the islands of the Gulf of Thailand.",
-    "kind": "ZONE"
+    "kind": "ZONE",
+    "image": "koh-rong.jpg"
   },
   {
     "code": "ANCIENT-CAPITALS",
@@ -56,7 +61,8 @@
       "culture",
       "cave",
       "viewpoint"
-    ]
+    ],
+    "image": "bayon-temple.jpg"
   },
   {
     "code": "NORTHEASTERN",
@@ -92,7 +98,8 @@
       "hiking-trekking",
       "camping",
       "viewpoint"
-    ]
+    ],
+    "image": "bou-sra-waterfall.jpg"
   },
   {
     "code": "MEKONG-TONLE-SAP",
@@ -128,7 +135,8 @@
       "fishing",
       "viewpoint",
       "cruise"
-    ]
+    ],
+    "image": "tonle-sap-floating-village.jpg"
   },
   {
     "code": "MOUNTAIN-WATERFALL",
@@ -163,7 +171,8 @@
       "hiking-trekking",
       "camping",
       "viewpoint"
-    ]
+    ],
+    "image": "phnom-kulen.jpg"
   },
   {
     "code": "COASTAL-ISLAND",
@@ -195,7 +204,8 @@
       "resorts",
       "fishing",
       "cruise"
-    ]
+    ],
+    "image": "koh-rong-sanloem-3.jpg"
   },
   {
     "code": "URBAN-LIFESTYLE",
@@ -228,7 +238,8 @@
       "streetfood",
       "skybar",
       "shopping"
-    ]
+    ],
+    "image": "phnom-penh-riverside.jpg"
   },
   {
     "code": "KHMER-CULINARY",
@@ -258,7 +269,8 @@
       "streetfood",
       "traditional-food",
       "skybar"
-    ]
+    ],
+    "image": "kep-crab-market.jpg"
   },
   {
     "code": "ECO-COMMUNITY",
@@ -294,7 +306,8 @@
       "traditional-food",
       "fishing",
       "camping"
-    ]
+    ],
+    "image": "chi-phat-3.jpg"
   },
   {
     "code": "LUXURY-TOURISM",
@@ -329,6 +342,7 @@
       "private-island",
       "skybar",
       "cruise"
-    ]
+    ],
+    "image": "song-saa-private-island.jpg"
   }
 ]

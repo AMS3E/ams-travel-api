@@ -92,3 +92,5 @@ backend answers each entry in its Status line, and the file comes back. Claude C
 
 Put this folder inside your app's repo as `api-docs/`, open Claude Code from the app's repo, and paste the
 prompt in `CLAUDE-PROMPT.md` as your first message. Nothing from the backend runs on your machine.
+After the backend answers `API-REQUESTS.md`, replace `api-docs/` with the new folder and paste
+`CLAUDE-PROMPT-2.md` (2026-10-14) as the next message: it tells Claude Code how to carry the answers into the app.

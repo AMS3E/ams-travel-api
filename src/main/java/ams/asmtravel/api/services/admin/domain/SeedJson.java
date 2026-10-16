@@ -8,6 +8,10 @@ import tools.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.math.BigDecimal;
+import java.time.LocalTime;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.List;
 
 /** Reads a service's seed file from that service's own package. */
@@ -67,5 +71,36 @@ public final class SeedJson {
 
     public static Double decimal(JsonNode node, String field) {
         return node.hasNonNull(field) ? node.get(field).asDouble() : null;
+    }
+
+    /** A money or coordinate value as the entity stores it, null when absent. */
+    public static BigDecimal money(JsonNode node, String field) {
+        return node.hasNonNull(field) ? node.get(field).decimalValue() : null;
+    }
+
+    public static Boolean bool(JsonNode node, String field, Boolean fallback) {
+        return node.hasNonNull(field) ? node.get(field).asBoolean() : fallback;
+    }
+
+    /** {@code HH:mm}, null when absent. */
+    public static LocalTime time(JsonNode node, String field) {
+        String text = text(node, field);
+        return text == null || text.isBlank() ? null : LocalTime.parse(text);
+    }
+
+    /** The enum constant the field names, null when absent. */
+    public static <E extends Enum<E>> E enumValue(JsonNode node, String field, Class<E> type) {
+        String text = text(node, field);
+        return text == null || text.isBlank() ? null : Enum.valueOf(type, text);
+    }
+
+    /** A plain object of strings ({@code {"mon": "07:00-22:00"}}), in file order; empty when absent. */
+    public static Map<String, String> stringMap(JsonNode node, String field) {
+        Map<String, String> map = new LinkedHashMap<>();
+        JsonNode object = node.get(field);
+        if (object != null && object.isObject()) {
+            object.properties().forEach(entry -> map.put(entry.getKey(), entry.getValue().asText()));
+        }
+        return map;
     }
 }

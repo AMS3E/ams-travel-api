@@ -9,6 +9,13 @@ import ams.asmtravel.api.services.destination.destination.config.DestinationSeed
 import ams.asmtravel.api.services.location.province.config.ProvinceSeeder;
 import ams.asmtravel.api.services.location.region.config.RegionSeeder;
 import ams.asmtravel.api.services.media.config.MinioConfig;
+import java.util.ArrayList;
+import ams.asmtravel.api.services.verification.config.VerificationSeeder;
+import ams.asmtravel.api.services.review.review.config.ReviewSeeder;
+import ams.asmtravel.api.services.user.user.config.TravellerSeeder;
+import ams.asmtravel.api.services.destination.food.config.FoodSeeder;
+import ams.asmtravel.api.services.destination.stayroom.config.StayRoomSeeder;
+import ams.asmtravel.api.services.destination.stay.config.StaySeeder;
 import ams.asmtravel.api.services.taxonomy.category.config.CategorySeeder;
 import ams.asmtravel.api.services.taxonomy.interest.config.InterestSeeder;
 import ams.asmtravel.api.services.taxonomy.tag.config.TagSeeder;
@@ -52,7 +59,10 @@ class CatalogSeedTests {
     @Test
     void everyRowEachServiceSeedsArrives() throws IOException {
         CatalogSeedContext context = new CatalogSeedContext(seedImageKeys());
-        transactions.executeWithoutResult(status -> contributors.forEach(contributor -> contributor.seed(context)));
+        transactions.executeWithoutResult(status -> {
+            reversed().forEach(CatalogSeedContributor::wipe);
+            contributors.forEach(contributor -> contributor.seed(context));
+        });
 
         // Five tourism zones the provinces belong to, and the nine tourism regions the Discover layer browses by.
         assertThat(count("taxonomy.regions")).isEqualTo(14).isEqualTo(rows(RegionSeeder.class, "regions.json").size());
@@ -127,12 +137,64 @@ class CatalogSeedTests {
         assertThat(count("destination.corridor_destinations")).isEqualTo(corridorStops());
         assertThat(count("taxonomy.corridors where status = 'PUBLISHED' and duration_days is not null"))
                 .isEqualTo(rows(CorridorSeeder.class, "corridors.json").size());
-        assertThat(count("media.media_items where owner_type = 'DESTINATION'")).isEqualTo(nested(MinioConfig.class, "destination-media.json", "media"));
+        assertThat(count("media.media_items")).isEqualTo(nested(MinioConfig.class, "galleries.json", "media"));
+        assertThat(count("media.media_items where is_cover = true"))
+                .isEqualTo(rows(MinioConfig.class, "galleries.json").size());
+
+        // The staging content: sample stays with their rooms, food places, travellers, what they wrote and browsed.
+        assertThat(count("destination.destination_stays")).isEqualTo(rows(StaySeeder.class, "stays.json").size());
+        assertThat(count("destination.destination_stays where status <> 'PUBLISHED' or cover_key is null")).isZero();
+        assertThat(count("destination.destination_stay_rooms")).isEqualTo(nested(StayRoomSeeder.class, "stay-rooms.json", "rooms"));
+        assertThat(count("destination.destination_foods")).isEqualTo(rows(FoodSeeder.class, "foods.json").size());
+        assertThat(count("destination.destination_foods where status <> 'PUBLISHED' or cover_key is null")).isZero();
+        assertThat(count("auth.users where email like '%" + TravellerSeeder.SEED_DOMAIN + "'"))
+                .isEqualTo(rows(TravellerSeeder.class, "travellers.json").size() + 1);
+        assertThat(count("publishing.destination_verifications v join auth.users u on u.id = v.decided_by "
+                + "where u.full_name = 'AMS Travel Editorial Desk'")).isEqualTo(rows(VerificationSeeder.class, "verifications.json").size());
+        assertThat(count("engagement.reviews")).isEqualTo(rows(ReviewSeeder.class, "reviews.json").size());
+        assertThat(count("engagement.ratings")).isEqualTo(rows(ReviewSeeder.class, "reviews.json").size());
+        assertThat(count("engagement.reviews where created_at > now()")).isZero();
+        assertThat(count("publishing.destination_verifications")).isEqualTo(rows(VerificationSeeder.class, "verifications.json").size());
+        assertThat(count("taxonomy.provinces where cover_key is null"))
+                .isEqualTo(rows(ProvinceSeeder.class, "provinces.json").stream().filter(row -> SeedJson.text(row, "image") == null).count());
 
         // What the changelog ships, the test fixture replays: roles, badges and the season calendar.
         assertThat(count("auth.roles")).isEqualTo(6);
         assertThat(count("gamification.badges")).isEqualTo(12);
         assertThat(count("gamification.seasons")).isEqualTo(4);
+    }
+
+    /** A staging reset: everything the seed wrote goes, in reverse order, and the same catalogue comes back once. */
+    @Test
+    void aResetWipesTheSeedAndSeedsItAgainWithoutDoubling() throws IOException {
+        CatalogSeedContext first = new CatalogSeedContext(seedImageKeys());
+        transactions.executeWithoutResult(status -> {
+            reversed().forEach(CatalogSeedContributor::wipe);
+            contributors.forEach(contributor -> contributor.seed(first));
+        });
+        long places = count("destination.destinations");
+        long items = count("media.media_items");
+        long people = count("auth.users where email like '%" + TravellerSeeder.SEED_DOMAIN + "'");
+
+        CatalogSeedContext again = new CatalogSeedContext(seedImageKeys());
+        transactions.executeWithoutResult(status -> {
+            reversed().forEach(CatalogSeedContributor::wipe);
+            assertThat(count("destination.destinations")).isZero();
+            assertThat(count("taxonomy.regions")).isZero();
+            assertThat(count("media.media_items")).isZero();
+            contributors.forEach(contributor -> contributor.seed(again));
+        });
+        assertThat(count("destination.destinations")).isEqualTo(places);
+        assertThat(count("media.media_items")).isEqualTo(items);
+        assertThat(count("auth.users where email like '%" + TravellerSeeder.SEED_DOMAIN + "'")).isEqualTo(people);
+        assertThat(count("taxonomy.amenities")).isEqualTo(72);
+    }
+
+    /** The contributors in the order a reset wipes them: the last seeded first. */
+    private List<CatalogSeedContributor> reversed() {
+        List<CatalogSeedContributor> reversed = new ArrayList<>(contributors);
+        java.util.Collections.reverse(reversed);
+        return reversed;
     }
 
     /** What startup gets back from storing the seed photographs, without a MinIO to store them in. */

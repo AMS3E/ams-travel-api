@@ -43,4 +43,10 @@ public class TagSeeder implements CatalogSeedContributor {
         }
         log.info("Seeded {} tags", rows.size());
     }
+
+    @Override
+    public void wipe() {
+        tagRepository.deleteAll();
+        tagRepository.flush();
+    }
 }

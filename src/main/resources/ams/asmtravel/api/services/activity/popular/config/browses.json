@@ -1,0 +1,547 @@
+[
+  {
+    "targetType": "DESTINATION",
+    "target": "angkor-wat",
+    "popularity": 5
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "bayon-temple",
+    "popularity": 5
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "ta-prohm",
+    "popularity": 4
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "banteay-srei",
+    "popularity": 4
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "koh-ker",
+    "popularity": 3
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "sambor-prei-kuk",
+    "popularity": 3
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "royal-palace",
+    "popularity": 5
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "national-museum",
+    "popularity": 4
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "preah-vihear-temple",
+    "popularity": 3
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "spean-praptos",
+    "popularity": 2
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "angkorian-royal-road",
+    "popularity": 1
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "preah-khan-kompong-svay",
+    "popularity": 1
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "bou-sra-waterfall",
+    "popularity": 3
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "elephant-valley-project",
+    "popularity": 3
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "yeak-laom-lake",
+    "popularity": 3
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "tonle-sap-floating-village",
+    "popularity": 4
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "battambang-bamboo-train",
+    "popularity": 4
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "mekong-discovery-trail",
+    "popularity": 3
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "phnom-kulen",
+    "popularity": 4
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "bokor-mountain",
+    "popularity": 5
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "koh-rong",
+    "popularity": 5
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "song-saa-private-island",
+    "popularity": 4
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "otres-beach",
+    "popularity": 4
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "kep-crab-market",
+    "popularity": 5
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "kampot-riverfront",
+    "popularity": 4
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "kampot-pepper-farm",
+    "popularity": 4
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "virachey-national-park",
+    "popularity": 2
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "romanear-waterfall",
+    "popularity": 2
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "sesan-srepok-confluence",
+    "popularity": 2
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "mondulkiri-coffee-highlands",
+    "popularity": 2
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "prek-toal-bird-sanctuary",
+    "popularity": 3
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "kampong-phluk",
+    "popularity": 3
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "kampong-khleang",
+    "popularity": 3
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "koh-trong",
+    "popularity": 3
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "kampi-dolphin-pool",
+    "popularity": 4
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "kirirom-national-park",
+    "popularity": 3
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "phnom-sampeau",
+    "popularity": 4
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "phnom-chhnork-cave",
+    "popularity": 2
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "tatai-waterfall",
+    "popularity": 3
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "cardamom-mountains",
+    "popularity": 3
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "koh-rong-sanloem",
+    "popularity": 4
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "koh-tang",
+    "popularity": 2
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "peam-krasop-mangrove",
+    "popularity": 2
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "ream-national-park",
+    "popularity": 3
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "phnom-penh-riverside",
+    "popularity": 4
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "central-market",
+    "popularity": 4
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "russian-market",
+    "popularity": 4
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "siem-reap-night-market",
+    "popularity": 4
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "sora-sky-bar",
+    "popularity": 4
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "phnom-penh-coffee-quarter",
+    "popularity": 3
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "battambang-art-quarter",
+    "popularity": 3
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "num-banh-chok-markets",
+    "popularity": 3
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "khmer-cooking-class-siem-reap",
+    "popularity": 3
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "kampong-speu-palm-sugar",
+    "popularity": 2
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "malis-phnom-penh",
+    "popularity": 3
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "chi-phat",
+    "popularity": 3
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "banteay-chhmar-community",
+    "popularity": 2
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "koh-dach-silk-island",
+    "popularity": 3
+  },
+  {
+    "targetType": "DESTINATION",
+    "target": "angkor-golf-resort",
+    "popularity": 3
+  },
+  {
+    "targetType": "STAY",
+    "target": "angkor-lotus-boutique",
+    "popularity": 4
+  },
+  {
+    "targetType": "STAY",
+    "target": "ta-prohm-garden-villa",
+    "popularity": 3
+  },
+  {
+    "targetType": "STAY",
+    "target": "siem-reap-river-hostel",
+    "popularity": 3
+  },
+  {
+    "targetType": "STAY",
+    "target": "kulen-hills-eco-lodge",
+    "popularity": 3
+  },
+  {
+    "targetType": "STAY",
+    "target": "kampong-phluk-homestay",
+    "popularity": 3
+  },
+  {
+    "targetType": "STAY",
+    "target": "riverside-palace-hotel",
+    "popularity": 4
+  },
+  {
+    "targetType": "STAY",
+    "target": "bkk1-garden-guesthouse",
+    "popularity": 3
+  },
+  {
+    "targetType": "STAY",
+    "target": "chaktomuk-sky-residences",
+    "popularity": 3
+  },
+  {
+    "targetType": "STAY",
+    "target": "silk-island-river-lodge",
+    "popularity": 2
+  },
+  {
+    "targetType": "STAY",
+    "target": "kampot-pepper-estate-bungalows",
+    "popularity": 3
+  },
+  {
+    "targetType": "STAY",
+    "target": "bokor-view-guesthouse",
+    "popularity": 3
+  },
+  {
+    "targetType": "STAY",
+    "target": "kep-seaside-villa",
+    "popularity": 3
+  },
+  {
+    "targetType": "STAY",
+    "target": "otres-beach-resort",
+    "popularity": 4
+  },
+  {
+    "targetType": "STAY",
+    "target": "koh-rong-sunset-bungalows",
+    "popularity": 4
+  },
+  {
+    "targetType": "STAY",
+    "target": "sanloem-lazy-beach-hostel",
+    "popularity": 3
+  },
+  {
+    "targetType": "STAY",
+    "target": "battambang-colonial-house",
+    "popularity": 3
+  },
+  {
+    "targetType": "STAY",
+    "target": "sen-monorom-hill-lodge",
+    "popularity": 3
+  },
+  {
+    "targetType": "STAY",
+    "target": "kratie-mekong-view-hotel",
+    "popularity": 3
+  },
+  {
+    "targetType": "STAY",
+    "target": "banlung-lake-guesthouse",
+    "popularity": 2
+  },
+  {
+    "targetType": "STAY",
+    "target": "tatai-river-ecolodge",
+    "popularity": 3
+  },
+  {
+    "targetType": "FOOD",
+    "target": "pub-street-khmer-kitchen",
+    "popularity": 4
+  },
+  {
+    "targetType": "FOOD",
+    "target": "angkor-morning-noodles",
+    "popularity": 3
+  },
+  {
+    "targetType": "FOOD",
+    "target": "kandal-village-cafe",
+    "popularity": 4
+  },
+  {
+    "targetType": "FOOD",
+    "target": "tonle-sap-fish-house",
+    "popularity": 3
+  },
+  {
+    "targetType": "FOOD",
+    "target": "old-market-smoothie-bar",
+    "popularity": 3
+  },
+  {
+    "targetType": "FOOD",
+    "target": "preah-dak-num-banh-chok",
+    "popularity": 3
+  },
+  {
+    "targetType": "FOOD",
+    "target": "riverside-grill-house",
+    "popularity": 4
+  },
+  {
+    "targetType": "FOOD",
+    "target": "bassac-lane-tapas",
+    "popularity": 4
+  },
+  {
+    "targetType": "FOOD",
+    "target": "orussey-market-breakfast",
+    "popularity": 3
+  },
+  {
+    "targetType": "FOOD",
+    "target": "toul-tom-poung-coffee",
+    "popularity": 3
+  },
+  {
+    "targetType": "FOOD",
+    "target": "royal-khmer-dining",
+    "popularity": 4
+  },
+  {
+    "targetType": "FOOD",
+    "target": "sisowath-sunset-bar",
+    "popularity": 4
+  },
+  {
+    "targetType": "FOOD",
+    "target": "street-240-bakery",
+    "popularity": 3
+  },
+  {
+    "targetType": "FOOD",
+    "target": "kampot-pepper-crab-shack",
+    "popularity": 4
+  },
+  {
+    "targetType": "FOOD",
+    "target": "kampot-night-market-bites",
+    "popularity": 3
+  },
+  {
+    "targetType": "FOOD",
+    "target": "kep-crab-pier-restaurant",
+    "popularity": 4
+  },
+  {
+    "targetType": "FOOD",
+    "target": "kep-plantation-cafe",
+    "popularity": 3
+  },
+  {
+    "targetType": "FOOD",
+    "target": "bamboo-train-canteen",
+    "popularity": 2
+  },
+  {
+    "targetType": "FOOD",
+    "target": "battambang-heritage-bistro",
+    "popularity": 3
+  },
+  {
+    "targetType": "FOOD",
+    "target": "otres-beach-bbq",
+    "popularity": 4
+  },
+  {
+    "targetType": "FOOD",
+    "target": "koh-rong-fisherman-shack",
+    "popularity": 3
+  },
+  {
+    "targetType": "FOOD",
+    "target": "kratie-riverfront-noodles",
+    "popularity": 2
+  },
+  {
+    "targetType": "FOOD",
+    "target": "sen-monorom-coffee-roastery",
+    "popularity": 3
+  },
+  {
+    "targetType": "FOOD",
+    "target": "kampong-cham-mekong-grill",
+    "popularity": 3
+  },
+  {
+    "targetType": "FOOD",
+    "target": "takeo-lake-fish-market",
+    "popularity": 2
+  },
+  {
+    "targetType": "CORRIDOR",
+    "target": "khmer-civilization-trail",
+    "popularity": 3
+  },
+  {
+    "targetType": "CORRIDOR",
+    "target": "mekong-civilization",
+    "popularity": 3
+  },
+  {
+    "targetType": "CORRIDOR",
+    "target": "coastal-paradise-route",
+    "popularity": 3
+  },
+  {
+    "targetType": "CORRIDOR",
+    "target": "cardamom-peaks-explorer",
+    "popularity": 3
+  },
+  {
+    "targetType": "CORRIDOR",
+    "target": "khmer-culinary",
+    "popularity": 3
+  }
+]
