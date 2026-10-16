@@ -46,3 +46,13 @@ deploy/dashboard.env
 
 # Finder droppings
 .DS_Store
+
+# A root .env is never read by the API (it runs on ../local/api.env or deploy/.env): never commit one
+.env
+
+# The Postman app's workspace files, written when the mobile collection is opened in it
+.postman/
+postman/
+
+# The bundle of docs/mobile sent to the mobile developer: built, not source
+docs/mobile.zip
