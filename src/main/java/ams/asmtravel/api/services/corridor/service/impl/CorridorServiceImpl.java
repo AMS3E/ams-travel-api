@@ -23,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -181,8 +182,24 @@ public class CorridorServiceImpl implements CorridorService {
         return corridorRepository.count();
     }
 
+    /** A curator may change any corridor's photos; nobody else may. */
+    @Override
+    @Transactional(readOnly = true)
+    public boolean canWrite(UUID id, Authentication authentication) {
+        return exists(id) && permission.canCurate(authentication);
+    }
+
+    /** Set from its gallery when a photo is made the cover, or cleared when that photo goes. */
+    @Override
+    @Transactional
+    public void setCover(UUID id, String coverKey) {
+        Corridor corridor = getEntity(id);
+        corridor.setCoverKey(coverKey);
+        corridorRepository.save(corridor);
+    }
+
     private CorridorResponse response(Corridor corridor, List<CorridorStop> stopsInOrder) {
-        return mapper.toResponse(corridor, stopsInOrder.size(), RouteSignature.status(corridor, stopsInOrder));
+        return mapper.toResponse(corridor, stopsInOrder, RouteSignature.status(corridor, stopsInOrder));
     }
 
     /** The ordered corridors without one; read before any change. */

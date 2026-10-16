@@ -52,7 +52,7 @@ public abstract class CorridorItineraryMapper {
                 corridor.getRouteCalculatedAt(),
                 corridor.getRouteError(),
                 routesConfigured);
-        return new CorridorItineraryResponse(corridorMapper.toResponse(corridor, stopsInOrder.size(), routeStatus), dayResponses, route);
+        return new CorridorItineraryResponse(corridorMapper.toResponse(corridor, stopsInOrder, routeStatus), dayResponses, route);
     }
 
     /** A stop for {@code /corridor-destinations}; {@code sortOrder} is over the whole corridor. */

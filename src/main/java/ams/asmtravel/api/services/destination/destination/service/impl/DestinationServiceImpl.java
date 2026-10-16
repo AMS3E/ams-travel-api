@@ -15,6 +15,7 @@ import ams.asmtravel.api.services.destination.destination.domain.DestinationRelo
 import ams.asmtravel.api.services.destination.destination.domain.DestinationSummary;
 import ams.asmtravel.api.services.destination.destination.domain.DestinationThemes;
 import ams.asmtravel.api.services.destination.destination.domain.ListingStatus;
+import ams.asmtravel.api.services.destination.destination.domain.NearbyDestination;
 import ams.asmtravel.api.services.destination.destination.domain.Slugs;
 import ams.asmtravel.api.services.destination.destination.dto.request.DestinationRequest;
 import ams.asmtravel.api.services.destination.destination.dto.response.DestinationResponse;
@@ -142,6 +143,18 @@ public class DestinationServiceImpl implements DestinationService {
         Map<UUID, Destination> byId = destinationRepository.findAllById(ids).stream()
                 .collect(Collectors.toMap(Destination::getId, Function.identity()));
         return ids.stream().map(byId::get).filter(Objects::nonNull).map(mapper::toDestinationResponse).toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<NearbyDestination> findNearbyWithDistance(double latitude, double longitude, double radiusKm, int limit) {
+        List<DestinationRepository.NearbyDistance> rows = destinationRepository.findNearbyDistances(latitude, longitude, radiusKm * 1_000, limit);
+        Map<UUID, Destination> byId = destinationRepository.findAllById(rows.stream().map(DestinationRepository.NearbyDistance::getId).toList())
+                .stream().collect(Collectors.toMap(Destination::getId, Function.identity()));
+        return rows.stream()
+                .filter(row -> byId.containsKey(row.getId()))
+                .map(row -> new NearbyDestination(mapper.toDestinationResponse(byId.get(row.getId())), row.getMetres()))
+                .toList();
     }
 
     @Override
@@ -396,7 +409,8 @@ public class DestinationServiceImpl implements DestinationService {
         }
         /* Theme and its specialties; values from an old theme are kept. */
         String theme = blankToNull(request.theme());
-        if (theme != null && !DestinationThemes.isTheme(theme)) {
+        /* The nine first regions, or any tourism region made since: a new one simply has no specialties. */
+        if (theme != null && !DestinationThemes.isTheme(theme) && !regionService.isTourismCode(theme)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No such theme: " + theme);
         }
         if (theme != null) {

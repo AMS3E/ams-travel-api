@@ -27,6 +27,13 @@ public interface UserBadgeRepository extends JpaRepository<UserBadge, UUID> {
 
     boolean existsByBadgeIdAndEarnedAtIsNotNull(UUID badgeId);
 
+    /** Every member with a row in the season: who, how many badges earned, and their progress added up. */
+    @Query("""
+            select u.userId, sum(case when u.earnedAt is not null then 1 else 0 end), sum(u.progress)
+            from UserBadge u where u.seasonId = :seasonId group by u.userId
+            """)
+    List<Object[]> activityIn(@Param("seasonId") UUID seasonId);
+
     @Modifying
     @Query("delete from UserBadge u where u.userId = :userId")
     void deleteByUser(@Param("userId") UUID userId);

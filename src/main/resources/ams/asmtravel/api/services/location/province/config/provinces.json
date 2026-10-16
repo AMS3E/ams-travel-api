@@ -2,126 +2,176 @@
   {
     "slug": "banteay-meanchey",
     "name": "Banteay Meanchey",
-    "regionCode": "ANGKOR"
+    "regionCode": "ANGKOR",
+    "latitude": 13.5859,
+    "longitude": 102.9737
   },
   {
     "slug": "battambang",
     "name": "Battambang",
-    "regionCode": "ANGKOR"
+    "regionCode": "ANGKOR",
+    "latitude": 13.0957,
+    "longitude": 103.2022
   },
   {
     "slug": "kampong-cham",
     "name": "Kampong Cham",
-    "regionCode": "MEKONG"
+    "regionCode": "MEKONG",
+    "latitude": 11.9934,
+    "longitude": 105.4635
   },
   {
     "slug": "kampong-chhnang",
     "name": "Kampong Chhnang",
-    "regionCode": "CAPITAL"
+    "regionCode": "CAPITAL",
+    "latitude": 12.2505,
+    "longitude": 104.6655
   },
   {
     "slug": "kampong-speu",
     "name": "Kampong Speu",
-    "regionCode": "CAPITAL"
+    "regionCode": "CAPITAL",
+    "latitude": 11.4535,
+    "longitude": 104.5209
   },
   {
     "slug": "kampong-thom",
     "name": "Kampong Thom",
-    "regionCode": "ANGKOR"
+    "regionCode": "ANGKOR",
+    "latitude": 12.7111,
+    "longitude": 104.8887
   },
   {
     "slug": "kampot",
     "name": "Kampot",
-    "regionCode": "COAST"
+    "regionCode": "COAST",
+    "latitude": 10.6104,
+    "longitude": 104.1815
   },
   {
     "slug": "kandal",
     "name": "Kandal",
-    "regionCode": "CAPITAL"
+    "regionCode": "CAPITAL",
+    "latitude": 11.4786,
+    "longitude": 104.9497
   },
   {
     "slug": "kep",
     "name": "Kep",
-    "regionCode": "COAST"
+    "regionCode": "COAST",
+    "latitude": 10.4829,
+    "longitude": 104.3167
   },
   {
     "slug": "koh-kong",
     "name": "Koh Kong",
-    "regionCode": "COAST"
+    "regionCode": "COAST",
+    "latitude": 11.6153,
+    "longitude": 102.9838
   },
   {
     "slug": "kratie",
     "name": "Kratie",
-    "regionCode": "NORTHEAST"
+    "regionCode": "NORTHEAST",
+    "latitude": 12.4881,
+    "longitude": 106.0188
   },
   {
     "slug": "mondulkiri",
     "name": "Mondulkiri",
-    "regionCode": "NORTHEAST"
+    "regionCode": "NORTHEAST",
+    "latitude": 12.4536,
+    "longitude": 107.1884
   },
   {
     "slug": "oddar-meanchey",
     "name": "Oddar Meanchey",
-    "regionCode": "ANGKOR"
+    "regionCode": "ANGKOR",
+    "latitude": 14.1817,
+    "longitude": 103.5169
   },
   {
     "slug": "pailin",
     "name": "Pailin",
-    "regionCode": "ANGKOR"
+    "regionCode": "ANGKOR",
+    "latitude": 12.849,
+    "longitude": 102.6093
   },
   {
     "slug": "phnom-penh",
     "name": "Phnom Penh",
-    "regionCode": "CAPITAL"
+    "regionCode": "CAPITAL",
+    "latitude": 11.5564,
+    "longitude": 104.9282
   },
   {
     "slug": "preah-sihanouk",
     "name": "Preah Sihanouk",
-    "regionCode": "COAST"
+    "regionCode": "COAST",
+    "latitude": 10.6253,
+    "longitude": 103.5235
   },
   {
     "slug": "preah-vihear",
     "name": "Preah Vihear",
-    "regionCode": "NORTHEAST"
+    "regionCode": "NORTHEAST",
+    "latitude": 13.807,
+    "longitude": 104.98
   },
   {
     "slug": "prey-veng",
     "name": "Prey Veng",
-    "regionCode": "MEKONG"
+    "regionCode": "MEKONG",
+    "latitude": 11.4868,
+    "longitude": 105.3253
   },
   {
     "slug": "pursat",
     "name": "Pursat",
-    "regionCode": "ANGKOR"
+    "regionCode": "ANGKOR",
+    "latitude": 12.5388,
+    "longitude": 103.9192
   },
   {
     "slug": "ratanakiri",
     "name": "Ratanakiri",
-    "regionCode": "NORTHEAST"
+    "regionCode": "NORTHEAST",
+    "latitude": 13.7395,
+    "longitude": 106.9873
   },
   {
     "slug": "siem-reap",
     "name": "Siem Reap",
-    "regionCode": "ANGKOR"
+    "regionCode": "ANGKOR",
+    "latitude": 13.3671,
+    "longitude": 103.8448
   },
   {
     "slug": "stung-treng",
     "name": "Stung Treng",
-    "regionCode": "NORTHEAST"
+    "regionCode": "NORTHEAST",
+    "latitude": 13.5259,
+    "longitude": 105.9683
   },
   {
     "slug": "svay-rieng",
     "name": "Svay Rieng",
-    "regionCode": "MEKONG"
+    "regionCode": "MEKONG",
+    "latitude": 11.0878,
+    "longitude": 105.7993
   },
   {
     "slug": "takeo",
     "name": "Takeo",
-    "regionCode": "CAPITAL"
+    "regionCode": "CAPITAL",
+    "latitude": 10.9908,
+    "longitude": 104.785
   },
   {
     "slug": "tbong-khmum",
     "name": "Tbong Khmum",
-    "regionCode": "MEKONG"
+    "regionCode": "MEKONG",
+    "latitude": 11.9115,
+    "longitude": 105.6558
   }
 ]

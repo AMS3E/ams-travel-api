@@ -2,6 +2,6 @@ package ams.asmtravel.api.services.activity.popular.domain;
 
 import java.util.UUID;
 
-/** How many different signed-in visitors opened one place in a window. */
-public record BrowseTotal(UUID destinationId, Long browses) {
+/** One place's browses in a window: how many different signed-in visitors opened it. */
+public record BrowseTotal(UUID targetId, Long browses) {
 }

@@ -102,3 +102,11 @@ databaseChangeLog:
   - include: { file: v2/engagement/004-review-visit.yaml, relativeToChangelogFile: true }
   - include: { file: v2/taxonomy/019-region-cover.yaml, relativeToChangelogFile: true }
   - include: { file: v2/destination/028-stay-weekend-price.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/taxonomy/020-province-cover-centre.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/taxonomy/021-province-centres.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/engagement/005-browse-target.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/auth/008-user-home-province.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/auth/009-preference-distance-unit.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/taxonomy/022-interest-cover.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/taxonomy/023-region-ams-recommended.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/taxonomy/024-region-map.yaml, relativeToChangelogFile: true }

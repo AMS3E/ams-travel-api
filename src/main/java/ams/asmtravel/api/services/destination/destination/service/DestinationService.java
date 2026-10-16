@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import ams.asmtravel.api.services.destination.destination.domain.Destination;
 import ams.asmtravel.api.services.destination.destination.domain.DestinationSummary;
+import ams.asmtravel.api.services.destination.destination.domain.NearbyDestination;
 import ams.asmtravel.api.services.destination.destination.dto.request.DestinationRequest;
 import ams.asmtravel.api.services.destination.destination.dto.response.DestinationResponse;
 import org.springframework.security.core.Authentication;
@@ -34,6 +35,9 @@ public interface DestinationService {
 
     /** Published places within {@code radiusKm}, nearest first. */
     List<DestinationResponse> findNearby(double latitude, double longitude, double radiusKm, int limit);
+
+    /** {@link #findNearby} with how far each place is from the point, in metres. */
+    List<NearbyDestination> findNearbyWithDistance(double latitude, double longitude, double radiusKm, int limit);
 
     /** Creates a DRAFT. */
     DestinationResponse create(DestinationRequest request, UUID authorId);

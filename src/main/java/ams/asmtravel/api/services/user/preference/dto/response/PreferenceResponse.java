@@ -1,5 +1,6 @@
 package ams.asmtravel.api.services.user.preference.dto.response;
 
+import ams.asmtravel.api.services.user.preference.domain.DistanceUnit;
 import ams.asmtravel.api.services.user.preference.domain.Theme;
 
 import java.time.Instant;
@@ -13,6 +14,7 @@ public record PreferenceResponse(
         boolean notificationEmail,
         boolean notificationPush,
         Theme theme,
+        DistanceUnit distanceUnit,
         Instant updatedAt
 ) {
 }

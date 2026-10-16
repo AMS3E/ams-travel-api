@@ -116,7 +116,12 @@ public class InterestServiceImpl implements InterestService {
         interest.setName(request.name().trim());
         interest.setDescription(request.description());
         interest.setGroupName(groupOf(request));
-        interest.setIconKey(request.iconKey() == null || request.iconKey().isBlank() ? null : request.iconKey().trim());
+        if (request.iconKey() != null) {
+            interest.setIconKey(request.iconKey().isBlank() ? null : request.iconKey().trim());
+        }
+        if (request.coverKey() != null) {
+            interest.setCoverKey(request.coverKey().isBlank() ? null : request.coverKey().trim());
+        }
     }
 
     /** The group it is listed under, as saved: trimmed, and null for none. */

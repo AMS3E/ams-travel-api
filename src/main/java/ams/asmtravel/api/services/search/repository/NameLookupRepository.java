@@ -19,7 +19,7 @@ public class NameLookupRepository {
 
     public Map<UUID, String> provinceNames() {
         Map<UUID, String> names = new HashMap<>();
-        provinceService.getAll().forEach(province -> names.put(province.id(), province.name()));
+        provinceService.findSummaries().forEach(province -> names.put(province.id(), province.name()));
         return names;
     }
 

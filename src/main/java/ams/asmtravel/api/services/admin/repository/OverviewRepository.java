@@ -109,7 +109,7 @@ public class OverviewRepository {
     public Map<UUID, Long> browses(Instant from, Instant to) {
         Map<UUID, Long> browses = new LinkedHashMap<>();
         for (BrowseTotal total : popularService.totalsBetween(from, to)) {
-            browses.put(total.destinationId(), total.browses());
+            browses.put(total.targetId(), total.browses());
         }
         return browses;
     }

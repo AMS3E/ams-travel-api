@@ -14,7 +14,9 @@ public record BadgeProgressResponse(
         List<Track> tracks,
         List<UserBadgeResponse> badges,
         List<UserBadgeResponse> earned,
-        Boolean browseCounted
+        Boolean browseCounted,
+        /** Where the traveller stands among the season's active members: 5 means the top 5%. Null with no activity yet. */
+        Integer percentile
 ) {
 
     /** One ladder this season; nextLevel and remaining are null at the top. */

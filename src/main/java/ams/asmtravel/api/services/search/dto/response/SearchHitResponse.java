@@ -37,6 +37,21 @@ public record SearchHitResponse(
         boolean travelerRecommended,
         BigDecimal priceFrom,
         String currency,
-        Integer durationDays
+        Integer durationDays,
+        /** Food places: open at this moment in Cambodia (null when no hours are known) and today's line. */
+        Boolean openNow,
+        String todayHours,
+        /** Corridors: the stops in travel order, and the whole route Google-encoded once calculated. */
+        List<String> stopNames,
+        String encodedPolyline,
+        /** Attractions searched {@code near} a destination: metres from it, measured on the map; null otherwise. */
+        Integer distanceMeters
 ) {
+
+    /** The same card, with its distance from the place it was searched around. */
+    public SearchHitResponse withDistanceMeters(Integer metres) {
+        return new SearchHitResponse(type, id, name, slug, shortDescription, coverUrl, provinceId, provinceName, latitude, longitude,
+                categoryIds, categoryNames, interestIds, tourismRegionIds, averageRating, ratingCount, reviewCount, verified, basis,
+                travelerRecommended, priceFrom, currency, durationDays, openNow, todayHours, stopNames, encodedPolyline, metres);
+    }
 }

@@ -20,6 +20,8 @@ public record UserBadgeResponse(
         UUID seasonId,
         String seasonName,
         String holderName,
-        Instant earnedAt
+        Instant earnedAt,
+        /** The public page a share links to; null until the badge is earned. */
+        String shareUrl
 ) {
 }

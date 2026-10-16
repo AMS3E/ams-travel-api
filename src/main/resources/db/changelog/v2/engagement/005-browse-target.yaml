@@ -1,0 +1,45 @@
+# A browse is of any kind of place, not only an attraction: the Popular page's
+# Stays, Food and Tourism Corridors chips count the pages of those kinds. The
+# column that held the attraction's id now holds any target's id, beside its
+# kind; every row so far is a destination's.
+databaseChangeLog:
+  - changeSet:
+      id: v2-engagement-browse-target
+      author: ams-travel-v2
+      changes:
+        - dropIndex: {schemaName: engagement, tableName: browse_events, indexName: idx_browse_events_destination_created}
+        - renameColumn:
+            schemaName: engagement
+            tableName: browse_events
+            oldColumnName: destination_id
+            newColumnName: target_id
+            columnDataType: uuid
+        - addColumn:
+            schemaName: engagement
+            tableName: browse_events
+            columns:
+              - column: {name: target_type, type: varchar(20), defaultValue: DESTINATION, constraints: {nullable: false}}
+        - createIndex:
+            schemaName: engagement
+            tableName: browse_events
+            indexName: idx_browse_events_target_created
+            columns:
+              - column: {name: target_type}
+              - column: {name: target_id}
+              - column: {name: created_at}
+      rollback:
+        - dropIndex: {schemaName: engagement, tableName: browse_events, indexName: idx_browse_events_target_created}
+        - dropColumn: {schemaName: engagement, tableName: browse_events, columnName: target_type}
+        - renameColumn:
+            schemaName: engagement
+            tableName: browse_events
+            oldColumnName: target_id
+            newColumnName: destination_id
+            columnDataType: uuid
+        - createIndex:
+            schemaName: engagement
+            tableName: browse_events
+            indexName: idx_browse_events_destination_created
+            columns:
+              - column: {name: destination_id}
+              - column: {name: created_at}

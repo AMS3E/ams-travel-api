@@ -10,6 +10,8 @@ import ams.asmtravel.api.services.review.review.service.ReviewService;
 import ams.asmtravel.api.services.user.user.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Max;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,6 +31,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 /** What customers wrote about places, and moderating it. */
@@ -41,15 +44,19 @@ public class ReviewController {
     private final ReviewService reviewService;
     private final UserService userService;
 
-    /** A place's published reviews; moderators may filter by status and author. */
+    /**
+     * A place's published reviews; moderators may filter by status and author. {@code ?rating=5} (repeatable,
+     * or {@code rating=4,5}) keeps the reviews whose author gave that many stars.
+     */
     @GetMapping
     public Page<ReviewResponse> getAll(@RequestParam(required = false) ReviewTargetType targetType,
                                        @RequestParam(required = false) UUID targetId,
                                        @RequestParam(required = false) ReviewStatus status,
                                        @RequestParam(required = false) UUID userId,
+                                       @RequestParam(name = "rating", required = false) Set<@Min(1) @Max(5) Integer> stars,
                                        @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC)
                                        Pageable pageable) {
-        return reviewService.getAll(targetType, targetId, status, userId, pageable);
+        return reviewService.getAll(targetType, targetId, status, userId, stars, pageable);
     }
 
     /** Review counts and ratings for a list page: {@code ?targetType=DESTINATION&targetIds=a,b}. */
@@ -59,11 +66,13 @@ public class ReviewController {
         return reviewService.summaries(targetType, targetIds);
     }
 
+    /** The caller's own reviews; {@code ?rating=} narrows them as above. */
     @GetMapping("/me")
     public Page<ReviewResponse> findMine(Authentication authentication,
+                                         @RequestParam(name = "rating", required = false) Set<@Min(1) @Max(5) Integer> stars,
                                          @PageableDefault(size = 20, sort = "createdAt", direction = Sort.Direction.DESC)
                                          Pageable pageable) {
-        return reviewService.findMine(userService.requireUserId(authentication), pageable);
+        return reviewService.findMine(userService.requireUserId(authentication), stars, pageable);
     }
 
     @GetMapping("/{id}")

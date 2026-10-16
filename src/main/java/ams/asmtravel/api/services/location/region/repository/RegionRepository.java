@@ -35,6 +35,8 @@ public interface RegionRepository extends JpaRepository<Region, UUID> {
 
     boolean existsByCodeIgnoreCase(String code);
 
+    boolean existsByKindAndCodeIgnoreCase(RegionKind kind, String code);
+
     boolean existsByCodeIgnoreCaseAndIdNot(String code, UUID id);
 
     /** A deleted zone's children become top level. */

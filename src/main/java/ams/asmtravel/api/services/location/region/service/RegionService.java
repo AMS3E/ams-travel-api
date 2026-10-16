@@ -27,6 +27,9 @@ public interface RegionService {
 
     boolean exists(UUID id);
 
+    /** Whether a tourism region has this code: what an attraction's theme names. */
+    boolean isTourismCode(String code);
+
     /**
      * The row, for a province to belong to.
      *

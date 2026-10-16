@@ -1,0 +1,190 @@
+# The centre of each of the 25 provinces: its capital town, so the Map screen
+# has a marker per province from day one. Written only where nothing is set,
+# so an editor's own value in the CMS is never overwritten. Keyed by slug.
+databaseChangeLog:
+  - changeSet:
+      id: v2-taxonomy-province-centres
+      author: ams-travel-v2
+      changes:
+        - update:
+            schemaName: taxonomy
+            tableName: provinces
+            columns:
+              - column: {name: latitude, valueNumeric: 13.5859}
+              - column: {name: longitude, valueNumeric: 102.9737}
+            where: slug = 'banteay-meanchey' and latitude is null
+        - update:
+            schemaName: taxonomy
+            tableName: provinces
+            columns:
+              - column: {name: latitude, valueNumeric: 13.0957}
+              - column: {name: longitude, valueNumeric: 103.2022}
+            where: slug = 'battambang' and latitude is null
+        - update:
+            schemaName: taxonomy
+            tableName: provinces
+            columns:
+              - column: {name: latitude, valueNumeric: 11.9934}
+              - column: {name: longitude, valueNumeric: 105.4635}
+            where: slug = 'kampong-cham' and latitude is null
+        - update:
+            schemaName: taxonomy
+            tableName: provinces
+            columns:
+              - column: {name: latitude, valueNumeric: 12.2505}
+              - column: {name: longitude, valueNumeric: 104.6655}
+            where: slug = 'kampong-chhnang' and latitude is null
+        - update:
+            schemaName: taxonomy
+            tableName: provinces
+            columns:
+              - column: {name: latitude, valueNumeric: 11.4535}
+              - column: {name: longitude, valueNumeric: 104.5209}
+            where: slug = 'kampong-speu' and latitude is null
+        - update:
+            schemaName: taxonomy
+            tableName: provinces
+            columns:
+              - column: {name: latitude, valueNumeric: 12.7111}
+              - column: {name: longitude, valueNumeric: 104.8887}
+            where: slug = 'kampong-thom' and latitude is null
+        - update:
+            schemaName: taxonomy
+            tableName: provinces
+            columns:
+              - column: {name: latitude, valueNumeric: 10.6104}
+              - column: {name: longitude, valueNumeric: 104.1815}
+            where: slug = 'kampot' and latitude is null
+        - update:
+            schemaName: taxonomy
+            tableName: provinces
+            columns:
+              - column: {name: latitude, valueNumeric: 11.4786}
+              - column: {name: longitude, valueNumeric: 104.9497}
+            where: slug = 'kandal' and latitude is null
+        - update:
+            schemaName: taxonomy
+            tableName: provinces
+            columns:
+              - column: {name: latitude, valueNumeric: 10.4829}
+              - column: {name: longitude, valueNumeric: 104.3167}
+            where: slug = 'kep' and latitude is null
+        - update:
+            schemaName: taxonomy
+            tableName: provinces
+            columns:
+              - column: {name: latitude, valueNumeric: 11.6153}
+              - column: {name: longitude, valueNumeric: 102.9838}
+            where: slug = 'koh-kong' and latitude is null
+        - update:
+            schemaName: taxonomy
+            tableName: provinces
+            columns:
+              - column: {name: latitude, valueNumeric: 12.4881}
+              - column: {name: longitude, valueNumeric: 106.0188}
+            where: slug = 'kratie' and latitude is null
+        - update:
+            schemaName: taxonomy
+            tableName: provinces
+            columns:
+              - column: {name: latitude, valueNumeric: 12.4536}
+              - column: {name: longitude, valueNumeric: 107.1884}
+            where: slug = 'mondulkiri' and latitude is null
+        - update:
+            schemaName: taxonomy
+            tableName: provinces
+            columns:
+              - column: {name: latitude, valueNumeric: 14.1817}
+              - column: {name: longitude, valueNumeric: 103.5169}
+            where: slug = 'oddar-meanchey' and latitude is null
+        - update:
+            schemaName: taxonomy
+            tableName: provinces
+            columns:
+              - column: {name: latitude, valueNumeric: 12.849}
+              - column: {name: longitude, valueNumeric: 102.6093}
+            where: slug = 'pailin' and latitude is null
+        - update:
+            schemaName: taxonomy
+            tableName: provinces
+            columns:
+              - column: {name: latitude, valueNumeric: 11.5564}
+              - column: {name: longitude, valueNumeric: 104.9282}
+            where: slug = 'phnom-penh' and latitude is null
+        - update:
+            schemaName: taxonomy
+            tableName: provinces
+            columns:
+              - column: {name: latitude, valueNumeric: 10.6253}
+              - column: {name: longitude, valueNumeric: 103.5235}
+            where: slug = 'preah-sihanouk' and latitude is null
+        - update:
+            schemaName: taxonomy
+            tableName: provinces
+            columns:
+              - column: {name: latitude, valueNumeric: 13.807}
+              - column: {name: longitude, valueNumeric: 104.98}
+            where: slug = 'preah-vihear' and latitude is null
+        - update:
+            schemaName: taxonomy
+            tableName: provinces
+            columns:
+              - column: {name: latitude, valueNumeric: 11.4868}
+              - column: {name: longitude, valueNumeric: 105.3253}
+            where: slug = 'prey-veng' and latitude is null
+        - update:
+            schemaName: taxonomy
+            tableName: provinces
+            columns:
+              - column: {name: latitude, valueNumeric: 12.5388}
+              - column: {name: longitude, valueNumeric: 103.9192}
+            where: slug = 'pursat' and latitude is null
+        - update:
+            schemaName: taxonomy
+            tableName: provinces
+            columns:
+              - column: {name: latitude, valueNumeric: 13.7395}
+              - column: {name: longitude, valueNumeric: 106.9873}
+            where: slug = 'ratanakiri' and latitude is null
+        - update:
+            schemaName: taxonomy
+            tableName: provinces
+            columns:
+              - column: {name: latitude, valueNumeric: 13.3671}
+              - column: {name: longitude, valueNumeric: 103.8448}
+            where: slug = 'siem-reap' and latitude is null
+        - update:
+            schemaName: taxonomy
+            tableName: provinces
+            columns:
+              - column: {name: latitude, valueNumeric: 13.5259}
+              - column: {name: longitude, valueNumeric: 105.9683}
+            where: slug = 'stung-treng' and latitude is null
+        - update:
+            schemaName: taxonomy
+            tableName: provinces
+            columns:
+              - column: {name: latitude, valueNumeric: 11.0878}
+              - column: {name: longitude, valueNumeric: 105.7993}
+            where: slug = 'svay-rieng' and latitude is null
+        - update:
+            schemaName: taxonomy
+            tableName: provinces
+            columns:
+              - column: {name: latitude, valueNumeric: 10.9908}
+              - column: {name: longitude, valueNumeric: 104.785}
+            where: slug = 'takeo' and latitude is null
+        - update:
+            schemaName: taxonomy
+            tableName: provinces
+            columns:
+              - column: {name: latitude, valueNumeric: 11.9115}
+              - column: {name: longitude, valueNumeric: 105.6558}
+            where: slug = 'tbong-khmum' and latitude is null
+      rollback:
+        - update:
+            schemaName: taxonomy
+            tableName: provinces
+            columns:
+              - column: {name: latitude, value: null}
+              - column: {name: longitude, value: null}

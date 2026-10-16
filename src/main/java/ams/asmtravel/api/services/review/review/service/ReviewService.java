@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 /** What customers wrote about places, and moderating it; stars are the rating service's. */
@@ -26,7 +27,9 @@ public interface ReviewService {
     }
 
     /** A page of reviews; only moderators may list beyond one place's published ones. */
-    Page<ReviewResponse> getAll(ReviewTargetType targetType, UUID targetId, ReviewStatus status, UUID userId, Pageable pageable);
+    /** {@code stars}: only reviews whose author rated the place with one of these; null or empty for all. */
+    Page<ReviewResponse> getAll(ReviewTargetType targetType, UUID targetId, ReviewStatus status, UUID userId,
+                                Set<Integer> stars, Pageable pageable);
 
     /** Published review count and newest date per place, with the place's rating. */
     List<ReviewSummaryResponse> summaries(ReviewTargetType targetType, List<UUID> targetIds);
@@ -38,7 +41,7 @@ public interface ReviewService {
     ReviewResponse findById(UUID id);
 
     /** The caller's own reviews, whatever their status except deleted. */
-    Page<ReviewResponse> findMine(UUID userId, Pageable pageable);
+    Page<ReviewResponse> findMine(UUID userId, Set<Integer> stars, Pageable pageable);
 
     /** Reviews a published place, published at once, and earns the day's point for it when still due. */
     ReviewResponse create(UUID userId, CreateReviewRequest request);

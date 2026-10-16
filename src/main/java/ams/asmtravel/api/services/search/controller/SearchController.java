@@ -2,6 +2,7 @@ package ams.asmtravel.api.services.search.controller;
 
 import ams.asmtravel.api.services.search.domain.SearchType;
 import ams.asmtravel.api.services.search.dto.request.SearchRequest;
+import ams.asmtravel.api.services.search.dto.response.ProvinceGroupResponse;
 import ams.asmtravel.api.services.search.dto.response.SearchHitResponse;
 import ams.asmtravel.api.services.search.dto.response.SuggestionResponse;
 import ams.asmtravel.api.services.search.service.SearchService;
@@ -35,13 +36,25 @@ public class SearchController {
 
     /**
      * {@code ?type=DESTINATION|STAY|FOOD|CORRIDOR} (destinations when left out), {@code ?q=} words, then
-     * {@code regionId}, {@code provinceId}, {@code categoryIds}, {@code tagIds}, {@code interestIds} (ids, comma-separated);
+     * {@code regionIds}, {@code provinceIds}, {@code categoryIds}, {@code tagIds}, {@code interestIds} (ids, comma-separated;
+     * {@code regionId} and {@code provinceId} still take one), {@code travelerRecommended=true} for the seal holders,
+     * {@code near=} a destination's id for what lies around it, nearest first;
      * {@code ?page=&size=} with 20 a page and at most 100. Name order.
      */
     @GetMapping
     public Page<SearchHitResponse> search(@Valid @ModelAttribute SearchRequest request,
                                           @PageableDefault(size = 20) Pageable pageable) {
         return searchService.search(request, pageable);
+    }
+
+    /**
+     * The Provinces page in one answer: the same filters, grouped by province, each with its first
+     * {@code perProvince} cards (8 unless asked, at most 20) and how many match in all. Provinces with nothing left out.
+     */
+    @GetMapping("/by-province")
+    public List<ProvinceGroupResponse> byProvince(@Valid @ModelAttribute SearchRequest request,
+                                                  @RequestParam(defaultValue = "8") @Min(1) @Max(20) int perProvince) {
+        return searchService.byProvince(request, perProvince);
     }
 
     /** Names containing the text, those starting with it first: places, provinces, tourism regions and corridors. */

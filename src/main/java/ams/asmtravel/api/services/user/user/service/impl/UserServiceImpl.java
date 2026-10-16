@@ -4,6 +4,8 @@ import ams.asmtravel.api.services.user.user.service.IdentityService;
 import ams.asmtravel.api.services.authorization.role.domain.RoleCode;
 import ams.asmtravel.api.services.user.user.config.UserProperties;
 import ams.asmtravel.api.services.user.user.domain.TokenIdentity;
+import ams.asmtravel.api.services.location.province.domain.ProvinceSummary;
+import ams.asmtravel.api.services.location.province.service.ProvinceService;
 import ams.asmtravel.api.services.user.user.domain.User;
 import ams.asmtravel.api.services.user.user.domain.UserDeletingEvent;
 import ams.asmtravel.api.services.user.user.domain.UserSummary;
@@ -16,6 +18,7 @@ import ams.asmtravel.api.services.user.user.repository.UserRepository;
 import ams.asmtravel.api.services.user.user.service.UserService;
 import ams.asmtravel.api.services.authorization.role.service.UserRoleService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -36,6 +39,7 @@ import java.time.Instant;
 import java.util.Collection;
 import java.util.EnumSet;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -63,6 +67,8 @@ public class UserServiceImpl implements UserService {
     private final TransactionTemplate signInOwnTransaction;
     private final String customerRealm;
     private final String backofficeRealm;
+    /* Provinces record who made them, so their service is reached lazily. */
+    private final ObjectProvider<ProvinceService> provinceService;
 
     public UserServiceImpl(
             UserRepository userRepository,
@@ -72,8 +78,10 @@ public class UserServiceImpl implements UserService {
             ApplicationEventPublisher events,
             UserProperties properties,
             PlatformTransactionManager transactionManager,
+            ObjectProvider<ProvinceService> provinceService,
             @Value("${keycloak.realm:amstravel}") String customerRealm,
             @Value("${keycloak.backoffice-realm:amsadmin}") String backofficeRealm) {
+        this.provinceService = provinceService;
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.identityService = identityService;
@@ -110,6 +118,7 @@ public class UserServiceImpl implements UserService {
             user.setFullName(fullName);
             user.setPhone(blankToNull(request.phone()));
             user.setAvatarKey(blankToNull(request.avatarKey()));
+            user.setHomeProvinceId(homeProvince(request.homeProvinceId()));
             user.setKeycloakId(parseUuid(subject));
             user = userRepository.save(user);
             if (subject != null) {
@@ -131,8 +140,9 @@ public class UserServiceImpl implements UserService {
     public List<UserResponse> getAll() {
         List<User> users = userRepository.findAllByOrderByCreatedAtDesc();
         Map<UUID, Set<RoleCode>> roles = userRoleService.rolesOf(users.stream().map(User::getId).toList());
+        Map<UUID, String> provinces = provinceNames();
         return users.stream()
-                .map(user -> userMapper.toResponse(user, roles.getOrDefault(user.getId(), Set.of())))
+                .map(user -> userMapper.toResponse(user, roles.getOrDefault(user.getId(), Set.of()), provinces.get(user.getHomeProvinceId())))
                 .toList();
     }
 
@@ -168,6 +178,9 @@ public class UserServiceImpl implements UserService {
         }
         if (request.avatarKey() != null) {
             user.setAvatarKey(blankToNull(request.avatarKey()));
+        }
+        if (request.homeProvinceId() != null) {
+            user.setHomeProvinceId(homeProvince(request.homeProvinceId()));
         }
         if (request.status() != null) {
             user.setStatus(request.status());
@@ -217,6 +230,10 @@ public class UserServiceImpl implements UserService {
         User user = findActiveUser(userId);
         user.setFullName(request.fullName().trim());
         user.setAvatarKey(blankToNull(request.avatarKey()));
+        if (request.phone() != null) {
+            user.setPhone(blankToNull(request.phone()));
+        }
+        user.setHomeProvinceId(homeProvince(request.homeProvinceId()));
         return respond(userRepository.saveAndFlush(user));
     }
 
@@ -407,7 +424,24 @@ public class UserServiceImpl implements UserService {
     }
 
     private UserResponse respond(User user) {
-        return userMapper.toResponse(user, userRoleService.rolesOf(user.getId()));
+        return userMapper.toResponse(user, userRoleService.rolesOf(user.getId()),
+                user.getHomeProvinceId() == null ? null : provinceNames().get(user.getHomeProvinceId()));
+    }
+
+    /** A province that exists, or null for none; anything else is the caller's mistake. */
+    private UUID homeProvince(UUID provinceId) {
+        if (provinceId != null && !provinceService.getObject().exists(provinceId)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No such province");
+        }
+        return provinceId;
+    }
+
+    private Map<UUID, String> provinceNames() {
+        Map<UUID, String> names = new HashMap<>();
+        for (ProvinceSummary province : provinceService.getObject().findSummaries()) {
+            names.put(province.id(), province.name());
+        }
+        return names;
     }
 
     private User findActiveUser(UUID id) {

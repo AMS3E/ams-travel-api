@@ -4,6 +4,8 @@ import ams.asmtravel.api.services.corridor.domain.Corridor;
 import ams.asmtravel.api.services.corridor.dto.request.CorridorRequest;
 import ams.asmtravel.api.services.corridor.dto.response.CorridorResponse;
 
+import org.springframework.security.core.Authentication;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -40,6 +42,10 @@ public interface CorridorService {
 
     /** Only published corridors can be saved as favorites. */
     boolean isPublished(UUID id);
+
+    boolean canWrite(UUID id, Authentication authentication);
+
+    void setCover(UUID id, String coverKey);
 
     long count();
 }

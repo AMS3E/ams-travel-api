@@ -57,6 +57,10 @@ public class UserPreferences {
     @Column(nullable = false, length = 20)
     private Theme theme = Theme.SYSTEM;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 5)
+    private DistanceUnit distanceUnit = DistanceUnit.KM;
+
     @UpdateTimestamp
     @Column(nullable = false)
     private Instant updatedAt;

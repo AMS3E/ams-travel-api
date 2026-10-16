@@ -40,7 +40,7 @@ class MinioConfigTests {
                 new MinioProperties.Connection("http://localhost:9000", "access-key", "secret-key"));
         MediaRepository repository = mock(MediaRepository.class);
         MediaServiceImpl mediaService = new MediaServiceImpl(new MinioStorageClient(minioClient, properties), properties,
-                repository, new MediaMapperImpl(), null, null, null);
+                repository, new MediaMapperImpl(), null, null, null, null);
         seedImages = new MinioConfig().seedImages(mediaService);
     }
 

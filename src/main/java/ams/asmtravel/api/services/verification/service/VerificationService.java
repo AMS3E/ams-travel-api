@@ -1,6 +1,7 @@
 package ams.asmtravel.api.services.verification.service;
 
 import ams.asmtravel.api.services.verification.dto.request.VerificationRequest;
+import ams.asmtravel.api.services.verification.domain.TravelerSealBar;
 import ams.asmtravel.api.services.verification.dto.response.VerificationResponse;
 import org.springframework.security.core.Authentication;
 
@@ -29,4 +30,7 @@ public interface VerificationService {
 
     /** Public status; without ids, all verified published places. */
     List<VerificationResponse> findStatuses(List<UUID> destinationIds);
+
+    /** The Traveler seal's bar, for a search that keeps only the places carrying it. */
+    TravelerSealBar travelerSeal();
 }

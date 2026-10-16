@@ -16,6 +16,7 @@ import ams.asmtravel.api.services.user.user.service.UserService;
 import ams.asmtravel.api.services.verification.config.VerificationProperties;
 import ams.asmtravel.api.services.verification.domain.DestinationVerification;
 import ams.asmtravel.api.services.verification.domain.Standing;
+import ams.asmtravel.api.services.verification.domain.TravelerSealBar;
 import ams.asmtravel.api.services.verification.domain.VerificationBasis;
 import ams.asmtravel.api.services.verification.dto.request.VerificationRequest;
 import ams.asmtravel.api.services.verification.dto.response.VerificationResponse;
@@ -198,6 +199,11 @@ public class VerificationServiceImpl implements VerificationService {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Your desk does not verify this destination");
         }
         return desk;
+    }
+
+    @Override
+    public TravelerSealBar travelerSeal() {
+        return new TravelerSealBar(properties.travelerSeal().minRatings(), properties.travelerSeal().minAverage());
     }
 
     /** Each place's star ratings and whether they earn the travellers' seal; the review service answers 100 at a time. */

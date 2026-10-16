@@ -1,5 +1,8 @@
 package ams.asmtravel.api.services.location.region.service.impl;
 
+import ams.asmtravel.api.services.destination.destination.domain.DestinationSummary;
+import ams.asmtravel.api.services.destination.destination.service.DestinationService;
+import ams.asmtravel.api.services.location.region.dto.response.GeoBounds;
 import ams.asmtravel.api.services.taxonomy.category.domain.CategoryDeletingEvent;
 import ams.asmtravel.api.services.taxonomy.category.service.CategoryService;
 import ams.asmtravel.api.services.location.region.domain.Region;
@@ -15,6 +18,7 @@ import ams.asmtravel.api.services.taxonomy.interest.service.InterestService;
 import ams.asmtravel.api.services.taxonomy.tag.domain.TagDeletingEvent;
 import ams.asmtravel.api.services.taxonomy.tag.service.TagService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpStatus;
@@ -54,6 +58,8 @@ public class RegionServiceImpl implements RegionService {
     private final InterestService interestService;
     private final RegionMapper mapper;
     private final ApplicationEventPublisher events;
+    /* Destinations depend on this service for their regions, so they are reached lazily, for the box around them. */
+    private final ObjectProvider<DestinationService> destinationService;
 
     @Override
     @Transactional(readOnly = true)
@@ -61,13 +67,14 @@ public class RegionServiceImpl implements RegionService {
         List<Region> regions = kind == null
                 ? regionRepository.findAllByOrderByNameAsc()
                 : regionRepository.findAllByKindOrderByNameAsc(kind);
-        return regions.stream().sorted(IN_ORDER).map(mapper::toRegionResponse).toList();
+        List<DestinationSummary> places = places();
+        return regions.stream().sorted(IN_ORDER).map(region -> mapper.toRegionResponse(region, boundsOf(region, places))).toList();
     }
 
     @Override
     @Transactional(readOnly = true)
     public RegionResponse findById(UUID id) {
-        return mapper.toRegionResponse(find(id));
+        return respond(find(id));
     }
 
     @Override
@@ -83,7 +90,7 @@ public class RegionServiceImpl implements RegionService {
         apply(region, request, null);
         region.setIsActive(request.isActive() == null || request.isActive());
         placeIn(region, others, request.sortOrder());
-        return mapper.toRegionResponse(regionRepository.save(region));
+        return respond(regionRepository.save(region));
     }
 
     @Override
@@ -108,7 +115,7 @@ public class RegionServiceImpl implements RegionService {
         if (kind != was) {
             renumber(was, id);
         }
-        return mapper.toRegionResponse(saved);
+        return respond(saved);
     }
 
     /** Refused while provinces are in it; preferences on it are cleared; child zones become top level. */
@@ -126,6 +133,12 @@ public class RegionServiceImpl implements RegionService {
     @Transactional(readOnly = true)
     public boolean exists(UUID id) {
         return id != null && regionRepository.existsById(id);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public boolean isTourismCode(String code) {
+        return code != null && !code.isBlank() && regionRepository.existsByKindAndCodeIgnoreCase(RegionKind.TOURISM, code.trim());
     }
 
     @Override
@@ -176,8 +189,21 @@ public class RegionServiceImpl implements RegionService {
         if (request.coverKey() != null) {
             region.setCoverKey(request.coverKey().isBlank() ? null : request.coverKey().trim());
         }
+        if (request.mapKey() != null) {
+            region.setMapKey(request.mapKey().isBlank() ? null : request.mapKey().trim());
+        }
+        if (request.latitude() != null || request.longitude() != null) {
+            if (request.latitude() == null || request.longitude() == null) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A centre needs both a latitude and a longitude");
+            }
+            region.setLatitude(request.latitude());
+            region.setLongitude(request.longitude());
+        }
         if (request.kind() != null) {
             region.setKind(request.kind());
+        }
+        if (request.amsRecommended() != null) {
+            region.setAmsRecommended(request.amsRecommended());
         }
         /* Null keeps the links, so a client that does not send them cannot empty them. */
         if (request.categoryIds() != null || region.getId() == null) {
@@ -196,6 +222,22 @@ public class RegionServiceImpl implements RegionService {
 
     private Region find(UUID id) {
         return regionRepository.findWithLinksById(id).orElseThrow(() -> new RegionNotFoundException());
+    }
+
+    private RegionResponse respond(Region region) {
+        return mapper.toRegionResponse(region, boundsOf(region, places()));
+    }
+
+    private List<DestinationSummary> places() {
+        return destinationService.getObject().findPublishedSummaries();
+    }
+
+    /** The box around the published places in a zone (through their province) or shelved in a tourism region. */
+    private static GeoBounds boundsOf(Region region, List<DestinationSummary> places) {
+        return GeoBounds.around(places.stream()
+                .filter(place -> place.inRegion(region.getId()))
+                .map(place -> new GeoBounds.Point(place.latitude(), place.longitude()))
+                .toList());
     }
 
     /** The rows found, in the order the ids were sent, each once. A new list, so the old link rows are replaced whole. */

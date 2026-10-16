@@ -21,6 +21,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -67,11 +68,26 @@ public class Region {
     @Column(length = 512)
     private String coverKey;
 
+    /** The picture in the Historical Map panel of its page in the app; null until one is uploaded. */
+    @Column(length = 512)
+    private String mapKey;
+
     /** Its place among the regions of its kind, 0 for the first: Discover shows them in this order. */
     private Integer sortOrder;
 
+    /** Its centre on the Map screen, when an editor set one; otherwise the response answers the middle of its places. */
+    @Column(precision = 10, scale = 7)
+    private BigDecimal latitude;
+
+    @Column(precision = 10, scale = 7)
+    private BigDecimal longitude;
+
     @Column(nullable = false)
     private Boolean isActive = true;
+
+    /** Staff mark it Recommended by AMS Travel: the badge on its card and its page in the app. */
+    @Column(nullable = false)
+    private Boolean amsRecommended = false;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)

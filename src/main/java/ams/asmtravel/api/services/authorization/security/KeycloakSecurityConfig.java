@@ -129,7 +129,8 @@ public class KeycloakSecurityConfig {
 
                 /* Badges: definitions and share links are public; a person's own need a sign-in; admin writes. */
                 .requestMatchers("/api/v1/badges/me/**").authenticated()
-                .requestMatchers(HttpMethod.GET, "/api/v1/badges", "/api/v1/badges/*", "/api/v1/badges/shared/*").permitAll()
+                .requestMatchers(HttpMethod.GET, "/api/v1/badges", "/api/v1/badges/*", "/api/v1/badges/shared/*",
+                        "/api/v1/badges/shared/*/page").permitAll()
                 .requestMatchers("/api/v1/badges", "/api/v1/badges/*").hasAuthority(Permissions.FULL_CONTROL)
 
                 /* Categories. */

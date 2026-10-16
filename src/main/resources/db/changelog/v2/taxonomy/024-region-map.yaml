@@ -1,0 +1,14 @@
+# A tourism region has a map picture: the Historical Map panel of its page in
+# the app. Null until an editor uploads one.
+databaseChangeLog:
+  - changeSet:
+      id: v2-taxonomy-region-map
+      author: ams-travel-v2
+      changes:
+        - addColumn:
+            schemaName: taxonomy
+            tableName: regions
+            columns:
+              - column: {name: map_key, type: varchar(512)}
+      rollback:
+        - dropColumn: {schemaName: taxonomy, tableName: regions, columnName: map_key}
