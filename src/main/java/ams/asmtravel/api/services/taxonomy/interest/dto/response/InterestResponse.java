@@ -11,6 +11,10 @@ public record InterestResponse(
         /** What the Discover layer lists it under, or null when it is not on those lists. */
         String groupName,
         String iconKey,
+        /** Its uploaded picture's key, or null. */
+        String coverKey,
+        /** The picture's link, or null. */
+        String coverUrl,
         Boolean isActive,
         /** Its place in its group, 0 for the first. */
         Integer sortOrder,

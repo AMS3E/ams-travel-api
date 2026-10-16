@@ -62,7 +62,9 @@
       "cave",
       "viewpoint"
     ],
-    "image": "bayon-temple.jpg"
+    "image": "bayon-temple.jpg",
+    "map": "map-ancient-capitals.jpg",
+    "amsRecommended": true
   },
   {
     "code": "NORTHEASTERN",
@@ -99,7 +101,9 @@
       "camping",
       "viewpoint"
     ],
-    "image": "bou-sra-waterfall.jpg"
+    "image": "bou-sra-waterfall.jpg",
+    "map": "map-northeastern.jpg",
+    "amsRecommended": false
   },
   {
     "code": "MEKONG-TONLE-SAP",
@@ -136,7 +140,9 @@
       "viewpoint",
       "cruise"
     ],
-    "image": "tonle-sap-floating-village.jpg"
+    "image": "tonle-sap-floating-village.jpg",
+    "map": "map-mekong-tonle-sap.jpg",
+    "amsRecommended": true
   },
   {
     "code": "MOUNTAIN-WATERFALL",
@@ -172,7 +178,9 @@
       "camping",
       "viewpoint"
     ],
-    "image": "phnom-kulen.jpg"
+    "image": "phnom-kulen.jpg",
+    "map": "map-mountain-waterfall.jpg",
+    "amsRecommended": false
   },
   {
     "code": "COASTAL-ISLAND",
@@ -205,7 +213,9 @@
       "fishing",
       "cruise"
     ],
-    "image": "koh-rong-sanloem-3.jpg"
+    "image": "koh-rong-sanloem-3.jpg",
+    "map": "map-coastal-island.jpg",
+    "amsRecommended": true
   },
   {
     "code": "URBAN-LIFESTYLE",
@@ -239,7 +249,9 @@
       "skybar",
       "shopping"
     ],
-    "image": "phnom-penh-riverside.jpg"
+    "image": "phnom-penh-riverside.jpg",
+    "map": "map-urban-lifestyle.jpg",
+    "amsRecommended": false
   },
   {
     "code": "KHMER-CULINARY",
@@ -270,7 +282,9 @@
       "traditional-food",
       "skybar"
     ],
-    "image": "kep-crab-market.jpg"
+    "image": "kep-crab-market.jpg",
+    "map": "map-khmer-culinary.jpg",
+    "amsRecommended": false
   },
   {
     "code": "ECO-COMMUNITY",
@@ -307,7 +321,9 @@
       "fishing",
       "camping"
     ],
-    "image": "chi-phat-3.jpg"
+    "image": "chi-phat-3.jpg",
+    "map": "map-eco-community.jpg",
+    "amsRecommended": false
   },
   {
     "code": "LUXURY-TOURISM",
@@ -343,6 +359,8 @@
       "skybar",
       "cruise"
     ],
-    "image": "song-saa-private-island.jpg"
+    "image": "song-saa-private-island.jpg",
+    "map": "map-luxury-tourism.jpg",
+    "amsRecommended": false
   }
 ]

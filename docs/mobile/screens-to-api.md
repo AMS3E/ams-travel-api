@@ -17,6 +17,16 @@ Legend: ✅ exists and fits · ⚠️ exists with a gap · ❌ nothing behind it
 | Explore as Guest | every read marked public below | ✅ |
 | After sign-in | `GET /users/me`, `GET /preferences/me` | ✅ |
 
+## What changed on 2026-10-16
+
+Three small additions, ported from the developer's branch: `GET /search?type=DESTINATION&near=` takes `radiusKm`
+(0.1 to 50; 25 when left out) and every attraction card found that way carries `distanceMeters`; an interest has
+a picture (`coverUrl`, folder `interest`; `iconKey` stays until the app draws pictures); a tourism region has a
+map picture (`mapUrl`: one image in the Map panel of its page, where the interactive map of its places used to be)
+and an `amsRecommended` flag for the Recommended by AMS Travel badge. A destination's `theme` may be the code of
+any tourism region, not only the nine first ones. History & Heritage stays out: there is no `history` schema and
+no historical-coverage endpoint.
+
 ## What changed on 2026-10-14 (the answers to API-REQUESTS.md)
 
 Every entry of `API-REQUESTS.md` has its Status line; the rows below are updated to match. In short: several
@@ -31,14 +41,14 @@ first/last name split (one Full name stays).
 
 ## The one card every list is made of
 
-`GET /search`, `GET /search/cards` and the filtered lists all return the same **card**: `type`, `id`, `name`, `slug`, `shortDescription`, `coverUrl`, `provinceId`, `provinceName`, `latitude`, `longitude`, `categoryIds`, `categoryNames`, `interestIds`, `tourismRegionIds`, `averageRating`, `ratingCount`, `reviewCount`, `verified`, `basis`, `travelerRecommended`, `priceFrom`, `currency`, `durationDays`, `openNow`, `todayHours` (food: open at this moment in Cambodia, null when no hours are known; today's line), `stopNames`, `encodedPolyline` (corridors: the stops in travel order; the whole route, Google encoded, null until calculated). A row in the app needs nothing else. Fields a kind does not have are null (a stay has no slug, a corridor no pin or province, only a stay or food a price, only a corridor a duration).
+`GET /search`, `GET /search/cards` and the filtered lists all return the same **card**: `type`, `id`, `name`, `slug`, `shortDescription`, `coverUrl`, `provinceId`, `provinceName`, `latitude`, `longitude`, `categoryIds`, `categoryNames`, `interestIds`, `tourismRegionIds`, `averageRating`, `ratingCount`, `reviewCount`, `verified`, `basis`, `travelerRecommended`, `priceFrom`, `currency`, `durationDays`, `openNow`, `todayHours` (food: open at this moment in Cambodia, null when no hours are known; today's line), `stopNames`, `encodedPolyline` (corridors: the stops in travel order; the whole route, Google encoded, null until calculated), `distanceMeters` (attractions searched `near=` a destination: metres from it; null otherwise). A row in the app needs nothing else. Fields a kind does not have are null (a stay has no slug, a corridor no pin or province, only a stay or food a price, only a corridor a duration).
 
 ## Explore
 
 | Element | Endpoint | State |
 | --- | --- | --- |
 | Chip row: Attraction Site, Stays, Food, Water, Activities, Corridors | `GET /interests` (public) grouped by `groupName`: the six groups are exactly these | ✅ |
-| Explore by Tourism Region cards | `GET /regions?kind=TOURISM` (public) → `name`, `coverUrl`, `description`, `latitude`, `longitude` (an editor's centre when `centreSet`, else the middle of its places), `bounds`; the heart: `POST /favorites` `{targetType: REGION, targetId}` | ✅ |
+| Explore by Tourism Region cards | `GET /regions?kind=TOURISM` (public) → `name`, `coverUrl`, `description`, `latitude`, `longitude` (an editor's centre when `centreSet`, else the middle of its places), `bounds`, `amsRecommended` (the Recommended by AMS Travel badge); the heart: `POST /favorites` `{targetType: REGION, targetId}` | ✅ |
 | Explore by Provinces cards | `GET /provinces` (public) → `name`, `coverUrl`, `averageRating`, `reviewCount`, `placeCount`; the heart: `POST /favorites` `{targetType: PROVINCE, targetId}` | ✅ |
 | "Recommend by Traveler" on a region card | nothing: the seal is per destination | design filler |
 | Explore by Popular | `GET /popular?limit=10` (public; `type`, `regionIds`, `provinceIds`, `interestIds` optional) → `items[{type, id, browses, reason}]`, filled up to `limit` (MOST_BROWSED, then VERIFIED, TOP_RATED, CATALOGUE), then `GET /search/cards?type=&ids=` for the rows | ✅ |
@@ -56,7 +66,7 @@ first/last name split (one Full name stays).
 | Typing suggestions ("Angkor Wat", "Battambang") | `GET /search/suggest?q=ang&limit=8` (public) → `kind` (DESTINATION, STAY, FOOD, CORRIDOR, PROVINCE, REGION), `id`, `name`, `slug`; names starting with the text first | ✅ |
 | Recent keywords | on the device | ✅ |
 | Explore by Nearby | `GET /destinations/nearby?latitude=&longitude=&radiusKm=25&limit=20` (public) → ids, then `GET /search/cards?ids=` | ✅ |
-| Around a destination, as cards | `GET /search?type=STAY|FOOD|DESTINATION|CORRIDOR&near={destinationId}` → `{content, page}` nearest first (stays and food within the Nearby radius, attractions within 25 km, corridors stopping there) | ✅ |
+| Around a destination, as cards | `GET /search?type=STAY|FOOD|DESTINATION|CORRIDOR&near={destinationId}` → `{content, page}` nearest first (stays and food within the Nearby radius, attractions within `radiusKm` (0.1 to 50; 25 when left out) each with `distanceMeters`, corridors stopping there) | ✅ |
 | Recommend Corridors | `GET /search?type=CORRIDOR` (public) | ✅ (the seal and review count on a corridor are filler until corridors have reviews) |
 
 ## Tourism Regions
@@ -64,7 +74,7 @@ first/last name split (one Full name stays).
 | Element | Endpoint | State |
 | --- | --- | --- |
 | Region list with three places each | `GET /regions?kind=TOURISM` + `GET /search?regionId=&size=3` per region | ✅ |
-| Region detail: banner, name, overview | `GET /regions/{id}` → `coverUrl`, `name`, `description` (HTML) | ✅ |
+| Region detail: banner, name, overview, map picture | `GET /regions/{id}` → `coverUrl`, `name`, `description` (HTML), `mapUrl` (the Map panel: one picture of the region's map, where the interactive map was; null until staff upload one), `amsRecommended` | ✅ |
 | Historical Map | the cards' `latitude`/`longitude` from `GET /search?regionId=&size=100`; the region's own `bounds` to frame it | ✅ |
 | Categories and Tags chips | `GET /regions/{id}` → `categoryIds`, `tagIds` resolved against `GET /categories`, `GET /tags` | ✅ flat lists, no values |
 | Destination list with category line and seal | `GET /search?regionId=` → `categoryNames`, `verified`, `travelerRecommended` on every card | ✅ |
@@ -95,7 +105,7 @@ first/last name split (one Full name stays).
 
 | Element | Endpoint | State |
 | --- | --- | --- |
-| Interest chips and grid | `GET /interests` (public); `GET /search?interestIds=` | ✅ |
+| Interest chips and grid | `GET /interests` (public) → `coverUrl` (its picture, null until staff choose one; `iconKey` stays for now); `GET /search?interestIds=` | ✅ |
 | "Recommend" panel (Traveler seal holders of the interest) | `GET /search?interestIds=&travelerRecommended=true&size=5`; hidden while empty | ✅ |
 | Stay detail: cover, gallery, name, star rating, slogan, description, policies, check-in/out, phone, website, amenities | `GET /stays/{id}` (public) → `starRating`, `slogan`, `description`, `policies`, `checkInFrom`, `checkOutUntil`, `phone`, `website`, `amenities` (slugs → `GET /amenities` for label, icon, group), `weekendNights`; gallery `GET /media?ownerType=STAY&ownerId=` | ✅ |
 | "Open 24h" on a stay | nothing: stays have check-in hours, not opening hours | design filler |

@@ -44,6 +44,8 @@ public class InterestSeeder implements CatalogSeedContributor {
             interest.setDescription(SeedJson.text(node, "description"));
             interest.setGroupName(SeedJson.text(node, "group"));
             interest.setIconKey(SeedJson.text(node, "icon"));
+            /* Its picture on the Explore shelf: one of the catalogue's own photographs, named by file. */
+            interest.setCoverKey(context.imageKey(node));
             interest.setSortOrder(numbered.merge(String.valueOf(interest.getGroupName()), 1, Integer::sum) - 1);
             context.publish(Interest.class, interest.getSlug(), interestRepository.save(interest));
         }

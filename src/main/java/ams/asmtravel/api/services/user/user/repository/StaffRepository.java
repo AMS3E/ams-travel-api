@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.keycloak.admin.client.CreatedResponseUtil;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.resource.RealmResource;
+import org.keycloak.admin.client.resource.UserResource;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.RoleRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
@@ -99,6 +100,25 @@ public class StaffRepository {
             throw translate(exception);
         }
         return backofficeUserMapper.toDomain(user, backofficeRolesOf(realm, id));
+    }
+
+    /** Renames an account, changes its e-mail or whether it may sign in; the roles and the password stay. */
+    public BackofficeUser update(String id, String firstName, String lastName, String email, boolean enabled) {
+        RealmResource realm = realm();
+        try {
+            UserResource account = realm.users().get(id);
+            UserRepresentation user = account.toRepresentation();
+            user.setFirstName(firstName);
+            user.setLastName(lastName);
+            user.setEmail(email);
+            user.setEnabled(enabled);
+            account.update(user);
+        } catch (NotFoundException exception) {
+            throw new StaffAccountNotFoundException();
+        } catch (WebApplicationException | ProcessingException exception) {
+            throw translate(exception);
+        }
+        return findById(id);
     }
 
     public BackofficeUser create(BackofficeUser account, String password, boolean temporaryPassword) {

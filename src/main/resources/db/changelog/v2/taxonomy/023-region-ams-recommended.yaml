@@ -1,0 +1,18 @@
+# Staff can mark a tourism region Recommended by AMS Travel; the app shows the
+# badge on its card. Every existing region starts unmarked.
+databaseChangeLog:
+  - changeSet:
+      id: v2-taxonomy-region-ams-recommended
+      author: ams-travel-v2
+      changes:
+        - addColumn:
+            schemaName: taxonomy
+            tableName: regions
+            columns:
+              - column:
+                  name: ams_recommended
+                  type: boolean
+                  defaultValueBoolean: false
+                  constraints: {nullable: false}
+      rollback:
+        - dropColumn: {schemaName: taxonomy, tableName: regions, columnName: ams_recommended}

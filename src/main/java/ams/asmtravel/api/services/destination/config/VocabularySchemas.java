@@ -39,9 +39,8 @@ public class VocabularySchemas {
                     Map.entry("paymentMethods", FoodVocabularies.PAYMENT_METHODS),
                     Map.entry("languagesSpoken", FoodVocabularies.LANGUAGES)),
             "FoodMenuItemRequest", Map.of("labels", FoodVocabularies.DISH_LABELS),
-            "DestinationRequest", Map.of(
-                    "theme", DestinationThemes.BY_THEME.keySet(),
-                    "specialties", DestinationThemes.ALL));
+            /* No theme list: any tourism region's code is one. */
+            "DestinationRequest", Map.of("specialties", DestinationThemes.ALL));
 
     @Bean
     OpenApiCustomizer listingVocabularies() {

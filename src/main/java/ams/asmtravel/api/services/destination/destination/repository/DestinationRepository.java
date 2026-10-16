@@ -76,6 +76,34 @@ public interface DestinationRepository extends JpaRepository<Destination, UUID>,
                              @Param("radiusMeters") double radiusMeters,
                              @Param("resultLimit") int resultLimit);
 
+    /** One row of {@link #findNearbyDistances}: a place and how far it is from the point, in metres. */
+    interface NearbyDistance {
+        UUID getId();
+
+        Double getMetres();
+    }
+
+    /** {@link #findNearbyIds} with each distance, measured the same way as the radius. PostgreSQL only. */
+    @Query(value = """
+            SELECT d.id AS id,
+                   ST_Distance(
+                     ST_SetSRID(ST_MakePoint(d.longitude::float8, d.latitude::float8), 4326)::geography,
+                     ST_SetSRID(ST_MakePoint(:longitude, :latitude), 4326)::geography) AS metres
+            FROM destination.destinations d
+            WHERE d.status = 'PUBLISHED'
+              AND d.latitude IS NOT NULL AND d.longitude IS NOT NULL
+              AND ST_DWithin(
+                    ST_SetSRID(ST_MakePoint(d.longitude::float8, d.latitude::float8), 4326)::geography,
+                    ST_SetSRID(ST_MakePoint(:longitude, :latitude), 4326)::geography,
+                    :radiusMeters)
+            ORDER BY metres, d.id
+            LIMIT :resultLimit
+            """, nativeQuery = true)
+    List<NearbyDistance> findNearbyDistances(@Param("latitude") double latitude,
+                                             @Param("longitude") double longitude,
+                                             @Param("radiusMeters") double radiusMeters,
+                                             @Param("resultLimit") int resultLimit);
+
     /** Unlinks a deleted category, tag, interest or region. */
     @Modifying
     @Query(value = "DELETE FROM destination.destination_categories WHERE category_id = :id", nativeQuery = true)

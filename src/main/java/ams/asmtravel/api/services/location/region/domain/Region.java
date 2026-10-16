@@ -64,6 +64,10 @@ public class Region {
     @Column(length = 512)
     private String coverKey;
 
+    /** The picture in the Map panel of its page in the app, one image where the interactive map was; null until uploaded. */
+    @Column(length = 512)
+    private String mapKey;
+
     /** Its place among the regions of its kind, 0 for the first: Discover shows them in this order. */
     private Integer sortOrder;
 
@@ -76,6 +80,10 @@ public class Region {
 
     @Column(nullable = false)
     private Boolean isActive = true;
+
+    /** Staff mark it Recommended by AMS Travel: the badge on its card and its page in the app. */
+    @Column(nullable = false)
+    private Boolean amsRecommended = false;
 
     @CreationTimestamp
     @Column(nullable = false, updatable = false)

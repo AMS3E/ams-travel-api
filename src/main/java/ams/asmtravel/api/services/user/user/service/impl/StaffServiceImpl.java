@@ -1,7 +1,10 @@
 package ams.asmtravel.api.services.user.user.service.impl;
 
+import ams.asmtravel.api.services.media.service.MediaService;
 import ams.asmtravel.api.services.user.user.domain.BackofficeUser;
 import ams.asmtravel.api.services.authorization.role.domain.RoleCode;
+import ams.asmtravel.api.services.user.user.domain.StaffProfile;
+import ams.asmtravel.api.services.user.user.dto.request.StaffProfileRequest;
 import ams.asmtravel.api.services.user.user.dto.request.StaffRequest;
 import ams.asmtravel.api.services.user.user.dto.response.StaffResponse;
 import ams.asmtravel.api.services.user.user.mapper.StaffMapper;
@@ -18,7 +21,11 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 
 /** Staff account workflows and role policy; the repository owns every Keycloak call. */
 @Service
@@ -29,24 +36,21 @@ public class StaffServiceImpl implements StaffService {
     private final StaffRepository keycloakUserRepository;
     private final StaffMapper backofficeUserMapper;
     private final UserService userService;
+    private final MediaService mediaService;
 
     @Override
     public List<StaffResponse> findBackofficeUsers() {
-        return keycloakUserRepository.findBackofficeUsers().stream()
-                .map(backofficeUserMapper::toBackofficeUserResponse)
-                .toList();
+        return respond(keycloakUserRepository.findBackofficeUsers());
     }
 
     @Override
     public List<StaffResponse> search(String query) {
-        return keycloakUserRepository.search(query).stream()
-                .map(backofficeUserMapper::toBackofficeUserResponse)
-                .toList();
+        return respond(keycloakUserRepository.search(query));
     }
 
     @Override
     public StaffResponse findById(String id) {
-        return backofficeUserMapper.toBackofficeUserResponse(keycloakUserRepository.findById(id));
+        return respond(keycloakUserRepository.findById(id));
     }
 
     @Override
@@ -61,7 +65,23 @@ public class StaffServiceImpl implements StaffService {
         BackofficeUser created = keycloakUserRepository.create(
                 backofficeUserMapper.toDomain(request), request.password(), Boolean.TRUE.equals(request.temporaryPassword()));
         log.info("Created back-office account {} as {}", request.username(), request.roles());
-        return backofficeUserMapper.toBackofficeUserResponse(created);
+        return respond(created);
+    }
+
+    @Override
+    public StaffResponse update(String id, StaffProfileRequest request) {
+        // Checked here so nobody locks themselves out.
+        if (id.equals(callerSubject()) && !request.enabled()) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You cannot disable your own account — ask another administrator");
+        }
+        String firstName = request.firstName().trim();
+        String lastName = request.lastName() == null ? "" : request.lastName().trim();
+        String email = request.email().trim().toLowerCase(Locale.ROOT);
+        BackofficeUser updated = keycloakUserRepository.update(id, firstName, lastName, email, request.enabled());
+        // Keycloak is the account; the person here carries what Keycloak does not (phone, photo) and mirrors the rest.
+        userService.mirrorStaffProfile(id, email, (firstName + " " + lastName).trim(), request.phone(), request.avatarKey());
+        log.info("Account {} edited: {}", id, request.enabled() ? "may sign in" : "disabled");
+        return respond(updated);
     }
 
     @Override
@@ -89,6 +109,30 @@ public class StaffServiceImpl implements StaffService {
         userService.mirrorBackofficeRoles(id, wanted);
         log.info("Account {} now holds {}", id, wanted);
         return findById(id);
+    }
+
+    /** The account with the phone and photo from the person's profile here. */
+    private StaffResponse respond(BackofficeUser user) {
+        return respond(List.of(user)).getFirst();
+    }
+
+    /** One profile lookup for the whole list. */
+    private List<StaffResponse> respond(List<BackofficeUser> users) {
+        Map<UUID, StaffProfile> profiles = userService.findStaffProfiles(
+                users.stream().map(user -> parseUuid(user.id())).filter(Objects::nonNull).toList());
+        return users.stream().map(user -> {
+            StaffProfile profile = profiles.get(parseUuid(user.id()));
+            return backofficeUserMapper.toBackofficeUserResponse(user, profile,
+                    profile == null ? null : mediaService.url(profile.avatarKey()));
+        }).toList();
+    }
+
+    private static UUID parseUuid(String value) {
+        try {
+            return value == null ? null : UUID.fromString(value);
+        } catch (IllegalArgumentException exception) {
+            return null;
+        }
     }
 
     /** USER is the customer realm's; it is not handed out here. */

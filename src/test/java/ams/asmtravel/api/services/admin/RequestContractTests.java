@@ -1,6 +1,5 @@
 package ams.asmtravel.api.services.admin;
 
-import ams.asmtravel.api.services.destination.destination.domain.DestinationThemes;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import static ams.asmtravel.api.support.Callers.editor;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -81,8 +79,8 @@ class RequestContractTests {
                 .andExpect(status().isOk())
                 /* Amenities are a taxonomy now (GET /api/v1/amenities), not a fixed enum in the schema. */
                 .andExpect(jsonPath("$.components.schemas.StayRequest.properties.amenities.items.enum").doesNotExist())
-                .andExpect(jsonPath("$.components.schemas.DestinationRequest.properties.theme.enum")
-                        .value(hasSize(DestinationThemes.BY_THEME.size())))
+                /* Any tourism region's code is a theme, so no fixed list is published for it. */
+                .andExpect(jsonPath("$.components.schemas.DestinationRequest.properties.theme.enum").doesNotExist())
                 .andExpect(jsonPath("$.components.schemas.FoodRequest.properties.cuisines.items.enum")
                         .value(hasItem("khmer")))
                 /* A time says what a time looks like, which "string" never did. */

@@ -1,6 +1,8 @@
 package ams.asmtravel.api.services.search.dto.request;
 
 import ams.asmtravel.api.services.search.domain.SearchType;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Size;
 
 import java.util.HashSet;
@@ -21,6 +23,7 @@ import java.util.UUID;
  * @param travelerRecommended true keeps only places carrying the Traveler seal (destinations; the other kinds carry none)
  * @param near                a destination's id: what lies around it, nearest first, instead of A to Z. Stays and food
  *                            within the Nearby radius, attractions within 25 km, corridors stopping there
+ * @param radiusKm            how far {@code near} reaches for attractions, 0.1 to 50 km; 25 when left out
  */
 public record SearchRequest(
         SearchType type,
@@ -33,7 +36,8 @@ public record SearchRequest(
         @Size(max = 20) Set<UUID> tagIds,
         @Size(max = 20) Set<UUID> interestIds,
         Boolean travelerRecommended,
-        UUID near
+        UUID near,
+        @DecimalMin("0.1") @DecimalMax("50") Double radiusKm
 ) {
     public SearchType typeOrDefault() {
         return type == null ? SearchType.DESTINATION : type;
@@ -46,6 +50,11 @@ public record SearchRequest(
 
     public Set<UUID> provinces() {
         return together(provinceId, provinceIds);
+    }
+
+    /** The attraction radius asked for, else the given default. */
+    public double radiusKmOr(double fallback) {
+        return radiusKm == null ? fallback : radiusKm;
     }
 
     public boolean sealOnly() {

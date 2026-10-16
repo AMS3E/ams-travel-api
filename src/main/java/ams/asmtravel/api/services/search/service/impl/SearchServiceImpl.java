@@ -5,6 +5,7 @@ import ams.asmtravel.api.services.corridor.dto.response.CorridorResponse;
 import ams.asmtravel.api.services.corridor.service.CorridorService;
 import ams.asmtravel.api.services.destination.destination.domain.DestinationSearch;
 import ams.asmtravel.api.services.destination.destination.domain.DestinationSummary;
+import ams.asmtravel.api.services.destination.destination.domain.NearbyDestination;
 import ams.asmtravel.api.services.destination.destination.domain.ListingStatus;
 import ams.asmtravel.api.services.destination.destination.dto.response.DestinationResponse;
 import ams.asmtravel.api.services.destination.destination.service.DestinationService;
@@ -66,7 +67,7 @@ public class SearchServiceImpl implements SearchService {
 
     private static final int MAX_PAGE = 100;
     private static final int SUMMARY_BATCH = 100;
-    /** Attractions around a destination: how far out, and at most how many. */
+    /** Attractions around a destination: how far out unless asked ({@code radiusKm}), and at most how many. */
     private static final double NEAR_RADIUS_KM = 25;
     private static final int NEAR_LIMIT = 100;
 
@@ -87,7 +88,7 @@ public class SearchServiceImpl implements SearchService {
         return switch (request.typeOrDefault()) {
             case DESTINATION -> {
                 if (request.near() != null) {
-                    yield paged(destinationsNear(request), page, this::destinationHits);
+                    yield paged(destinationsNear(request), page, this::nearHits);
                 }
                 Page<DestinationResponse> found = destinationService.searchPublished(criteria(request),
                         page.withSort(Sort.by("name").ascending()));
@@ -103,9 +104,10 @@ public class SearchServiceImpl implements SearchService {
     public List<ProvinceGroupResponse> byProvince(SearchRequest request, int perProvince) {
         Map<UUID, String> provinceNames = names.provinceNames();
         return switch (request.typeOrDefault()) {
-            case DESTINATION -> grouped(request.near() != null ? destinationsNear(request)
-                            : destinationService.searchPublished(criteria(request), Pageable.unpaged(Sort.by("name").ascending())).getContent(),
-                    place -> one(place.provinceId()), this::destinationHits, perProvince, provinceNames);
+            case DESTINATION -> request.near() != null
+                    ? grouped(destinationsNear(request), near -> one(near.place().provinceId()), this::nearHits, perProvince, provinceNames)
+                    : grouped(destinationService.searchPublished(criteria(request), Pageable.unpaged(Sort.by("name").ascending())).getContent(),
+                            place -> one(place.provinceId()), this::destinationHits, perProvince, provinceNames);
             case STAY -> grouped(stays(request), stay -> one(stay.provinceId()), this::stayHits, perProvince, provinceNames);
             case FOOD -> grouped(foods(request), food -> one(food.provinceId()), this::foodHits, perProvince, provinceNames);
             case CORRIDOR -> grouped(corridors(request), CorridorResponse::stopProvinceIds, this::corridorHits, perProvince, provinceNames);
@@ -173,31 +175,32 @@ public class SearchServiceImpl implements SearchService {
                 request.tagIds(), request.interestIds(), seal);
     }
 
-    /** Published attractions within the radius, nearest first, the centre itself left out; the chips then narrow them. */
-    private List<DestinationResponse> destinationsNear(SearchRequest request) {
+    /** Published attractions within the radius, nearest first with their distances, the centre itself left out; the chips then narrow them. */
+    private List<NearbyDestination> destinationsNear(SearchRequest request) {
         DestinationSummary centre = destinationService.findSummary(request.near()).filter(DestinationSummary::published).orElse(null);
         if (centre == null || centre.latitude() == null || centre.longitude() == null) {
             return List.of();
         }
         Map<UUID, UUID> zones = zones();
-        List<DestinationResponse> around = destinationService
-                .findNearby(centre.latitude().doubleValue(), centre.longitude().doubleValue(), NEAR_RADIUS_KM, NEAR_LIMIT).stream()
-                .filter(place -> !place.id().equals(centre.id()) && place.status() == ListingStatus.PUBLISHED)
-                .filter(place -> matches(request.q(), place.name(), place.shortDescription(), place.address()))
-                .filter(place -> inProvinces(request.provinces(), place.provinceId()))
-                .filter(place -> inRegions(request.regions(), place.provinceId(), place.tourismRegionIds(), zones))
-                .filter(place -> anyOf(request.categoryIds(), place.categoryIds()))
-                .filter(place -> anyOf(request.tagIds(), place.tagIds()))
-                .filter(place -> anyOf(request.interestIds(), place.interestIds()))
+        List<NearbyDestination> around = destinationService
+                .findNearbyWithDistance(centre.latitude().doubleValue(), centre.longitude().doubleValue(),
+                        request.radiusKmOr(NEAR_RADIUS_KM), NEAR_LIMIT).stream()
+                .filter(near -> !near.place().id().equals(centre.id()) && near.place().status() == ListingStatus.PUBLISHED)
+                .filter(near -> matches(request.q(), near.place().name(), near.place().shortDescription(), near.place().address()))
+                .filter(near -> inProvinces(request.provinces(), near.place().provinceId()))
+                .filter(near -> inRegions(request.regions(), near.place().provinceId(), near.place().tourismRegionIds(), zones))
+                .filter(near -> anyOf(request.categoryIds(), near.place().categoryIds()))
+                .filter(near -> anyOf(request.tagIds(), near.place().tagIds()))
+                .filter(near -> anyOf(request.interestIds(), near.place().interestIds()))
                 .toList();
         if (!request.sealOnly() || around.isEmpty()) {
             return around;
         }
-        Set<UUID> sealed = verificationService.findStatuses(around.stream().map(DestinationResponse::id).toList()).stream()
+        Set<UUID> sealed = verificationService.findStatuses(around.stream().map(near -> near.place().id()).toList()).stream()
                 .filter(status -> Boolean.TRUE.equals(status.travelerRecommended()))
                 .map(VerificationResponse::destinationId)
                 .collect(Collectors.toSet());
-        return around.stream().filter(place -> sealed.contains(place.id())).toList();
+        return around.stream().filter(near -> sealed.contains(near.place().id())).toList();
     }
 
     // The lists of the few kinds, filtered here. Only destinations carry the Traveler seal.
@@ -261,6 +264,15 @@ public class SearchServiceImpl implements SearchService {
     }
 
     // Cards, with ratings and standing looked up a page at a time.
+
+    /** Cards for places found around a destination, each carrying how far it is, rounded to the metre. */
+    private List<SearchHitResponse> nearHits(List<NearbyDestination> rows) {
+        Map<UUID, Double> metres = new HashMap<>();
+        rows.forEach(near -> metres.put(near.place().id(), near.metres()));
+        return destinationHits(rows.stream().map(NearbyDestination::place).toList()).stream()
+                .map(hit -> hit.withDistanceMeters(metres.containsKey(hit.id()) ? (int) Math.round(metres.get(hit.id())) : null))
+                .toList();
+    }
 
     private List<SearchHitResponse> destinationHits(List<DestinationResponse> places) {
         if (places.isEmpty()) {
