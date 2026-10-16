@@ -1,6 +1,6 @@
 {
   "info": {
-    "_postman_id": "2a5675b9-9423-4053-ab2b-026114974519",
+    "_postman_id": "e073f0e7-a99d-4211-9b7e-87feb1d28753",
     "name": "AMS Travel Mobile",
     "description": "The AMS Travel API as the mobile app uses it, one folder per screen. Built by docs/mobile/postman/build-collection.py from the API's OpenAPI description on 2026-10-14. Reads marked public need no token; the rest send the traveller's bearer token from {{token}}. See docs/mobile/screens-to-api.md for what each screen needs.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -411,6 +411,12 @@
                   "value": "",
                   "disabled": true,
                   "description": ""
+                },
+                {
+                  "key": "radiusKm",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
                 }
               ]
             },
@@ -506,6 +512,12 @@
                   "value": "",
                   "disabled": true,
                   "description": ""
+                },
+                {
+                  "key": "radiusKm",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
                 }
               ]
             },
@@ -598,6 +610,12 @@
                 },
                 {
                   "key": "near",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "radiusKm",
                   "value": "",
                   "disabled": true,
                   "description": ""
@@ -871,6 +889,12 @@
                 },
                 {
                   "key": "near",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "radiusKm",
                   "value": "",
                   "disabled": true,
                   "description": ""
@@ -1542,6 +1566,12 @@
                   "value": "",
                   "disabled": true,
                   "description": ""
+                },
+                {
+                  "key": "radiusKm",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
                 }
               ]
             },
@@ -1868,6 +1898,12 @@
                   "value": "",
                   "disabled": true,
                   "description": ""
+                },
+                {
+                  "key": "radiusKm",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
                 }
               ]
             },
@@ -2001,6 +2037,12 @@
                 },
                 {
                   "key": "near",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "radiusKm",
                   "value": "",
                   "disabled": true,
                   "description": ""
@@ -2162,6 +2204,12 @@
                   "value": "",
                   "disabled": true,
                   "description": ""
+                },
+                {
+                  "key": "radiusKm",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
                 }
               ]
             },
@@ -2257,6 +2305,12 @@
                   "value": "",
                   "disabled": true,
                   "description": ""
+                },
+                {
+                  "key": "radiusKm",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
                 }
               ]
             },
@@ -2343,6 +2397,12 @@
                 },
                 {
                   "key": "near",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "radiusKm",
                   "value": "",
                   "disabled": true,
                   "description": ""
@@ -2527,6 +2587,12 @@
                   "value": "",
                   "disabled": true,
                   "description": ""
+                },
+                {
+                  "key": "radiusKm",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
                 }
               ]
             },
@@ -2671,6 +2737,12 @@
                 },
                 {
                   "key": "near",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "radiusKm",
                   "value": "",
                   "disabled": true,
                   "description": ""

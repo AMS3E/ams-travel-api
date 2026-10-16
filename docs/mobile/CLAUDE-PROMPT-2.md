@@ -15,6 +15,15 @@ this order:
    "What changed on 2026-10-14" at the top sums it up.
 3. `api-docs/postman/`: re-import both files; the collection has 81 requests now, one for every new call.
 
+Added 2026-10-16 (same folder, newer than the answers above; `screens-to-api.md` has the note "What changed
+on 2026-10-16"): `GET /search?type=DESTINATION&near=` takes `radiusKm` (0.1 to 50; 25 when left out) and every
+attraction card found that way carries `distanceMeters`, null on other cards; every interest answers
+`coverUrl` (its picture; keep `iconKey` as the fallback); every tourism region answers `mapUrl` (ONE picture
+for the Map panel of its page, in place of an interactive map of its places) and `amsRecommended` (show the
+"Recommended by AMS Travel" badge on its card and page). A destination's `theme` may be any tourism region's
+code. There is no `history` data and no `historical-coverage` endpoint: build nothing on them. The staging
+catalogue was reseeded on 2026-10-16, so every id changed: clear caches and saved test data first.
+
 First check that the server runs the new API; it goes live when Kimleng deploys, today. The checks:
 `GET https://api.travel.ams.com.kh/api/v1/provinces` answers `coverUrl` and `placeCount` on each province,
 and `GET /popular?limit=3` answers `items[]` with a `reason`. Until both do, change nothing and tell me.
