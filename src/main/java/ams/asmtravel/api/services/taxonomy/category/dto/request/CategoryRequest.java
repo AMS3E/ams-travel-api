@@ -13,6 +13,8 @@ public record CategoryRequest(
         String description,
         @Size(max = 512) String iconKey,
         Integer sortOrder,
-        Boolean isActive
+        Boolean isActive,
+        /** Khmer twins: null keeps what is stored, blank clears it. */
+        @Size(max = 100) String nameKm
 ) {
 }

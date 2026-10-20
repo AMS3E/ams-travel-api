@@ -1,0 +1,74 @@
+[
+  {
+    "destinationSlug": "angkor-wat",
+    "basis": "OFFICIAL_SITE",
+    "reference": "APSARA National Authority",
+    "note": "Listed as the principal monument of the Angkor Archaeological Park, managed by the APSARA National Authority."
+  },
+  {
+    "destinationSlug": "bayon-temple",
+    "basis": "OFFICIAL_SITE",
+    "reference": "APSARA National Authority",
+    "note": "A protected monument within the Angkor Thom enclosure of the Angkor World Heritage Site."
+  },
+  {
+    "destinationSlug": "ta-prohm",
+    "basis": "OFFICIAL_SITE",
+    "reference": "APSARA National Authority",
+    "note": "A protected monument of the Angkor Archaeological Park, conserved jointly with the Archaeological Survey of India."
+  },
+  {
+    "destinationSlug": "banteay-srei",
+    "basis": "OFFICIAL_SITE",
+    "reference": "APSARA National Authority",
+    "note": "A protected monument within the Angkor World Heritage Site, with its own APSARA ticket checkpoint."
+  },
+  {
+    "destinationSlug": "preah-vihear-temple",
+    "basis": "OFFICIAL_SITE",
+    "reference": "National Authority for Preah Vihear",
+    "note": "A UNESCO World Heritage Site since 2008, administered by the National Authority for Preah Vihear."
+  },
+  {
+    "destinationSlug": "koh-ker",
+    "basis": "OFFICIAL_SITE",
+    "reference": "National Authority for Preah Vihear",
+    "note": "A UNESCO World Heritage Site since 2023, managed through the National Authority for Preah Vihear."
+  },
+  {
+    "destinationSlug": "sambor-prei-kuk",
+    "basis": "OFFICIAL_SITE",
+    "reference": "National Authority for Sambor Prei Kuk",
+    "note": "A UNESCO World Heritage Site since 2017, with a national authority of its own for conservation and visits."
+  },
+  {
+    "destinationSlug": "royal-palace",
+    "basis": "OFFICIAL_SITE",
+    "reference": "Ministry of the Royal Palace",
+    "note": "The official residence of the King of Cambodia, open to visitors under the Ministry of the Royal Palace."
+  },
+  {
+    "destinationSlug": "national-museum",
+    "basis": "OFFICIAL_SITE",
+    "reference": "Ministry of Culture and Fine Arts",
+    "note": "The national museum of Cambodia, a public institution of the Ministry of Culture and Fine Arts."
+  },
+  {
+    "destinationSlug": "phnom-kulen",
+    "basis": "OFFICIAL_SITE",
+    "reference": "Ministry of Environment, Phnom Kulen National Park",
+    "note": "A national park with an official ticket office, its archaeological sites under the APSARA National Authority."
+  },
+  {
+    "destinationSlug": "bokor-mountain",
+    "basis": "OFFICIAL_SITE",
+    "reference": "Ministry of Environment, Preah Monivong Bokor National Park",
+    "note": "Lies within Preah Monivong Bokor National Park, a protected area of the Ministry of Environment."
+  },
+  {
+    "destinationSlug": "kirirom-national-park",
+    "basis": "OFFICIAL_SITE",
+    "reference": "Ministry of Environment, Kirirom National Park",
+    "note": "Cambodia's first national park, designated in 1993 and administered by the Ministry of Environment."
+  }
+]

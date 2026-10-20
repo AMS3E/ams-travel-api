@@ -2,7 +2,7 @@
  * AMS Travel sign-in for Keycloak's own pages, CSS only, on keycloak.v2's templates:
  * Angkor Wat behind, the brand on the left, a light glass card on the right.
  */
-@import url("https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Kantumruy+Pro:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&display=swap");
 
 :root {
   --ams-font: Poppins, "Kantumruy Pro", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -693,4 +693,352 @@ body#keycloak-bg {
   #keycloak-bg .pf-v5-c-form-control {
     border-color: var(--ink-soft);
   }
+}
+
+/* ==== Customers (realm amstravel): the AMS Travel app's own sign-in ====
+ * login_screen.dart: Angkor under an indigo veil at the top, a pale sheet
+ * rising over it with a handle, "Welcome Back", bordered icon fields, a violet
+ * stadium button. Staff realms keep the look above.
+ */
+
+body#keycloak-bg:has(form[action*="/realms/amstravel/"]) {
+  background: #f1f1f5;
+  font-family: Geist, "Kantumruy Pro", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+#keycloak-bg:has(form[action*="/realms/amstravel/"]) .pf-v5-c-login {
+  background: #f1f1f5;
+  min-height: 100dvh;
+  position: relative;
+}
+
+/* The photo band: 250px, the app's 70% indigo veil over it. */
+#keycloak-bg:has(form[action*="/realms/amstravel/"]) .pf-v5-c-login::before {
+  background:
+    linear-gradient(rgb(16 28 102 / 0.7), rgb(16 28 102 / 0.7)),
+    url("../img/angkor-sunrise.jpg") center 40% / cover no-repeat;
+  content: "";
+  height: 250px;
+  inset: 0 0 auto;
+  position: absolute;
+}
+
+#keycloak-bg:has(form[action*="/realms/amstravel/"]) .pf-v5-c-login__container {
+  display: block;
+  margin: 0 auto;
+  max-width: 30rem;
+  min-height: 100dvh;
+  padding: 196px 0 0;
+  position: relative;
+}
+
+#keycloak-bg:has(form[action*="/realms/amstravel/"]) .pf-v5-c-login__container::after,
+#keycloak-bg:has(form[action*="/realms/amstravel/"]) #kc-header {
+  display: none;
+}
+
+/* The sheet. */
+#keycloak-bg:has(form[action*="/realms/amstravel/"]) .pf-v5-c-login__main {
+  animation: none;
+  backdrop-filter: none;
+  background: #f1f1f5;
+  border: 0;
+  border-radius: 28px 28px 0 0;
+  box-shadow: none;
+  max-width: none;
+  min-height: calc(100dvh - 196px);
+  overflow: visible;
+  padding: 12px 24px 24px;
+}
+
+/* Its handle. */
+#keycloak-bg:has(form[action*="/realms/amstravel/"]) .pf-v5-c-login__main::before {
+  background: #d0ccd8;
+  border-radius: 99px;
+  content: "";
+  display: block;
+  height: 4px;
+  margin: 0 auto 18px;
+  width: 40px;
+}
+
+#keycloak-bg:has(form[action*="/realms/amstravel/"]) .pf-v5-c-login__main-header,
+#keycloak-bg:has(form[action*="/realms/amstravel/"]) .pf-v5-c-login__main-body,
+#keycloak-bg:has(form[action*="/realms/amstravel/"]) .pf-v5-c-login__main-footer-band {
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+
+#keycloak-bg:has(form[action*="/realms/amstravel/"]) #kc-page-title {
+  color: #181620;
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  margin: 0;
+}
+
+/* The sign-in page carries the app's own words; the other pages keep theirs. */
+#keycloak-bg[data-page-id="login-login"]:has(form[action*="/realms/amstravel/"]) #kc-page-title {
+  font-size: 0;
+}
+
+#keycloak-bg[data-page-id="login-login"]:has(form[action*="/realms/amstravel/"]) #kc-page-title::before {
+  content: "Welcome Back";
+  display: block;
+  font-size: 24px;
+}
+
+#keycloak-bg[data-page-id="login-login"]:has(form[action*="/realms/amstravel/"]) #kc-page-title::after {
+  color: #6f6979;
+  content: "Log in to pick up your saved places and plan the rest of the trip";
+  display: block;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.4;
+  margin-top: 8px;
+}
+
+#keycloak-bg:has(form[action*="/realms/amstravel/"]) .pf-v5-c-login__main-body {
+  margin-top: 20px;
+}
+
+#keycloak-bg:has(form[action*="/realms/amstravel/"]) .pf-v5-c-form {
+  gap: 12px;
+}
+
+#keycloak-bg:has(form[action*="/realms/amstravel/"]) .pf-v5-c-form__label,
+#keycloak-bg:has(form[action*="/realms/amstravel/"]) .pf-v5-c-form__label-text {
+  color: #282531;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* Fields: white, a sand hairline, 14px corners; violet when focused. */
+#keycloak-bg:has(form[action*="/realms/amstravel/"]) .pf-v5-c-form-control {
+  background: #ffffff;
+  border: 1px solid #d0ccd8;
+  border-radius: 14px;
+  box-shadow: none;
+  min-height: 54px;
+}
+
+#keycloak-bg:has(form[action*="/realms/amstravel/"]) .pf-v5-c-form-control:hover {
+  border-color: #a09aac;
+}
+
+#keycloak-bg:has(form[action*="/realms/amstravel/"]) .pf-v5-c-form-control:focus-within {
+  border-color: #5b2ee5;
+  box-shadow: 0 0 0 1px #5b2ee5;
+}
+
+#keycloak-bg:has(form[action*="/realms/amstravel/"]) .pf-v5-c-form-control > input {
+  color: #181620;
+  font-size: 15px;
+}
+
+/* The app's icon in a bordered 34px tile at the start of the field. */
+#keycloak-bg:has(form[action*="/realms/amstravel/"]) :is(#username, #email, #password, #password-new, #password-confirm, #firstName, #lastName) {
+  background-position: 14px center;
+  background-repeat: no-repeat;
+  background-size: 34px;
+  padding-left: 60px;
+}
+
+#keycloak-bg:has(form[action*="/realms/amstravel/"]) :is(#username, #email) {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 34 34'%3E%3Crect x='0.5' y='0.5' width='33' height='33' rx='10' fill='white' stroke='%23d0ccd8'/%3E%3Cg transform='translate(7.5 7.5) scale(0.79)' fill='none' stroke='%236f6979' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='5' width='18' height='14' rx='2.5'/%3E%3Cpath d='m3.5 6.5 8.5 6.5 8.5-6.5'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+#keycloak-bg:has(form[action*="/realms/amstravel/"]) :is(#password, #password-new, #password-confirm) {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 34 34'%3E%3Crect x='0.5' y='0.5' width='33' height='33' rx='10' fill='white' stroke='%23d0ccd8'/%3E%3Cg transform='translate(7.5 7.5) scale(0.79)' fill='none' stroke='%236f6979' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='4.5' y='10.5' width='15' height='10' rx='2.5'/%3E%3Cpath d='M8 10.5V7.5a4 4 0 0 1 8 0v3'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+#keycloak-bg:has(form[action*="/realms/amstravel/"]) :is(#firstName, #lastName) {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 34 34'%3E%3Crect x='0.5' y='0.5' width='33' height='33' rx='10' fill='white' stroke='%23d0ccd8'/%3E%3Cg transform='translate(7.5 7.5) scale(0.79)' fill='none' stroke='%236f6979' stroke-width='1.9' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='8' r='4'/%3E%3Cpath d='M4 20c1.5-3.5 4.5-5 8-5s6.5 1.5 8 5'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+#keycloak-bg:has(form[action*="/realms/amstravel/"]) .pf-v5-c-input-group .pf-v5-c-button.pf-m-control {
+  color: #a09aac;
+}
+
+/* "Forgot your password?" on the right, in violet. */
+#keycloak-bg:has(form[action*="/realms/amstravel/"]) .pf-v5-c-login__main a,
+#keycloak-bg:has(form[action*="/realms/amstravel/"]) .pf-v5-c-button.pf-m-link {
+  color: #5b2ee5;
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+#keycloak-bg:has(form[action*="/realms/amstravel/"]) .pf-v5-c-check__label {
+  color: #3c3847;
+  font-size: 13.5px;
+}
+
+#keycloak-bg:has(form[action*="/realms/amstravel/"]) input[type="checkbox"]:checked {
+  background-color: #5b2ee5;
+  border-color: #5b2ee5;
+}
+
+/* The violet stadium button, 54px. */
+#keycloak-bg:has(form[action*="/realms/amstravel/"]) .pf-v5-c-button.pf-m-primary,
+#keycloak-bg:has(form[action*="/realms/amstravel/"]) input[type="submit"] {
+  background: #5b2ee5;
+  border: 0;
+  border-radius: 999px;
+  box-shadow: none;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 700;
+  min-height: 54px;
+  width: 100%;
+}
+
+#keycloak-bg:has(form[action*="/realms/amstravel/"]) .pf-v5-c-button.pf-m-primary:hover,
+#keycloak-bg:has(form[action*="/realms/amstravel/"]) input[type="submit"]:hover {
+  background: #443c84;
+  box-shadow: none;
+  transform: none;
+}
+
+#keycloak-bg:has(form[action*="/realms/amstravel/"]) .pf-v5-c-button.pf-m-secondary,
+#keycloak-bg:has(form[action*="/realms/amstravel/"]) .pf-v5-c-button.pf-m-tertiary {
+  background: #ffffff;
+  border: 1px solid rgb(91 46 229 / 0.5);
+  border-radius: 999px;
+  color: #181620;
+  min-height: 54px;
+}
+
+/* "Don't have an account? Register", centred under the button. */
+#keycloak-bg:has(form[action*="/realms/amstravel/"]) .pf-v5-c-login__main-footer {
+  margin-top: 18px;
+  text-align: center;
+}
+
+#keycloak-bg:has(form[action*="/realms/amstravel/"]) #kc-registration,
+#keycloak-bg:has(form[action*="/realms/amstravel/"]) #kc-registration span {
+  color: #3c3847;
+  font-size: 14px;
+}
+
+#keycloak-bg:has(form[action*="/realms/amstravel/"]) #kc-registration a {
+  font-size: 14px;
+  font-weight: 700;
+  margin-left: 4px;
+}
+
+/* Alerts in the app's colours. */
+#keycloak-bg:has(form[action*="/realms/amstravel/"]) .pf-v5-c-alert {
+  border-radius: 12px;
+}
+
+@media (max-width: 36rem) {
+  #keycloak-bg:has(form[action*="/realms/amstravel/"]) .pf-v5-c-login__container {
+    padding: 196px 0 0;
+  }
+
+  #keycloak-bg:has(form[action*="/realms/amstravel/"]) .pf-v5-c-login__main {
+    border-radius: 28px 28px 0 0;
+  }
+}
+
+/* Customers: the app's Geist throughout, and PatternFly's own font variables pointed at it. */
+body#keycloak-bg:has(form[action*="/realms/amstravel/"]) {
+  --ams-font: Geist, "Kantumruy Pro", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --pf-v5-global--FontFamily--text: var(--ams-font);
+  --pf-v5-global--FontFamily--heading: var(--ams-font);
+}
+
+#keycloak-bg:has(form[action*="/realms/amstravel/"]) :is(h1, h2, p, span, label, a, input, button, div) {
+  font-family: var(--ams-font);
+}
+
+/* The app's hero photo (login_screen.dart authHeroImage), with the theme's own Angkor underneath if it cannot load. */
+#keycloak-bg:has(form[action*="/realms/amstravel/"]) .pf-v5-c-login::before {
+  background:
+    linear-gradient(rgb(16 28 102 / 0.7), rgb(16 28 102 / 0.7)),
+    url("https://images.unsplash.com/photo-1566706546199-a93ba33ce9f7?auto=format&fit=crop&w=1000&q=70") center 45% / cover no-repeat,
+    url("../img/angkor-sunrise.jpg") center 40% / cover no-repeat;
+}
+
+/* The password and its eye are one field, as in the app. */
+#keycloak-bg:has(form[action*="/realms/amstravel/"]) .pf-v5-c-input-group {
+  background: #ffffff;
+  border: 1px solid #d0ccd8;
+  border-radius: 14px;
+  min-height: 54px;
+  overflow: hidden;
+}
+
+#keycloak-bg:has(form[action*="/realms/amstravel/"]) .pf-v5-c-input-group:focus-within {
+  border-color: #5b2ee5;
+  box-shadow: 0 0 0 1px #5b2ee5;
+}
+
+#keycloak-bg:has(form[action*="/realms/amstravel/"]) .pf-v5-c-input-group .pf-v5-c-form-control,
+#keycloak-bg:has(form[action*="/realms/amstravel/"]) .pf-v5-c-input-group .pf-v5-c-form-control:focus-within {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+#keycloak-bg:has(form[action*="/realms/amstravel/"]) .pf-v5-c-input-group .pf-v5-c-button.pf-m-control {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  padding: 0 14px;
+}
+
+
+/* Sign-up (register_screen.dart): "Create Account" and its line, no required-field notes, and the way back to log in. */
+#keycloak-bg[data-page-id="login-register"]:has(form[action*="/realms/amstravel/"]) #kc-page-title {
+  font-size: 0;
+}
+
+#keycloak-bg[data-page-id="login-register"]:has(form[action*="/realms/amstravel/"]) #kc-page-title::before {
+  content: "Create Account";
+  display: block;
+  font-size: 24px;
+}
+
+#keycloak-bg[data-page-id="login-register"]:has(form[action*="/realms/amstravel/"]) #kc-page-title::after {
+  color: #6f6979;
+  content: "Create your account and make your holiday easier and more comfortable";
+  display: block;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.4;
+  margin-top: 8px;
+}
+
+#keycloak-bg[data-page-id="login-register"]:has(form[action*="/realms/amstravel/"]) .pf-v5-c-login__main-body > .pf-v5-u-mb-md-on-md,
+#keycloak-bg:has(form[action*="/realms/amstravel/"]) .pf-v5-c-form__label-required {
+  display: none;
+}
+
+#keycloak-bg[data-page-id="login-register"]:has(form[action*="/realms/amstravel/"]) #kc-form-options {
+  text-align: center;
+  width: 100%;
+}
+
+#keycloak-bg[data-page-id="login-register"]:has(form[action*="/realms/amstravel/"]) #kc-form-options a {
+  font-size: 0;
+}
+
+#keycloak-bg[data-page-id="login-register"]:has(form[action*="/realms/amstravel/"]) #kc-form-options a::before {
+  color: #3c3847;
+  content: "Already have an account?";
+  font-size: 14px;
+  font-weight: 400;
+  margin-right: 6px;
+}
+
+#keycloak-bg[data-page-id="login-register"]:has(form[action*="/realms/amstravel/"]) #kc-form-options a::after {
+  color: #5b2ee5;
+  content: "Login";
+  font-size: 14px;
+  font-weight: 700;
 }

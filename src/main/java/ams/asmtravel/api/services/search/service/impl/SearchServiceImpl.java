@@ -5,6 +5,7 @@ import ams.asmtravel.api.services.corridor.dto.response.CorridorResponse;
 import ams.asmtravel.api.services.corridor.service.CorridorService;
 import ams.asmtravel.api.services.destination.destination.domain.DestinationSearch;
 import ams.asmtravel.api.services.destination.destination.domain.DestinationSummary;
+import ams.asmtravel.api.services.destination.destination.domain.KhmerText;
 import ams.asmtravel.api.services.destination.destination.domain.NearbyDestination;
 import ams.asmtravel.api.services.destination.destination.domain.ListingStatus;
 import ams.asmtravel.api.services.destination.destination.dto.response.DestinationResponse;
@@ -20,6 +21,7 @@ import ams.asmtravel.api.services.location.region.service.RegionService;
 import ams.asmtravel.api.services.review.review.domain.ReviewTargetType;
 import ams.asmtravel.api.services.review.review.dto.response.ReviewSummaryResponse;
 import ams.asmtravel.api.services.review.review.service.ReviewService;
+import ams.asmtravel.api.services.search.domain.KhmerNames;
 import ams.asmtravel.api.services.search.domain.SearchType;
 import ams.asmtravel.api.services.search.domain.SuggestionKind;
 import ams.asmtravel.api.services.search.dto.request.SearchRequest;
@@ -67,6 +69,8 @@ public class SearchServiceImpl implements SearchService {
 
     private static final int MAX_PAGE = 100;
     private static final int SUMMARY_BATCH = 100;
+    /** How much of the Khmer description a Khmer card shows. */
+    private static final int SUMMARY_LENGTH = 300;
     /** Attractions around a destination: how far out unless asked ({@code radiusKm}), and at most how many. */
     private static final double NEAR_RADIUS_KM = 25;
     private static final int NEAR_LIMIT = 100;
@@ -85,59 +89,67 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public Page<SearchHitResponse> search(SearchRequest request, Pageable pageable) {
         PageRequest page = PageRequest.of(pageable.getPageNumber(), Math.min(Math.max(pageable.getPageSize(), 1), MAX_PAGE));
+        boolean khmer = request.khmer();
         return switch (request.typeOrDefault()) {
             case DESTINATION -> {
                 if (request.near() != null) {
-                    yield paged(destinationsNear(request), page, this::nearHits);
+                    yield paged(destinationsNear(request), page, rows -> nearHits(rows, khmer));
                 }
                 Page<DestinationResponse> found = destinationService.searchPublished(criteria(request),
                         page.withSort(Sort.by("name").ascending()));
-                yield new PageImpl<>(destinationHits(found.getContent()), page, found.getTotalElements());
+                yield new PageImpl<>(destinationHits(found.getContent(), khmer), page, found.getTotalElements());
             }
-            case STAY -> paged(stays(request), page, this::stayHits);
-            case FOOD -> paged(foods(request), page, this::foodHits);
-            case CORRIDOR -> paged(corridors(request), page, this::corridorHits);
+            case STAY -> paged(stays(request), page, rows -> stayHits(rows, khmer));
+            case FOOD -> paged(foods(request), page, rows -> foodHits(rows, khmer));
+            case CORRIDOR -> paged(corridors(request), page, rows -> corridorHits(rows, khmer));
         };
     }
 
     @Override
     public List<ProvinceGroupResponse> byProvince(SearchRequest request, int perProvince) {
         Map<UUID, String> provinceNames = names.provinceNames();
+        boolean khmer = request.khmer();
+        Map<UUID, String> provinceNamesKm = khmer ? names.khmerNames().provincesKm() : null;
         return switch (request.typeOrDefault()) {
             case DESTINATION -> request.near() != null
-                    ? grouped(destinationsNear(request), near -> one(near.place().provinceId()), this::nearHits, perProvince, provinceNames)
+                    ? grouped(destinationsNear(request), near -> one(near.place().provinceId()), rows -> nearHits(rows, khmer),
+                            perProvince, provinceNames, provinceNamesKm)
                     : grouped(destinationService.searchPublished(criteria(request), Pageable.unpaged(Sort.by("name").ascending())).getContent(),
-                            place -> one(place.provinceId()), this::destinationHits, perProvince, provinceNames);
-            case STAY -> grouped(stays(request), stay -> one(stay.provinceId()), this::stayHits, perProvince, provinceNames);
-            case FOOD -> grouped(foods(request), food -> one(food.provinceId()), this::foodHits, perProvince, provinceNames);
-            case CORRIDOR -> grouped(corridors(request), CorridorResponse::stopProvinceIds, this::corridorHits, perProvince, provinceNames);
+                            place -> one(place.provinceId()), rows -> destinationHits(rows, khmer), perProvince, provinceNames, provinceNamesKm);
+            case STAY -> grouped(stays(request), stay -> one(stay.provinceId()), rows -> stayHits(rows, khmer), perProvince,
+                    provinceNames, provinceNamesKm);
+            case FOOD -> grouped(foods(request), food -> one(food.provinceId()), rows -> foodHits(rows, khmer), perProvince,
+                    provinceNames, provinceNamesKm);
+            case CORRIDOR -> grouped(corridors(request), CorridorResponse::stopProvinceIds, rows -> corridorHits(rows, khmer), perProvince,
+                    provinceNames, provinceNamesKm);
         };
     }
 
     @Override
-    public List<SuggestionResponse> suggest(String text, int limit) {
+    public List<SuggestionResponse> suggest(String text, int limit, boolean khmer) {
         String needle = text == null ? "" : text.trim();
         if (needle.isEmpty() || limit < 1) {
             return List.of();
         }
         List<SuggestionResponse> found = new ArrayList<>();
         destinationService.suggestPublished(needle, limit)
-                .forEach(place -> found.add(new SuggestionResponse(SuggestionKind.DESTINATION, place.id(), place.name(), place.slug())));
-        provinceService.findSummaries().stream().filter(province -> contains(province.name(), needle))
-                .forEach(province -> found.add(new SuggestionResponse(SuggestionKind.PROVINCE, province.id(), province.name(), province.slug())));
+                .forEach(place -> found.add(suggestion(SuggestionKind.DESTINATION, place.id(), place.name(), place.nameKm(), place.slug(), khmer)));
+        provinceService.findSummaries().stream().filter(province -> contains(province.name(), needle) || contains(province.nameKm(), needle))
+                .forEach(province -> found.add(suggestion(SuggestionKind.PROVINCE, province.id(), province.name(), province.nameKm(),
+                        province.slug(), khmer)));
         regionService.getAll(RegionKind.TOURISM).stream()
-                .filter(region -> !Boolean.FALSE.equals(region.isActive()) && contains(region.name(), needle))
-                .forEach(region -> found.add(new SuggestionResponse(SuggestionKind.REGION, region.id(), region.name(),
-                        region.code() == null ? null : region.code().toLowerCase(Locale.ROOT))));
+                .filter(region -> !Boolean.FALSE.equals(region.isActive()) && (contains(region.name(), needle) || contains(region.nameKm(), needle)))
+                .forEach(region -> found.add(suggestion(SuggestionKind.REGION, region.id(), region.name(), region.nameKm(),
+                        region.code() == null ? null : region.code().toLowerCase(Locale.ROOT), khmer)));
         corridorService.getAll(null).stream()
                 .filter(corridor -> corridor.status() == CorridorStatus.PUBLISHED && contains(corridor.name(), needle))
-                .forEach(corridor -> found.add(new SuggestionResponse(SuggestionKind.CORRIDOR, corridor.id(), corridor.name(), corridor.slug())));
+                .forEach(corridor -> found.add(suggestion(SuggestionKind.CORRIDOR, corridor.id(), corridor.name(), null, corridor.slug(), khmer)));
         stayService.getAll(null).stream()
-                .filter(stay -> stay.status() == ListingStatus.PUBLISHED && contains(stay.name(), needle))
-                .forEach(stay -> found.add(new SuggestionResponse(SuggestionKind.STAY, stay.id(), stay.name(), null)));
+                .filter(stay -> stay.status() == ListingStatus.PUBLISHED && (contains(stay.name(), needle) || contains(stay.nameKm(), needle)))
+                .forEach(stay -> found.add(suggestion(SuggestionKind.STAY, stay.id(), stay.name(), stay.nameKm(), null, khmer)));
         foodService.getAll(null, null).stream()
-                .filter(food -> food.status() == ListingStatus.PUBLISHED && contains(food.name(), needle))
-                .forEach(food -> found.add(new SuggestionResponse(SuggestionKind.FOOD, food.id(), food.name(), food.slug())));
+                .filter(food -> food.status() == ListingStatus.PUBLISHED && (contains(food.name(), needle) || contains(food.nameKm(), needle)))
+                .forEach(food -> found.add(suggestion(SuggestionKind.FOOD, food.id(), food.name(), food.nameKm(), food.slug(), khmer)));
         String lower = needle.toLowerCase(Locale.ROOT);
         return found.stream()
                 .sorted(Comparator.comparing((SuggestionResponse one) -> one.name().toLowerCase(Locale.ROOT).startsWith(lower) ? 0 : 1)
@@ -147,19 +159,20 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public List<SearchHitResponse> cards(SearchType type, List<UUID> ids) {
+    public List<SearchHitResponse> cards(SearchType type, List<UUID> ids, boolean khmer) {
         if (ids == null || ids.isEmpty()) {
             return List.of();
         }
         Set<UUID> wanted = new LinkedHashSet<>(ids);
         return switch (type == null ? SearchType.DESTINATION : type) {
-            case DESTINATION -> destinationHits(inOrder(destinationService.findPublished(wanted), DestinationResponse::id, ids));
+            case DESTINATION -> destinationHits(inOrder(destinationService.findPublished(wanted), DestinationResponse::id, ids), khmer);
             case STAY -> stayHits(inOrder(stayService.getAll(null).stream()
-                    .filter(stay -> stay.status() == ListingStatus.PUBLISHED && wanted.contains(stay.id())).toList(), StayResponse::id, ids));
+                    .filter(stay -> stay.status() == ListingStatus.PUBLISHED && wanted.contains(stay.id())).toList(), StayResponse::id, ids), khmer);
             case FOOD -> foodHits(inOrder(foodService.getAll(null, null).stream()
-                    .filter(food -> food.status() == ListingStatus.PUBLISHED && wanted.contains(food.id())).toList(), FoodResponse::id, ids));
+                    .filter(food -> food.status() == ListingStatus.PUBLISHED && wanted.contains(food.id())).toList(), FoodResponse::id, ids), khmer);
             case CORRIDOR -> corridorHits(inOrder(corridorService.getAll(null).stream()
-                    .filter(corridor -> corridor.status() == CorridorStatus.PUBLISHED && wanted.contains(corridor.id())).toList(), CorridorResponse::id, ids));
+                    .filter(corridor -> corridor.status() == CorridorStatus.PUBLISHED && wanted.contains(corridor.id())).toList(), CorridorResponse::id, ids),
+                    khmer);
         };
     }
 
@@ -186,7 +199,8 @@ public class SearchServiceImpl implements SearchService {
                 .findNearbyWithDistance(centre.latitude().doubleValue(), centre.longitude().doubleValue(),
                         request.radiusKmOr(NEAR_RADIUS_KM), NEAR_LIMIT).stream()
                 .filter(near -> !near.place().id().equals(centre.id()) && near.place().status() == ListingStatus.PUBLISHED)
-                .filter(near -> matches(request.q(), near.place().name(), near.place().shortDescription(), near.place().address()))
+                .filter(near -> matches(request.q(), near.place().name(), near.place().shortDescription(), near.place().address(),
+                        near.place().nameKm(), near.place().addressKm()))
                 .filter(near -> inProvinces(request.provinces(), near.place().provinceId()))
                 .filter(near -> inRegions(request.regions(), near.place().provinceId(), near.place().tourismRegionIds(), zones))
                 .filter(near -> anyOf(request.categoryIds(), near.place().categoryIds()))
@@ -212,7 +226,7 @@ public class SearchServiceImpl implements SearchService {
         Map<UUID, UUID> zones = zones();
         Stream<StayResponse> kept = (request.near() != null ? stayService.getNear(request.near()) : stayService.getAll(null)).stream()
                 .filter(stay -> stay.status() == ListingStatus.PUBLISHED)
-                .filter(stay -> matches(request.q(), stay.name(), stay.shortDescription(), stay.address()))
+                .filter(stay -> matches(request.q(), stay.name(), stay.shortDescription(), stay.address(), stay.nameKm(), stay.addressKm()))
                 .filter(stay -> inProvinces(request.provinces(), stay.provinceId()))
                 .filter(stay -> inRegions(request.regions(), stay.provinceId(), List.of(), zones))
                 .filter(stay -> anyOf(request.interestIds(), stay.interestIds()));
@@ -227,7 +241,7 @@ public class SearchServiceImpl implements SearchService {
         Map<UUID, UUID> zones = zones();
         Stream<FoodResponse> kept = (request.near() != null ? foodService.getNear(request.near()) : foodService.getAll(null, null)).stream()
                 .filter(food -> food.status() == ListingStatus.PUBLISHED)
-                .filter(food -> matches(request.q(), food.name(), food.shortDescription(), food.address()))
+                .filter(food -> matches(request.q(), food.name(), food.shortDescription(), food.address(), food.nameKm(), food.addressKm()))
                 .filter(food -> inProvinces(request.provinces(), food.provinceId()))
                 .filter(food -> inRegions(request.regions(), food.provinceId(), List.of(), zones))
                 .filter(food -> anyOf(request.categoryIds(), food.categoryIds()))
@@ -266,15 +280,15 @@ public class SearchServiceImpl implements SearchService {
     // Cards, with ratings and standing looked up a page at a time.
 
     /** Cards for places found around a destination, each carrying how far it is, rounded to the metre. */
-    private List<SearchHitResponse> nearHits(List<NearbyDestination> rows) {
+    private List<SearchHitResponse> nearHits(List<NearbyDestination> rows, boolean khmer) {
         Map<UUID, Double> metres = new HashMap<>();
         rows.forEach(near -> metres.put(near.place().id(), near.metres()));
-        return destinationHits(rows.stream().map(NearbyDestination::place).toList()).stream()
+        return destinationHits(rows.stream().map(NearbyDestination::place).toList(), khmer).stream()
                 .map(hit -> hit.withDistanceMeters(metres.containsKey(hit.id()) ? (int) Math.round(metres.get(hit.id())) : null))
                 .toList();
     }
 
-    private List<SearchHitResponse> destinationHits(List<DestinationResponse> places) {
+    private List<SearchHitResponse> destinationHits(List<DestinationResponse> places, boolean khmer) {
         if (places.isEmpty()) {
             return List.of();
         }
@@ -287,36 +301,69 @@ public class SearchServiceImpl implements SearchService {
         }
         Map<UUID, String> provinces = names.provinceNames();
         Map<UUID, String> categories = names.categoryNames();
+        KhmerNames words = khmer ? names.khmerNames() : null;
         return places.stream()
-                .map(place -> mapper.toHit(place, provinces, categories, reviews.get(place.id()), standing.get(place.id())))
+                .map(place -> {
+                    SearchHitResponse hit = mapper.toHit(place, provinces, categories, reviews.get(place.id()), standing.get(place.id()));
+                    return khmer ? mapper.inKhmer(hit, place.nameKm(), KhmerText.excerpt(place.descriptionKm(), SUMMARY_LENGTH), words) : hit;
+                })
                 .toList();
     }
 
-    private List<SearchHitResponse> stayHits(List<StayResponse> stays) {
+    private List<SearchHitResponse> stayHits(List<StayResponse> stays, boolean khmer) {
         if (stays.isEmpty()) {
             return List.of();
         }
         Map<UUID, ReviewSummaryResponse> reviews = reviews(ReviewTargetType.STAY, stays.stream().map(StayResponse::id).toList());
         Map<UUID, String> provinces = names.provinceNames();
-        return stays.stream().map(stay -> mapper.toHit(stay, provinces, reviews.get(stay.id()))).toList();
+        KhmerNames words = khmer ? names.khmerNames() : null;
+        return stays.stream()
+                .map(stay -> {
+                    SearchHitResponse hit = mapper.toHit(stay, provinces, reviews.get(stay.id()));
+                    return khmer ? mapper.inKhmer(hit, stay.nameKm(), KhmerText.excerpt(stay.descriptionKm(), SUMMARY_LENGTH), words) : hit;
+                })
+                .toList();
     }
 
-    private List<SearchHitResponse> foodHits(List<FoodResponse> foods) {
+    private List<SearchHitResponse> foodHits(List<FoodResponse> foods, boolean khmer) {
         if (foods.isEmpty()) {
             return List.of();
         }
         Map<UUID, ReviewSummaryResponse> reviews = reviews(ReviewTargetType.FOOD, foods.stream().map(FoodResponse::id).toList());
         Map<UUID, String> provinces = names.provinceNames();
         Map<UUID, String> categories = names.categoryNames();
-        return foods.stream().map(food -> mapper.toHit(food, provinces, categories, reviews.get(food.id()))).toList();
+        KhmerNames words = khmer ? names.khmerNames() : null;
+        return foods.stream()
+                .map(food -> {
+                    SearchHitResponse hit = mapper.toHit(food, provinces, categories, reviews.get(food.id()));
+                    return khmer ? mapper.inKhmer(hit, food.nameKm(), KhmerText.excerpt(food.descriptionKm(), SUMMARY_LENGTH), words) : hit;
+                })
+                .toList();
     }
 
-    private List<SearchHitResponse> corridorHits(List<CorridorResponse> corridors) {
+    private List<SearchHitResponse> corridorHits(List<CorridorResponse> corridors, boolean khmer) {
         if (corridors.isEmpty()) {
             return List.of();
         }
         Map<UUID, ReviewSummaryResponse> reviews = reviews(ReviewTargetType.CORRIDOR, corridors.stream().map(CorridorResponse::id).toList());
-        return corridors.stream().map(corridor -> mapper.toHit(corridor, reviews.get(corridor.id()))).toList();
+        return english(corridors.stream().map(corridor -> mapper.toHit(corridor, reviews.get(corridor.id()))).toList(), khmer);
+    }
+
+    /** Corridors have no Khmer text of their own: asked in Khmer, only their province and category names change. */
+    private List<SearchHitResponse> english(List<SearchHitResponse> hits, boolean khmer) {
+        if (!khmer || hits.isEmpty()) {
+            return hits;
+        }
+        KhmerNames words = names.khmerNames();
+        return hits.stream().map(hit -> mapper.inKhmer(hit, null, null, words)).toList();
+    }
+
+    private static SuggestionResponse suggestion(SuggestionKind kind, UUID id, String name, String nameKm, String slug, boolean khmer) {
+        if (!khmer) {
+            return new SuggestionResponse(kind, id, name, slug, List.of());
+        }
+        boolean written = nameKm != null && !nameKm.isBlank();
+        return new SuggestionResponse(kind, id, written ? nameKm : name, slug, written ? List.of() : List.of("name"));
     }
 
     private Map<UUID, ReviewSummaryResponse> reviews(ReviewTargetType type, List<UUID> ids) {
@@ -339,7 +386,7 @@ public class SearchServiceImpl implements SearchService {
     /** Rows grouped by province (a corridor under each province it stops in), the first few of each made into cards. */
     private static <T> List<ProvinceGroupResponse> grouped(List<T> rows, Function<T, Collection<UUID>> provincesOf,
                                                            Function<List<T>, List<SearchHitResponse>> hits, int perProvince,
-                                                           Map<UUID, String> provinceNames) {
+                                                           Map<UUID, String> provinceNames, Map<UUID, String> provinceNamesKm) {
         Map<UUID, List<T>> byProvince = new HashMap<>();
         for (T row : rows) {
             for (UUID provinceId : provincesOf.apply(row)) {
@@ -349,8 +396,13 @@ public class SearchServiceImpl implements SearchService {
             }
         }
         return byProvince.entrySet().stream()
-                .map(group -> new ProvinceGroupResponse(group.getKey(), provinceNames.get(group.getKey()), group.getValue().size(),
-                        hits.apply(group.getValue().subList(0, Math.min(perProvince, group.getValue().size())))))
+                .map(group -> {
+                    String khmer = provinceNamesKm == null ? null : provinceNamesKm.get(group.getKey());
+                    boolean english = provinceNamesKm != null && khmer == null;
+                    return new ProvinceGroupResponse(group.getKey(), khmer != null ? khmer : provinceNames.get(group.getKey()),
+                            group.getValue().size(), hits.apply(group.getValue().subList(0, Math.min(perProvince, group.getValue().size()))),
+                            english ? List.of("provinceName") : List.of());
+                })
                 .sorted(Comparator.comparing(ProvinceGroupResponse::provinceName, Comparator.nullsLast(String.CASE_INSENSITIVE_ORDER)))
                 .toList();
     }

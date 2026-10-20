@@ -1,0 +1,44 @@
+# The Khmer text of stays and food places, typed by hand beside the English as
+# for attractions (029). Null until an editor writes it; English untouched.
+databaseChangeLog:
+  - changeSet:
+      id: v2-stay-food-khmer
+      author: ams-travel-v2
+      changes:
+        - addColumn:
+            schemaName: destination
+            tableName: destination_stays
+            columns:
+              - column: {name: name_km, type: varchar(255)}
+              - column: {name: description_km, type: text}
+              - column: {name: slogan_km, type: varchar(300)}
+              - column: {name: slogan_by_km, type: varchar(120)}
+              - column: {name: address_km, type: text}
+        - addColumn:
+            schemaName: destination
+            tableName: destination_foods
+            columns:
+              - column: {name: name_km, type: varchar(255)}
+              - column: {name: description_km, type: text}
+              - column: {name: slogan_km, type: varchar(300)}
+              - column: {name: slogan_by_km, type: varchar(120)}
+              - column: {name: address_km, type: text}
+      rollback:
+        - dropColumn:
+            schemaName: destination
+            tableName: destination_stays
+            columns:
+              - column: {name: name_km}
+              - column: {name: description_km}
+              - column: {name: slogan_km}
+              - column: {name: slogan_by_km}
+              - column: {name: address_km}
+        - dropColumn:
+            schemaName: destination
+            tableName: destination_foods
+            columns:
+              - column: {name: name_km}
+              - column: {name: description_km}
+              - column: {name: slogan_km}
+              - column: {name: slogan_by_km}
+              - column: {name: address_km}

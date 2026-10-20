@@ -8,6 +8,7 @@ import ams.asmtravel.api.services.corridor.domain.CorridorDay;
 import ams.asmtravel.api.services.corridor.domain.CorridorStop;
 import ams.asmtravel.api.services.corridor.domain.CorridorTransportType;
 import ams.asmtravel.api.services.corridor.repository.CorridorDayRepository;
+import ams.asmtravel.api.services.corridor.repository.CorridorStopRepository;
 import ams.asmtravel.api.services.corridor.repository.CorridorRepository;
 import ams.asmtravel.api.services.destination.destination.domain.Destination;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,7 @@ public class CorridorItinerarySeeder implements CatalogSeedContributor {
 
     private final CorridorRepository corridorRepository;
     private final CorridorDayRepository dayRepository;
+    private final CorridorStopRepository stopRepository;
     private final ObjectMapper objectMapper;
 
     @Override
@@ -88,5 +90,11 @@ public class CorridorItinerarySeeder implements CatalogSeedContributor {
     private static LocalTime time(JsonNode node, String field) {
         String text = SeedJson.text(node, field);
         return text == null ? null : LocalTime.parse(text);
+    }
+
+    @Override
+    public void wipe() {
+        stopRepository.deleteAllInBatch();
+        dayRepository.deleteAllInBatch();
     }
 }

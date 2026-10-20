@@ -39,8 +39,15 @@ public class TagSeeder implements CatalogSeedContributor {
             Tag tag = new Tag();
             tag.setSlug(SeedJson.text(node, "slug"));
             tag.setName(SeedJson.text(node, "name"));
+            tag.setNameKm(SeedJson.text(node, "nameKm"));
             context.publish(Tag.class, tag.getSlug(), tagRepository.save(tag));
         }
         log.info("Seeded {} tags", rows.size());
+    }
+
+    @Override
+    public void wipe() {
+        tagRepository.deleteAll();
+        tagRepository.flush();
     }
 }

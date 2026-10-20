@@ -4,7 +4,9 @@ import ams.asmtravel.api.services.location.province.service.ProvinceService;
 import ams.asmtravel.api.services.taxonomy.category.domain.CategoryDeletingEvent;
 import ams.asmtravel.api.services.taxonomy.category.service.CategoryService;
 import ams.asmtravel.api.services.destination.destination.domain.DestinationDeletingEvent;
+import ams.asmtravel.api.services.destination.destination.domain.KhmerText;
 import ams.asmtravel.api.services.destination.destination.domain.ListingStatus;
+import ams.asmtravel.api.services.destination.destination.exception.KhmerTextMissingException;
 import ams.asmtravel.api.services.destination.destination.domain.NearbyArea;
 import ams.asmtravel.api.services.destination.destination.domain.Slugs;
 import ams.asmtravel.api.services.destination.destination.service.DestinationService;
@@ -273,6 +275,22 @@ public class FoodServiceImpl implements FoodService {
         food.setDescription(blankToNull(request.description()));
         food.setSlogan(blankToNull(request.slogan()));
         food.setSloganBy(blankToNull(request.sloganBy()));
+        /* Khmer: null keeps it, so a client that has never heard of it wipes nothing. */
+        if (request.nameKm() != null) {
+            food.setNameKm(blankToNull(request.nameKm()));
+        }
+        if (request.descriptionKm() != null) {
+            food.setDescriptionKm(KhmerText.hasText(request.descriptionKm()) ? request.descriptionKm().trim() : null);
+        }
+        if (request.sloganKm() != null) {
+            food.setSloganKm(blankToNull(request.sloganKm()));
+        }
+        if (request.sloganByKm() != null) {
+            food.setSloganByKm(blankToNull(request.sloganByKm()));
+        }
+        if (request.addressKm() != null) {
+            food.setAddressKm(blankToNull(request.addressKm()));
+        }
         food.setProvince(request.provinceId() == null ? null : provinceService.getEntity(request.provinceId()));
         food.setAddress(blankToNull(request.address()));
         food.setLatitude(request.latitude());
@@ -349,7 +367,21 @@ public class FoodServiceImpl implements FoodService {
                 : values.stream().map(String::trim).filter(one -> !one.isEmpty()).distinct().toList();
     }
 
+    /** Refused with 409 while any filled English field has no Khmer. */
+    @Override
+    @Transactional(readOnly = true)
+    public void requireKhmer(UUID id) {
+        Food food = find(id);
+        if (!food.missingKhmer().isEmpty()) {
+            throw new KhmerTextMissingException(food.missingKhmer());
+        }
+    }
+
+    /** On its way live, only with its Khmer written. */
     private void setStatus(Food food, ListingStatus status) {
+        if (status == ListingStatus.PUBLISHED && food.getStatus() != ListingStatus.PUBLISHED && !food.missingKhmer().isEmpty()) {
+            throw new KhmerTextMissingException(food.missingKhmer());
+        }
         if (status == ListingStatus.PUBLISHED && food.getStatus() != ListingStatus.PUBLISHED) {
             food.setPublishedAt(Instant.now());
         }

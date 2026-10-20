@@ -1,15 +1,9 @@
 package ams.asmtravel.api.services.activity.popular.controller;
 
-import ams.asmtravel.api.services.activity.popular.domain.BrowseTarget;
-import ams.asmtravel.api.services.activity.popular.dto.request.BrowseEventRequest;
-import ams.asmtravel.api.services.activity.popular.dto.response.PopularResponse;
-import ams.asmtravel.api.services.activity.popular.service.PopularService;
-import ams.asmtravel.api.services.user.user.service.UserService;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import lombok.RequiredArgsConstructor;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,9 +14,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
+import ams.asmtravel.api.services.activity.popular.domain.BrowseTarget;
+import ams.asmtravel.api.services.activity.popular.dto.request.BrowseEventRequest;
+import ams.asmtravel.api.services.activity.popular.dto.response.PopularResponse;
+import ams.asmtravel.api.services.activity.popular.service.PopularService;
+import ams.asmtravel.api.services.user.user.service.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import lombok.RequiredArgsConstructor;
 
 /** Browse events and the app's Popular lists. A signed-in visitor is read from the token. */
 @Tag(name = "Engagement · Popular", description = "What visitors browse, and the lists made from it.")

@@ -85,7 +85,13 @@ public record StayRequest(
         @Size(max = 100) String licenseNumber,
         @Min(1800) @Max(2100) Integer yearOpened,
         List<@NotBlank @Size(max = 100) String> specialties,
-        List<@Pattern(regexp = "MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY", message = "Name a night by its day, e.g. FRIDAY") String> weekendNights
+        List<@Pattern(regexp = "MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY", message = "Name a night by its day, e.g. FRIDAY") String> weekendNights,
+        /* Khmer twins of the English text: null keeps what is stored, blank clears it. */
+        @Size(max = 255) String nameKm,
+        String descriptionKm,
+        @Size(max = 300) String sloganKm,
+        @Size(max = 120) String sloganByKm,
+        String addressKm
 ) {
 
     static final String PIN_REQUIRED = "Put the stay on the map: travellers find it by its pin";

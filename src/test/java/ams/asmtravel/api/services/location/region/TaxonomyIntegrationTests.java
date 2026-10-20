@@ -196,6 +196,35 @@ class TaxonomyIntegrationTests {
                 .andExpect(status().isBadRequest());
     }
 
+    /** A Khmer name is typed beside the English one; a save that leaves it out keeps it, a blank one clears it. */
+    @Test
+    void taxonomyKeepsItsKhmerNamesBesideTheEnglish() throws Exception {
+        String category = create("/api/v1/categories", "{\"name\":\"Temples\",\"nameKm\":\"ប្រាសាទ\"}");
+        mvc.perform(get("/api/v1/categories/" + category))
+                .andExpect(jsonPath("$.name").value("Temples"))
+                .andExpect(jsonPath("$.nameKm").value("ប្រាសាទ"));
+        mvc.perform(put("/api/v1/categories/" + category).with(manager()).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"Temple Sites\"}"))
+                .andExpect(jsonPath("$.name").value("Temple Sites"))
+                .andExpect(jsonPath("$.nameKm").value("ប្រាសាទ"));
+        mvc.perform(put("/api/v1/categories/" + category).with(manager()).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"Temple Sites\",\"nameKm\":\"\"}"))
+                .andExpect(jsonPath("$.nameKm").value(nullValue()));
+
+        String region = create("/api/v1/regions", "{\"name\":\"Khmer Region\",\"code\":\"KM-1\",\"kind\":\"TOURISM\","
+                + "\"nameKm\":\"តំបន់ខ្មែរ\",\"descriptionKm\":\"ទិដ្ឋភាពទូទៅ\"}");
+        mvc.perform(get("/api/v1/regions/" + region))
+                .andExpect(jsonPath("$.nameKm").value("តំបន់ខ្មែរ"))
+                .andExpect(jsonPath("$.descriptionKm").value("ទិដ្ឋភាពទូទៅ"));
+        String tag = create("/api/v1/tags", "{\"name\":\"Kayak\",\"nameKm\":\"កាយ៉ាក់\"}");
+        mvc.perform(get("/api/v1/tags/" + tag)).andExpect(jsonPath("$.nameKm").value("កាយ៉ាក់"));
+        String interest = create("/api/v1/interests", "{\"name\":\"Waterfalls\",\"nameKm\":\"ទឹកធ្លាក់\"}");
+        mvc.perform(get("/api/v1/interests/" + interest)).andExpect(jsonPath("$.nameKm").value("ទឹកធ្លាក់"));
+        mvc.perform(post("/api/v1/categories").with(manager()).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"Long\",\"nameKm\":\"" + "ក".repeat(101) + "\"}"))
+                .andExpect(status().isBadRequest());
+    }
+
     @Test
     void aTourismRegionCanBeRecommendedByAmsTravel() throws Exception {
         String region = create("/api/v1/regions", "{\"name\":\"Marked Region\",\"code\":\"MARKED-1\",\"kind\":\"TOURISM\"}");

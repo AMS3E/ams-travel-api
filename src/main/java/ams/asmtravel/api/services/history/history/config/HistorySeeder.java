@@ -59,4 +59,10 @@ public class HistorySeeder implements CatalogSeedContributor {
         }
         log.info("Seeded the timelines of {} destinations", seeded);
     }
+
+    @Override
+    public void wipe() {
+        historyRepository.deleteAll();
+        historyRepository.flush();
+    }
 }

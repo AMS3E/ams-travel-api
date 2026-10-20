@@ -6,6 +6,7 @@ import ams.asmtravel.api.services.user.user.config.UserProperties;
 import ams.asmtravel.api.services.user.user.domain.TokenIdentity;
 import ams.asmtravel.api.services.location.province.domain.ProvinceSummary;
 import ams.asmtravel.api.services.location.province.service.ProvinceService;
+import ams.asmtravel.api.services.user.user.domain.StaffProfile;
 import ams.asmtravel.api.services.user.user.domain.User;
 import ams.asmtravel.api.services.user.user.domain.UserDeletingEvent;
 import ams.asmtravel.api.services.user.user.domain.UserSummary;
@@ -358,6 +359,56 @@ public class UserServiceImpl implements UserService {
             roles.stream().filter(RoleCode::isBackoffice).forEach(wanted::add);
             userRoleService.replace(user, wanted);
         });
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Map<UUID, StaffProfile> findStaffProfiles(Collection<UUID> keycloakIds) {
+        if (keycloakIds.isEmpty()) {
+            return Map.of();
+        }
+        Map<UUID, StaffProfile> profiles = new HashMap<>();
+        for (User user : userRepository.findAllByKeycloakIdIn(keycloakIds)) {
+            profiles.put(user.getKeycloakId(), new StaffProfile(user.getPhone(), user.getAvatarKey()));
+        }
+        return profiles;
+    }
+
+    @Override
+    @Transactional
+    public void mirrorStaffProfile(String keycloakId, String email, String fullName, String phone, String avatarKey) {
+        UUID subject = parseUuid(keycloakId);
+        if (subject == null) {
+            return;
+        }
+        /* The same chain as a first sign-in: the linked person, the one made for them, the one with their e-mail, or a new one. */
+        Optional<User> linked = identityService.findUser(backofficeRealm, keycloakId);
+        User user = linked
+                .or(() -> userRepository.findByKeycloakId(subject))
+                .or(() -> userRepository.findByEmailIgnoreCase(email))
+                .orElseGet(() -> {
+                    User created = new User();
+                    created.setKeycloakId(subject);
+                    created.setEmail(email);
+                    created.setFullName(fullName.isBlank() ? email : fullName);
+                    return userRepository.save(created);
+                });
+        if (linked.isEmpty()) {
+            user.setKeycloakId(subject);
+            identityService.link(user, backofficeRealm, keycloakId);
+        }
+        /* A customer here may already use the new address; Keycloak has it now, the person keeps the old one. */
+        boolean emailTaken = userRepository.findByEmailIgnoreCase(email)
+                .filter(other -> !other.getId().equals(user.getId())).isPresent();
+        if (emailTaken) {
+            log.warn("Staff account {} took the e-mail {} in Keycloak, which another person here already uses", keycloakId, email);
+        } else {
+            user.setEmail(email);
+        }
+        user.setFullName(fullName.isBlank() ? user.getEmail() : fullName);
+        user.setPhone(blankToNull(phone));
+        user.setAvatarKey(blankToNull(avatarKey));
+        userRepository.save(user);
     }
 
     @Override

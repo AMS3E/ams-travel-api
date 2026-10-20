@@ -195,7 +195,7 @@ class EngagementIntegrationTests {
     void anAnswerToAPublishRequestIsANotification() throws Exception {
         RequestPostProcessor writer = contributor("notified@desk.test");
         String draft = JsonPath.read(mvc.perform(post("/api/v1/destinations").with(writer).contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"Beng Mealea\",\"provinceId\":\"" + province.getId() + "\"}"))
+                        .content("{\"name\":\"Beng Mealea\",\"nameKm\":\"ប្រាសាទបឹងមាលា\",\"provinceId\":\"" + province.getId() + "\"}"))
                 .andExpect(status().isCreated())
                 .andReturn().getResponse().getContentAsString(), "$.id");
         String request = JsonPath.read(mvc.perform(post("/api/v1/publish-requests").with(writer).contentType(MediaType.APPLICATION_JSON)

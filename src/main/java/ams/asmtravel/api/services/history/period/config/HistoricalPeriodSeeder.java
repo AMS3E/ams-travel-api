@@ -45,4 +45,10 @@ public class HistoricalPeriodSeeder implements CatalogSeedContributor {
         }
         log.info("Seeded {} historical periods", periods.size());
     }
+
+    @Override
+    public void wipe() {
+        periodRepository.deleteAll();
+        periodRepository.flush();
+    }
 }

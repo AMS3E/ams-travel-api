@@ -103,7 +103,7 @@ class DestinationIntegrationTests {
     void aContributorsDraftIsTheirsUntilItIsPublished() throws Exception {
         RequestPostProcessor contributor = staff("writer@desk.test", "CONTRIBUTOR",
                 "PERM_DESTINATION_DRAFT_CREATE", "PERM_DESTINATION_DRAFT_EDIT_OWN");
-        String id = create(contributor, "{\"name\":\"Bayon Temple\",\"provinceId\":\"" + province.getId()
+        String id = create(contributor, "{\"name\":\"Bayon Temple\",\"nameKm\":\"ប្រាសាទបាយ័ន\",\"provinceId\":\"" + province.getId()
                 + "\",\"coverKey\":\"" + COVER + "\",\"categoryIds\":[\"" + temples.getId() + "\"]}");
 
         mvc.perform(get("/api/v1/destinations/" + id).with(contributor))
@@ -138,6 +138,50 @@ class DestinationIntegrationTests {
     }
 
     /**
+     * The Khmer is typed beside the English and kept apart from it. Publishing waits until every English
+     * field that says something has its Khmer; an edit that leaves the Khmer out keeps what is stored.
+     */
+    @Test
+    void theKhmerIsKeptBesideTheEnglishAndPublishingWaitsForIt() throws Exception {
+        String english = "\"name\":\"Bakong\",\"provinceId\":\"" + province.getId()
+                + "\",\"description\":\"<p>The first temple mountain.</p>\",\"address\":\"Roluos\"";
+        String id = create(editor(), "{" + english + ",\"nameKm\":\"ប្រាសាទបាគង\"}");
+
+        mvc.perform(get("/api/v1/destinations/" + id).with(editor()))
+                .andExpect(jsonPath("$.name").value("Bakong"))
+                .andExpect(jsonPath("$.nameKm").value("ប្រាសាទបាគង"))
+                .andExpect(jsonPath("$.missingKhmer", contains("descriptionKm", "addressKm")));
+        mvc.perform(patch("/api/v1/destinations/" + id + "/publish").with(owner()))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.detail").value("Write the Khmer text before publishing: description, address"))
+                .andExpect(jsonPath("$.missingKhmer", contains("descriptionKm", "addressKm")));
+
+        // Left out, the Khmer name stands; an empty paragraph is no Khmer description.
+        mvc.perform(put("/api/v1/destinations/" + id).with(editor()).contentType(MediaType.APPLICATION_JSON)
+                        .content("{" + english + ",\"descriptionKm\":\"<p></p>\",\"addressKm\":\"រលួស\"}"))
+                .andExpect(jsonPath("$.nameKm").value("ប្រាសាទបាគង"))
+                .andExpect(jsonPath("$.descriptionKm").value(nullValue()))
+                .andExpect(jsonPath("$.missingKhmer", contains("descriptionKm")));
+        mvc.perform(put("/api/v1/destinations/" + id).with(editor()).contentType(MediaType.APPLICATION_JSON)
+                        .content("{" + english + ",\"descriptionKm\":\"<p>ភ្នំប្រាសាទដំបូង។</p>\"}"))
+                .andExpect(jsonPath("$.addressKm").value("រលួស"))
+                .andExpect(jsonPath("$.missingKhmer", hasSize(0)));
+        mvc.perform(patch("/api/v1/destinations/" + id + "/publish").with(owner()))
+                .andExpect(jsonPath("$.status").value("PUBLISHED"));
+
+        // Both languages are public, side by side; blank clears a Khmer field.
+        mvc.perform(get("/api/v1/destinations/" + id))
+                .andExpect(jsonPath("$.name").value("Bakong"))
+                .andExpect(jsonPath("$.address").value("Roluos"))
+                .andExpect(jsonPath("$.addressKm").value("រលួស"))
+                .andExpect(jsonPath("$.descriptionKm").value("<p>ភ្នំប្រាសាទដំបូង។</p>"));
+        mvc.perform(put("/api/v1/destinations/" + id).with(editor()).contentType(MediaType.APPLICATION_JSON)
+                        .content("{" + english + ",\"addressKm\":\" \"}"))
+                .andExpect(jsonPath("$.addressKm").value(nullValue()))
+                .andExpect(jsonPath("$.missingKhmer", contains("addressKm")));
+    }
+
+    /**
      * A place is shelved in the tourism regions chosen for it, not in every
      * region one of its categories happens to belong to. Its zone is where its
      * province is, and cannot be chosen.
@@ -146,7 +190,7 @@ class DestinationIntegrationTests {
     void aPlaceIsShelvedInTheTourismRegionsChosenForIt() throws Exception {
         Region capitals = theme("Ancient Capitals & Khmer Civilization", "CAPITALS-T");
         Region culinary = theme("Khmer Culinary", "CULINARY-T");
-        String id = create(owner(), "{\"name\":\"Phnom Da\",\"provinceId\":\"" + province.getId()
+        String id = create(owner(), "{\"name\":\"Phnom Da\",\"nameKm\":\"ភ្នំដា\",\"provinceId\":\"" + province.getId()
                 + "\",\"categoryIds\":[\"" + temples.getId()
                 + "\"],\"tourismRegionIds\":[\"" + capitals.getId() + "\"]}");
 
@@ -334,7 +378,7 @@ class DestinationIntegrationTests {
 
     @Test
     void anUploadJoinsTheGalleryAndAHiddenPhotoLeavesThePublicSite() throws Exception {
-        String id = create(editor(), "{\"name\":\"Banteay Srei\",\"provinceId\":\"" + province.getId() + "\"}");
+        String id = create(editor(), "{\"name\":\"Banteay Srei\",\"nameKm\":\"បន្ទាយស្រី\",\"provinceId\":\"" + province.getId() + "\"}");
         MockMultipartFile png = new MockMultipartFile("files", "srei.png", "image/png",
                 new byte[] {(byte) 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A, 0});
         String body = mvc.perform(multipart("/api/v1/media").file(png).with(editor())
@@ -410,7 +454,7 @@ class DestinationIntegrationTests {
 
         String stay = JsonPath.read(mvc.perform(post("/api/v1/stays").with(listing).contentType(MediaType.APPLICATION_JSON)
                         .content("{\"destinationId\":\"" + destination
-                                + "\",\"name\":\"River Hut\",\"type\":\"GUESTHOUSE\",\"starRating\":3.5," + KAMPOT_PIN + ","
+                                + "\",\"name\":\"River Hut\",\"nameKm\":\"ខ្ទមមាត់ទន្លេ\",\"type\":\"GUESTHOUSE\",\"starRating\":3.5," + KAMPOT_PIN + ","
                                 + "\"priceFrom\":25,\"amenities\":[\"wifi\",\"breakfast\"]}"))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.status").value("DRAFT"))
@@ -574,7 +618,7 @@ class DestinationIntegrationTests {
                 .andExpect(status().isCreated())
                 .andReturn().getResponse().getContentAsString(), "$.id");
         String stay = JsonPath.read(mvc.perform(post("/api/v1/stays").with(editor()).contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"Riverside Resort\",\"type\":\"RESORT\",\"status\":\"PUBLISHED\"," + KAMPOT_PIN
+                        .content("{\"name\":\"Riverside Resort\",\"nameKm\":\"រីសតមាត់ទន្លេ\",\"type\":\"RESORT\",\"status\":\"PUBLISHED\"," + KAMPOT_PIN
                                 + ",\"interestIds\":[\"" + resorts + "\"]}"))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.interestIds", contains(resorts)))
@@ -594,14 +638,14 @@ class DestinationIntegrationTests {
 
     private ResultActions food(String name, String latitude, String longitude, String status) throws Exception {
         return mvc.perform(post("/api/v1/foods").with(editor()).contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"" + name + "\",\"type\":\"RESTAURANT\",\"status\":\"" + status
+                        .content("{\"name\":\"" + name + "\",\"nameKm\":\"ភោជនីយដ្ឋាន " + name + "\",\"type\":\"RESTAURANT\",\"status\":\"" + status
                                 + "\",\"latitude\":" + latitude + ",\"longitude\":" + longitude + "}"))
                 .andExpect(status().isCreated());
     }
 
     private ResultActions stay(String name, String latitude, String longitude, String status) throws Exception {
         return mvc.perform(post("/api/v1/stays").with(editor()).contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"" + name + "\",\"type\":\"HOTEL\",\"status\":\"" + status
+                        .content("{\"name\":\"" + name + "\",\"nameKm\":\"សណ្ឋាគារ " + name + "\",\"type\":\"HOTEL\",\"status\":\"" + status
                                 + "\",\"latitude\":" + latitude + ",\"longitude\":" + longitude + "}"))
                 .andExpect(status().isCreated());
     }

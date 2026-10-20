@@ -1,6 +1,7 @@
 package ams.asmtravel.api.services.user.user.service;
 
 import ams.asmtravel.api.services.authorization.role.domain.RoleCode;
+import ams.asmtravel.api.services.user.user.dto.request.StaffProfileRequest;
 import ams.asmtravel.api.services.user.user.dto.request.StaffRequest;
 import ams.asmtravel.api.services.user.user.dto.response.StaffResponse;
 
@@ -19,6 +20,9 @@ public interface StaffService {
     StaffResponse findById(String id);
 
     StaffResponse create(StaffRequest request);
+
+    /** Edits the name, e-mail, phone, photo and whether the account may sign in; roles and password stay. */
+    StaffResponse update(String id, StaffProfileRequest request);
 
     /** Sets exactly these roles, adding and revoking to match, in Keycloak and the mirror. */
     StaffResponse setRoles(String id, Set<RoleCode> roles);

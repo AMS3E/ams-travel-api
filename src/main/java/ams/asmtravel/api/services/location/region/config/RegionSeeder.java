@@ -48,6 +48,12 @@ public class RegionSeeder implements CatalogSeedContributor {
             region.setCode(SeedJson.text(node, "code"));
             region.setName(SeedJson.text(node, "name"));
             region.setDescription(SeedJson.text(node, "description"));
+            region.setNameKm(SeedJson.text(node, "nameKm"));
+            region.setDescriptionKm(SeedJson.text(node, "descriptionKm"));
+            region.setCoverKey(context.imageKey(node));
+            /* The Map panel picture (a tourism region's places on an OpenStreetMap base) and the AMS Travel badge. */
+            region.setMapKey(context.imageKey(SeedJson.text(node, "map")));
+            region.setAmsRecommended(SeedJson.bool(node, "amsRecommended", false));
             String kind = SeedJson.text(node, "kind");
             region.setKind(kind == null ? RegionKind.ZONE : RegionKind.valueOf(kind));
             region.setSortOrder(numbered.merge(region.getKind(), 1, Integer::sum) - 1);
@@ -58,5 +64,11 @@ public class RegionSeeder implements CatalogSeedContributor {
             context.publish(Region.class, region.getCode(), regionRepository.save(region));
         }
         log.info("Seeded {} regions", regions.size());
+    }
+
+    @Override
+    public void wipe() {
+        regionRepository.deleteAll();
+        regionRepository.flush();
     }
 }

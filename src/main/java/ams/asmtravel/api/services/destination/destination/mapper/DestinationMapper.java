@@ -42,6 +42,7 @@ public abstract class DestinationMapper {
     @Mapping(target = "religionIds", expression = "java(ids(destination.getReligions(), Religion::getId))")
     @Mapping(target = "historicalPeriodIds", expression = "java(ids(destination.getHistoricalPeriods(), HistoricalPeriod::getId))")
     @Mapping(target = "centuries", expression = "java(destination.getCenturies() == null ? List.of() : destination.getCenturies().stream().sorted().toList())")
+    @Mapping(target = "missingKhmer", expression = "java(destination.missingKhmer())")
     public abstract DestinationResponse toDestinationResponse(Destination destination);
 
     @Mapping(target = "provinceId", source = "province.id")

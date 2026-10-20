@@ -42,11 +42,21 @@ public class InterestSeeder implements CatalogSeedContributor {
             interest.setSlug(SeedJson.text(node, "slug"));
             interest.setName(SeedJson.text(node, "name"));
             interest.setDescription(SeedJson.text(node, "description"));
+            interest.setNameKm(SeedJson.text(node, "nameKm"));
+            interest.setDescriptionKm(SeedJson.text(node, "descriptionKm"));
             interest.setGroupName(SeedJson.text(node, "group"));
             interest.setIconKey(SeedJson.text(node, "icon"));
+            /* Its picture on the Explore shelf: one of the catalogue's own photographs, named by file. */
+            interest.setCoverKey(context.imageKey(node));
             interest.setSortOrder(numbered.merge(String.valueOf(interest.getGroupName()), 1, Integer::sum) - 1);
             context.publish(Interest.class, interest.getSlug(), interestRepository.save(interest));
         }
         log.info("Seeded {} interests", rows.size());
+    }
+
+    @Override
+    public void wipe() {
+        interestRepository.deleteAll();
+        interestRepository.flush();
     }
 }

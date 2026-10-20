@@ -25,6 +25,7 @@ import java.util.UUID;
  * @param tourismRegionIds zones are refused
  * @param theme            main tourism region code, see {@link ams.asmtravel.api.services.destination.destination.domain.DestinationThemes}
  * @param centuries        1 to 21
+ * @param nameKm           Khmer twins of the English text: null keeps what is stored, blank clears it
  */
 public record DestinationRequest(
         @NotBlank @Size(max = 255) String name,
@@ -49,6 +50,11 @@ public record DestinationRequest(
         @Size(max = 40) String theme,
         List<@NotBlank @Size(max = 100) String> specialties,
         Set<UUID> historicalPeriodIds,
-        List<@NotNull @Min(1) @Max(21) Integer> centuries
+        List<@NotNull @Min(1) @Max(21) Integer> centuries,
+        @Size(max = 255) String nameKm,
+        String descriptionKm,
+        @Size(max = 300) String sloganKm,
+        @Size(max = 120) String sloganByKm,
+        String addressKm
 ) {
 }

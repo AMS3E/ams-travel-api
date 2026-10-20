@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -30,6 +31,11 @@ public interface ReviewRepository extends JpaRepository<Review, UUID>, JpaSpecif
     List<Review> findByUserId(UUID userId);
 
     long countByStatus(ReviewStatus status);
+
+    /** The seed's reviews were written some time ago: moved back after the insert. */
+    @Modifying
+    @Query(value = "update engagement.reviews set created_at = :at, updated_at = :at where id = :id", nativeQuery = true)
+    void backdate(@Param("id") UUID id, @Param("at") Instant at);
 
     long countByStatusNot(ReviewStatus status);
 

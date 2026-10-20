@@ -42,7 +42,9 @@ public final class DestinationSpecification {
             return builder.or(
                     builder.like(builder.lower(root.get("name")), like),
                     builder.like(builder.lower(root.get("shortDescription")), like),
-                    builder.like(builder.lower(root.get("address")), like));
+                    builder.like(builder.lower(root.get("address")), like),
+                    builder.like(builder.lower(root.get("nameKm")), like),
+                    builder.like(builder.lower(root.get("addressKm")), like));
         };
     }
 

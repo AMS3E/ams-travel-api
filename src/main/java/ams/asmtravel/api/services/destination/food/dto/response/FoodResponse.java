@@ -70,6 +70,13 @@ public record FoodResponse(
         String whatsapp,
         String facebookUrl,
         Integer yearOpened,
-        List<String> specialties
+        List<String> specialties,
+        /* Khmer twins of the English text, and those still empty while their English is filled: publishing waits on them. */
+        String nameKm,
+        String descriptionKm,
+        String sloganKm,
+        String sloganByKm,
+        String addressKm,
+        List<String> missingKhmer
 ) {
 }

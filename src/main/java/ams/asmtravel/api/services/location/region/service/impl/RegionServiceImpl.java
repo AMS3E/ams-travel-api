@@ -138,7 +138,8 @@ public class RegionServiceImpl implements RegionService {
     @Override
     @Transactional(readOnly = true)
     public boolean isTourismCode(String code) {
-        return code != null && !code.isBlank() && regionRepository.existsByKindAndCodeIgnoreCase(RegionKind.TOURISM, code.trim());
+        return code != null && !code.isBlank()
+                && regionRepository.existsByKindAndCodeIgnoreCase(RegionKind.TOURISM, code.trim());
     }
 
     @Override
@@ -186,6 +187,12 @@ public class RegionServiceImpl implements RegionService {
         region.setParentId(parentId);
         region.setDescription(request.description());
         region.setHistoryIntro(request.historyIntro());
+        if (request.nameKm() != null) {
+            region.setNameKm(request.nameKm().isBlank() ? null : request.nameKm().trim());
+        }
+        if (request.descriptionKm() != null) {
+            region.setDescriptionKm(request.descriptionKm().isBlank() ? null : request.descriptionKm().trim());
+        }
         if (request.coverKey() != null) {
             region.setCoverKey(request.coverKey().isBlank() ? null : request.coverKey().trim());
         }

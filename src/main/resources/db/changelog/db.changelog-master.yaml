@@ -107,6 +107,14 @@ databaseChangeLog:
   - include: { file: v2/engagement/005-browse-target.yaml, relativeToChangelogFile: true }
   - include: { file: v2/auth/008-user-home-province.yaml, relativeToChangelogFile: true }
   - include: { file: v2/auth/009-preference-distance-unit.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/system/002-seed-runs.yaml, relativeToChangelogFile: true }
   - include: { file: v2/taxonomy/022-interest-cover.yaml, relativeToChangelogFile: true }
   - include: { file: v2/taxonomy/023-region-ams-recommended.yaml, relativeToChangelogFile: true }
   - include: { file: v2/taxonomy/024-region-map.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/destination/029-destination-khmer.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/taxonomy/025-khmer-names.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/destination/030-stay-food-khmer.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/destination/031-khmer-text-rows.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/taxonomy/026-khmer-text-rows.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/destination/032-khmer-text-fixes.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/taxonomy/027-khmer-text-fixes.yaml, relativeToChangelogFile: true }

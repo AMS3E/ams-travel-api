@@ -34,6 +34,9 @@ public interface FoodService {
     /** Publishes on approval; the publishing service checks the authority. */
     FoodResponse publish(UUID id);
 
+    /** Refused with 409 while any filled English field has no Khmer: for a reviewer about to approve it. */
+    void requireKhmer(UUID id);
+
     /** Takes it off the site; it stays as a draft. */
     FoodResponse unpublish(UUID id);
 

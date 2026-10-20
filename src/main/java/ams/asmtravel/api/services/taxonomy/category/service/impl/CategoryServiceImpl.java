@@ -98,6 +98,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     private void apply(Category category, CategoryRequest request) {
         category.setName(request.name().trim());
+        if (request.nameKm() != null) {
+            category.setNameKm(request.nameKm().isBlank() ? null : request.nameKm().trim());
+        }
         category.setDescription(request.description());
         category.setIconKey(request.iconKey() == null || request.iconKey().isBlank() ? null : request.iconKey().trim());
     }

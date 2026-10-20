@@ -21,6 +21,9 @@ public record InterestResponse(
         /** Who made it; null for the ones the seed wrote. */
         UUID createdBy,
         /** When it was made: what "Newest first" sorts on. */
-        Instant createdAt
+        Instant createdAt,
+        /** Khmer name and description; null until an editor writes them. */
+        String nameKm,
+        String descriptionKm
 ) {
 }

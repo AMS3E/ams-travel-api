@@ -2,7 +2,9 @@ package ams.asmtravel.api.services.destination.stay.service.impl;
 
 import ams.asmtravel.api.services.location.province.service.ProvinceService;
 import ams.asmtravel.api.services.destination.destination.domain.DestinationDeletingEvent;
+import ams.asmtravel.api.services.destination.destination.domain.KhmerText;
 import ams.asmtravel.api.services.destination.destination.domain.ListingStatus;
+import ams.asmtravel.api.services.destination.destination.exception.KhmerTextMissingException;
 import ams.asmtravel.api.services.destination.destination.domain.NearbyArea;
 import ams.asmtravel.api.services.destination.destination.service.DestinationService;
 import ams.asmtravel.api.services.destination.stay.domain.Stay;
@@ -113,7 +115,7 @@ public class StayServiceImpl implements StayService {
         checkWrite(ownerUserId);
         Stay stay = new Stay();
         apply(stay, request, ownerUserId);
-        stay.setStatus(permittedStatus(request.status(), ListingStatus.DRAFT));
+        stay.setStatus(goingLive(stay, permittedStatus(request.status(), ListingStatus.DRAFT)));
         return mapper.toStayResponse(stayRepository.save(stay));
     }
 
@@ -126,7 +128,7 @@ public class StayServiceImpl implements StayService {
         UUID ownerUserId = owner(request.ownerUserId());
         checkWrite(ownerUserId);
         apply(stay, request, ownerUserId);
-        stay.setStatus(permittedStatus(request.status(), stay.getStatus()));
+        stay.setStatus(goingLive(stay, permittedStatus(request.status(), stay.getStatus())));
         Stay saved = stayRepository.saveAndFlush(stay);
         // Rooms reset the "from" price before the response is built.
         events.publishEvent(new StaySavedEvent(saved.getId()));
@@ -154,7 +156,7 @@ public class StayServiceImpl implements StayService {
     @Transactional
     public StayResponse publish(UUID id) {
         Stay stay = find(id);
-        stay.setStatus(ListingStatus.PUBLISHED);
+        stay.setStatus(goingLive(stay, ListingStatus.PUBLISHED));
         return mapper.toStayResponse(stayRepository.saveAndFlush(stay));
     }
 
@@ -255,6 +257,22 @@ public class StayServiceImpl implements StayService {
         stay.setDescription(request.description());
         stay.setSlogan(blankToNull(request.slogan()));
         stay.setSloganBy(blankToNull(request.sloganBy()));
+        /* Khmer: null keeps it, so a client that has never heard of it wipes nothing. */
+        if (request.nameKm() != null) {
+            stay.setNameKm(blankToNull(request.nameKm()));
+        }
+        if (request.descriptionKm() != null) {
+            stay.setDescriptionKm(KhmerText.hasText(request.descriptionKm()) ? request.descriptionKm().trim() : null);
+        }
+        if (request.sloganKm() != null) {
+            stay.setSloganKm(blankToNull(request.sloganKm()));
+        }
+        if (request.sloganByKm() != null) {
+            stay.setSloganByKm(blankToNull(request.sloganByKm()));
+        }
+        if (request.addressKm() != null) {
+            stay.setAddressKm(blankToNull(request.addressKm()));
+        }
         stay.setProvince(request.provinceId() == null ? null : provinceService.getEntity(request.provinceId()));
         stay.setPolicies(blankToNull(request.policies()));
         stay.setCheckInFrom(request.checkInFrom());
@@ -356,6 +374,21 @@ public class StayServiceImpl implements StayService {
                     ? "Name the account this stay belongs to"
                     : "This stay is listed in someone else's name");
         }
+    }
+
+    /** Refused with 409 while any filled English field has no Khmer. */
+    @Override
+    @Transactional(readOnly = true)
+    public void requireKhmer(UUID id) {
+        goingLive(find(id), ListingStatus.PUBLISHED);
+    }
+
+    /** The status it is to have; on its way live, only with its Khmer written. */
+    private static ListingStatus goingLive(Stay stay, ListingStatus next) {
+        if (next == ListingStatus.PUBLISHED && stay.getStatus() != ListingStatus.PUBLISHED && !stay.missingKhmer().isEmpty()) {
+            throw new KhmerTextMissingException(stay.missingKhmer());
+        }
+        return next;
     }
 
     /** Only an editor may publish or unpublish; other writers keep the other statuses. */

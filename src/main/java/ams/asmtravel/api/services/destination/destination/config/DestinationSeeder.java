@@ -63,7 +63,15 @@ public class DestinationSeeder implements CatalogSeedContributor {
             destination.setName(SeedJson.text(node, "name"));
             destination.setShortDescription(SeedJson.text(node, "shortDescription"));
             destination.setDescription(SeedJson.text(node, "description"));
+            destination.setSlogan(SeedJson.text(node, "slogan"));
+            destination.setSloganBy(SeedJson.text(node, "sloganBy"));
+            /* As many views as the browse seed records: six visitors per point of popularity. */
+            Integer popularity = SeedJson.integer(node, "popularity");
+            destination.setViewCount(popularity == null ? 0L : popularity * 6L);
             destination.setAddress(SeedJson.text(node, "address"));
+            destination.setNameKm(SeedJson.text(node, "nameKm"));
+            destination.setDescriptionKm(SeedJson.text(node, "descriptionKm"));
+            destination.setAddressKm(SeedJson.text(node, "addressKm"));
             destination.setLatitude(decimal(node, "latitude"));
             destination.setLongitude(decimal(node, "longitude"));
             destination.setCoverKey(context.imageKey(node));
@@ -114,5 +122,11 @@ public class DestinationSeeder implements CatalogSeedContributor {
 
     private static BigDecimal decimal(JsonNode node, String field) {
         return node.hasNonNull(field) ? node.get(field).decimalValue() : null;
+    }
+
+    @Override
+    public void wipe() {
+        destinationRepository.deleteAll();
+        destinationRepository.flush();
     }
 }

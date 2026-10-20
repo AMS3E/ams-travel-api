@@ -39,10 +39,17 @@ public class CategorySeeder implements CatalogSeedContributor {
             Category category = new Category();
             category.setSlug(SeedJson.text(node, "slug"));
             category.setName(SeedJson.text(node, "name"));
+            category.setNameKm(SeedJson.text(node, "nameKm"));
             Integer sortOrder = SeedJson.integer(node, "sortOrder");
             category.setSortOrder(sortOrder == null ? 0 : sortOrder);
             context.publish(Category.class, category.getSlug(), categoryRepository.save(category));
         }
         log.info("Seeded {} categories", rows.size());
+    }
+
+    @Override
+    public void wipe() {
+        categoryRepository.deleteAll();
+        categoryRepository.flush();
     }
 }

@@ -39,6 +39,12 @@ public class CatalogSeedContext {
         return value;
     }
 
+    /** Every row of a kind published so far, in seed order. */
+    public <T> List<T> all(Class<T> type) {
+        Map<String, Object> rows = published.get(type);
+        return rows == null ? List.of() : rows.values().stream().map(type::cast).toList();
+    }
+
     /** The rows those slugs mean, skipping and reporting any that nothing published. */
     public <T> List<T> resolve(Class<T> type, List<String> slugs) {
         List<T> resolved = new ArrayList<>(slugs.size());

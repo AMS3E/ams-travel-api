@@ -46,4 +46,10 @@ public class MonarchSeeder implements CatalogSeedContributor {
         }
         log.info("Seeded {} monarchs", monarchs.size());
     }
+
+    @Override
+    public void wipe() {
+        monarchRepository.deleteAll();
+        monarchRepository.flush();
+    }
 }

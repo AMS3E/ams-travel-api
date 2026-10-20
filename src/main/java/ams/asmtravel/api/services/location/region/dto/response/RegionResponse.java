@@ -27,7 +27,7 @@ public record RegionResponse(
         String historyIntro,
         String coverKey,
         String coverUrl,
-        /** The Historical Map picture on its page in the app; null until one is uploaded. */
+        /** The Map panel picture on its page in the app, in place of the interactive map; null until one is uploaded. */
         String mapKey,
         String mapUrl,
         List<UUID> categoryIds,
@@ -41,6 +41,9 @@ public record RegionResponse(
         BigDecimal longitude,
         boolean centreSet,
         GeoBounds bounds,
-        Instant createdAt
+        Instant createdAt,
+        /** Khmer name and description; null until an editor writes them. */
+        String nameKm,
+        String descriptionKm
 ) {
 }

@@ -47,6 +47,10 @@ public class Region {
     @Column(nullable = false, length = 150)
     private String name;
 
+    /** Its Khmer name, typed by hand; null until written. */
+    @Column(length = 150)
+    private String nameKm;
+
     /** Upper-case and short ({@code COAST}); the website's URL for the region is it lower-cased. */
     @Column(nullable = false, unique = true, length = 20)
     private String code;
@@ -60,6 +64,10 @@ public class Region {
     @Column(columnDefinition = "text")
     private String description;
 
+    /** The description in Khmer; null until written. */
+    @Column(columnDefinition = "text")
+    private String descriptionKm;
+
     /** The line under the Historical coverage heading, in the region's own words. */
     @Column(columnDefinition = "text")
     private String historyIntro;
@@ -68,7 +76,7 @@ public class Region {
     @Column(length = 512)
     private String coverKey;
 
-    /** The picture in the Historical Map panel of its page in the app; null until one is uploaded. */
+    /** The picture in the Map panel of its page in the app, one image where the interactive map was; null until uploaded. */
     @Column(length = 512)
     private String mapKey;
 

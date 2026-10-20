@@ -1,0 +1,2564 @@
+[
+  {
+    "ownerType": "DESTINATION",
+    "owner": "angkor-wat",
+    "media": [
+      {
+        "image": "angkor-wat-2.jpg",
+        "caption": "The central towers of Angkor Wat seen from the causeway",
+        "sortOrder": 1,
+        "cover": false
+      },
+      {
+        "image": "angkor-wat.jpg",
+        "caption": "Angkor Wat catching first light across the moat",
+        "sortOrder": 2,
+        "cover": true
+      },
+      {
+        "image": "angkor-wat-3.jpg",
+        "caption": "The western causeway crossing the moat towards the main gate (Photo: Satdeep Gill, CC BY-SA 4.0)",
+        "sortOrder": 3,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "bayon-temple",
+    "media": [
+      {
+        "image": "bayon-temple.jpg",
+        "caption": "Face towers rising from the terraces of the Bayon",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "bayon-temple-2.jpg",
+        "caption": "Bas-relief of the marching Khmer army in the Bayon's outer gallery",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "bayon-temple-3.jpg",
+        "caption": "Close view of a four-faced tower on the upper terrace (Photo: Satdeep Gill, CC BY-SA 4.0)",
+        "sortOrder": 3,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "ta-prohm",
+    "media": [
+      {
+        "image": "ta-prohm.jpg",
+        "caption": "Roots gripping the gallery walls at Ta Prohm",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "ta-prohm-2.jpg",
+        "caption": "A root-covered doorway inside Ta Prohm",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "ta-prohm-3.jpg",
+        "caption": "A silk-cotton tree straddling the wall of the inner enclosure (Photo: Jakub Hałun, CC BY-SA 4.0)",
+        "sortOrder": 3,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "banteay-srei",
+    "media": [
+      {
+        "image": "banteay-srei.jpg",
+        "caption": "Central and southern sanctuaries at Banteay Srei",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "banteay-srei-2.jpg",
+        "caption": "Carved pediment at Banteay Srei showing Indra on his elephant",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "banteay-srei-3.jpg",
+        "caption": "Guardian figures kneeling before the doorway of a library (Photo: PIERRE ANDRE LECLERCQ, CC BY-SA 4.0)",
+        "sortOrder": 3,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "koh-ker",
+    "media": [
+      {
+        "image": "koh-ker.jpg",
+        "caption": "The seven tiers of Prasat Thom seen along the approach",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "koh-ker-2.jpg",
+        "caption": "Prasat Bram, one of the brick temples in the Koh Ker group",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "koh-ker-3.jpg",
+        "caption": "The wooden staircase climbing the side of the Prasat Thom pyramid (Photo: PsamatheM, CC BY-SA 4.0)",
+        "sortOrder": 3,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "sambor-prei-kuk",
+    "media": [
+      {
+        "image": "sambor-prei-kuk.jpg",
+        "caption": "Pre-Angkorian brick towers at Sambor Prei Kuk",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "sambor-prei-kuk-2.jpg",
+        "caption": "A brick sanctuary standing in the forest at Sambor Prei Kuk",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "sambor-prei-kuk-3.jpg",
+        "caption": "Carved brick flying palace relief on an octagonal tower (Photo: PsamatheM, CC BY-SA 4.0)",
+        "sortOrder": 3,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "royal-palace",
+    "media": [
+      {
+        "image": "royal-palace.jpg",
+        "caption": "Golden roofline of the Chanchhaya Pavilion",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "royal-palace-2.jpg",
+        "caption": "The Silver Pagoda inside the Royal Palace grounds",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "royal-palace-3.jpg",
+        "caption": "The Throne Hall with its tiered roof and central spire (Photo: Marcin Konsek, CC BY-SA 4.0)",
+        "sortOrder": 3,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "national-museum",
+    "media": [
+      {
+        "image": "national-museum.jpg",
+        "caption": "Terracotta facade of the National Museum",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "national-museum-2.jpg",
+        "caption": "The museum's inner courtyard and garden",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "national-museum-3.jpg",
+        "caption": "Stone sculptures of Hindu deities displayed in a gallery (Photo: AKS.9955, CC BY-SA 4.0)",
+        "sortOrder": 3,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "preah-vihear-temple",
+    "media": [
+      {
+        "image": "preah-vihear-temple.jpg",
+        "caption": "The temple laid out along its cliff-top axis",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "preah-vihear-temple-2.jpg",
+        "caption": "Stone stairway climbing through Preah Vihear",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "preah-vihear-temple-3.jpg",
+        "caption": "The final gopura at the cliff edge above the plain (Photo: PsamatheM, CC BY-SA 4.0)",
+        "sortOrder": 3,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "spean-praptos",
+    "media": [
+      {
+        "image": "koh-ker.jpg",
+        "caption": "Laterite blockwork in the Koh Ker temple group",
+        "sortOrder": 1,
+        "cover": false
+      },
+      {
+        "image": "koh-ker-2.jpg",
+        "caption": "Corbelled Angkorian stonework at Prasat Bram",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "spean-praptos-3.jpg",
+        "caption": "The corbelled laterite arches of the bridge seen from the riverbank (Photo: Elmschrat, CC0)",
+        "sortOrder": 3,
+        "cover": true
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "angkorian-royal-road",
+    "media": [
+      {
+        "image": "preah-vihear-temple-2.jpg",
+        "caption": "Angkorian stone stairway climbing towards a hilltop sanctuary",
+        "sortOrder": 1,
+        "cover": false
+      },
+      {
+        "image": "preah-vihear-temple.jpg",
+        "caption": "The processional axis laid out along the Dangrek ridge",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "koh-ker.jpg",
+        "caption": "Laterite construction of the kind used along the royal roads",
+        "sortOrder": 3,
+        "cover": false
+      },
+      {
+        "image": "angkorian-royal-road-3.jpg",
+        "caption": "An Angkorian laterite bridge beside the modern road (Photo: Brian Jeffery Beggerly, CC BY 2.0)",
+        "sortOrder": 4,
+        "cover": true
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "preah-khan-kompong-svay",
+    "media": [
+      {
+        "image": "ta-prohm-2.jpg",
+        "caption": "Roots gripping an unrestored Angkorian gallery wall",
+        "sortOrder": 1,
+        "cover": false
+      },
+      {
+        "image": "sambor-prei-kuk-2.jpg",
+        "caption": "A sanctuary tower standing alone in the forest",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "preah-khan-kompong-svay-3.jpg",
+        "caption": "Collapsed sandstone towers of the central sanctuary among trees (Photo: Saxula, CC BY-SA 3.0)",
+        "sortOrder": 3,
+        "cover": true
+      },
+      {
+        "image": "preah-khan-kompong-svay-4.jpg",
+        "caption": "Face tower of Preah Stung reflected in standing water (Photo: Saxula, CC BY-SA 3.0)",
+        "sortOrder": 4,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "bou-sra-waterfall",
+    "media": [
+      {
+        "image": "bou-sra-waterfall.jpg",
+        "caption": "The main tier of Bou Sra in full flow",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "bou-sra-waterfall-2.jpg",
+        "caption": "Visitors on the rocks above the upper tier",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "bou-sra-waterfall-3.jpg",
+        "caption": "The lower tier of Bou Sra thundering into its gorge (Photo: Kiensvay, CC BY-SA 4.0)",
+        "sortOrder": 3,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "elephant-valley-project",
+    "media": [
+      {
+        "image": "elephant-valley-project.jpg",
+        "caption": "The forested valley the sanctuary sits above",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "elephant-valley-project-2.jpg",
+        "caption": "The entrance gate to the Elephant Valley Project near Sen Monorom",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "elephant-valley-project-3.jpg",
+        "caption": "An elephant foraging in long grass beside the forest edge (Photo: Dan Koehl, CC BY 3.0)",
+        "sortOrder": 3,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "yeak-laom-lake",
+    "media": [
+      {
+        "image": "yeak-laom-lake.jpg",
+        "caption": "The full circle of the crater lake seen from the shore",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "yeak-laom-lake-2.jpg",
+        "caption": "Yeak Laom from above, forest closing the rim",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "yeak-laom-lake-3.jpg",
+        "caption": "A wooden swimming pier reaching into the clear crater lake (Photo: Jensre, CC BY-SA 3.0)",
+        "sortOrder": 3,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "tonle-sap-floating-village",
+    "media": [
+      {
+        "image": "tonle-sap-floating-village.jpg",
+        "caption": "Houses floating in a channel of the Tonle Sap",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "tonle-sap-floating-village-2.jpg",
+        "caption": "The floating school serving the village",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "tonle-sap-floating-village-3.jpg",
+        "caption": "Paddle boats threading through the flooded forest at high water (Photo: Krzysztof Golik, CC BY-SA 4.0)",
+        "sortOrder": 3,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "battambang-bamboo-train",
+    "media": [
+      {
+        "image": "battambang-bamboo-train.jpg",
+        "caption": "A norry loaded and moving down the single track",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "battambang-bamboo-train-2.jpg",
+        "caption": "The bamboo train station outside Battambang",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "battambang-bamboo-train-3.jpg",
+        "caption": "Passengers riding a bamboo norry through green rice fields (Photo: Io Herodotus, CC BY-SA 4.0)",
+        "sortOrder": 3,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "mekong-discovery-trail",
+    "media": [
+      {
+        "image": "mekong-discovery-trail.jpg",
+        "caption": "The bamboo bridge being rebuilt after the floods",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "mekong-discovery-trail-2.jpg",
+        "caption": "Nokor Bachey pagoda on the trail at Kampong Cham",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "mekong-discovery-trail-3.jpg",
+        "caption": "Cyclists crossing the rebuilt bamboo bridge to Koh Paen (Photo: PsamatheM, CC BY-SA 4.0)",
+        "sortOrder": 3,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "phnom-kulen",
+    "media": [
+      {
+        "image": "phnom-kulen.jpg",
+        "caption": "The Kulen falls dropping into their pool",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "phnom-kulen-2.jpg",
+        "caption": "The reclining Buddha shrine at the summit of Phnom Kulen",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "phnom-kulen-3.jpg",
+        "caption": "Lingas carved into the riverbed above the Kulen waterfall (Photo: Narith5, CC BY 2.0)",
+        "sortOrder": 3,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "bokor-mountain",
+    "media": [
+      {
+        "image": "bokor-mountain.jpg",
+        "caption": "Ridges and coastline seen from Bokor Hill Station",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "bokor-mountain-2.jpg",
+        "caption": "The abandoned colonial church on Bokor Mountain",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "bokor-mountain-3.jpg",
+        "caption": "The restored Bokor Palace Hotel with cloud rolling across the plateau (Photo: Oobmak, CC BY-SA 4.0)",
+        "sortOrder": 3,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "koh-rong",
+    "media": [
+      {
+        "image": "koh-rong.jpg",
+        "caption": "The channel between the islands off Koh Rong",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "koh-rong-2.jpg",
+        "caption": "White sand and shallow turquoise water on the archipelago",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "koh-rong-3.jpg",
+        "caption": "Long Set Beach at low tide with the forest behind the sand (Photo: Peazapata, CC BY-SA 4.0)",
+        "sortOrder": 3,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "song-saa-private-island",
+    "media": [
+      {
+        "image": "song-saa-private-island.jpg",
+        "caption": "Empty sand along Saracen Bay",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "song-saa-private-island-2.jpg",
+        "caption": "Rocky islets at the north end of the bay",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "song-saa-private-island-3.jpg",
+        "caption": "Overwater villas on stilts reaching out from the shore (Photo: SongSaa12, CC BY-SA 4.0)",
+        "sortOrder": 3,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "otres-beach",
+    "media": [
+      {
+        "image": "otres-beach.jpg",
+        "caption": "The open stretch of sand at Otres",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "otres-beach-2.jpg",
+        "caption": "Palms leaning over the water at Otres Beach",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "otres-beach-3.jpg",
+        "caption": "Casuarina trees shading the empty sand in late afternoon (Photo: Dmitry Makeev, CC BY-SA 4.0)",
+        "sortOrder": 3,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "kep-crab-market",
+    "media": [
+      {
+        "image": "kep-crab-market.jpg",
+        "caption": "The crab market building standing out over the water",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "kep-crab-market-2.jpg",
+        "caption": "Seafood laid out at the Kep market stalls",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "kep-crab-market-3.jpg",
+        "caption": "Blue swimmer crabs lifted from a woven basket in the shallows (Photo: PsamatheM, CC BY-SA 4.0)",
+        "sortOrder": 3,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "kampot-riverfront",
+    "media": [
+      {
+        "image": "kampot-riverfront.jpg",
+        "caption": "The river turning gold in front of the Bokor ridge",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "kampot-riverfront-2.jpg",
+        "caption": "Fishing boats moored along the Kampot river",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "kampot-riverfront-3.jpg",
+        "caption": "Restored French-era shophouses facing the river promenade (Photo: Marcin Konsek, CC BY-SA 4.0)",
+        "sortOrder": 3,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "kampot-pepper-farm",
+    "media": [
+      {
+        "image": "kampot-pepper-farm.jpg",
+        "caption": "Rows of pepper poles under their shade netting",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "kampot-pepper-farm-2.jpg",
+        "caption": "Green peppercorns ripening on the vine",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "kampot-pepper-farm-3.jpg",
+        "caption": "A farm worker sorting dried peppercorns by hand on a tray (Photo: PsamatheM, CC BY-SA 4.0)",
+        "sortOrder": 3,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "virachey-national-park",
+    "media": [
+      {
+        "image": "ratanakiri-forest.jpg",
+        "caption": "Forest closing over a hill trail in Ratanakiri",
+        "sortOrder": 1,
+        "cover": false
+      },
+      {
+        "image": "elephant-valley-project.jpg",
+        "caption": "Highland forest of the kind the park protects",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "virachey-national-park-3.jpg",
+        "caption": "Trekkers crossing a shallow forest river on foot (Photo: Mangoholic2, Public domain)",
+        "sortOrder": 3,
+        "cover": true
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "romanear-waterfall",
+    "media": [
+      {
+        "image": "bou-sra-waterfall-2.jpg",
+        "caption": "A Mondulkiri waterfall seen from the rocks below the drop",
+        "sortOrder": 1,
+        "cover": false
+      },
+      {
+        "image": "bou-sra-waterfall.jpg",
+        "caption": "A Mondulkiri waterfall dropping through the forest",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "elephant-valley-project.jpg",
+        "caption": "Forested hills rolling away across Mondulkiri",
+        "sortOrder": 3,
+        "cover": false
+      },
+      {
+        "image": "romanear-waterfall-3.jpg",
+        "caption": "The second fall dropping into its pool between forest banks (Photo: wikirictor, Public domain)",
+        "sortOrder": 4,
+        "cover": true
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "sesan-srepok-confluence",
+    "media": [
+      {
+        "image": "mekong-discovery-trail.jpg",
+        "caption": "The braided river channel in the north-east",
+        "sortOrder": 1,
+        "cover": false
+      },
+      {
+        "image": "ratanakiri-forest.jpg",
+        "caption": "Riverine forest upstream in Ratanakiri",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "sesan-srepok-confluence-3.jpg",
+        "caption": "Sandbars and braided channels where the two rivers meet (Photo: Adam Jones from Kelowna, BC, Canada, CC BY-SA 2.0)",
+        "sortOrder": 3,
+        "cover": true
+      },
+      {
+        "image": "sesan-srepok-confluence-4.jpg",
+        "caption": "A long-tail boat heading upriver at first light (Photo: Anilakeo, CC BY-SA 4.0)",
+        "sortOrder": 4,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "mondulkiri-coffee-highlands",
+    "media": [
+      {
+        "image": "elephant-valley-project.jpg",
+        "caption": "The plateau country the coffee is grown on",
+        "sortOrder": 1,
+        "cover": false
+      },
+      {
+        "image": "elephant-valley-project-2.jpg",
+        "caption": "Forest edge above Sen Monorom",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "mondulkiri-coffee-highlands-3.jpg",
+        "caption": "Coffee cherries ripening red on a smallholder's bush (Photo: Dtfman, CC BY-SA 3.0)",
+        "sortOrder": 3,
+        "cover": true
+      },
+      {
+        "image": "mondulkiri-coffee-highlands-4.jpg",
+        "caption": "Beans drying on tarpaulins in front of a highland farmhouse (Photo: Travelpleb, CC BY-SA 3.0)",
+        "sortOrder": 4,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "prek-toal-bird-sanctuary",
+    "media": [
+      {
+        "image": "tonle-sap-floating-village.jpg",
+        "caption": "Open water and flooded forest on the Tonle Sap",
+        "sortOrder": 1,
+        "cover": false
+      },
+      {
+        "image": "tonle-sap-floating-village-2.jpg",
+        "caption": "A floating building on the lake",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "prek-toal-bird-sanctuary-3.jpg",
+        "caption": "Painted storks and pelicans crowding a nesting tree (Photo: Charles J. Sharp, CC BY-SA 4.0)",
+        "sortOrder": 3,
+        "cover": true
+      },
+      {
+        "image": "prek-toal-bird-sanctuary-4.jpg",
+        "caption": "A small boat pushing into the flooded forest at dawn (Photo: PIERRE ANDRE LECLERCQ, CC BY-SA 4.0)",
+        "sortOrder": 4,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "kampong-phluk",
+    "media": [
+      {
+        "image": "tonle-sap-floating-village-2.jpg",
+        "caption": "Stilted houses above the dry-season floodplain",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "tonle-sap-floating-village.jpg",
+        "caption": "The flooded forest behind the village",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "kampong-phluk-3.jpg",
+        "caption": "Houses on tall hardwood stilts lining the village channel (Photo: Krzysztof Golik, CC BY-SA 4.0)",
+        "sortOrder": 3,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "kampong-khleang",
+    "media": [
+      {
+        "image": "tonle-sap-floating-village.jpg",
+        "caption": "Houses on pontoons at the lake edge",
+        "sortOrder": 1,
+        "cover": false
+      },
+      {
+        "image": "tonle-sap-floating-village-2.jpg",
+        "caption": "A stilted building over the floodplain",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "kampong-khleang-3.jpg",
+        "caption": "Fishing boats moored below stilt houses at the lake edge (Photo: Bahnfrend, CC BY-SA 4.0)",
+        "sortOrder": 3,
+        "cover": true
+      },
+      {
+        "image": "kampong-khleang-4.jpg",
+        "caption": "Fish drying on bamboo racks in the afternoon sun (Photo: Bahnfrend, CC BY-SA 4.0)",
+        "sortOrder": 4,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "koh-trong",
+    "media": [
+      {
+        "image": "mekong-discovery-trail.jpg",
+        "caption": "The Mekong channel between bank and island",
+        "sortOrder": 1,
+        "cover": false
+      },
+      {
+        "image": "mekong-discovery-trail-2.jpg",
+        "caption": "River-country pagoda architecture",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "koh-trong-3.jpg",
+        "caption": "The flat sandy track circling the island under palm trees (Photo: Adam Jones from Kelowna, BC, Canada, CC BY-SA 2.0)",
+        "sortOrder": 3,
+        "cover": true
+      },
+      {
+        "image": "koh-trong-4.jpg",
+        "caption": "Pomelos hanging heavy in an orchard beside the path (Photo: Jakub Hałun, CC BY-SA 4.0)",
+        "sortOrder": 4,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "kampi-dolphin-pool",
+    "media": [
+      {
+        "image": "mekong-discovery-trail.jpg",
+        "caption": "The Mekong above Kratie",
+        "sortOrder": 1,
+        "cover": false
+      },
+      {
+        "image": "mekong-discovery-trail-2.jpg",
+        "caption": "River bank country near Kratie",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "kampi-dolphin-pool-3.jpg",
+        "caption": "An Irrawaddy dolphin surfacing on the calm brown river (Photo: Pierre André, CC BY-SA 4.0)",
+        "sortOrder": 3,
+        "cover": true
+      },
+      {
+        "image": "kampi-dolphin-pool-4.jpg",
+        "caption": "Wooden tourist boats waiting at the Kampi landing (Photo: Pierre André, CC BY-SA 4.0)",
+        "sortOrder": 4,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "kirirom-national-park",
+    "media": [
+      {
+        "image": "bokor-mountain.jpg",
+        "caption": "Plateau country in the southern ranges",
+        "sortOrder": 1,
+        "cover": false
+      },
+      {
+        "image": "cardamom-rainforest.jpg",
+        "caption": "Forest on the Cardamom side of the range",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "kirirom-national-park-3.jpg",
+        "caption": "Pine trees standing in open grassland on the plateau (Photo: Goldface2009, CC BY-SA 4.0)",
+        "sortOrder": 3,
+        "cover": true
+      },
+      {
+        "image": "kirirom-national-park-4.jpg",
+        "caption": "A cliff-edge viewpoint looking out over forested hills (Photo: Vanna 0885599228, CC BY-SA 3.0)",
+        "sortOrder": 4,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "phnom-sampeau",
+    "media": [
+      {
+        "image": "battambang-town.jpg",
+        "caption": "The plain around Battambang seen from above",
+        "sortOrder": 1,
+        "cover": false
+      },
+      {
+        "image": "battambang-bamboo-train-2.jpg",
+        "caption": "Rice country outside Battambang",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "phnom-sampeau-3.jpg",
+        "caption": "A stream of bats pouring from the cave mouth at dusk (Photo: Christophe95, CC BY-SA 4.0)",
+        "sortOrder": 3,
+        "cover": true
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "phnom-chhnork-cave",
+    "media": [
+      {
+        "image": "kampot-riverfront.jpg",
+        "caption": "Limestone hills behind the Kampot river plain",
+        "sortOrder": 1,
+        "cover": false
+      },
+      {
+        "image": "sambor-prei-kuk-2.jpg",
+        "caption": "Pre-Angkorian brickwork of the same period",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "phnom-chhnork-cave-3.jpg",
+        "caption": "The brick pre-Angkorian shrine standing inside the cave mouth (Photo: eric yeargan, CC BY 2.0)",
+        "sortOrder": 3,
+        "cover": true
+      },
+      {
+        "image": "phnom-chhnork-cave-4.jpg",
+        "caption": "Stone steps climbing the limestone hill from the rice fields (Photo: eric yeargan, CC BY 2.0)",
+        "sortOrder": 4,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "tatai-waterfall",
+    "media": [
+      {
+        "image": "cardamom-rainforest.jpg",
+        "caption": "The Cardamom rainforest along the river",
+        "sortOrder": 1,
+        "cover": false
+      },
+      {
+        "image": "kampot-riverfront-2.jpg",
+        "caption": "River boats of the kind used on the Tatai",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "tatai-waterfall-3.jpg",
+        "caption": "The wide rock shelf of the falls with forest on both banks (Photo: Andyb3947, CC BY-SA 4.0)",
+        "sortOrder": 3,
+        "cover": true
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "cardamom-mountains",
+    "media": [
+      {
+        "image": "cardamom-rainforest.jpg",
+        "caption": "Rainforest along a Cardamom river",
+        "sortOrder": 1,
+        "cover": false
+      },
+      {
+        "image": "bokor-mountain.jpg",
+        "caption": "The high plateau at the eastern end of the range",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "cardamom-mountains-3.jpg",
+        "caption": "Mist lifting from unbroken rainforest across the valleys (Photo: Andyb3947, CC BY-SA 4.0)",
+        "sortOrder": 3,
+        "cover": true
+      },
+      {
+        "image": "cardamom-mountains-4.jpg",
+        "caption": "A trekking party resting beside a clear forest stream (Photo: Andyb3947, CC BY-SA 4.0)",
+        "sortOrder": 4,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "koh-rong-sanloem",
+    "media": [
+      {
+        "image": "song-saa-private-island.jpg",
+        "caption": "The long curve of Saracen Bay",
+        "sortOrder": 1,
+        "cover": false
+      },
+      {
+        "image": "song-saa-private-island-2.jpg",
+        "caption": "Rocky islets at the north end of the bay",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "koh-rong-sanloem-3.jpg",
+        "caption": "Saracen Bay's white sand curving towards the headland (Photo: Wikirictor, CC BY-SA 3.0)",
+        "sortOrder": 3,
+        "cover": true
+      },
+      {
+        "image": "koh-rong-sanloem-4.jpg",
+        "caption": "The jungle path crossing the island to the sunset beaches (Photo: Treehill, CC BY-SA 4.0)",
+        "sortOrder": 4,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "koh-tang",
+    "media": [
+      {
+        "image": "koh-rong.jpg",
+        "caption": "Open gulf water off an offshore island",
+        "sortOrder": 1,
+        "cover": false
+      },
+      {
+        "image": "song-saa-private-island-2.jpg",
+        "caption": "Rock and reef at an island headland",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "koh-tang-3.jpg",
+        "caption": "Coral and schooling fish in clear water off the island (Photo: User: (WT-shared) Asfintesco at wts wikivoyage, Public domain)",
+        "sortOrder": 3,
+        "cover": true
+      },
+      {
+        "image": "koh-tang-4.jpg",
+        "caption": "A dive boat anchored off the island's empty shore (Photo: No machine-readable author provided. Dcshaw assumed (based on copyright claims)., CC BY-SA 3.0)",
+        "sortOrder": 4,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "peam-krasop-mangrove",
+    "media": [
+      {
+        "image": "cardamom-rainforest.jpg",
+        "caption": "Dense forest along a tidal channel",
+        "sortOrder": 1,
+        "cover": false
+      },
+      {
+        "image": "kampot-riverfront-2.jpg",
+        "caption": "Small boats of the kind used in the estuary",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "peam-krasop-mangrove-3.jpg",
+        "caption": "The stilted walkway winding through dense mangrove roots (Photo: Dtfman, CC BY-SA 3.0)",
+        "sortOrder": 3,
+        "cover": true
+      },
+      {
+        "image": "peam-krasop-mangrove-4.jpg",
+        "caption": "A fisherman's boat in a narrow mangrove channel (Photo: Vanna 0885599228, CC BY-SA 3.0)",
+        "sortOrder": 4,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "ream-national-park",
+    "media": [
+      {
+        "image": "otres-beach-2.jpg",
+        "caption": "Shoreline in Preah Sihanouk",
+        "sortOrder": 1,
+        "cover": false
+      },
+      {
+        "image": "koh-rong.jpg",
+        "caption": "Offshore islands within the park boundary",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "ream-national-park-3.jpg",
+        "caption": "A boat entering the mangrove channel of the Prek Toek Sap (Photo: Dmitry Makeev, CC BY-SA 4.0)",
+        "sortOrder": 3,
+        "cover": true
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "phnom-penh-riverside",
+    "media": [
+      {
+        "image": "phnom-penh-riverside.jpg",
+        "caption": "The riverside promenade in the late afternoon",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "royal-palace.jpg",
+        "caption": "The palace roofline behind the quay",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "phnom-penh-riverside-3.jpg",
+        "caption": "Families and food carts crowding the quay at sunset (Photo: Jakub Hałun, CC BY-SA 4.0)",
+        "sortOrder": 3,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "central-market",
+    "media": [
+      {
+        "image": "phnom-penh-riverside.jpg",
+        "caption": "The streets of central Phnom Penh",
+        "sortOrder": 1,
+        "cover": false
+      },
+      {
+        "image": "kep-crab-market-2.jpg",
+        "caption": "Market stalls of the kind that fill the arms",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "central-market-3.jpg",
+        "caption": "The great Art Deco dome lit by its lattice windows from inside (Photo: Jakub Hałun, CC BY-SA 4.0)",
+        "sortOrder": 3,
+        "cover": true
+      },
+      {
+        "image": "central-market-4.jpg",
+        "caption": "The yellow central market building seen from the boulevard (Photo: Kiensvay, CC BY-SA 3.0)",
+        "sortOrder": 4,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "russian-market",
+    "media": [
+      {
+        "image": "kep-crab-market-2.jpg",
+        "caption": "Produce laid out on market stalls",
+        "sortOrder": 1,
+        "cover": false
+      },
+      {
+        "image": "phnom-penh-riverside.jpg",
+        "caption": "The southern quarters of the city",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "russian-market-3.jpg",
+        "caption": "Narrow aisles of fabric and souvenir stalls under tin roofing (Photo: Clay Gilliland, CC BY-SA 2.0)",
+        "sortOrder": 3,
+        "cover": true
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "siem-reap-night-market",
+    "media": [
+      {
+        "image": "siem-reap-street.jpg",
+        "caption": "Siem Reap street life in the evening",
+        "sortOrder": 1,
+        "cover": false
+      },
+      {
+        "image": "kep-crab-market-2.jpg",
+        "caption": "Market stalls after dark",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "siem-reap-night-market-3.jpg",
+        "caption": "Lantern-lit stalls of the night market crowded with evening shoppers (Photo: Christophe95, CC BY-SA 4.0)",
+        "sortOrder": 3,
+        "cover": true
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "sora-sky-bar",
+    "media": [
+      {
+        "image": "phnom-penh-riverside.jpg",
+        "caption": "The riverfront the bar looks out over",
+        "sortOrder": 1,
+        "cover": false
+      },
+      {
+        "image": "royal-palace.jpg",
+        "caption": "The palace quarter from above",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "sora-sky-bar-3.jpg",
+        "caption": "The cantilevered terrace of the bar above the city at dusk (Photo: Christophe95, CC BY-SA 4.0)",
+        "sortOrder": 3,
+        "cover": true
+      },
+      {
+        "image": "sora-sky-bar-4.jpg",
+        "caption": "Vattanac Capital Tower rising above the Phnom Penh skyline (Photo: Christophe95, CC BY-SA 4.0)",
+        "sortOrder": 4,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "phnom-penh-coffee-quarter",
+    "media": [
+      {
+        "image": "phnom-penh-riverside.jpg",
+        "caption": "Shophouse frontages in the central quarters",
+        "sortOrder": 1,
+        "cover": false
+      },
+      {
+        "image": "elephant-valley-project.jpg",
+        "caption": "The Mondulkiri plateau much of the coffee comes from",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "phnom-penh-coffee-quarter-3.jpg",
+        "caption": "A barista pouring a slow drip over ice at a shophouse counter (Photo: aseiff, CC BY 2.0)",
+        "sortOrder": 3,
+        "cover": true
+      },
+      {
+        "image": "phnom-penh-coffee-quarter-4.jpg",
+        "caption": "Coffee drinkers on a tiled 1960s shophouse terrace (Photo: Jwslubbock, CC BY-SA 4.0)",
+        "sortOrder": 4,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "battambang-art-quarter",
+    "media": [
+      {
+        "image": "battambang-town.jpg",
+        "caption": "The town spread out along the Sangker",
+        "sortOrder": 1,
+        "cover": false
+      },
+      {
+        "image": "battambang-bamboo-train-2.jpg",
+        "caption": "Battambang's older railway architecture",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "battambang-art-quarter-3.jpg",
+        "caption": "Painted shophouse facades with wooden shutters along the riverside (Photo: Milei.vencel, CC BY-SA 3.0)",
+        "sortOrder": 3,
+        "cover": true
+      },
+      {
+        "image": "battambang-art-quarter-4.jpg",
+        "caption": "An artist's studio open to the street behind a shophouse front (Photo: Milei.vencel, Hungary, CC BY-SA 3.0)",
+        "sortOrder": 4,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "num-banh-chok-markets",
+    "media": [
+      {
+        "image": "kep-crab-market-2.jpg",
+        "caption": "Market stalls with fresh produce",
+        "sortOrder": 1,
+        "cover": false
+      },
+      {
+        "image": "siem-reap-street.jpg",
+        "caption": "A Siem Reap street in the early morning",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "num-banh-chok-markets-3.jpg",
+        "caption": "A bowl of num banh chok heaped with herbs and banana blossom (Photo: Turaids, CC BY-SA 4.0)",
+        "sortOrder": 3,
+        "cover": true
+      },
+      {
+        "image": "num-banh-chok-markets-4.jpg",
+        "caption": "A seller ladling green fish gravy over rice noodles at dawn (Photo: Turaids, CC BY-SA 4.0)",
+        "sortOrder": 4,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "khmer-cooking-class-siem-reap",
+    "media": [
+      {
+        "image": "siem-reap-street.jpg",
+        "caption": "Siem Reap street life",
+        "sortOrder": 1,
+        "cover": false
+      },
+      {
+        "image": "kep-crab-market-2.jpg",
+        "caption": "The market produce a class starts from",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "khmer-cooking-class-siem-reap-3.jpg",
+        "caption": "Students pounding kroeung paste in stone mortars at a long table (Photo: Turaids, CC BY-SA 4.0)",
+        "sortOrder": 3,
+        "cover": true
+      },
+      {
+        "image": "khmer-cooking-class-siem-reap-4.jpg",
+        "caption": "Fish amok steaming in banana-leaf cups on a stove (Photo: Mx. Granger, CC0)",
+        "sortOrder": 4,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "kampong-speu-palm-sugar",
+    "media": [
+      {
+        "image": "kampot-pepper-farm.jpg",
+        "caption": "Smallholder farmland in southern Cambodia",
+        "sortOrder": 1,
+        "cover": false
+      },
+      {
+        "image": "kampot-pepper-farm-2.jpg",
+        "caption": "Farm crops grown for market",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "kampong-speu-palm-sugar-3.jpg",
+        "caption": "A tapper climbing a sugar palm on a bamboo ladder at dawn (Photo: Gerd Eichmann, CC BY-SA 4.0)",
+        "sortOrder": 3,
+        "cover": true
+      },
+      {
+        "image": "kampong-speu-palm-sugar-4.jpg",
+        "caption": "Palm sap boiling down in wide pans over a frond fire (Photo: Gerd Eichmann, CC BY-SA 4.0)",
+        "sortOrder": 4,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "malis-phnom-penh",
+    "media": [
+      {
+        "image": "royal-palace.jpg",
+        "caption": "The central Phnom Penh quarter",
+        "sortOrder": 1,
+        "cover": false
+      },
+      {
+        "image": "phnom-penh-riverside.jpg",
+        "caption": "Streets near the boulevard",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "malis-phnom-penh-3.jpg",
+        "caption": "A dish of Kampot pepper crab plated on white porcelain (Photo: Alexandersingh9, CC0)",
+        "sortOrder": 3,
+        "cover": true
+      },
+      {
+        "image": "malis-phnom-penh-4.jpg",
+        "caption": "The courtyard dining terrace beside its lily pools at night (Photo: Marcin Konsek, CC BY-SA 4.0)",
+        "sortOrder": 4,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "chi-phat",
+    "media": [
+      {
+        "image": "cardamom-rainforest.jpg",
+        "caption": "The Cardamom forest the village sits inside",
+        "sortOrder": 1,
+        "cover": false
+      },
+      {
+        "image": "kampot-riverfront-2.jpg",
+        "caption": "River boats of the kind used to reach the village",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "chi-phat-3.jpg",
+        "caption": "Village houses along the riverbank with forest behind (Photo: Wikirictor, CC BY-SA 4.0)",
+        "sortOrder": 3,
+        "cover": true
+      },
+      {
+        "image": "chi-phat-4.jpg",
+        "caption": "A community guide leading trekkers along a forest trail (Photo: Wikirictor, CC BY-SA 4.0)",
+        "sortOrder": 4,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "banteay-chhmar-community",
+    "media": [
+      {
+        "image": "ta-prohm.jpg",
+        "caption": "Forest growing through an unrestored Angkorian gallery",
+        "sortOrder": 1,
+        "cover": false
+      },
+      {
+        "image": "bayon-temple-2.jpg",
+        "caption": "Bas-relief carving of the same period and style",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "banteay-chhmar-community-3.jpg",
+        "caption": "A collapsed gallery and face tower rising from the undergrowth (Photo: Andrew Marino - User: (WT-shared) Andrewjmarino at wts wikivoyage, CC BY-SA 3.0)",
+        "sortOrder": 3,
+        "cover": true
+      },
+      {
+        "image": "banteay-chhmar-community-4.jpg",
+        "caption": "The many-armed Avalokiteshvara relief on the western wall (Photo: Photo Dharma from Penang, Malaysia, CC BY 2.0)",
+        "sortOrder": 4,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "koh-dach-silk-island",
+    "media": [
+      {
+        "image": "mekong-discovery-trail.jpg",
+        "caption": "The Mekong channel beside the island",
+        "sortOrder": 1,
+        "cover": false
+      },
+      {
+        "image": "mekong-discovery-trail-2.jpg",
+        "caption": "Riverside village architecture near the capital",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "koh-dach-silk-island-3.jpg",
+        "caption": "A weaver at a wooden hand loom beneath a stilt house (Photo: Adam Jones from Kelowna, BC, Canada, CC BY-SA 2.0)",
+        "sortOrder": 3,
+        "cover": true
+      },
+      {
+        "image": "koh-dach-silk-island-4.jpg",
+        "caption": "The small ferry crossing the Mekong to the island (Photo: Piseth1, CC BY-SA 3.0)",
+        "sortOrder": 4,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "DESTINATION",
+    "owner": "angkor-golf-resort",
+    "media": [
+      {
+        "image": "siem-reap-street.jpg",
+        "caption": "The country roads around Siem Reap",
+        "sortOrder": 1,
+        "cover": false
+      },
+      {
+        "image": "battambang-town.jpg",
+        "caption": "Open plain country of the kind the course sits on",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "angkor-golf-resort-3.jpg",
+        "caption": "A fairway curving past a water hazard in the early morning (Photo: Sopheak HEM, CC0)",
+        "sortOrder": 3,
+        "cover": true
+      },
+      {
+        "image": "angkor-golf-resort-4.jpg",
+        "caption": "The clubhouse terrace overlooking the eighteenth green (Photo: ayustety from Tokyo, Japan, CC BY-SA 2.0)",
+        "sortOrder": 4,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "STAY",
+    "owner": "angkor-lotus-boutique",
+    "media": [
+      {
+        "image": "stay-angkor-lotus-boutique-1.jpg",
+        "caption": "The saltwater pool and frangipani garden at dusk (Photo: No machine-readable author provided. FlemmingN67 assumed (based on copyright claims)., CC BY-SA 3.0)",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "stay-angkor-lotus-boutique-2.jpg",
+        "caption": "A deluxe room with hardwood floor and balcony doors (Photo: Kounosu, CC BY-SA 3.0)",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "STAY",
+    "owner": "ta-prohm-garden-villa",
+    "media": [
+      {
+        "image": "stay-ta-prohm-garden-villa-1.jpg",
+        "caption": "The larger villa's pool and terrace under rain trees (Photo: jokertrekker, CC BY 3.0)",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "stay-ta-prohm-garden-villa-2.jpg",
+        "caption": "A master bedroom with doors opening onto the garden (Photo: Kissskoool, CC BY-SA 4.0)",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "STAY",
+    "owner": "siem-reap-river-hostel",
+    "media": [
+      {
+        "image": "stay-siem-reap-river-hostel-1.jpg",
+        "caption": "Pod beds with privacy curtains in the mixed dorm (Photo: @felixtriller from Cologne, Germany, CC BY 2.0)",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "stay-siem-reap-river-hostel-2.jpg",
+        "caption": "The rooftop terrace with the river at sunset (Photo: Dmitry A. Mottl, CC BY-SA 4.0)",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "STAY",
+    "owner": "kulen-hills-eco-lodge",
+    "media": [
+      {
+        "image": "stay-kulen-hills-eco-lodge-1.jpg",
+        "caption": "Thatched bungalows on stilts above the forest stream (Photo: LBM1948, CC BY-SA 4.0)",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "stay-kulen-hills-eco-lodge-2.jpg",
+        "caption": "The open dining sala lit by lanterns at night (Photo: yeowatzup, CC BY 2.0)",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "STAY",
+    "owner": "kampong-phluk-homestay",
+    "media": [
+      {
+        "image": "stay-kampong-phluk-homestay-1.jpg",
+        "caption": "The family's stilt house with the boat tied below (Photo: lumoplank, CC0)",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "stay-kampong-phluk-homestay-2.jpg",
+        "caption": "Dinner laid on the floor of the main room (Photo: Krzysztof Golik, CC BY-SA 4.0)",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "STAY",
+    "owner": "riverside-palace-hotel",
+    "media": [
+      {
+        "image": "stay-riverside-palace-hotel-1.jpg",
+        "caption": "The rooftop pool at dusk with the river beyond (Photo: Rlr.marcoms, CC BY-SA 4.0)",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "stay-riverside-palace-hotel-2.jpg",
+        "caption": "A river-view room with the city lights below (Photo: Uhooep, CC BY-SA 4.0)",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "STAY",
+    "owner": "bkk1-garden-guesthouse",
+    "media": [
+      {
+        "image": "stay-bkk1-garden-guesthouse-1.jpg",
+        "caption": "Breakfast tables under the mango trees in the garden (Photo: Wikimedia Commons user Dbenbenn, Public domain)",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "stay-bkk1-garden-guesthouse-2.jpg",
+        "caption": "A tiled upstairs room with balcony shutters open (Photo: Dara, CC BY-SA 3.0)",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "STAY",
+    "owner": "chaktomuk-sky-residences",
+    "media": [
+      {
+        "image": "stay-chaktomuk-sky-residences-1.jpg",
+        "caption": "The 28th-floor infinity pool looking over the river (Photo: SOPHEAP92, CC0)",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "stay-chaktomuk-sky-residences-2.jpg",
+        "caption": "A one-bedroom residence with kitchen and city view (Photo: Mao Piseth, CC BY-SA 4.0)",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "STAY",
+    "owner": "silk-island-river-lodge",
+    "media": [
+      {
+        "image": "stay-silk-island-river-lodge-1.jpg",
+        "caption": "The wooden house with looms working beneath it (Photo: Sepakam Sombai, CC BY-SA 4.0)",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "stay-silk-island-river-lodge-2.jpg",
+        "caption": "The riverside bungalow at the end of the garden (Photo: Christine Zenino from Chicago, US, CC BY 2.0)",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "STAY",
+    "owner": "kampot-pepper-estate-bungalows",
+    "media": [
+      {
+        "image": "stay-kampot-pepper-estate-bungalows-1.jpg",
+        "caption": "Bungalows lined up along the pepper rows at sunrise (Photo: Christophe95, CC BY-SA 4.0)",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "stay-kampot-pepper-estate-bungalows-2.jpg",
+        "caption": "The spring-fed pool shaded by mango trees (Photo: PsamatheM, CC BY-SA 4.0)",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "STAY",
+    "owner": "bokor-view-guesthouse",
+    "media": [
+      {
+        "image": "stay-bokor-view-guesthouse-1.jpg",
+        "caption": "The rooftop terrace with Bokor turning pink at sunset (Photo: Marcin Konsek, CC BY-SA 4.0)",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "stay-bokor-view-guesthouse-2.jpg",
+        "caption": "A front room's balcony above the river road (Photo: Marcin Konsek, CC BY-SA 4.0)",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "STAY",
+    "owner": "kep-seaside-villa",
+    "media": [
+      {
+        "image": "stay-kep-seaside-villa-1.jpg",
+        "caption": "The pool edge meeting the gulf with Rabbit Island beyond (Photo: Gonzo Gooner, CC BY 3.0)",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "stay-kep-seaside-villa-2.jpg",
+        "caption": "The chef's crab dinner laid on the seafront terrace (Photo: Mx. Granger, CC0)",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "STAY",
+    "owner": "otres-beach-resort",
+    "media": [
+      {
+        "image": "stay-otres-beach-resort-1.jpg",
+        "caption": "The main pool and beach restaurant under the casuarinas (Photo: Stekirr, CC BY-SA 4.0)",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "stay-otres-beach-resort-2.jpg",
+        "caption": "A beachfront villa's plunge pool at sunset (Photo: User: (WT-shared) Jpatokal at wts wikivoyage, CC BY-SA 4.0)",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "STAY",
+    "owner": "koh-rong-sunset-bungalows",
+    "media": [
+      {
+        "image": "stay-koh-rong-sunset-bungalows-1.jpg",
+        "caption": "Bungalows among the trees at the edge of the sand (Photo: Peazapata, CC BY-SA 4.0)",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "stay-koh-rong-sunset-bungalows-2.jpg",
+        "caption": "Restaurant tables on the beach as the sun goes down (Photo: Treehill, CC BY-SA 4.0)",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "STAY",
+    "owner": "sanloem-lazy-beach-hostel",
+    "media": [
+      {
+        "image": "stay-sanloem-lazy-beach-hostel-1.jpg",
+        "caption": "Thatched huts on the sand with hammocks between the trees (Photo: Treehill, CC BY-SA 4.0)",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "stay-sanloem-lazy-beach-hostel-2.jpg",
+        "caption": "The wooden dorm longhouse at the edge of the beach (Photo: Treehill, CC BY-SA 4.0)",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "STAY",
+    "owner": "battambang-colonial-house",
+    "media": [
+      {
+        "image": "stay-battambang-colonial-house-1.jpg",
+        "caption": "The shophouse facade with its long first-floor balcony (Photo: Christophe95, CC BY-SA 4.0)",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "stay-battambang-colonial-house-2.jpg",
+        "caption": "A high-ceilinged room with original patterned tiles (Photo: Christophe95, CC BY-SA 4.0)",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "STAY",
+    "owner": "sen-monorom-hill-lodge",
+    "media": [
+      {
+        "image": "stay-sen-monorom-hill-lodge-1.jpg",
+        "caption": "Pine bungalows on the hillside with the valley in mist (Photo: Laottre (or \"Mr. Jack\" as claimed by the uploader in the caption of voy:KNN Resort Mondulkiri (deleted)), CC BY-SA 4.0)",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "stay-sen-monorom-hill-lodge-2.jpg",
+        "caption": "The restaurant fireplace lit on a cold evening (Photo: Myrmux, CC BY-SA 4.0)",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "STAY",
+    "owner": "kratie-mekong-view-hotel",
+    "media": [
+      {
+        "image": "stay-kratie-mekong-view-hotel-1.jpg",
+        "caption": "The hotel's front terrace facing the Mekong at sunset (Photo: August Dominus, CC BY-SA 4.0)",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "stay-kratie-mekong-view-hotel-2.jpg",
+        "caption": "A river-view room with the window open to Koh Trong (Photo: Adam Jones from Kelowna, BC, Canada, CC BY-SA 2.0)",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "STAY",
+    "owner": "banlung-lake-guesthouse",
+    "media": [
+      {
+        "image": "stay-banlung-lake-guesthouse-1.jpg",
+        "caption": "Wooden bungalows under jackfruit trees in the garden (Photo: August Dominus, CC BY-SA 4.0)",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "stay-banlung-lake-guesthouse-2.jpg",
+        "caption": "Breakfast table set out under the trees with coffee (Photo: Jensre, CC BY-SA 3.0)",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "STAY",
+    "owner": "tatai-river-ecolodge",
+    "media": [
+      {
+        "image": "stay-tatai-river-ecolodge-1.jpg",
+        "caption": "Floating bungalows along the forested riverbank (Photo: Wikirictor, CC BY-SA 4.0)",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "stay-tatai-river-ecolodge-2.jpg",
+        "caption": "Kayaks pulled up on the deck at dawn with mist on the water (Photo: Dnrallis, CC BY-SA 4.0)",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "FOOD",
+    "owner": "pub-street-khmer-kitchen",
+    "media": [
+      {
+        "image": "food-pub-street-khmer-kitchen-1.jpg",
+        "caption": "Fish amok in a banana-leaf cup beside beef lok lak (Photo: Saphabodi, CC0)",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "food-pub-street-khmer-kitchen-2.jpg",
+        "caption": "The first-floor balcony tables above Pub Street at night (Photo: Radosław Botev, CC BY 3.0 pl)",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "FOOD",
+    "owner": "angkor-morning-noodles",
+    "media": [
+      {
+        "image": "food-angkor-morning-noodles-1.jpg",
+        "caption": "A bowl of kuy teav with pork, prawns and fried garlic (Photo: DragonSamYU, CC BY-SA 4.0)",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "food-angkor-morning-noodles-2.jpg",
+        "caption": "The noodle cart and its stools at first light (Photo: Radosław Botev, CC BY 3.0 pl)",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "FOOD",
+    "owner": "kandal-village-cafe",
+    "media": [
+      {
+        "image": "food-kandal-village-cafe-1.jpg",
+        "caption": "Eggs on sourdough with a flat white on a tiled table (Photo: Photogoddle, CC BY-SA 4.0)",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "food-kandal-village-cafe-2.jpg",
+        "caption": "The white-tiled café room opening onto its courtyard (Photo: Steven Marshall / Cardboardbird, CC BY-SA 3.0)",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "FOOD",
+    "owner": "tonle-sap-fish-house",
+    "media": [
+      {
+        "image": "food-tonle-sap-fish-house-1.jpg",
+        "caption": "Fish amok steamed in banana leaf, thick with coconut cream (Photo: Marcin Konsek, CC BY-SA 4.0)",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "food-tonle-sap-fish-house-2.jpg",
+        "caption": "Long tables under the tin roof with fans turning (Photo: Fred Bigio from Marseille, france, CC BY 2.0)",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "FOOD",
+    "owner": "old-market-smoothie-bar",
+    "media": [
+      {
+        "image": "food-old-market-smoothie-bar-1.jpg",
+        "caption": "A mango and passion fruit smoothie beside a cut coconut (Photo: Uoaei1, CC BY-SA 4.0)",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "food-old-market-smoothie-bar-2.jpg",
+        "caption": "The fruit-stacked counter on the Old Market corner (Photo: Hzh, CC BY-SA 4.0)",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "FOOD",
+    "owner": "preah-dak-num-banh-chok",
+    "media": [
+      {
+        "image": "food-preah-dak-num-banh-chok-1.jpg",
+        "caption": "Num banh chok piled with herbs and banana blossom (Photo: Thomas Wanhoff from Siem Reap, Cambodia, CC BY-SA 2.0)",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "food-preah-dak-num-banh-chok-2.jpg",
+        "caption": "The roadside stall with its pots and plastic stools (Photo: Radosław Botev, CC BY 3.0 pl)",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "FOOD",
+    "owner": "riverside-grill-house",
+    "media": [
+      {
+        "image": "food-riverside-grill-house-1.jpg",
+        "caption": "Marinated beef and prawns sizzling on a table brazier (Photo: Adam Jones Adam63, CC BY-SA 3.0)",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "food-riverside-grill-house-2.jpg",
+        "caption": "The open-fronted hall full of smoke and families at night (Photo: Uhooep, CC BY-SA 4.0)",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "FOOD",
+    "owner": "bassac-lane-tapas",
+    "media": [
+      {
+        "image": "food-bassac-lane-tapas-1.jpg",
+        "caption": "Kampot pepper squid and glazed pork belly on sharing plates (Photo: Kritzolina, CC BY-SA 4.0)",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "food-bassac-lane-tapas-2.jpg",
+        "caption": "The counter kitchen and bar stools in the narrow shophouse (Photo: Andi9876, CC BY-SA 4.0)",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "FOOD",
+    "owner": "orussey-market-breakfast",
+    "media": [
+      {
+        "image": "food-orussey-market-breakfast-1.jpg",
+        "caption": "Bai sach chrouk over broken rice with pickles and broth (Photo: Dion Hinchcliffe, CC BY-SA 2.0)",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "food-orussey-market-breakfast-2.jpg",
+        "caption": "Steel tables and steaming stalls in the market food hall (Photo: Sundgauvien38, CC BY-SA 3.0)",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "FOOD",
+    "owner": "toul-tom-poung-coffee",
+    "media": [
+      {
+        "image": "food-toul-tom-poung-coffee-1.jpg",
+        "caption": "A pour-over dripping beside a bag of freshly roasted beans (Photo: MarkSweep, Public domain)",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "food-toul-tom-poung-coffee-2.jpg",
+        "caption": "The roaster in the shophouse window with the café behind (Photo: Clay Gilliland, CC BY-SA 2.0)",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "FOOD",
+    "owner": "royal-khmer-dining",
+    "media": [
+      {
+        "image": "food-royal-khmer-dining-1.jpg",
+        "caption": "Kampot lobster in green pepper plated on Khmer ceramics (Photo: David Jones, CC BY 2.0)",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "food-royal-khmer-dining-2.jpg",
+        "caption": "The teak dining room of the restored villa set for dinner (Photo: Marcin Konsek, CC BY-SA 4.0)",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "FOOD",
+    "owner": "sisowath-sunset-bar",
+    "media": [
+      {
+        "image": "food-sisowath-sunset-bar-1.jpg",
+        "caption": "A Kampot pepper margarita on the rail at sunset (Photo: Nik Frey (niksan), CC BY 2.5)",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "food-sisowath-sunset-bar-2.jpg",
+        "caption": "The rooftop terrace with the river junction behind (Photo: Dmitry A. Mottl, CC BY-SA 4.0)",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "FOOD",
+    "owner": "street-240-bakery",
+    "media": [
+      {
+        "image": "food-street-240-bakery-1.jpg",
+        "caption": "Baguettes and croissants stacked fresh on the counter (Photo: Mx. Granger, CC0)",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "food-street-240-bakery-2.jpg",
+        "caption": "Pavement tables under the tamarind trees of Street 240 (Photo: trungydang, CC BY 3.0)",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "FOOD",
+    "owner": "kampot-pepper-crab-shack",
+    "media": [
+      {
+        "image": "food-kampot-pepper-crab-shack-1.jpg",
+        "caption": "Crab stir-fried with strands of fresh green Kampot pepper (Photo: eric yeargan, CC BY 2.0)",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "food-kampot-pepper-crab-shack-2.jpg",
+        "caption": "The wooden deck over the river facing the Bokor ridge (Photo: Hans A. Rosbach, CC BY-SA 3.0)",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "FOOD",
+    "owner": "kampot-night-market-bites",
+    "media": [
+      {
+        "image": "food-kampot-night-market-bites-1.jpg",
+        "caption": "Pork skewers and chicken wings charring over the coals (Photo: Oliver Spalt, CC BY 2.0)",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "food-kampot-night-market-bites-2.jpg",
+        "caption": "The grill stall lit by bulbs at the night market (Photo: Marcin Konsek, CC BY-SA 4.0)",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "FOOD",
+    "owner": "kep-crab-pier-restaurant",
+    "media": [
+      {
+        "image": "food-kep-crab-pier-restaurant-1.jpg",
+        "caption": "A platter of blue swimmer crab with green pepper and lime (Photo: self, CC BY-SA 3.0)",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "food-kep-crab-pier-restaurant-2.jpg",
+        "caption": "The stilt restaurant's plank floor over the shallows at dusk (Photo: PsamatheM, CC BY-SA 4.0)",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "FOOD",
+    "owner": "kep-plantation-cafe",
+    "media": [
+      {
+        "image": "food-kep-plantation-cafe-1.jpg",
+        "caption": "A pepper hot chocolate and a slice of palm-sugar flan (Photo: Turaids, CC BY-SA 4.0)",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "food-kep-plantation-cafe-2.jpg",
+        "caption": "The shaded garden terrace among pepper vines and frangipani (Photo: PsamatheM, CC BY-SA 4.0)",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "FOOD",
+    "owner": "bamboo-train-canteen",
+    "media": [
+      {
+        "image": "food-bamboo-train-canteen-1.jpg",
+        "caption": "Fried rice with egg and a cut young coconut on a plastic table (Photo: Bahnfrend, CC BY-SA 4.0)",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "food-bamboo-train-canteen-2.jpg",
+        "caption": "The thatched canteen beside the rails at the terminus (Photo: Christophe95, CC BY-SA 4.0)",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "FOOD",
+    "owner": "battambang-heritage-bistro",
+    "media": [
+      {
+        "image": "food-battambang-heritage-bistro-1.jpg",
+        "caption": "Duck confit with green Kampot pepper on a white plate (Photo: James Antrobus, CC BY 2.0)",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "food-battambang-heritage-bistro-2.jpg",
+        "caption": "The tiled shophouse dining room hung with local paintings (Photo: Christophe95, CC BY-SA 4.0)",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "FOOD",
+    "owner": "otres-beach-bbq",
+    "media": [
+      {
+        "image": "food-otres-beach-bbq-1.jpg",
+        "caption": "Whole snapper and tiger prawns on the charcoal grill (Photo: PsamatheM, CC BY-SA 4.0)",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "food-otres-beach-bbq-2.jpg",
+        "caption": "Tables on the sand with lanterns lit at sunset (Photo: Kiensvay, CC BY-SA 3.0)",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "FOOD",
+    "owner": "koh-rong-fisherman-shack",
+    "media": [
+      {
+        "image": "food-koh-rong-fisherman-shack-1.jpg",
+        "caption": "A whole grilled grouper with lime and salt dip on the table (Photo: PsamatheM, CC BY-SA 4.0)",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "food-koh-rong-fisherman-shack-2.jpg",
+        "caption": "The thatched shack with its tables on the sand (Photo: Wikirictor, CC BY-SA 3.0)",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "FOOD",
+    "owner": "kratie-riverfront-noodles",
+    "media": [
+      {
+        "image": "food-kratie-riverfront-noodles-1.jpg",
+        "caption": "A bowl of beef noodle soup with herbs and lime at sunrise (Photo: Ik T from Kanagawa, Japan, CC BY 2.0)",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "food-kratie-riverfront-noodles-2.jpg",
+        "caption": "The noodle cart under tamarind trees on the riverfront (Photo: Jensre, CC BY-SA 3.0)",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "FOOD",
+    "owner": "sen-monorom-coffee-roastery",
+    "media": [
+      {
+        "image": "food-sen-monorom-coffee-roastery-1.jpg",
+        "caption": "A pour-over beside a tray of freshly roasted beans (Photo: A S M Jobaer, CC BY-SA 4.0)",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "food-sen-monorom-coffee-roastery-2.jpg",
+        "caption": "The roastery terrace facing the Mondulkiri hills (Photo: Dtfman, CC BY-SA 3.0)",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "FOOD",
+    "owner": "kampong-cham-mekong-grill",
+    "media": [
+      {
+        "image": "food-kampong-cham-mekong-grill-1.jpg",
+        "caption": "A whole grilled Mekong fish scored and blistered on the plate (Photo: Stefan Rohner, CC BY-SA 3.0)",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "food-kampong-cham-mekong-grill-2.jpg",
+        "caption": "Tables under the riverside trees with the bridge lights behind (Photo: Adam Jones from Kelowna, BC, Canada, CC BY-SA 2.0)",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "FOOD",
+    "owner": "takeo-lake-fish-market",
+    "media": [
+      {
+        "image": "food-takeo-lake-fish-market-1.jpg",
+        "caption": "Grilled fish on bamboo skewers with rice and herbs (Photo: Paxse, CC BY-SA 3.0)",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "food-takeo-lake-fish-market-2.jpg",
+        "caption": "Boats unloading live fish into basins on the lakefront quay (Photo: Martpan, CC BY-SA 3.0)",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "CORRIDOR",
+    "owner": "khmer-civilization-trail",
+    "media": [
+      {
+        "image": "angkor-wat-2.jpg",
+        "caption": "Khmer Civilization",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "angkor-wat.jpg",
+        "caption": "Angkor Wat, a stop on the Khmer Civilization corridor",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "koh-ker.jpg",
+        "caption": "Koh Ker, a stop on the Khmer Civilization corridor",
+        "sortOrder": 3,
+        "cover": false
+      },
+      {
+        "image": "sambor-prei-kuk.jpg",
+        "caption": "Sambor Prei Kuk, a stop on the Khmer Civilization corridor",
+        "sortOrder": 4,
+        "cover": false
+      },
+      {
+        "image": "royal-palace.jpg",
+        "caption": "Royal Palace, a stop on the Khmer Civilization corridor",
+        "sortOrder": 5,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "CORRIDOR",
+    "owner": "mekong-civilization",
+    "media": [
+      {
+        "image": "tonle-sap-floating-village.jpg",
+        "caption": "Mekong Civilization",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "tonle-sap-floating-village-2.jpg",
+        "caption": "Kampong Phluk, a stop on the Mekong Civilization corridor",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "koh-dach-silk-island-3.jpg",
+        "caption": "Koh Dach Silk Island, a stop on the Mekong Civilization corridor (Photo: Adam Jones from Kelowna, BC, Canada, CC BY-SA 2.0)",
+        "sortOrder": 3,
+        "cover": false
+      },
+      {
+        "image": "kampi-dolphin-pool-3.jpg",
+        "caption": "Kampi Dolphin Pool, a stop on the Mekong Civilization corridor (Photo: Pierre André, CC BY-SA 4.0)",
+        "sortOrder": 4,
+        "cover": false
+      },
+      {
+        "image": "mekong-discovery-trail.jpg",
+        "caption": "Mekong Discovery Trail, a stop on the Mekong Civilization corridor",
+        "sortOrder": 5,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "CORRIDOR",
+    "owner": "coastal-paradise-route",
+    "media": [
+      {
+        "image": "koh-rong-2.jpg",
+        "caption": "Coastal Discovery",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "kampot-riverfront.jpg",
+        "caption": "Kampot Riverfront, a stop on the Coastal Discovery corridor",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "kep-crab-market.jpg",
+        "caption": "Kep Crab Market, a stop on the Coastal Discovery corridor",
+        "sortOrder": 3,
+        "cover": false
+      },
+      {
+        "image": "otres-beach.jpg",
+        "caption": "Otres Beach, a stop on the Coastal Discovery corridor",
+        "sortOrder": 4,
+        "cover": false
+      },
+      {
+        "image": "koh-rong.jpg",
+        "caption": "Koh Rong, a stop on the Coastal Discovery corridor",
+        "sortOrder": 5,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "CORRIDOR",
+    "owner": "cardamom-peaks-explorer",
+    "media": [
+      {
+        "image": "bokor-mountain.jpg",
+        "caption": "Mountain Adventure",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "royal-palace.jpg",
+        "caption": "Royal Palace, a stop on the Mountain Adventure corridor",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "kampot-riverfront.jpg",
+        "caption": "Kampot Riverfront, a stop on the Mountain Adventure corridor",
+        "sortOrder": 3,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "CORRIDOR",
+    "owner": "khmer-culinary",
+    "media": [
+      {
+        "image": "kampot-pepper-farm.jpg",
+        "caption": "Khmer Culinary",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "khmer-cooking-class-siem-reap-3.jpg",
+        "caption": "Khmer Cooking Classes, Siem Reap, a stop on the Khmer Culinary corridor (Photo: Turaids, CC BY-SA 4.0)",
+        "sortOrder": 2,
+        "cover": false
+      },
+      {
+        "image": "num-banh-chok-markets-3.jpg",
+        "caption": "Num Banh Chok Morning Markets, a stop on the Khmer Culinary corridor (Photo: Turaids, CC BY-SA 4.0)",
+        "sortOrder": 3,
+        "cover": false
+      },
+      {
+        "image": "malis-phnom-penh-3.jpg",
+        "caption": "Malis, a stop on the Khmer Culinary corridor (Photo: Alexandersingh9, CC0)",
+        "sortOrder": 4,
+        "cover": false
+      },
+      {
+        "image": "kampong-speu-palm-sugar-3.jpg",
+        "caption": "Kampong Speu Palm Sugar Farms, a stop on the Khmer Culinary corridor (Photo: Gerd Eichmann, CC BY-SA 4.0)",
+        "sortOrder": 5,
+        "cover": false
+      },
+      {
+        "image": "kep-crab-market.jpg",
+        "caption": "Kep Crab Market, a stop on the Khmer Culinary corridor",
+        "sortOrder": 6,
+        "cover": false
+      }
+    ]
+  }
+]

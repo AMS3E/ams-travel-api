@@ -52,4 +52,9 @@ public interface BrowseEventRepository extends JpaRepository<BrowseEvent, Long> 
     @Modifying
     @Query("update BrowseEvent e set e.userId = null where e.userId = :userId")
     int forgetUser(UUID userId);
+
+    /** The seed's browses happened over the past month: moved back after the insert. */
+    @Modifying
+    @Query(value = "update engagement.browse_events set created_at = :at where id = :id", nativeQuery = true)
+    void backdate(Long id, Instant at);
 }

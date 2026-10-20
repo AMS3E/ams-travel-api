@@ -44,4 +44,10 @@ public class ReligionSeeder implements CatalogSeedContributor {
         }
         log.info("Seeded {} religions", religions.size());
     }
+
+    @Override
+    public void wipe() {
+        religionRepository.deleteAll();
+        religionRepository.flush();
+    }
 }

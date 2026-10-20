@@ -2,176 +2,226 @@
   {
     "slug": "banteay-meanchey",
     "name": "Banteay Meanchey",
+    "nameKm": "បន្ទាយមានជ័យ",
     "regionCode": "ANGKOR",
     "latitude": 13.5859,
-    "longitude": 102.9737
+    "longitude": 102.9737,
+    "image": "province-banteay-meanchey.jpg"
   },
   {
     "slug": "battambang",
     "name": "Battambang",
+    "nameKm": "បាត់ដំបង",
     "regionCode": "ANGKOR",
     "latitude": 13.0957,
-    "longitude": 103.2022
+    "longitude": 103.2022,
+    "image": "province-battambang.jpg"
   },
   {
     "slug": "kampong-cham",
     "name": "Kampong Cham",
+    "nameKm": "កំពង់ចាម",
     "regionCode": "MEKONG",
     "latitude": 11.9934,
-    "longitude": 105.4635
+    "longitude": 105.4635,
+    "image": "province-kampong-cham.jpg"
   },
   {
     "slug": "kampong-chhnang",
     "name": "Kampong Chhnang",
+    "nameKm": "កំពង់ឆ្នាំង",
     "regionCode": "CAPITAL",
     "latitude": 12.2505,
-    "longitude": 104.6655
+    "longitude": 104.6655,
+    "image": "province-kampong-chhnang.jpg"
   },
   {
     "slug": "kampong-speu",
     "name": "Kampong Speu",
+    "nameKm": "កំពង់ស្ពឺ",
     "regionCode": "CAPITAL",
     "latitude": 11.4535,
-    "longitude": 104.5209
+    "longitude": 104.5209,
+    "image": "province-kampong-speu.jpg"
   },
   {
     "slug": "kampong-thom",
     "name": "Kampong Thom",
+    "nameKm": "កំពង់ធំ",
     "regionCode": "ANGKOR",
     "latitude": 12.7111,
-    "longitude": 104.8887
+    "longitude": 104.8887,
+    "image": "province-kampong-thom.jpg"
   },
   {
     "slug": "kampot",
     "name": "Kampot",
+    "nameKm": "កំពត",
     "regionCode": "COAST",
     "latitude": 10.6104,
-    "longitude": 104.1815
+    "longitude": 104.1815,
+    "image": "province-kampot.jpg"
   },
   {
     "slug": "kandal",
     "name": "Kandal",
+    "nameKm": "កណ្ដាល",
     "regionCode": "CAPITAL",
     "latitude": 11.4786,
-    "longitude": 104.9497
+    "longitude": 104.9497,
+    "image": "province-kandal.jpg"
   },
   {
     "slug": "kep",
     "name": "Kep",
+    "nameKm": "កែប",
     "regionCode": "COAST",
     "latitude": 10.4829,
-    "longitude": 104.3167
+    "longitude": 104.3167,
+    "image": "province-kep.jpg"
   },
   {
     "slug": "koh-kong",
     "name": "Koh Kong",
+    "nameKm": "កោះកុង",
     "regionCode": "COAST",
     "latitude": 11.6153,
-    "longitude": 102.9838
+    "longitude": 102.9838,
+    "image": "province-koh-kong.jpg"
   },
   {
     "slug": "kratie",
     "name": "Kratie",
+    "nameKm": "ក្រចេះ",
     "regionCode": "NORTHEAST",
     "latitude": 12.4881,
-    "longitude": 106.0188
+    "longitude": 106.0188,
+    "image": "province-kratie.jpg"
   },
   {
     "slug": "mondulkiri",
     "name": "Mondulkiri",
+    "nameKm": "មណ្ឌលគិរី",
     "regionCode": "NORTHEAST",
     "latitude": 12.4536,
-    "longitude": 107.1884
+    "longitude": 107.1884,
+    "image": "province-mondulkiri.jpg"
   },
   {
     "slug": "oddar-meanchey",
     "name": "Oddar Meanchey",
+    "nameKm": "ឧត្ដរមានជ័យ",
     "regionCode": "ANGKOR",
     "latitude": 14.1817,
-    "longitude": 103.5169
+    "longitude": 103.5169,
+    "image": "province-oddar-meanchey.jpg"
   },
   {
     "slug": "pailin",
     "name": "Pailin",
+    "nameKm": "ប៉ៃលិន",
     "regionCode": "ANGKOR",
     "latitude": 12.849,
-    "longitude": 102.6093
+    "longitude": 102.6093,
+    "image": "province-pailin.jpg"
   },
   {
     "slug": "phnom-penh",
     "name": "Phnom Penh",
+    "nameKm": "ភ្នំពេញ",
     "regionCode": "CAPITAL",
     "latitude": 11.5564,
-    "longitude": 104.9282
+    "longitude": 104.9282,
+    "image": "province-phnom-penh.jpg"
   },
   {
     "slug": "preah-sihanouk",
     "name": "Preah Sihanouk",
+    "nameKm": "ព្រះសីហនុ",
     "regionCode": "COAST",
     "latitude": 10.6253,
-    "longitude": 103.5235
+    "longitude": 103.5235,
+    "image": "province-preah-sihanouk.jpg"
   },
   {
     "slug": "preah-vihear",
     "name": "Preah Vihear",
+    "nameKm": "ព្រះវិហារ",
     "regionCode": "NORTHEAST",
     "latitude": 13.807,
-    "longitude": 104.98
+    "longitude": 104.98,
+    "image": "province-preah-vihear.jpg"
   },
   {
     "slug": "prey-veng",
     "name": "Prey Veng",
+    "nameKm": "ព្រៃវែង",
     "regionCode": "MEKONG",
     "latitude": 11.4868,
-    "longitude": 105.3253
+    "longitude": 105.3253,
+    "image": "province-prey-veng.jpg"
   },
   {
     "slug": "pursat",
     "name": "Pursat",
+    "nameKm": "ពោធិ៍សាត់",
     "regionCode": "ANGKOR",
     "latitude": 12.5388,
-    "longitude": 103.9192
+    "longitude": 103.9192,
+    "image": "province-pursat.jpg"
   },
   {
     "slug": "ratanakiri",
     "name": "Ratanakiri",
+    "nameKm": "រតនគិរី",
     "regionCode": "NORTHEAST",
     "latitude": 13.7395,
-    "longitude": 106.9873
+    "longitude": 106.9873,
+    "image": "province-ratanakiri.jpg"
   },
   {
     "slug": "siem-reap",
     "name": "Siem Reap",
+    "nameKm": "សៀមរាប",
     "regionCode": "ANGKOR",
     "latitude": 13.3671,
-    "longitude": 103.8448
+    "longitude": 103.8448,
+    "image": "province-siem-reap.jpg"
   },
   {
     "slug": "stung-treng",
     "name": "Stung Treng",
+    "nameKm": "ស្ទឹងត្រែង",
     "regionCode": "NORTHEAST",
     "latitude": 13.5259,
-    "longitude": 105.9683
+    "longitude": 105.9683,
+    "image": "province-stung-treng.jpg"
   },
   {
     "slug": "svay-rieng",
     "name": "Svay Rieng",
+    "nameKm": "ស្វាយរៀង",
     "regionCode": "MEKONG",
     "latitude": 11.0878,
-    "longitude": 105.7993
+    "longitude": 105.7993,
+    "image": "province-svay-rieng.jpg"
   },
   {
     "slug": "takeo",
     "name": "Takeo",
+    "nameKm": "តាកែវ",
     "regionCode": "CAPITAL",
     "latitude": 10.9908,
-    "longitude": 104.785
+    "longitude": 104.785,
+    "image": "province-takeo.jpg"
   },
   {
     "slug": "tbong-khmum",
     "name": "Tbong Khmum",
+    "nameKm": "ត្បូងឃ្មុំ",
     "regionCode": "MEKONG",
     "latitude": 11.9115,
-    "longitude": 105.6558
+    "longitude": 105.6558,
+    "image": "province-tbong-khmum.jpg"
   }
 ]

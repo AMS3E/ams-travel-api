@@ -33,6 +33,9 @@ public interface StayService {
     /** Publishes on approval; the publishing service checks the authority. */
     StayResponse publish(UUID id);
 
+    /** Refused with 409 while any filled English field has no Khmer: for a reviewer about to approve it. */
+    void requireKhmer(UUID id);
+
     /** Takes it off the site; it stays as a draft. */
     StayResponse unpublish(UUID id);
 

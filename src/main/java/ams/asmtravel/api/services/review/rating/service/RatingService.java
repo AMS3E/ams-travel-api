@@ -55,4 +55,7 @@ public interface RatingService {
 
     /** The average of every active rating, one decimal; null when there are none. */
     BigDecimal averageStars();
+
+    /** Every rating, gone: a staging reset before the seed writes them again. */
+    void deleteAll();
 }

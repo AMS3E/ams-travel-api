@@ -19,6 +19,9 @@ public interface DestinationRepository extends JpaRepository<Destination, UUID>,
     /** Up to a page of published places whose name contains the text, A to Z: the search box's suggestions. */
     List<Destination> findByStatusAndNameContainingIgnoreCaseOrderByNameAsc(ListingStatus status, String name, Pageable pageable);
 
+    /** The same, matched on the Khmer name. */
+    List<Destination> findByStatusAndNameKmContainingOrderByNameAsc(ListingStatus status, String nameKm, Pageable pageable);
+
 
     /* Joins province and zone; collections load in batches. */
     @EntityGraph(attributePaths = {"province", "province.region"})

@@ -47,4 +47,10 @@ public class ArchitectureStyleSeeder implements CatalogSeedContributor {
         }
         log.info("Seeded {} architecture styles", styles.size());
     }
+
+    @Override
+    public void wipe() {
+        styleRepository.deleteAll();
+        styleRepository.flush();
+    }
 }

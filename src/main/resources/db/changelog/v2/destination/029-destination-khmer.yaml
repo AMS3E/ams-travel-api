@@ -1,0 +1,26 @@
+# A destination's Khmer text, typed by hand beside the English. Null until an
+# editor writes it; the English columns are untouched.
+databaseChangeLog:
+  - changeSet:
+      id: v2-destination-khmer
+      author: ams-travel-v2
+      changes:
+        - addColumn:
+            schemaName: destination
+            tableName: destinations
+            columns:
+              - column: {name: name_km, type: varchar(255)}
+              - column: {name: description_km, type: text}
+              - column: {name: slogan_km, type: varchar(300)}
+              - column: {name: slogan_by_km, type: varchar(120)}
+              - column: {name: address_km, type: text}
+      rollback:
+        - dropColumn:
+            schemaName: destination
+            tableName: destinations
+            columns:
+              - column: {name: name_km}
+              - column: {name: description_km}
+              - column: {name: slogan_km}
+              - column: {name: slogan_by_km}
+              - column: {name: address_km}

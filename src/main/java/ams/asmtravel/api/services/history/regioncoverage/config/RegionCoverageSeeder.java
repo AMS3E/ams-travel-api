@@ -67,4 +67,10 @@ public class RegionCoverageSeeder implements CatalogSeedContributor {
         }
         log.info("Seeded {} historical coverage entries across {} regions", written, regions.size());
     }
+
+    @Override
+    public void wipe() {
+        coverageRepository.deleteAll();
+        coverageRepository.flush();
+    }
 }

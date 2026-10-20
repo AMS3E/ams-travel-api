@@ -53,7 +53,7 @@ class StayRoomIntegrationTests {
         User owner = person("owner@hostel.test");
         RequestPostProcessor partner = staff("owner@hostel.test", "PARTNER", "PERM_LISTING_EDIT_OWN", "PERM_LISTING_DELETE_OWN");
         String stay = id(mvc.perform(post("/api/v1/stays").with(partner).contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"Riverside Hostel\",\"type\":\"HOSTEL\",\"priceFrom\":99," + PIN + "}"))
+                        .content("{\"name\":\"Riverside Hostel\",\"nameKm\":\"សណ្ឋាគារមាត់ទន្លេ\",\"type\":\"HOSTEL\",\"priceFrom\":99," + PIN + "}"))
                 .andExpect(status().isCreated()));
 
         String dorm = id(room(partner, "{\"stayId\":\"" + stay + "\",\"name\":\"Bed in 6-Bed Mixed Dorm\",\"roomType\":\"DORM_BED\","

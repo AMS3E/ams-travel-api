@@ -5,6 +5,7 @@ import ams.asmtravel.api.services.destination.destination.dto.response.Destinati
 import ams.asmtravel.api.services.destination.food.dto.response.FoodResponse;
 import ams.asmtravel.api.services.destination.stay.dto.response.StayResponse;
 import ams.asmtravel.api.services.review.review.dto.response.ReviewSummaryResponse;
+import ams.asmtravel.api.services.search.domain.KhmerNames;
 import ams.asmtravel.api.services.search.domain.SearchType;
 import ams.asmtravel.api.services.search.dto.response.SearchHitResponse;
 import ams.asmtravel.api.services.verification.dto.response.VerificationResponse;
@@ -31,7 +32,7 @@ public interface SearchMapper {
                 verification != null && verification.verified(),
                 verification == null || verification.basis() == null ? null : verification.basis().name(),
                 verification != null && Boolean.TRUE.equals(verification.travelerRecommended()),
-                null, null, null, null, null, null, null, null);
+                null, null, null, null, null, null, null, null, List.of());
     }
 
     default SearchHitResponse toHit(StayResponse stay, Map<UUID, String> provinceNames, ReviewSummaryResponse review) {
@@ -40,7 +41,7 @@ public interface SearchMapper {
                 List.of(), List.of(), ids(stay.interestIds()), List.of(),
                 review == null ? null : review.averageRating(), review == null ? 0 : review.ratingCount(),
                 review == null ? 0 : review.reviewCount(), false, null, false,
-                stay.priceFrom(), stay.currency(), null, null, null, null, null, null);
+                stay.priceFrom(), stay.currency(), null, null, null, null, null, null, List.of());
     }
 
     default SearchHitResponse toHit(FoodResponse food, Map<UUID, String> provinceNames, Map<UUID, String> categoryNames,
@@ -51,7 +52,7 @@ public interface SearchMapper {
                 categoryIds, names(categoryIds, categoryNames), ids(food.interestIds()), List.of(),
                 review == null ? null : review.averageRating(), review == null ? 0 : review.ratingCount(),
                 review == null ? 0 : review.reviewCount(), false, null, false,
-                food.priceFrom(), food.currency(), null, food.openNow(), food.todayHours(), null, null, null);
+                food.priceFrom(), food.currency(), null, food.openNow(), food.todayHours(), null, null, null, List.of());
     }
 
     default SearchHitResponse toHit(CorridorResponse corridor, ReviewSummaryResponse review) {
@@ -60,7 +61,49 @@ public interface SearchMapper {
                 List.of(), List.of(), ids(corridor.interestIds()), List.of(),
                 review == null ? null : review.averageRating(), review == null ? 0 : review.ratingCount(),
                 review == null ? 0 : review.reviewCount(), false, null, false,
-                null, null, corridor.durationDays(), null, null, corridor.stopNames(), corridor.encodedPolyline(), null);
+                null, null, corridor.durationDays(), null, null, corridor.stopNames(), corridor.encodedPolyline(), null, List.of());
+    }
+
+    /**
+     * The card in Khmer: each word swapped where a Khmer one is written, the rest left in English and named in
+     * {@code untranslated}. Corridors have no Khmer text of their own yet.
+     */
+    default SearchHitResponse inKhmer(SearchHitResponse hit, String nameKm, String summaryKm, KhmerNames names) {
+        List<String> untranslated = new ArrayList<>();
+        String name = pick(nameKm, hit.name(), "name", untranslated);
+        String summary = pick(summaryKm, hit.shortDescription(), "shortDescription", untranslated);
+        String province = hit.provinceId() == null ? hit.provinceName()
+                : pick(names.provincesKm().get(hit.provinceId()), hit.provinceName(), "provinceName", untranslated);
+        List<String> categories = new ArrayList<>();
+        boolean englishCategory = false;
+        for (UUID id : hit.categoryIds()) {
+            String english = names.categories().get(id);
+            String khmer = names.categoriesKm().get(id);
+            if (khmer != null) {
+                categories.add(khmer);
+            } else if (english != null) {
+                categories.add(english);
+                englishCategory = true;
+            }
+        }
+        if (englishCategory) {
+            untranslated.add("categoryNames");
+        }
+        if (hit.stopNames() != null && !hit.stopNames().isEmpty()) {
+            untranslated.add("stopNames");
+        }
+        return hit.withText(name, summary, province, categories, List.copyOf(untranslated));
+    }
+
+    /** The Khmer when written; else the English, noted as untranslated when there is any. */
+    static String pick(String khmer, String english, String field, List<String> untranslated) {
+        if (khmer != null && !khmer.isBlank()) {
+            return khmer;
+        }
+        if (english != null && !english.isBlank()) {
+            untranslated.add(field);
+        }
+        return english;
     }
 
     static List<UUID> ids(Collection<UUID> ids) {

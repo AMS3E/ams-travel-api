@@ -1,5 +1,6 @@
-# A tourism region has a map picture: the Historical Map panel of its page in
-# the app. Null until an editor uploads one.
+# A tourism region has a map picture: one image in the Map panel of its page in
+# the app, where the interactive map of its places used to be. Null until an
+# editor uploads one.
 databaseChangeLog:
   - changeSet:
       id: v2-taxonomy-region-map

@@ -324,6 +324,30 @@ class UserIntegrationTests {
                 .andExpect(status().isServiceUnavailable());
     }
 
+    /** Editing an account: the body is checked here and the self lock-out refused here; the rest is Keycloak's. */
+    @Test
+    void anAccountEditIsCheckedBeforeKeycloakIsAsked() throws Exception {
+        String id = UUID.randomUUID().toString();
+        String body = "{\"firstName\":\"Sok\",\"lastName\":\"Dara\",\"email\":\"sok.dara@staff.test\","
+                + "\"phone\":\"\",\"avatarKey\":\"\",\"enabled\":%s}";
+        mvc.perform(put("/api/v1/staff/" + id).with(manager()).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"firstName\":\"\",\"email\":\"not-an-address\",\"enabled\":true}"))
+                .andExpect(status().isBadRequest());
+        mvc.perform(put("/api/v1/staff/" + id).with(manager()).contentType(MediaType.APPLICATION_JSON)
+                        .content(body.formatted("true").replace("\"avatarKey\":\"\"", "\"avatarKey\":\"not a key\"")))
+                .andExpect(status().isBadRequest());
+        // Disabling yourself is refused before Keycloak hears of it.
+        mvc.perform(put("/api/v1/staff/" + id)
+                        .with(jwt().jwt(token -> token.subject(id).claim("email", "sok.dara@staff.test"))
+                                .authorities(new SimpleGrantedAuthority("ROLE_PERM_USER_MANAGE")))
+                        .contentType(MediaType.APPLICATION_JSON).content(body.formatted("false")))
+                .andExpect(status().isForbidden());
+        // A sound edit goes to Keycloak, which no test run has.
+        mvc.perform(put("/api/v1/staff/" + id).with(manager()).contentType(MediaType.APPLICATION_JSON)
+                        .content(body.formatted("true")))
+                .andExpect(status().isServiceUnavailable());
+    }
+
     /* ---------------------------------------------------------------------- */
 
     private RequestPostProcessor customer(String subject, String email) {

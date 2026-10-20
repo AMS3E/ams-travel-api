@@ -14,12 +14,14 @@ import ams.asmtravel.api.services.destination.destination.domain.DestinationDele
 import ams.asmtravel.api.services.destination.destination.domain.DestinationRelocatedEvent;
 import ams.asmtravel.api.services.destination.destination.domain.DestinationSummary;
 import ams.asmtravel.api.services.destination.destination.domain.DestinationThemes;
+import ams.asmtravel.api.services.destination.destination.domain.KhmerText;
 import ams.asmtravel.api.services.destination.destination.domain.ListingStatus;
 import ams.asmtravel.api.services.destination.destination.domain.NearbyDestination;
 import ams.asmtravel.api.services.destination.destination.domain.Slugs;
 import ams.asmtravel.api.services.destination.destination.dto.request.DestinationRequest;
 import ams.asmtravel.api.services.destination.destination.dto.response.DestinationResponse;
 import ams.asmtravel.api.services.destination.destination.exception.DestinationNotFoundException;
+import ams.asmtravel.api.services.destination.destination.exception.KhmerTextMissingException;
 import ams.asmtravel.api.services.destination.destination.mapper.DestinationMapper;
 import ams.asmtravel.api.services.destination.destination.repository.DestinationRepository;
 import ams.asmtravel.api.services.destination.destination.security.DestinationPermissionEvaluator;
@@ -120,9 +122,12 @@ public class DestinationServiceImpl implements DestinationService {
         if (text == null || text.isBlank() || limit < 1) {
             return List.of();
         }
-        return destinationRepository.findByStatusAndNameContainingIgnoreCaseOrderByNameAsc(ListingStatus.PUBLISHED, text.trim(), PageRequest.of(0, limit)).stream()
-                .map(mapper::toDestinationResponse)
-                .toList();
+        Map<UUID, Destination> found = new LinkedHashMap<>();
+        destinationRepository.findByStatusAndNameContainingIgnoreCaseOrderByNameAsc(ListingStatus.PUBLISHED, text.trim(), PageRequest.of(0, limit))
+                .forEach(destination -> found.put(destination.getId(), destination));
+        destinationRepository.findByStatusAndNameKmContainingOrderByNameAsc(ListingStatus.PUBLISHED, text.trim(), PageRequest.of(0, limit))
+                .forEach(destination -> found.putIfAbsent(destination.getId(), destination));
+        return found.values().stream().limit(limit).map(mapper::toDestinationResponse).toList();
     }
 
     /** An unpublished place outside the caller's desk is 404, not 403. */
@@ -148,9 +153,11 @@ public class DestinationServiceImpl implements DestinationService {
     @Override
     @Transactional(readOnly = true)
     public List<NearbyDestination> findNearbyWithDistance(double latitude, double longitude, double radiusKm, int limit) {
-        List<DestinationRepository.NearbyDistance> rows = destinationRepository.findNearbyDistances(latitude, longitude, radiusKm * 1_000, limit);
-        Map<UUID, Destination> byId = destinationRepository.findAllById(rows.stream().map(DestinationRepository.NearbyDistance::getId).toList())
-                .stream().collect(Collectors.toMap(Destination::getId, Function.identity()));
+        List<DestinationRepository.NearbyDistance> rows =
+                destinationRepository.findNearbyDistances(latitude, longitude, radiusKm * 1_000, limit);
+        Map<UUID, Destination> byId = destinationRepository
+                .findAllById(rows.stream().map(DestinationRepository.NearbyDistance::getId).toList()).stream()
+                .collect(Collectors.toMap(Destination::getId, Function.identity()));
         return rows.stream()
                 .filter(row -> byId.containsKey(row.getId()))
                 .map(row -> new NearbyDestination(mapper.toDestinationResponse(byId.get(row.getId())), row.getMetres()))
@@ -202,9 +209,16 @@ public class DestinationServiceImpl implements DestinationService {
     @Transactional
     public DestinationResponse publish(UUID id) {
         Destination destination = find(id);
+        requireKhmer(destination);
         destination.setStatus(ListingStatus.PUBLISHED);
         destination.setPublishedAt(Instant.now());
         return mapper.toDestinationResponse(destinationRepository.saveAndFlush(destination));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public void requireKhmer(UUID id) {
+        requireKhmer(find(id));
     }
 
     @Override
@@ -379,6 +393,22 @@ public class DestinationServiceImpl implements DestinationService {
         destination.setLongitude(request.longitude());
         destination.setAddress(blankToNull(request.address()));
         destination.setCoverKey(blankToNull(request.coverKey()));
+        /* Khmer: null keeps it, so a client that has never heard of it wipes nothing. */
+        if (request.nameKm() != null) {
+            destination.setNameKm(blankToNull(request.nameKm()));
+        }
+        if (request.descriptionKm() != null) {
+            destination.setDescriptionKm(KhmerText.hasText(request.descriptionKm()) ? request.descriptionKm().trim() : null);
+        }
+        if (request.sloganKm() != null) {
+            destination.setSloganKm(blankToNull(request.sloganKm()));
+        }
+        if (request.sloganByKm() != null) {
+            destination.setSloganByKm(blankToNull(request.sloganByKm()));
+        }
+        if (request.addressKm() != null) {
+            destination.setAddressKm(blankToNull(request.addressKm()));
+        }
         if (request.categoryIds() != null || destination.getId() == null) {
             destination.setCategories(new HashSet<>(categoryService.getEntities(nullToEmpty(request.categoryIds()))));
         }
@@ -424,6 +454,14 @@ public class DestinationServiceImpl implements DestinationService {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No such specialty: " + String.join(", ", unknown));
             }
             destination.setSpecialties(new ArrayList<>(specialties));
+        }
+    }
+
+    /** Nothing goes live with English text that has no Khmer beside it. */
+    private static void requireKhmer(Destination destination) {
+        List<String> missing = destination.missingKhmer();
+        if (!missing.isEmpty()) {
+            throw new KhmerTextMissingException(missing);
         }
     }
 

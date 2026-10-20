@@ -49,4 +49,10 @@ public class DestinationMonarchSeeder implements CatalogSeedContributor {
         }
         log.info("Seeded {} ties between destinations and monarchs", written);
     }
+
+    @Override
+    public void wipe() {
+        linkRepository.deleteAll();
+        linkRepository.flush();
+    }
 }

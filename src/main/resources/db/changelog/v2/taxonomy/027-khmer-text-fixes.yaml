@@ -1,0 +1,61 @@
+# Better Khmer for categories, tags and interests whose first translation read too literally.
+# Swaps only text still as first written, so an editor's own fix is kept.
+databaseChangeLog:
+  - changeSet:
+      id: v2-taxonomy-khmer-text-fixes
+      author: ams-travel-v2
+      dbms: postgresql
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              UPDATE taxonomy.categories c SET name_km = v.next FROM (VALUES
+                ('michelin', E'មីស្លាំង (Michelin)', E'ផ្កាយ Michelin'),
+                ('viewpoint', E'ចំណុចទេសភាព', E'ចំណុចមើលទេសភាព')
+              ) AS v (slug, was, next)
+              WHERE v.slug = c.slug AND c.name_km = v.was;
+
+              UPDATE taxonomy.tags t SET name_km = v.next FROM (VALUES
+                ('exclusive', E'ឯកសិទ្ធិ', E'ពិសេសផ្ដាច់មុខ'),
+                ('trail', E'ផ្លូវលំ', E'ផ្លូវដើរ')
+              ) AS v (slug, was, next)
+              WHERE v.slug = t.slug AND t.name_km = v.was;
+
+              UPDATE taxonomy.interests i SET name_km = v.next FROM (VALUES
+                ('hiking-trekking', E'ការដើរឡើងភ្នំ/ដើរព្រៃ', E'ដើរឡើងភ្នំ និងដើរព្រៃ'),
+                ('viewpoint', E'ចំណុចទេសភាព', E'ចំណុចមើលទេសភាព')
+              ) AS v (slug, was, next)
+              WHERE v.slug = i.slug AND i.name_km = v.was;
+
+              UPDATE taxonomy.interests i SET description_km = v.next FROM (VALUES
+                ('shopping', E'ផ្សារ សង្កាត់សិប្បកម្ម និងផ្លូវទិញឥវ៉ាន់នៃរាជធានី។', E'ផ្សារ តំបន់សិប្បកម្ម និងផ្លូវទិញឥវ៉ាន់នៃរាជធានី។'),
+                ('restaurants', E'ផ្ទះបាយខ្មែរ និងភោជនីយដ្ឋានលំដាប់ខ្ពស់ ដែលសមនឹងរៀបចំពេលមួយថ្ងៃដើម្បីទៅដល់។', E'ផ្ទះបាយខ្មែរ និងភោជនីយដ្ឋានលំដាប់ខ្ពស់ ដែលសមនឹងចំណាយពេលទៅភ្លក់។')
+              ) AS v (slug, was, next)
+              WHERE v.slug = i.slug AND i.description_km = v.was;
+      rollback:
+        - sql:
+            splitStatements: true
+            sql: |
+              UPDATE taxonomy.categories c SET name_km = v.next FROM (VALUES
+                ('michelin', E'ផ្កាយ Michelin', E'មីស្លាំង (Michelin)'),
+                ('viewpoint', E'ចំណុចមើលទេសភាព', E'ចំណុចទេសភាព')
+              ) AS v (slug, was, next)
+              WHERE v.slug = c.slug AND c.name_km = v.was;
+
+              UPDATE taxonomy.tags t SET name_km = v.next FROM (VALUES
+                ('exclusive', E'ពិសេសផ្ដាច់មុខ', E'ឯកសិទ្ធិ'),
+                ('trail', E'ផ្លូវដើរ', E'ផ្លូវលំ')
+              ) AS v (slug, was, next)
+              WHERE v.slug = t.slug AND t.name_km = v.was;
+
+              UPDATE taxonomy.interests i SET name_km = v.next FROM (VALUES
+                ('hiking-trekking', E'ដើរឡើងភ្នំ និងដើរព្រៃ', E'ការដើរឡើងភ្នំ/ដើរព្រៃ'),
+                ('viewpoint', E'ចំណុចមើលទេសភាព', E'ចំណុចទេសភាព')
+              ) AS v (slug, was, next)
+              WHERE v.slug = i.slug AND i.name_km = v.was;
+
+              UPDATE taxonomy.interests i SET description_km = v.next FROM (VALUES
+                ('shopping', E'ផ្សារ តំបន់សិប្បកម្ម និងផ្លូវទិញឥវ៉ាន់នៃរាជធានី។', E'ផ្សារ សង្កាត់សិប្បកម្ម និងផ្លូវទិញឥវ៉ាន់នៃរាជធានី។'),
+                ('restaurants', E'ផ្ទះបាយខ្មែរ និងភោជនីយដ្ឋានលំដាប់ខ្ពស់ ដែលសមនឹងចំណាយពេលទៅភ្លក់។', E'ផ្ទះបាយខ្មែរ និងភោជនីយដ្ឋានលំដាប់ខ្ពស់ ដែលសមនឹងរៀបចំពេលមួយថ្ងៃដើម្បីទៅដល់។')
+              ) AS v (slug, was, next)
+              WHERE v.slug = i.slug AND i.description_km = v.was;

@@ -103,6 +103,12 @@ public class PublishingServiceImpl implements PublishingService {
     public PublishingResponse approve(UUID id, ApprovePublishRequest decision, UUID reviewerId) {
         PublishingRequest request = answerable(id, true);
         expect(request, PublishingStatus.PENDING_REVIEW, "Only a request waiting for review can be approved");
+        /* Approved means ready to go live: not while its English has no Khmer beside it. */
+        switch (request.getTargetType()) {
+            case DESTINATION -> destinationService.requireKhmer(request.getTargetId());
+            case STAY -> stayService.requireKhmer(request.getTargetId());
+            case FOOD -> foodService.requireKhmer(request.getTargetId());
+        }
         return decide(request, PublishingStatus.APPROVED, decision == null ? null : decision.note(), reviewerId);
     }
 
