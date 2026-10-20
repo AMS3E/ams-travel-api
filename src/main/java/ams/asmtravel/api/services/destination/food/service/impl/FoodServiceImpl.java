@@ -204,6 +204,12 @@ public class FoodServiceImpl implements FoodService {
     }
 
     @Override
+    @Transactional
+    public void recordView(UUID id) {
+        foodRepository.incrementViewCount(id);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public boolean canWrite(UUID id, Authentication authentication) {
         return foodRepository.findById(id)

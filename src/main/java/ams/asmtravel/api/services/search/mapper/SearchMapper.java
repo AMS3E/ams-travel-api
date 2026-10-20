@@ -34,23 +34,30 @@ public interface SearchMapper {
                 null, null, null, null, null, null, null, null);
     }
 
-    default SearchHitResponse toHit(StayResponse stay, Map<UUID, String> provinceNames, ReviewSummaryResponse review) {
+    default SearchHitResponse toHit(StayResponse stay, Map<UUID, String> provinceNames, ReviewSummaryResponse review,
+                                    VerificationResponse verification) {
         return new SearchHitResponse(SearchType.STAY, stay.id(), stay.name(), null, stay.shortDescription(), stay.coverUrl(),
                 stay.provinceId(), provinceNames.get(stay.provinceId()), stay.latitude(), stay.longitude(),
                 List.of(), List.of(), ids(stay.interestIds()), List.of(),
                 review == null ? null : review.averageRating(), review == null ? 0 : review.ratingCount(),
-                review == null ? 0 : review.reviewCount(), false, null, false,
+                review == null ? 0 : review.reviewCount(),
+                verification != null && verification.verified(),
+                verification == null || verification.basis() == null ? null : verification.basis().name(),
+                verification != null && Boolean.TRUE.equals(verification.travelerRecommended()),
                 stay.priceFrom(), stay.currency(), null, null, null, null, null, null);
     }
 
     default SearchHitResponse toHit(FoodResponse food, Map<UUID, String> provinceNames, Map<UUID, String> categoryNames,
-                                    ReviewSummaryResponse review) {
+                                    ReviewSummaryResponse review, VerificationResponse verification) {
         List<UUID> categoryIds = ids(food.categoryIds());
         return new SearchHitResponse(SearchType.FOOD, food.id(), food.name(), food.slug(), food.shortDescription(), food.coverUrl(),
                 food.provinceId(), provinceNames.get(food.provinceId()), food.latitude(), food.longitude(),
                 categoryIds, names(categoryIds, categoryNames), ids(food.interestIds()), List.of(),
                 review == null ? null : review.averageRating(), review == null ? 0 : review.ratingCount(),
-                review == null ? 0 : review.reviewCount(), false, null, false,
+                review == null ? 0 : review.reviewCount(),
+                verification != null && verification.verified(),
+                verification == null || verification.basis() == null ? null : verification.basis().name(),
+                verification != null && Boolean.TRUE.equals(verification.travelerRecommended()),
                 food.priceFrom(), food.currency(), null, food.openNow(), food.todayHours(), null, null, null);
     }
 

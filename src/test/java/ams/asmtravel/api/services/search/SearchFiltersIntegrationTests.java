@@ -87,7 +87,7 @@ class SearchFiltersIntegrationTests {
                 .andExpect(jsonPath("$.content[0].name").value("Angkor Wat S"))
                 .andExpect(jsonPath("$.content[0].travelerRecommended").value(true))
                 .andExpect(jsonPath("$.page.totalElements").value(1));
-        // Only destinations carry the seal.
+        // A kind with no seal holder answers none (stays and food places earn the seal since 2026-10-20).
         mvc.perform(get("/api/v1/search").param("type", "STAY").param("travelerRecommended", "true"))
                 .andExpect(jsonPath("$.content", hasSize(0)));
     }

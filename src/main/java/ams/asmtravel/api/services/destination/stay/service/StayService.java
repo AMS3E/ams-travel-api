@@ -43,6 +43,9 @@ public interface StayService {
 
     boolean exists(UUID id);
 
+    /** Counts one more view: a page's first open of the day, as the popular service decides. */
+    void recordView(UUID id);
+
     /** Whether the caller may write this stay and its gallery; false if it does not exist. */
     boolean canWrite(UUID id, Authentication authentication);
 

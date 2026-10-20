@@ -203,12 +203,9 @@ public class SearchServiceImpl implements SearchService {
         return around.stream().filter(near -> sealed.contains(near.place().id())).toList();
     }
 
-    // The lists of the few kinds, filtered here. Only destinations carry the Traveler seal.
+    // The lists of the few kinds, filtered here; the Traveler seal is read for every kind.
 
     private List<StayResponse> stays(SearchRequest request) {
-        if (request.sealOnly()) {
-            return List.of();
-        }
         Map<UUID, UUID> zones = zones();
         Stream<StayResponse> kept = (request.near() != null ? stayService.getNear(request.near()) : stayService.getAll(null)).stream()
                 .filter(stay -> stay.status() == ListingStatus.PUBLISHED)
@@ -216,14 +213,12 @@ public class SearchServiceImpl implements SearchService {
                 .filter(stay -> inProvinces(request.provinces(), stay.provinceId()))
                 .filter(stay -> inRegions(request.regions(), stay.provinceId(), List.of(), zones))
                 .filter(stay -> anyOf(request.interestIds(), stay.interestIds()));
-        return request.near() != null ? kept.toList()
+        List<StayResponse> stays = request.near() != null ? kept.toList()
                 : kept.sorted(Comparator.comparing(StayResponse::name, String.CASE_INSENSITIVE_ORDER)).toList();
+        return request.sealOnly() ? sealed(stays, StayResponse::id) : stays;
     }
 
     private List<FoodResponse> foods(SearchRequest request) {
-        if (request.sealOnly()) {
-            return List.of();
-        }
         Map<UUID, UUID> zones = zones();
         Stream<FoodResponse> kept = (request.near() != null ? foodService.getNear(request.near()) : foodService.getAll(null, null)).stream()
                 .filter(food -> food.status() == ListingStatus.PUBLISHED)
@@ -232,8 +227,31 @@ public class SearchServiceImpl implements SearchService {
                 .filter(food -> inRegions(request.regions(), food.provinceId(), List.of(), zones))
                 .filter(food -> anyOf(request.categoryIds(), food.categoryIds()))
                 .filter(food -> anyOf(request.interestIds(), food.interestIds()));
-        return request.near() != null ? kept.toList()
+        List<FoodResponse> foods = request.near() != null ? kept.toList()
                 : kept.sorted(Comparator.comparing(FoodResponse::name, String.CASE_INSENSITIVE_ORDER)).toList();
+        return request.sealOnly() ? sealed(foods, FoodResponse::id) : foods;
+    }
+
+    /** The rows whose reviews have earned them the Traveler seal. */
+    private <T> List<T> sealed(List<T> rows, Function<T, UUID> idOf) {
+        if (rows.isEmpty()) {
+            return rows;
+        }
+        Set<UUID> sealed = standings(rows.stream().map(idOf).toList()).values().stream()
+                .filter(status -> Boolean.TRUE.equals(status.travelerRecommended()))
+                .map(VerificationResponse::destinationId)
+                .collect(Collectors.toSet());
+        return rows.stream().filter(row -> sealed.contains(idOf.apply(row))).toList();
+    }
+
+    /** Verified, on what, and the Traveler seal, per place of any kind; the verification service answers 100 at a time. */
+    private Map<UUID, VerificationResponse> standings(List<UUID> ids) {
+        Map<UUID, VerificationResponse> standing = new HashMap<>();
+        for (int from = 0; from < ids.size(); from += SUMMARY_BATCH) {
+            verificationService.findStatuses(ids.subList(from, Math.min(from + SUMMARY_BATCH, ids.size())))
+                    .forEach(status -> standing.put(status.destinationId(), status));
+        }
+        return standing;
     }
 
     /** A corridor is in a province or a region through its stops; "near" a destination means stopping there. */
@@ -280,11 +298,7 @@ public class SearchServiceImpl implements SearchService {
         }
         List<UUID> ids = places.stream().map(DestinationResponse::id).toList();
         Map<UUID, ReviewSummaryResponse> reviews = reviews(ReviewTargetType.DESTINATION, ids);
-        Map<UUID, VerificationResponse> standing = new HashMap<>();
-        for (int from = 0; from < ids.size(); from += SUMMARY_BATCH) {
-            verificationService.findStatuses(ids.subList(from, Math.min(from + SUMMARY_BATCH, ids.size())))
-                    .forEach(status -> standing.put(status.destinationId(), status));
-        }
+        Map<UUID, VerificationResponse> standing = standings(ids);
         Map<UUID, String> provinces = names.provinceNames();
         Map<UUID, String> categories = names.categoryNames();
         return places.stream()
@@ -296,19 +310,23 @@ public class SearchServiceImpl implements SearchService {
         if (stays.isEmpty()) {
             return List.of();
         }
-        Map<UUID, ReviewSummaryResponse> reviews = reviews(ReviewTargetType.STAY, stays.stream().map(StayResponse::id).toList());
+        List<UUID> ids = stays.stream().map(StayResponse::id).toList();
+        Map<UUID, ReviewSummaryResponse> reviews = reviews(ReviewTargetType.STAY, ids);
+        Map<UUID, VerificationResponse> standing = standings(ids);
         Map<UUID, String> provinces = names.provinceNames();
-        return stays.stream().map(stay -> mapper.toHit(stay, provinces, reviews.get(stay.id()))).toList();
+        return stays.stream().map(stay -> mapper.toHit(stay, provinces, reviews.get(stay.id()), standing.get(stay.id()))).toList();
     }
 
     private List<SearchHitResponse> foodHits(List<FoodResponse> foods) {
         if (foods.isEmpty()) {
             return List.of();
         }
-        Map<UUID, ReviewSummaryResponse> reviews = reviews(ReviewTargetType.FOOD, foods.stream().map(FoodResponse::id).toList());
+        List<UUID> ids = foods.stream().map(FoodResponse::id).toList();
+        Map<UUID, ReviewSummaryResponse> reviews = reviews(ReviewTargetType.FOOD, ids);
+        Map<UUID, VerificationResponse> standing = standings(ids);
         Map<UUID, String> provinces = names.provinceNames();
         Map<UUID, String> categories = names.categoryNames();
-        return foods.stream().map(food -> mapper.toHit(food, provinces, categories, reviews.get(food.id()))).toList();
+        return foods.stream().map(food -> mapper.toHit(food, provinces, categories, reviews.get(food.id()), standing.get(food.id()))).toList();
     }
 
     private List<SearchHitResponse> corridorHits(List<CorridorResponse> corridors) {

@@ -41,6 +41,8 @@ public record StayResponse(
         BigDecimal latitude,
         BigDecimal longitude,
         ListingStatus status,
+        /** First opens of a day, signed in or not, all time. */
+        Long viewCount,
         Instant createdAt,
         Instant updatedAt,
         List<UUID> interestIds,

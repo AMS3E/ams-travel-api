@@ -48,8 +48,10 @@ public class Badge {
     @Column(length = 512)
     private String iconKey;
 
+    /* A plain varchar on purpose: the changelog replay in the tests inserts rows of a retired type (POINTS,
+       2026-10-20) before the later changelog deletes them, which an enum check constraint would refuse. */
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 30)
+    @Column(nullable = false, columnDefinition = "varchar(30)")
     private BadgeType type;
 
     /** Null for a collection badge, which is on no ladder. */

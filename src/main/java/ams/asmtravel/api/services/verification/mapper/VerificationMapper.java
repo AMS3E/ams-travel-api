@@ -1,52 +1,39 @@
 package ams.asmtravel.api.services.verification.mapper;
 
-import ams.asmtravel.api.services.destination.destination.domain.DestinationSummary;
 import ams.asmtravel.api.services.media.service.MediaService;
 import ams.asmtravel.api.services.publishing.service.PublishingService.Desk;
 import ams.asmtravel.api.services.verification.domain.DestinationVerification;
 import ams.asmtravel.api.services.verification.domain.Standing;
 import ams.asmtravel.api.services.verification.domain.VerificationBasis;
+import ams.asmtravel.api.services.verification.domain.VerifiedPlace;
 import ams.asmtravel.api.services.verification.dto.response.VerificationResponse;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
-@Mapper(componentModel = "spring")
-public abstract class VerificationMapper {
+/** Decisions and standings as the API answers them; the place itself comes from its own service. */
+@Component
+@RequiredArgsConstructor
+public class VerificationMapper {
 
-    @Autowired
-    protected MediaService mediaService;
+    private final MediaService mediaService;
 
     /**
      * @param desk          the place's desk for the queue; null in a history
      * @param decidedByName null if the decider no longer exists
      */
-    @Mapping(target = "id", source = "decision.id")
-    @Mapping(target = "destinationId", source = "decision.destination.id")
-    @Mapping(target = "destinationName", source = "decision.destination.name")
-    @Mapping(target = "destinationSlug", source = "decision.destination.slug")
-    @Mapping(target = "destinationCoverUrl", expression = "java(mediaService.url(decision.getDestination().getCoverKey()))")
-    @Mapping(target = "destinationStatus", source = "decision.destination.status")
-    @Mapping(target = "desk", source = "desk")
-    @Mapping(target = "verified", source = "decision.verified")
-    @Mapping(target = "basis", source = "decision.basis")
-    @Mapping(target = "travelerRecommended", ignore = true)
-    @Mapping(target = "ratingCount", ignore = true)
-    @Mapping(target = "averageRating", ignore = true)
-    @Mapping(target = "reference", source = "decision.reference")
-    @Mapping(target = "note", source = "decision.note")
-    @Mapping(target = "evidenceKey", source = "decision.evidenceKey")
-    @Mapping(target = "evidenceUrl", expression = "java(mediaService.url(decision.getEvidenceKey()))")
-    @Mapping(target = "decidedBy", source = "decision.decidedBy")
-    @Mapping(target = "decidedByName", source = "decidedByName")
-    @Mapping(target = "createdAt", source = "decision.createdAt")
-    public abstract VerificationResponse toResponse(DestinationVerification decision, Desk desk, String decidedByName);
+    public VerificationResponse toResponse(DestinationVerification decision, VerifiedPlace place, Desk desk, String decidedByName) {
+        return new VerificationResponse(decision.getId(), place.type(), place.id(), place.name(), place.slug(),
+                mediaService.url(place.coverKey()), place.status(), desk,
+                Boolean.TRUE.equals(decision.getVerified()), decision.getBasis(), null, null, null,
+                decision.getReference(), decision.getNote(), decision.getEvidenceKey(), mediaService.url(decision.getEvidenceKey()),
+                decision.getDecidedBy(), decidedByName, decision.getCreatedAt());
+    }
 
     /** Queue row for a place with no decision yet. */
-    public VerificationResponse undecided(DestinationSummary place, Desk desk) {
-        return new VerificationResponse(null, place.id(), place.name(), place.slug(), mediaService.url(place.coverKey()),
+    public VerificationResponse undecided(VerifiedPlace place, Desk desk) {
+        return new VerificationResponse(null, place.type(), place.id(), place.name(), place.slug(), mediaService.url(place.coverKey()),
                 place.status(), desk, false, null, null, null, null, null, null, null, null, null, null, null);
     }
 
@@ -56,8 +43,8 @@ public abstract class VerificationMapper {
      */
     public VerificationResponse standing(VerificationResponse latest, Standing standing) {
         boolean decided = latest.verified();
-        return new VerificationResponse(latest.id(), latest.destinationId(), latest.destinationName(), latest.destinationSlug(),
-                latest.destinationCoverUrl(), latest.destinationStatus(), latest.desk(),
+        return new VerificationResponse(latest.id(), latest.targetType(), latest.destinationId(), latest.destinationName(),
+                latest.destinationSlug(), latest.destinationCoverUrl(), latest.destinationStatus(), latest.desk(),
                 decided || standing.travelerRecommended(), basisOf(decided, latest.basis(), standing),
                 standing.travelerRecommended(), standing.ratingCount(), standing.averageRating(),
                 latest.reference(), latest.note(), latest.evidenceKey(), latest.evidenceUrl(),
@@ -67,7 +54,7 @@ public abstract class VerificationMapper {
     /** Public status only: verified, on what, the travellers' seal, and since when. */
     public VerificationResponse publicStatus(UUID destinationId, DestinationVerification latest, Standing standing) {
         boolean decided = latest != null && Boolean.TRUE.equals(latest.getVerified());
-        return new VerificationResponse(null, destinationId, null, null, null, null, null,
+        return new VerificationResponse(null, latest == null ? null : latest.getTargetType(), destinationId, null, null, null, null, null,
                 decided || standing.travelerRecommended(), basisOf(decided, latest == null ? null : latest.getBasis(), standing),
                 standing.travelerRecommended(), standing.ratingCount(), standing.averageRating(),
                 null, null, null, null, null, null, latest == null ? null : latest.getCreatedAt());

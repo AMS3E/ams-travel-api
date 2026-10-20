@@ -92,7 +92,7 @@ first/last name split (one Full name stays).
 | How to get there (route, time, distance) | device maps SDK from the user's location to the pin | ✅ client side |
 | Highlights / About sheet | the same `description` | design filler |
 | Write a Review | `POST /reviews` `{targetType, targetId, rating 1–5, title ≤200, content ≤5000, visitType, visitedOn "YYYY-MM", photoKeys[]}`; photos first via `POST /media/files` (type `review`) | ✅ |
-| Check in ("I'm here", the Adventure badge) | `POST /stamps` with the device position; the API answers with the distance and the radius it allows | ✅ needs a screen in the design |
+| Check in ("I'm here", the Adventure badge) | since 2026-10-20 the QR code posted on site AND the device position, both: scan the code, then `POST /stamps` `{code, latitude, longitude}` (`code` = the scanned text, a link whose last part is the code; signed in) → `outcome` COLLECTED / ALREADY_COLLECTED (this season) / TOO_FAR / INVALID_CODE, `targetType`, `destinationId`, `distanceMeters`, `radiusMeters`, `badgesEarned`. Once per place per season. Stays and food places are checked in the same way, with their own codes | ✅ needs a screen in the design |
 
 ## Popular page
 
@@ -170,7 +170,7 @@ first/last name split (one Full name stays).
 | First name / Last name split | one "Full name" input stays (declined 2026-10-14: Khmer and multi-word names) | ✅ decided |
 | Email and password change | Keycloak account, not this API | ⚠️ decide the flow |
 | Review (4) tile | `GET /reviews/me` (signed in) | ✅ |
-| Check-ins and points | `GET /stamps/me` (collected stamps), `GET /points/me` (signed in) | ✅ need a place in the Profile design |
+| Check-ins and points | `GET /stamps/me` (collected stamps, each with `targetType` DESTINATION / STAY / FOOD), `GET /points/me` (signed in; points are a season total only since 2026-10-20, no badge rests on them) | ✅ need a place in the Profile design |
 | Sign out | token revocation on the device | ✅ |
 
 ## Badges
@@ -178,9 +178,9 @@ first/last name split (one Full name stays).
 | Element | Endpoint | State |
 | --- | --- | --- |
 | Badge overview, current status, progress bar, "this season" | `GET /badges/me/progress?seasonId=` (signed in) → tracks, badges, earned; `GET /seasons/current` (public) | ✅ |
-| Badge categories Browser / Adventure / Reviewer | `GET /badges` (public): BROWSER, REVIEWER, ADVENTURE and POINTS, each SILVER / GOLDEN / PLATINUM | ⚠️ design says Gold / Silver / Bronze; the API has Silver, Golden, Platinum and a Points track |
+| Badge categories Browser / Adventure / Reviewer | `GET /badges` (public): three ladders, `type` BROWSES / REVIEWS / STAMPS, each SILVER / GOLDEN / PLATINUM (the POINTS ladder was retired on 2026-10-20). Browser: a destination opened counts once per place per day; Reviewer: one review per place (a second attempt is refused); Adventure: one stamp per place per season. Attractions, stays and food places all count as destinations | ⚠️ design says Gold / Silver / Bronze; the API has Silver, Golden, Platinum |
 | Tier thresholds ("300 browses required") | each badge's `threshold` | ✅ |
-| Adventure badge | counts GPS check-ins: `POST /stamps`, `GET /stamps/me` | ✅ needs the check-in screen |
+| Adventure badge | counts QR check-ins (scan + position): `POST /stamps`, `GET /stamps/me` | ✅ needs the check-in screen |
 | Achievement, Share to Facebook, View badge history | `GET /badges/me/earned` → each row's `shareUrl` (`https://api.travel.ams.com.kh/api/v1/badges/shared/{userBadgeId}/page`, a public page with Open Graph tags: give it to the share sheet); `GET /badges/shared/{userBadgeId}` (public page data); `GET /seasons/me/history` | ✅ |
 | "Top 5% of active members" | `GET /badges/me/progress` → `percentile` (5 means the top 5%; null with no activity this season) | ✅ |
 
@@ -208,7 +208,7 @@ Static text and links. No endpoint; ship them in the app, or add a small setting
 
 ## In the API, absent from the design (decided 2026-10-12)
 
-- Check-ins (`POST /stamps`) and points (`GET /points/me`) are IN: the designer adds a check-in action on the destination page and a stamps and points area in Profile.
+- Check-ins (`POST /stamps`) and points (`GET /points/me`) are IN: the designer adds a check-in action on the destination, stay and food pages (a scan screen) and a stamps and points area in Profile.
 - `GET /recommendations/for-you` (personal recommendations): no screen; left as is.
 - Seasons (`GET /seasons`, `/current`, `/me/progress`, `/me/history`): referenced by the badge screen only.
 - Food: 40+ fields served, about 10 read by the design. Stay: 20 policy fields served, the design shows one policies box plus check-in/out. Room: 50 fields served, about 10 read. The Postman collection documents what the app reads.
@@ -225,3 +225,11 @@ months, browses over the last month (so Popular is real), and 12 Verified decisi
 4 seasons. The stays, food places, travellers and reviews are fictional staging content; photos come from
 Wikimedia Commons, credited in each gallery caption. A reset reseeds all of it: nothing you create on the staging
 server is kept across one.
+
+## What changed on 2026-10-20
+
+- **Check-in by QR code.** `POST /stamps` now takes `{code, latitude, longitude}`; `destinationId` is gone. The code is what the QR posted on site encodes: a link like `https://api.travel.ams.com.kh/api/v1/stamps/scan/ABCD-EFGH-JKLM`; send the whole scanned text or just its last part. Both the code and the position are checked; a new `outcome` INVALID_CODE says the code is unknown, withdrawn or replaced. One stamp per place per season (was per day). A stamp carries `targetType` (DESTINATION, STAY, FOOD) and `source` QR.
+- **Every kind is a destination.** Stays and food places are stamped (their own codes), browsed for the Browser badge (`PUT /badges/me/explorations/{id}` takes any kind's id) and viewed (`viewCount` on `GET /stays/{id}` and `GET /foods/{id}`) exactly like attractions.
+- **The Explorer (POINTS) ladder is retired.** `GET /badges` and `GET /badges/me/progress` answer three ladders. Points stay as season totals (`GET /points/me`, `GET /seasons/me/progress`).
+- **Destination Detail in the CMS** reads one place's standing by id: `GET /admin/destination-stats/{id}` (staff only; not for the app).
+- **Verified for every kind.** `verified`, `basis` and `travelerRecommended` on stay and food cards are real now (they were always false before): a stay or a food place is verified by a desk like an attraction, and its reviews earn the Traveler seal. `GET /destination-verifications/status?destinationIds=` takes any kind's id and answers `targetType`; a `travelerRecommended=true` search keeps sealed stays and food places too.

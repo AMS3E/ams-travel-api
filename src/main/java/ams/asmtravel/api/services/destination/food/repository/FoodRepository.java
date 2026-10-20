@@ -18,6 +18,11 @@ public interface FoodRepository extends JpaRepository<Food, UUID> {
     @EntityGraph(attributePaths = {"categories", "tags", "interests"})
     List<Food> findAllByOrderByNameAsc();
 
+    /** Bulk update on purpose: a visit writes no audit row and no {@code updated_at}. */
+    @Modifying
+    @Query("update Food x set x.viewCount = x.viewCount + 1 where x.id = :id")
+    int incrementViewCount(UUID id);
+
     @EntityGraph(attributePaths = {"categories", "tags", "interests"})
     List<Food> findByStatusOrderByNameAsc(ListingStatus status);
 

@@ -5,6 +5,7 @@ import ams.asmtravel.api.services.admin.domain.CatalogSeedContributor;
 import ams.asmtravel.api.services.admin.domain.SeedJson;
 import ams.asmtravel.api.services.destination.destination.domain.Destination;
 import ams.asmtravel.api.services.user.user.domain.User;
+import ams.asmtravel.api.services.publishing.domain.PublishingTargetType;
 import ams.asmtravel.api.services.verification.domain.DestinationVerification;
 import ams.asmtravel.api.services.verification.domain.VerificationBasis;
 import ams.asmtravel.api.services.verification.repository.DestinationVerificationRepository;
@@ -50,7 +51,8 @@ public class VerificationSeeder implements CatalogSeedContributor {
                 continue;
             }
             DestinationVerification decision = new DestinationVerification();
-            decision.setDestination(place);
+            decision.setTargetType(PublishingTargetType.DESTINATION);
+            decision.setTargetId(place.getId());
             decision.setVerified(true);
             VerificationBasis basis = SeedJson.enumValue(node, "basis", VerificationBasis.class);
             decision.setBasis(basis == null ? VerificationBasis.OFFICIAL_SITE : basis);

@@ -106,3 +106,7 @@ databaseChangeLog:
   - include: { file: v2/taxonomy/022-interest-cover.yaml, relativeToChangelogFile: true }
   - include: { file: v2/taxonomy/023-region-ams-recommended.yaml, relativeToChangelogFile: true }
   - include: { file: v2/taxonomy/024-region-map.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/destination/029-stay-food-views.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/engagement/006-stamp-codes.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/gamification/010-retire-points-ladder.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/publishing/005-verification-targets.yaml, relativeToChangelogFile: true }

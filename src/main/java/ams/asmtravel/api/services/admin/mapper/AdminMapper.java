@@ -2,7 +2,7 @@ package ams.asmtravel.api.services.admin.mapper;
 
 import ams.asmtravel.api.services.admin.dto.response.DestinationStatsResponse;
 import ams.asmtravel.api.services.admin.dto.response.OverviewResponse;
-import ams.asmtravel.api.services.destination.destination.domain.DestinationSummary;
+import ams.asmtravel.api.services.admin.domain.PlaceSummary;
 import ams.asmtravel.api.services.review.review.dto.response.ReviewSummaryResponse;
 import ams.asmtravel.api.services.review.review.service.ReviewService.ReviewTotals;
 import ams.asmtravel.api.services.verification.dto.response.VerificationResponse;
@@ -22,9 +22,9 @@ public interface AdminMapper {
      * @param review       null when it has no reviews and no stars
      * @param verification null when the verification service did not answer for it
      */
-    default DestinationStatsResponse.Place toPlace(DestinationSummary place, Long browses, ReviewSummaryResponse review,
+    default DestinationStatsResponse.Place toPlace(PlaceSummary place, Long browses, ReviewSummaryResponse review,
                                                   VerificationResponse verification) {
-        return new DestinationStatsResponse.Place(place.id(), place.name(), place.slug(), place.provinceId(), place.status(),
+        return new DestinationStatsResponse.Place(place.id(), place.type(), place.name(), place.slug(), place.provinceId(), place.status(),
                 browses == null ? 0 : browses, place.viewCount(),
                 review == null ? 0 : review.ratingCount(), review == null ? null : review.averageRating(),
                 review == null ? 0 : review.reviewCount(),

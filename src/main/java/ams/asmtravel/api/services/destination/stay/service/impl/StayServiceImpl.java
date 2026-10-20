@@ -217,6 +217,12 @@ public class StayServiceImpl implements StayService {
     }
 
     @Override
+    @Transactional
+    public void recordView(UUID id) {
+        stayRepository.incrementViewCount(id);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public boolean canWrite(UUID id, Authentication authentication) {
         return stayRepository.findById(id)

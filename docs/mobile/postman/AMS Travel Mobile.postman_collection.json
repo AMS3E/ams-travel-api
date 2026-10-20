@@ -19,6 +19,11 @@
     {
       "key": "baseUrl",
       "value": "https://api.travel.ams.com.kh/api/v1"
+    },
+    {
+      "key": "checkInCode",
+      "value": "ABCD-EFGH-JKLM",
+      "type": "string"
     }
   ],
   "item": [
@@ -1255,7 +1260,7 @@
           "response": []
         },
         {
-          "name": "Check in (GPS stamp, Adventure badge)",
+          "name": "Check in (scan the posted code + GPS, Adventure badge)",
           "request": {
             "method": "POST",
             "header": [
@@ -1274,10 +1279,10 @@
               ],
               "query": []
             },
-            "description": "\n\nNeeds the traveller's token.",
+            "description": "Since 2026-10-20 a check-in needs the QR code posted on site AND the device position. Scan the code in the app and send the scanned text as `code` (a link whose last part is the code; the code alone works too). Answers `outcome` COLLECTED, ALREADY_COLLECTED (one stamp per place per season), TOO_FAR or INVALID_CODE, with `targetType` DESTINATION / STAY / FOOD and `destinationId`. Stays and food places are checked in the same way.",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"destinationId\": \"{{destinationId}}\",\n  \"latitude\": 13.4125,\n  \"longitude\": 103.867\n}",
+              "raw": "{\n  \"code\": \"{{checkInCode}}\",\n  \"latitude\": 13.4125,\n  \"longitude\": 103.867\n}",
               "options": {
                 "raw": {
                   "language": "json"

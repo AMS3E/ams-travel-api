@@ -1,14 +1,15 @@
-# Prompt for Claude Code, round 2 (2026-10-14)
+# Round 2 for Claude Code (2026-10-16)
 
-The backend answered every entry of `API-REQUESTS.md`. Replace the app repo's `api-docs/` folder with this
-folder (the answered `API-REQUESTS.md`, the updated `screens-to-api.md` and `README.md`, the rebuilt
-`postman/`), open Claude Code from the app's repo, and paste everything below the line as the next message.
+Developer: delete the folder where our API docs sit in your app repo and unzip this bundle in its place, then
+tell Claude Code `Read CLAUDE-PROMPT-2.md and do what it says.` Everything below the line is for Claude Code.
 
 ---
 
 The AMS Travel API answered our `API-REQUESTS.md`: of the 29 entries, 23 are built and 6 are parked or
-declined. The backend team's documentation in `api-docs/` is updated and stays the source of truth. Read, in
-this order:
+declined. The folder that holds this file was just replaced with the backend team's new bundle (it is written
+`api-docs/` below; if yours carries another name, read that folder wherever `api-docs/` appears): every file
+in it is newer than what you read before, so read them again now and trust them over anything you remember or
+noted from the old folder. It stays the source of truth. Read, in this order:
 1. `api-docs/API-REQUESTS.md`: every entry now has a **Status** line. `built 2026-10-14, …` names the exact
    field or endpoint; `declined: …` says why, and whether it is parked.
 2. `api-docs/screens-to-api.md`: the rows are updated to the new fields and endpoints, and the section
@@ -24,7 +25,7 @@ for the Map panel of its page, in place of an interactive map of its places) and
 code. There is no `history` data and no `historical-coverage` endpoint: build nothing on them. The staging
 catalogue was reseeded on 2026-10-16, so every id changed: clear caches and saved test data first.
 
-First check that the server runs the new API; it goes live when Kimleng deploys, today. The checks:
+First check that the server runs the new API. The checks:
 `GET https://api.travel.ams.com.kh/api/v1/provinces` answers `coverUrl` and `placeCount` on each province,
 and `GET /popular?limit=3` answers `items[]` with a `reason`. Until both do, change nothing and tell me.
 

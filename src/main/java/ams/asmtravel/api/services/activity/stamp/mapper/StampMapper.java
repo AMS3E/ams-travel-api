@@ -1,7 +1,9 @@
 package ams.asmtravel.api.services.activity.stamp.mapper;
 
 import ams.asmtravel.api.services.activity.stamp.domain.DigitalStamp;
+import ams.asmtravel.api.services.activity.stamp.domain.StampCode;
 import ams.asmtravel.api.services.activity.stamp.domain.StampOutcome;
+import ams.asmtravel.api.services.activity.stamp.dto.response.StampCodeResponse;
 import ams.asmtravel.api.services.activity.stamp.dto.response.StampResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -15,4 +17,8 @@ public interface StampMapper {
     @Mapping(target = "radiusMeters", ignore = true)
     @Mapping(target = "badgesEarned", expression = "java(List.of())")
     StampResponse toResponse(DigitalStamp stamp);
+
+    /** The code with what its QR encodes. */
+    @Mapping(target = "payload", source = "payload")
+    StampCodeResponse toResponse(StampCode code, String payload);
 }
