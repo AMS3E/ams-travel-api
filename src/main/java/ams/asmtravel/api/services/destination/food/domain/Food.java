@@ -1,6 +1,7 @@
 package ams.asmtravel.api.services.destination.food.domain;
 
 import ams.asmtravel.api.services.destination.destination.domain.Destination;
+import ams.asmtravel.api.services.destination.destination.domain.KhmerText;
 import ams.asmtravel.api.services.destination.destination.domain.ListingStatus;
 import ams.asmtravel.api.services.taxonomy.category.domain.Category;
 import ams.asmtravel.api.services.location.province.domain.Province;
@@ -76,6 +77,22 @@ public class Food {
     /** Who said it. */
     @Column(length = 120)
     private String sloganBy;
+
+    /** Khmer twins of the English text, typed by hand; null until written. */
+    @Column(length = 255)
+    private String nameKm;
+
+    @Column(columnDefinition = "text")
+    private String descriptionKm;
+
+    @Column(length = 300)
+    private String sloganKm;
+
+    @Column(length = 120)
+    private String sloganByKm;
+
+    @Column(columnDefinition = "text")
+    private String addressKm;
 
     @Column(columnDefinition = "text")
     private String address;
@@ -241,4 +258,25 @@ public class Food {
             joinColumns = @JoinColumn(name = "food_id"),
             inverseJoinColumns = @JoinColumn(name = "interest_id"))
     private Set<Interest> interests = new HashSet<>();
+
+    /** Filled English fields with no Khmer yet, by request name; publishing waits until this is empty. */
+    public List<String> missingKhmer() {
+        List<String> missing = new ArrayList<>();
+        if (KhmerText.lacks(name, nameKm)) {
+            missing.add("nameKm");
+        }
+        if (KhmerText.lacks(description, descriptionKm)) {
+            missing.add("descriptionKm");
+        }
+        if (KhmerText.lacks(slogan, sloganKm)) {
+            missing.add("sloganKm");
+        }
+        if (KhmerText.lacks(sloganBy, sloganByKm)) {
+            missing.add("sloganByKm");
+        }
+        if (KhmerText.lacks(address, addressKm)) {
+            missing.add("addressKm");
+        }
+        return missing;
+    }
 }

@@ -110,3 +110,10 @@ databaseChangeLog:
   - include: { file: v2/engagement/006-stamp-codes.yaml, relativeToChangelogFile: true }
   - include: { file: v2/gamification/010-retire-points-ladder.yaml, relativeToChangelogFile: true }
   - include: { file: v2/publishing/005-verification-targets.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/destination/030-destination-khmer.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/taxonomy/025-khmer-names.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/destination/031-stay-food-khmer.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/destination/032-khmer-text-rows.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/taxonomy/026-khmer-text-rows.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/destination/033-khmer-text-fixes.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/taxonomy/027-khmer-text-fixes.yaml, relativeToChangelogFile: true }

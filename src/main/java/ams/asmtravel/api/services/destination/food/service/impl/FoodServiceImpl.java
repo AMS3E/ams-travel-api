@@ -4,6 +4,7 @@ import ams.asmtravel.api.services.location.province.service.ProvinceService;
 import ams.asmtravel.api.services.taxonomy.category.domain.CategoryDeletingEvent;
 import ams.asmtravel.api.services.taxonomy.category.service.CategoryService;
 import ams.asmtravel.api.services.destination.destination.domain.DestinationDeletingEvent;
+import ams.asmtravel.api.services.destination.destination.domain.KhmerText;
 import ams.asmtravel.api.services.destination.destination.domain.ListingStatus;
 import ams.asmtravel.api.services.destination.destination.domain.NearbyArea;
 import ams.asmtravel.api.services.destination.destination.domain.Slugs;
@@ -279,6 +280,22 @@ public class FoodServiceImpl implements FoodService {
         food.setDescription(blankToNull(request.description()));
         food.setSlogan(blankToNull(request.slogan()));
         food.setSloganBy(blankToNull(request.sloganBy()));
+        /* Khmer: null keeps it, so a client that has never heard of it wipes nothing. */
+        if (request.nameKm() != null) {
+            food.setNameKm(blankToNull(request.nameKm()));
+        }
+        if (request.descriptionKm() != null) {
+            food.setDescriptionKm(KhmerText.hasText(request.descriptionKm()) ? request.descriptionKm().trim() : null);
+        }
+        if (request.sloganKm() != null) {
+            food.setSloganKm(blankToNull(request.sloganKm()));
+        }
+        if (request.sloganByKm() != null) {
+            food.setSloganByKm(blankToNull(request.sloganByKm()));
+        }
+        if (request.addressKm() != null) {
+            food.setAddressKm(blankToNull(request.addressKm()));
+        }
         food.setProvince(request.provinceId() == null ? null : provinceService.getEntity(request.provinceId()));
         food.setAddress(blankToNull(request.address()));
         food.setLatitude(request.latitude());

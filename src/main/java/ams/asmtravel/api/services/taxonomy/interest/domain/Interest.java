@@ -29,11 +29,19 @@ public class Interest {
     @Column(nullable = false, length = 100)
     private String name;
 
+    /** Its Khmer name, typed by hand; null until written. */
+    @Column(length = 100)
+    private String nameKm;
+
     @Column(nullable = false, unique = true, length = 100)
     private String slug;
 
     @Column(columnDefinition = "text")
     private String description;
+
+    /** The description in Khmer; null until written. */
+    @Column(columnDefinition = "text")
+    private String descriptionKm;
 
     /** The Discover layer lists interests under this — Attraction Sites, Stays, Food. Null: not listed. */
     @Column(length = 60)

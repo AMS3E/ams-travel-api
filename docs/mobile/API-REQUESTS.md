@@ -101,7 +101,7 @@ The backend writes only the Status line: `built YYYY-MM-DD, <endpoint or field>`
 - **Needed:** the Khmer text, either through `Accept-Language` / a `lang=km` parameter answering in Khmer with English as fallback, or `nameKm` and `shortDescriptionKm` beside the English fields
 - **Why:** the app's own text switches to Khmer but every name stays English
 - **Blocks the screen:** no, the English names show meanwhile
-- **Status:** declined: parked by Kimleng on 2026-10-14, Khmer content is a content decision (who writes the Khmer text) before it is an API one; the app keeps English until then
+- **Status:** built 2026-10-21 (unparked by Kimleng): `nameKm`, `descriptionKm`, `sloganKm`, `sloganByKm`, `addressKm` beside the English on attractions, stays and food places; `nameKm` (and `descriptionKm` on regions and interests) on provinces, regions, categories, tags and interests; `?lang=km` on `GET /search`, `/search/by-province`, `/search/suggest`, `/search/cards` answers the cards in Khmer where written, with `untranslated` naming the fields still in English. Khmer is optional on the CMS side for now, so fall back to the English field when the Khmer one is null
 
 ### R-005 · Saves · regions and provinces
 - **Screen:** Explore (region cards, province cards), Tourism Region detail, Saved tabs Regions / Provinces; signed-in

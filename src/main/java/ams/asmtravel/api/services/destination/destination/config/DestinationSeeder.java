@@ -66,6 +66,9 @@ public class DestinationSeeder implements CatalogSeedContributor {
             Integer popularity = SeedJson.integer(node, "popularity");
             destination.setViewCount(popularity == null ? 0L : popularity * 6L);
             destination.setAddress(SeedJson.text(node, "address"));
+            destination.setNameKm(SeedJson.text(node, "nameKm"));
+            destination.setDescriptionKm(SeedJson.text(node, "descriptionKm"));
+            destination.setAddressKm(SeedJson.text(node, "addressKm"));
             destination.setLatitude(decimal(node, "latitude"));
             destination.setLongitude(decimal(node, "longitude"));
             destination.setCoverKey(context.imageKey(node));

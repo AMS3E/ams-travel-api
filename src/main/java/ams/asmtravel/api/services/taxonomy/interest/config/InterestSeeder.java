@@ -42,6 +42,8 @@ public class InterestSeeder implements CatalogSeedContributor {
             interest.setSlug(SeedJson.text(node, "slug"));
             interest.setName(SeedJson.text(node, "name"));
             interest.setDescription(SeedJson.text(node, "description"));
+            interest.setNameKm(SeedJson.text(node, "nameKm"));
+            interest.setDescriptionKm(SeedJson.text(node, "descriptionKm"));
             interest.setGroupName(SeedJson.text(node, "group"));
             interest.setIconKey(SeedJson.text(node, "icon"));
             /* Its picture on the Explore shelf: one of the catalogue's own photographs, named by file. */

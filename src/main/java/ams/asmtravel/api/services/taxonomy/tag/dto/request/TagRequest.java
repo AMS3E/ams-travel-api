@@ -11,6 +11,8 @@ public record TagRequest(
         @Size(max = 100) @Pattern(regexp = "^$|" + Slugs.PATTERN, message = "Use lower-case words joined by hyphens")
         String slug,
         String description,
-        Boolean isActive
+        Boolean isActive,
+        /** Khmer twins: null keeps what is stored, blank clears it. */
+        @Size(max = 100) String nameKm
 ) {
 }

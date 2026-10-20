@@ -85,7 +85,13 @@ public record FoodRequest(
         @Size(max = 50) String whatsapp,
         @Size(max = 512) String facebookUrl,
         @Min(1800) @Max(2100) Integer yearOpened,
-        List<@NotBlank @Size(max = 100) String> specialties
+        List<@NotBlank @Size(max = 100) String> specialties,
+        /* Khmer twins of the English text: null keeps what is stored, blank clears it. */
+        @Size(max = 255) String nameKm,
+        String descriptionKm,
+        @Size(max = 300) String sloganKm,
+        @Size(max = 120) String sloganByKm,
+        String addressKm
 ) {
 
     static final String PIN_REQUIRED = "Put the place on the map: travellers find it by its pin";

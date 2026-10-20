@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -39,7 +40,8 @@ public class SearchController {
      * {@code regionIds}, {@code provinceIds}, {@code categoryIds}, {@code tagIds}, {@code interestIds} (ids, comma-separated;
      * {@code regionId} and {@code provinceId} still take one), {@code travelerRecommended=true} for the seal holders,
      * {@code near=} a destination's id for what lies around it, nearest first;
-     * {@code ?page=&size=} with 20 a page and at most 100. Name order.
+     * {@code ?page=&size=} with 20 a page and at most 100. Name order. {@code ?lang=km} (here and on every search URL)
+     * gives the cards' words in Khmer where written, naming what is still English in {@code untranslated}.
      */
     @GetMapping
     public Page<SearchHitResponse> search(@Valid @ModelAttribute SearchRequest request,
@@ -60,14 +62,16 @@ public class SearchController {
     /** Names containing the text, those starting with it first: places, provinces, tourism regions and corridors. */
     @GetMapping("/suggest")
     public List<SuggestionResponse> suggest(@RequestParam @NotBlank @Size(max = 100) String q,
-                                            @RequestParam(defaultValue = "8") @Min(1) @Max(20) int limit) {
-        return searchService.suggest(q, limit);
+                                            @RequestParam(defaultValue = "8") @Min(1) @Max(20) int limit,
+                                            @RequestParam(required = false) @Pattern(regexp = "^(en|km)?$") String lang) {
+        return searchService.suggest(q, limit, "km".equals(lang));
     }
 
     /** The cards for known ids, in the order asked: what Saves, Popular and Nearby draw their rows from. */
     @GetMapping("/cards")
     public List<SearchHitResponse> cards(@RequestParam(defaultValue = "DESTINATION") SearchType type,
-                                         @RequestParam @Size(min = 1, max = 100) List<UUID> ids) {
-        return searchService.cards(type, ids);
+                                         @RequestParam @Size(min = 1, max = 100) List<UUID> ids,
+                                         @RequestParam(required = false) @Pattern(regexp = "^(en|km)?$") String lang) {
+        return searchService.cards(type, ids, "km".equals(lang));
     }
 }

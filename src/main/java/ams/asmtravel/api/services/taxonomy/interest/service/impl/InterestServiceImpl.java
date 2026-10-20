@@ -115,6 +115,12 @@ public class InterestServiceImpl implements InterestService {
     private void apply(Interest interest, InterestRequest request) {
         interest.setName(request.name().trim());
         interest.setDescription(request.description());
+        if (request.nameKm() != null) {
+            interest.setNameKm(request.nameKm().isBlank() ? null : request.nameKm().trim());
+        }
+        if (request.descriptionKm() != null) {
+            interest.setDescriptionKm(request.descriptionKm().isBlank() ? null : request.descriptionKm().trim());
+        }
         interest.setGroupName(groupOf(request));
         if (request.iconKey() != null) {
             interest.setIconKey(request.iconKey().isBlank() ? null : request.iconKey().trim());

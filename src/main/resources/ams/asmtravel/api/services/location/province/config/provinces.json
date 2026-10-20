@@ -2,6 +2,7 @@
   {
     "slug": "banteay-meanchey",
     "name": "Banteay Meanchey",
+    "nameKm": "បន្ទាយមានជ័យ",
     "regionCode": "ANGKOR",
     "latitude": 13.5859,
     "longitude": 102.9737,
@@ -10,6 +11,7 @@
   {
     "slug": "battambang",
     "name": "Battambang",
+    "nameKm": "បាត់ដំបង",
     "regionCode": "ANGKOR",
     "latitude": 13.0957,
     "longitude": 103.2022,
@@ -18,6 +20,7 @@
   {
     "slug": "kampong-cham",
     "name": "Kampong Cham",
+    "nameKm": "កំពង់ចាម",
     "regionCode": "MEKONG",
     "latitude": 11.9934,
     "longitude": 105.4635,
@@ -26,6 +29,7 @@
   {
     "slug": "kampong-chhnang",
     "name": "Kampong Chhnang",
+    "nameKm": "កំពង់ឆ្នាំង",
     "regionCode": "CAPITAL",
     "latitude": 12.2505,
     "longitude": 104.6655,
@@ -34,6 +38,7 @@
   {
     "slug": "kampong-speu",
     "name": "Kampong Speu",
+    "nameKm": "កំពង់ស្ពឺ",
     "regionCode": "CAPITAL",
     "latitude": 11.4535,
     "longitude": 104.5209,
@@ -42,6 +47,7 @@
   {
     "slug": "kampong-thom",
     "name": "Kampong Thom",
+    "nameKm": "កំពង់ធំ",
     "regionCode": "ANGKOR",
     "latitude": 12.7111,
     "longitude": 104.8887,
@@ -50,6 +56,7 @@
   {
     "slug": "kampot",
     "name": "Kampot",
+    "nameKm": "កំពត",
     "regionCode": "COAST",
     "latitude": 10.6104,
     "longitude": 104.1815,
@@ -58,6 +65,7 @@
   {
     "slug": "kandal",
     "name": "Kandal",
+    "nameKm": "កណ្ដាល",
     "regionCode": "CAPITAL",
     "latitude": 11.4786,
     "longitude": 104.9497,
@@ -66,6 +74,7 @@
   {
     "slug": "kep",
     "name": "Kep",
+    "nameKm": "កែប",
     "regionCode": "COAST",
     "latitude": 10.4829,
     "longitude": 104.3167,
@@ -74,6 +83,7 @@
   {
     "slug": "koh-kong",
     "name": "Koh Kong",
+    "nameKm": "កោះកុង",
     "regionCode": "COAST",
     "latitude": 11.6153,
     "longitude": 102.9838,
@@ -82,6 +92,7 @@
   {
     "slug": "kratie",
     "name": "Kratie",
+    "nameKm": "ក្រចេះ",
     "regionCode": "NORTHEAST",
     "latitude": 12.4881,
     "longitude": 106.0188,
@@ -90,6 +101,7 @@
   {
     "slug": "mondulkiri",
     "name": "Mondulkiri",
+    "nameKm": "មណ្ឌលគិរី",
     "regionCode": "NORTHEAST",
     "latitude": 12.4536,
     "longitude": 107.1884,
@@ -98,6 +110,7 @@
   {
     "slug": "oddar-meanchey",
     "name": "Oddar Meanchey",
+    "nameKm": "ឧត្ដរមានជ័យ",
     "regionCode": "ANGKOR",
     "latitude": 14.1817,
     "longitude": 103.5169,
@@ -106,6 +119,7 @@
   {
     "slug": "pailin",
     "name": "Pailin",
+    "nameKm": "ប៉ៃលិន",
     "regionCode": "ANGKOR",
     "latitude": 12.849,
     "longitude": 102.6093,
@@ -114,6 +128,7 @@
   {
     "slug": "phnom-penh",
     "name": "Phnom Penh",
+    "nameKm": "ភ្នំពេញ",
     "regionCode": "CAPITAL",
     "latitude": 11.5564,
     "longitude": 104.9282,
@@ -122,6 +137,7 @@
   {
     "slug": "preah-sihanouk",
     "name": "Preah Sihanouk",
+    "nameKm": "ព្រះសីហនុ",
     "regionCode": "COAST",
     "latitude": 10.6253,
     "longitude": 103.5235,
@@ -130,6 +146,7 @@
   {
     "slug": "preah-vihear",
     "name": "Preah Vihear",
+    "nameKm": "ព្រះវិហារ",
     "regionCode": "NORTHEAST",
     "latitude": 13.807,
     "longitude": 104.98,
@@ -138,6 +155,7 @@
   {
     "slug": "prey-veng",
     "name": "Prey Veng",
+    "nameKm": "ព្រៃវែង",
     "regionCode": "MEKONG",
     "latitude": 11.4868,
     "longitude": 105.3253,
@@ -146,6 +164,7 @@
   {
     "slug": "pursat",
     "name": "Pursat",
+    "nameKm": "ពោធិ៍សាត់",
     "regionCode": "ANGKOR",
     "latitude": 12.5388,
     "longitude": 103.9192,
@@ -154,6 +173,7 @@
   {
     "slug": "ratanakiri",
     "name": "Ratanakiri",
+    "nameKm": "រតនគិរី",
     "regionCode": "NORTHEAST",
     "latitude": 13.7395,
     "longitude": 106.9873,
@@ -162,6 +182,7 @@
   {
     "slug": "siem-reap",
     "name": "Siem Reap",
+    "nameKm": "សៀមរាប",
     "regionCode": "ANGKOR",
     "latitude": 13.3671,
     "longitude": 103.8448,
@@ -170,6 +191,7 @@
   {
     "slug": "stung-treng",
     "name": "Stung Treng",
+    "nameKm": "ស្ទឹងត្រែង",
     "regionCode": "NORTHEAST",
     "latitude": 13.5259,
     "longitude": 105.9683,
@@ -178,6 +200,7 @@
   {
     "slug": "svay-rieng",
     "name": "Svay Rieng",
+    "nameKm": "ស្វាយរៀង",
     "regionCode": "MEKONG",
     "latitude": 11.0878,
     "longitude": 105.7993,
@@ -186,6 +209,7 @@
   {
     "slug": "takeo",
     "name": "Takeo",
+    "nameKm": "តាកែវ",
     "regionCode": "CAPITAL",
     "latitude": 10.9908,
     "longitude": 104.785,
@@ -194,6 +218,7 @@
   {
     "slug": "tbong-khmum",
     "name": "Tbong Khmum",
+    "nameKm": "ត្បូងឃ្មុំ",
     "regionCode": "MEKONG",
     "latitude": 11.9115,
     "longitude": 105.6558,

@@ -98,7 +98,7 @@ class NearbyDestinationsTests {
     }
 
     private static SearchRequest request(UUID near, Double radiusKm) {
-        return new SearchRequest(null, null, null, null, null, null, null, null, null, null, near, radiusKm);
+        return new SearchRequest(null, null, null, null, null, null, null, null, null, null, near, radiusKm, null);
     }
 
     private static NearbyDestination near(UUID id, String name, ListingStatus status, double metres) {

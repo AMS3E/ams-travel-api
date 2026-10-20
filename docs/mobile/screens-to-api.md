@@ -36,7 +36,7 @@ row filled and typed (`type=`, `items[].reason`), provinces with a picture, a ce
 with a centre and bounds, regions and provinces as favourites, corridor cards with `stopNames` and
 `encodedPolyline`, corridor galleries, food cards with `openNow`/`todayHours`, a documented hours format, a star
 filter on both review lists, home province and `profileCompletion`, `distanceUnit`, `percentile`, `shareUrl`.
-Parked by Kimleng: Khmer content, riel prices, saved folders, helpful votes, reporting a review; declined: a
+Parked by Kimleng: riel prices, saved folders, helpful votes, reporting a review (Khmer content was built on 2026-10-21, see R-004); declined: a
 first/last name split (one Full name stays).
 
 ## The one card every list is made of
@@ -199,7 +199,7 @@ first/last name split (one Full name stays).
 
 | Element | Endpoint | State |
 | --- | --- | --- |
-| Language (EN / KH), Currency (KHR / USD), Notification on/off | `GET /preferences/me`, `PUT /preferences/me` `{preferredLanguage, preferredCurrency, preferredRegionId, notificationEmail, notificationPush, theme, distanceUnit}`; Khmer content and riel prices are parked (2026-10-14): names stay English, prices in the API's currency | ✅ |
+| Language (EN / KH), Currency (KHR / USD), Notification on/off | `GET /preferences/me`, `PUT /preferences/me` `{preferredLanguage, preferredCurrency, preferredRegionId, notificationEmail, notificationPush, theme, distanceUnit}`; riel prices are parked (2026-10-14): prices come in the API's currency. Khmer content since 2026-10-21: with the language on KH ask `?lang=km` on `/search`, `/search/by-province`, `/search/suggest` and `/search/cards` (cards carry the Khmer where written and list what is still English in `untranslated`), and read `nameKm`, `descriptionKm`, `sloganKm`, `sloganByKm`, `addressKm` on a listing, `nameKm` (+ `descriptionKm`) on provinces, regions, categories, tags and interests; fall back to the English field when the Khmer one is null | ✅ |
 | Units (km / mi) | `distanceUnit` `KM` or `MI` on the same calls | ✅ |
 
 ## Help & Support, Terms & Conditions

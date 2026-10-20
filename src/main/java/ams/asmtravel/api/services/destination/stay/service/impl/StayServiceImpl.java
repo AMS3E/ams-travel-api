@@ -2,6 +2,7 @@ package ams.asmtravel.api.services.destination.stay.service.impl;
 
 import ams.asmtravel.api.services.location.province.service.ProvinceService;
 import ams.asmtravel.api.services.destination.destination.domain.DestinationDeletingEvent;
+import ams.asmtravel.api.services.destination.destination.domain.KhmerText;
 import ams.asmtravel.api.services.destination.destination.domain.ListingStatus;
 import ams.asmtravel.api.services.destination.destination.domain.NearbyArea;
 import ams.asmtravel.api.services.destination.destination.service.DestinationService;
@@ -261,6 +262,22 @@ public class StayServiceImpl implements StayService {
         stay.setDescription(request.description());
         stay.setSlogan(blankToNull(request.slogan()));
         stay.setSloganBy(blankToNull(request.sloganBy()));
+        /* Khmer: null keeps it, so a client that has never heard of it wipes nothing. */
+        if (request.nameKm() != null) {
+            stay.setNameKm(blankToNull(request.nameKm()));
+        }
+        if (request.descriptionKm() != null) {
+            stay.setDescriptionKm(KhmerText.hasText(request.descriptionKm()) ? request.descriptionKm().trim() : null);
+        }
+        if (request.sloganKm() != null) {
+            stay.setSloganKm(blankToNull(request.sloganKm()));
+        }
+        if (request.sloganByKm() != null) {
+            stay.setSloganByKm(blankToNull(request.sloganByKm()));
+        }
+        if (request.addressKm() != null) {
+            stay.setAddressKm(blankToNull(request.addressKm()));
+        }
         stay.setProvince(request.provinceId() == null ? null : provinceService.getEntity(request.provinceId()));
         stay.setPolicies(blankToNull(request.policies()));
         stay.setCheckInFrom(request.checkInFrom());

@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static ams.asmtravel.api.support.Callers.editor;
 import static ams.asmtravel.api.support.Callers.staff;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasItem;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.not;
@@ -116,6 +117,43 @@ class ListingPublishingIntegrationTests {
                 .andExpect(jsonPath("$[1].status").value("UNPUBLISHED"));
         mvc.perform(get("/api/v1/publish-requests/current").with(partner).param("targetType", "STAY").param("targetId", stay))
                 .andExpect(jsonPath("$.status").value("PENDING_REVIEW"));
+    }
+
+    /**
+     * Khmer is optional for now (2026-10-21): a stay or a place to eat goes live without it, from the desk or saved
+     * straight as published, and {@code missingKhmer} says what is still to write. Once written, the Khmer cards
+     * speak Khmer; until then they say what is still English.
+     */
+    @Test
+    void staysAndFoodPlacesGoLiveWithoutTheirKhmerAndSayWhatIsMissing() throws Exception {
+        RequestPostProcessor partner = partner("owner@khmer.test");
+        String english = "\"name\":\"Lotus Guesthouse\",\"type\":\"GUESTHOUSE\",\"slogan\":\"Quiet nights\"," + PIN;
+        String stay = id(mvc.perform(post("/api/v1/stays").with(partner).contentType(MediaType.APPLICATION_JSON)
+                        .content("{" + english + "}"))
+                .andExpect(jsonPath("$.missingKhmer", contains("nameKm", "sloganKm"))));
+        String request = id(submit(partner, "{\"targetType\":\"STAY\",\"targetId\":\"" + stay + "\"}").andExpect(status().isCreated()));
+        mvc.perform(post("/api/v1/publish-requests/" + request + "/approve").with(bdo())
+                        .contentType(MediaType.APPLICATION_JSON).content("{}"))
+                .andExpect(jsonPath("$.status").value("APPROVED"));
+        mvc.perform(post("/api/v1/publish-requests/" + request + "/publish").with(bdo()))
+                .andExpect(jsonPath("$.status").value("PUBLISHED"));
+        mvc.perform(get("/api/v1/search").param("type", "STAY").param("lang", "km").param("q", "lotus"))
+                .andExpect(jsonPath("$.content[0].name").value("Lotus Guesthouse"))
+                .andExpect(jsonPath("$.content[0].untranslated", hasItem("name")));
+
+        mvc.perform(put("/api/v1/stays/" + stay).with(editorDesk()).contentType(MediaType.APPLICATION_JSON)
+                        .content("{" + english + ",\"nameKm\":\"ផ្ទះសំណាក់ផ្កាឈូក\",\"sloganKm\":\"យប់ស្ងាត់\"}"))
+                .andExpect(jsonPath("$.missingKhmer", hasSize(0)));
+        mvc.perform(get("/api/v1/search").param("type", "STAY").param("lang", "km").param("q", "ផ្កាឈូក"))
+                .andExpect(jsonPath("$.content[0].name").value("ផ្ទះសំណាក់ផ្កាឈូក"))
+                .andExpect(jsonPath("$.content[0].untranslated", not(hasItem("name"))));
+
+        // An editor saving a food place straight as published is not held back either.
+        String food = "\"name\":\"Lotus Noodles\",\"type\":\"RESTAURANT\",\"status\":\"PUBLISHED\"," + PIN;
+        mvc.perform(post("/api/v1/foods").with(editorDesk()).contentType(MediaType.APPLICATION_JSON).content("{" + food + "}"))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.status").value("PUBLISHED"))
+                .andExpect(jsonPath("$.missingKhmer", contains("nameKm")));
     }
 
     @Test

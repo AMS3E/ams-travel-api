@@ -20,6 +20,8 @@ public record ProvinceRequest(
         Boolean isActive,
         @MediaKey(allowEmpty = true, message = "Upload the picture first, then send its key") String coverKey,
         @DecimalMin("-90") @DecimalMax("90") BigDecimal latitude,
-        @DecimalMin("-180") @DecimalMax("180") BigDecimal longitude
+        @DecimalMin("-180") @DecimalMax("180") BigDecimal longitude,
+        /** Khmer twins: null keeps what is stored, blank clears it. */
+        @Size(max = 150) String nameKm
 ) {
 }

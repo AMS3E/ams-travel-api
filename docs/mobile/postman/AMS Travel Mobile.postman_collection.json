@@ -1,6 +1,6 @@
 {
   "info": {
-    "_postman_id": "e073f0e7-a99d-4211-9b7e-87feb1d28753",
+    "_postman_id": "a4611e3e-93f6-4f75-99e4-7eae86c8bc19",
     "name": "AMS Travel Mobile",
     "description": "The AMS Travel API as the mobile app uses it, one folder per screen. Built by docs/mobile/postman/build-collection.py from the API's OpenAPI description on 2026-10-14. Reads marked public need no token; the rest send the traveller's bearer token from {{token}}. See docs/mobile/screens-to-api.md for what each screen needs.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -19,11 +19,6 @@
     {
       "key": "baseUrl",
       "value": "https://api.travel.ams.com.kh/api/v1"
-    },
-    {
-      "key": "checkInCode",
-      "value": "ABCD-EFGH-JKLM",
-      "type": "string"
     }
   ],
   "item": [
@@ -671,6 +666,155 @@
           "response": []
         },
         {
+          "name": "The same in Khmer: cards in Khmer where written, `untranslated` names the rest (also on by-province, suggest, cards)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/search?type=DESTINATION&q=អង្គរ&lang=km&size=20",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "DESTINATION",
+                  "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "q",
+                  "value": "អង្គរ",
+                  "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "lang",
+                  "value": "km",
+                  "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "size",
+                  "value": "20",
+                  "disabled": false,
+                  "description": "The size of the page to be returned"
+                },
+                {
+                  "key": "regionId",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "provinceId",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "regionIds",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "provinceIds",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "categoryIds",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "tagIds",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "interestIds",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "travelerRecommended",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "near",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "radiusKm",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                }
+              ]
+            },
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Suggestions in Khmer",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/search/suggest?q=អង្គ&limit=8&lang=km",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "search",
+                "suggest"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "អង្គ",
+                  "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "limit",
+                  "value": "8",
+                  "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "lang",
+                  "value": "km",
+                  "disabled": false,
+                  "description": ""
+                }
+              ]
+            },
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": []
+        },
+        {
           "name": "Explore by Nearby",
           "request": {
             "method": "GET",
@@ -1260,7 +1404,7 @@
           "response": []
         },
         {
-          "name": "Check in (scan the posted code + GPS, Adventure badge)",
+          "name": "Check in (GPS stamp, Adventure badge)",
           "request": {
             "method": "POST",
             "header": [
@@ -1279,10 +1423,10 @@
               ],
               "query": []
             },
-            "description": "Since 2026-10-20 a check-in needs the QR code posted on site AND the device position. Scan the code in the app and send the scanned text as `code` (a link whose last part is the code; the code alone works too). Answers `outcome` COLLECTED, ALREADY_COLLECTED (one stamp per place per season), TOO_FAR or INVALID_CODE, with `targetType` DESTINATION / STAY / FOOD and `destinationId`. Stays and food places are checked in the same way.",
+            "description": "\n\nNeeds the traveller's token.",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"code\": \"{{checkInCode}}\",\n  \"latitude\": 13.4125,\n  \"longitude\": 103.867\n}",
+              "raw": "{\n  \"destinationId\": \"{{destinationId}}\",\n  \"latitude\": 13.4125,\n  \"longitude\": 103.867\n}",
               "options": {
                 "raw": {
                   "language": "json"

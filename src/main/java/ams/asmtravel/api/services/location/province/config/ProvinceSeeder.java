@@ -40,6 +40,7 @@ public class ProvinceSeeder implements CatalogSeedContributor {
             Province province = new Province();
             province.setSlug(SeedJson.text(node, "slug"));
             province.setName(SeedJson.text(node, "name"));
+            province.setNameKm(SeedJson.text(node, "nameKm"));
             province.setRegion(context.require(Region.class, SeedJson.text(node, "regionCode"), "region"));
             province.setCoverKey(context.imageKey(node));
             if (node.hasNonNull("latitude") && node.hasNonNull("longitude")) {

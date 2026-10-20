@@ -27,6 +27,8 @@ SCREENS = [
         ("GET", "/api/v1/search", "Filter by regions, provinces, category, tag, interest (several ids comma-separated)", {"regionIds": "{{regionId}}", "provinceIds": "", "categoryIds": "", "tagIds": "", "interestIds": "", "size": "20"}, None),
         ("GET", "/api/v1/search", "Only the Traveler seal holders", {"travelerRecommended": "true", "size": "20"}, None),
         ("GET", "/api/v1/search/suggest", "Suggestions while typing", {"q": "ang", "limit": "8"}, None),
+        ("GET", "/api/v1/search", "The same in Khmer: cards in Khmer where written, `untranslated` names the rest (also on by-province, suggest, cards)", {"type": "DESTINATION", "q": "អង្គរ", "lang": "km", "size": "20"}, None),
+        ("GET", "/api/v1/search/suggest", "Suggestions in Khmer", {"q": "អង្គ", "limit": "8", "lang": "km"}, None),
         ("GET", "/api/v1/destinations/nearby", "Explore by Nearby", {"latitude": "13.4125", "longitude": "103.8670", "radiusKm": "25", "limit": "20"}, None),
         ("GET", "/api/v1/categories", "Category chips", {}, None),
         ("GET", "/api/v1/tags", "Tag chips", {}, None),

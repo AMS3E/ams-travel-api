@@ -171,6 +171,9 @@ public class ProvinceServiceImpl implements ProvinceService {
             province.setRegion(zone);
         }
         province.setName(request.name().trim());
+        if (request.nameKm() != null) {
+            province.setNameKm(request.nameKm().isBlank() ? null : request.nameKm().trim());
+        }
         province.setCountryCode(request.countryCode() == null || request.countryCode().isBlank()
                 ? "KH" : request.countryCode().trim().toUpperCase(Locale.ROOT));
         if (request.coverKey() != null) {

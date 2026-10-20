@@ -3,6 +3,8 @@
     "slug": "historical-sites",
     "name": "Historical Sites",
     "description": "Temples, royal capitals and ruins from twelve centuries of Khmer history.",
+    "nameKm": "តំបន់ប្រវត្តិសាស្ត្រ",
+    "descriptionKm": "ប្រាសាទ រាជធានី និងសំណង់បុរាណពីប្រវត្តិសាស្ត្រខ្មែរដប់ពីរសតវត្ស។",
     "group": "Attraction Sites",
     "icon": "temple",
     "image": "angkor-wat-3.jpg"
@@ -11,6 +13,8 @@
     "slug": "culture",
     "name": "Culture",
     "description": "Museums, living crafts, indigenous communities and the arts of modern Cambodia.",
+    "nameKm": "វប្បធម៌",
+    "descriptionKm": "សារមន្ទីរ សិប្បកម្មដែលនៅរស់រវើក សហគមន៍ជនជាតិដើមភាគតិច និងសិល្បៈនៃកម្ពុជាសម័យទំនើប។",
     "group": "Attraction Sites",
     "icon": "sparkles",
     "image": "national-museum-3.jpg"
@@ -19,6 +23,8 @@
     "slug": "national-parks",
     "name": "National Parks",
     "description": "Protected forest, wildlife sanctuaries, and highland plateaus.",
+    "nameKm": "ឧទ្យានជាតិ",
+    "descriptionKm": "ព្រៃការពារ ដែនជម្រកសត្វព្រៃ និងខ្ពង់រាប។",
     "group": "Attraction Sites",
     "icon": "tree",
     "image": "kirirom-national-park-3.jpg"
@@ -27,6 +33,8 @@
     "slug": "cave",
     "name": "Cave",
     "description": "Limestone caves with hilltop shrines, ancient carvings and bats at dusk.",
+    "nameKm": "រូងភ្នំ",
+    "descriptionKm": "រូងភ្នំថ្មកំបោរ ជាមួយទីសក្ការៈលើកំពូលភ្នំ ចម្លាក់បុរាណ និងសត្វប្រចៀវពេលព្រលប់។",
     "group": "Attraction Sites",
     "icon": "mountain",
     "image": "phnom-chhnork-cave-3.jpg"
@@ -35,6 +43,8 @@
     "slug": "luxury-hotel",
     "name": "Luxury Hotel",
     "description": "Five-star stays from the gulf islands to the Bokor plateau.",
+    "nameKm": "សណ្ឋាគារប្រណីត",
+    "descriptionKm": "កន្លែងស្នាក់នៅលំដាប់ផ្កាយប្រាំ ចាប់ពីកោះនានាក្នុងឈូងសមុទ្រ រហូតដល់ខ្ពង់រាបបូកគោ។",
     "group": "Stays",
     "icon": "building",
     "image": "stay-chaktomuk-sky-residences-1.jpg"
@@ -43,6 +53,8 @@
     "slug": "homestay",
     "name": "Homestay",
     "description": "Sleep in a village house and live the local rhythm.",
+    "nameKm": "ស្នាក់នៅផ្ទះអ្នកភូមិ",
+    "descriptionKm": "ស្នាក់នៅក្នុងផ្ទះអ្នកភូមិ ហើយរស់នៅតាមរបៀបក្នុងស្រុក។",
     "group": "Stays",
     "icon": "home",
     "image": "stay-kampong-phluk-homestay-1.jpg"
@@ -51,6 +63,8 @@
     "slug": "resorts",
     "name": "Resorts",
     "description": "Resort stays with a pool, a spa or a golf course close by.",
+    "nameKm": "រមណីយដ្ឋាន",
+    "descriptionKm": "ការស្នាក់នៅរមណីយដ្ឋាន ដែលមានអាងហែលទឹក ស្ប៉ា ឬទីលានវាយកូនហ្គោលនៅក្បែរ។",
     "group": "Stays",
     "icon": "sun",
     "image": "stay-otres-beach-resort-1.jpg"
@@ -59,6 +73,8 @@
     "slug": "private-island",
     "name": "Private Island",
     "description": "A whole island to yourself in the Gulf of Thailand.",
+    "nameKm": "កោះឯកជន",
+    "descriptionKm": "កោះទាំងមូលសម្រាប់តែអ្នក នៅក្នុងឈូងសមុទ្រថៃ។",
     "group": "Stays",
     "icon": "waves",
     "image": "song-saa-private-island-3.jpg"
@@ -67,6 +83,8 @@
     "slug": "eco-lodge",
     "name": "Eco Lodge",
     "description": "Low-impact lodges run with the communities around them.",
+    "nameKm": "ផ្ទះសំណាក់បែបអេកូ",
+    "descriptionKm": "ផ្ទះសំណាក់ដែលប៉ះពាល់បរិស្ថានតិច ដំណើរការរួមគ្នាជាមួយសហគមន៍ជុំវិញ។",
     "group": "Stays",
     "icon": "leaf",
     "image": "stay-kulen-hills-eco-lodge-1.jpg"
@@ -75,6 +93,8 @@
     "slug": "restaurants",
     "name": "Restaurants",
     "description": "Khmer kitchens and fine dining worth planning a day around.",
+    "nameKm": "ភោជនីយដ្ឋាន",
+    "descriptionKm": "ផ្ទះបាយខ្មែរ និងភោជនីយដ្ឋានលំដាប់ខ្ពស់ ដែលសមនឹងចំណាយពេលទៅភ្លក់។",
     "group": "Food",
     "icon": "utensils",
     "image": "food-royal-khmer-dining-1.jpg"
@@ -83,6 +103,8 @@
     "slug": "markets",
     "name": "Markets",
     "description": "Produce, crab and night markets — where the country shops and eats.",
+    "nameKm": "ផ្សារ",
+    "descriptionKm": "ផ្សារបន្លែផ្លែឈើ ផ្សារក្ដាម និងផ្សាររាត្រី — កន្លែងដែលប្រជាជនទិញ និងញ៉ាំ។",
     "group": "Food",
     "icon": "utensils",
     "image": "central-market-3.jpg"
@@ -91,6 +113,8 @@
     "slug": "drinks",
     "name": "Drinks",
     "description": "Highland coffee, city cafés, rice wine and rooftop bars.",
+    "nameKm": "ភេសជ្ជៈ",
+    "descriptionKm": "កាហ្វេខ្ពង់រាប ហាងកាហ្វេក្នុងទីក្រុង ស្រាស និងបារលើដំបូល។",
     "group": "Food",
     "icon": "sparkles",
     "image": "food-sisowath-sunset-bar-1.jpg"
@@ -99,6 +123,8 @@
     "slug": "streetfood",
     "name": "Streetfood",
     "description": "Noodle stalls, grills and riverfront snacks.",
+    "nameKm": "អាហារតាមផ្លូវ",
+    "descriptionKm": "តូបគុយទាវ សាច់អាំង និងអាហារសម្រន់មាត់ទន្លេ។",
     "group": "Food",
     "icon": "utensils",
     "image": "food-kampot-night-market-bites-1.jpg"
@@ -107,6 +133,8 @@
     "slug": "traditional-food",
     "name": "Traditional Food",
     "description": "Amok, num banh chok, pepper and palm sugar — tasted where they are made.",
+    "nameKm": "ម្ហូបប្រពៃណី",
+    "descriptionKm": "អាម៉ុក នំបញ្ចុក ម្រេច និងស្ករត្នោត — ភ្លក់នៅកន្លែងដែលគេផលិតពួកវា។",
     "group": "Food",
     "icon": "utensils",
     "image": "food-preah-dak-num-banh-chok-1.jpg"
@@ -115,6 +143,8 @@
     "slug": "skybar",
     "name": "Skybar",
     "description": "Rooftop bars above the capital's skyline.",
+    "nameKm": "បារលើដំបូល",
+    "descriptionKm": "បារលើដំបូលអគារខ្ពស់ៗ មើលទេសភាពរាជធានី។",
     "group": "Food",
     "icon": "building",
     "image": "sora-sky-bar-3.jpg"
@@ -123,6 +153,8 @@
     "slug": "beaches-islands",
     "name": "Beaches & Island",
     "description": "Gulf islands, sandbars, and long empty shorelines.",
+    "nameKm": "ឆ្នេរ និងកោះ",
+    "descriptionKm": "កោះក្នុងឈូងសមុទ្រ កោះខ្សាច់ និងឆ្នេរវែងៗដ៏ស្ងប់ស្ងាត់។",
     "group": "Water",
     "icon": "sun",
     "image": "koh-rong-3.jpg"
@@ -131,6 +163,8 @@
     "slug": "waterfalls",
     "name": "Waterfalls",
     "description": "Two-tier falls, monsoon cascades, and swimmable pools.",
+    "nameKm": "ទឹកធ្លាក់",
+    "descriptionKm": "ទឹកធ្លាក់ពីរជាន់ ទឹកធ្លាក់រដូវវស្សា និងអន្លង់ដែលអាចហែលទឹកបាន។",
     "group": "Water",
     "icon": "waves",
     "image": "bou-sra-waterfall-3.jpg"
@@ -139,6 +173,8 @@
     "slug": "floating-village",
     "name": "Floating Village",
     "description": "Stilt houses and floating homes on the Tonle Sap.",
+    "nameKm": "ភូមិបណ្ដែតទឹក",
+    "descriptionKm": "ផ្ទះសសរខ្ពស់ និងផ្ទះបណ្ដែតទឹកលើបឹងទន្លេសាប។",
     "group": "Water",
     "icon": "home",
     "image": "tonle-sap-floating-village-3.jpg"
@@ -147,6 +183,8 @@
     "slug": "diving",
     "name": "Diving",
     "description": "Reefs, coral gardens and snorkelling off the islands.",
+    "nameKm": "ការមុជទឹក",
+    "descriptionKm": "ថ្មប៉ប្រះទឹក សួនផ្កាថ្ម និងការមុជទឹកមើលផ្កាថ្មក្បែរកោះនានា។",
     "group": "Activities & Experiences",
     "icon": "waves",
     "image": "koh-tang-3.jpg"
@@ -155,6 +193,8 @@
     "slug": "kayak",
     "name": "Kayak",
     "description": "Paddle mangroves, rivers and island coves.",
+    "nameKm": "កាយ៉ាក់",
+    "descriptionKm": "អុំកាយ៉ាក់កាត់ព្រៃកោងកាង ទន្លេ និងឈូងតូចៗនៃកោះ។",
     "group": "Activities & Experiences",
     "icon": "waves",
     "image": "peam-krasop-mangrove-3.jpg"
@@ -163,6 +203,8 @@
     "slug": "bird-sanctuary",
     "name": "Bird Sanctuary",
     "description": "Wetlands where storks, pelicans and cranes gather.",
+    "nameKm": "ជម្រកសត្វស្លាប",
+    "descriptionKm": "តំបន់ដីសើមដែលសត្វស្លាបធំៗ ដូចជា ទុង ត្រដក់ និងក្រៀល មកប្រមូលផ្ដុំ។",
     "group": "Activities & Experiences",
     "icon": "leaf",
     "image": "prek-toal-bird-sanctuary-3.jpg"
@@ -171,6 +213,8 @@
     "slug": "wildlife",
     "name": "Wildlife",
     "description": "Elephants, river dolphins and the forest animals of the highlands.",
+    "nameKm": "សត្វព្រៃ",
+    "descriptionKm": "ដំរី ផ្សោតទន្លេ និងសត្វព្រៃនៃតំបន់ខ្ពង់រាប។",
     "group": "Activities & Experiences",
     "icon": "tree",
     "image": "elephant-valley-project-3.jpg"
@@ -179,6 +223,8 @@
     "slug": "hiking-trekking",
     "name": "Hiking/Trekking",
     "description": "Ridge trails, jungle treks and summit walks.",
+    "nameKm": "ដើរឡើងភ្នំ និងដើរព្រៃ",
+    "descriptionKm": "ផ្លូវដើរតាមខ្នងភ្នំ ការដើរកាត់ព្រៃ និងការឡើងកំពូលភ្នំ។",
     "group": "Activities & Experiences",
     "icon": "mountain",
     "image": "cardamom-mountains-3.jpg"
@@ -187,6 +233,8 @@
     "slug": "fishing",
     "name": "Fishing",
     "description": "Fishing villages and rivers where the catch still shapes the day.",
+    "nameKm": "ការនេសាទ",
+    "descriptionKm": "ភូមិនេសាទ និងទន្លេដែលការនេសាទនៅតែកំណត់ជីវភាពប្រចាំថ្ងៃ។",
     "group": "Activities & Experiences",
     "icon": "waves",
     "image": "kampong-khleang-3.jpg"
@@ -195,6 +243,8 @@
     "slug": "camping",
     "name": "Camping",
     "description": "Nights in the forest and under the highland sky.",
+    "nameKm": "ការបោះជំរុំ",
+    "descriptionKm": "យប់នៅក្នុងព្រៃ និងក្រោមមេឃនៃតំបន់ខ្ពង់រាប។",
     "group": "Activities & Experiences",
     "icon": "tree",
     "image": "virachey-national-park-3.jpg"
@@ -203,6 +253,8 @@
     "slug": "viewpoint",
     "name": "Viewpoint",
     "description": "Sunrise summits, sunset ridges and wide Cambodian landscapes.",
+    "nameKm": "ចំណុចមើលទេសភាព",
+    "descriptionKm": "កំពូលភ្នំមើលថ្ងៃរះ ខ្នងភ្នំមើលថ្ងៃលិច និងទេសភាពដ៏ធំល្វឹងល្វើយរបស់កម្ពុជា។",
     "group": "Activities & Experiences",
     "icon": "camera",
     "image": "bokor-mountain-3.jpg"
@@ -211,6 +263,8 @@
     "slug": "cruise",
     "name": "Cruise",
     "description": "Boat trips on the Mekong, the Tonle Sap and the gulf.",
+    "nameKm": "ការជិះនាវាកម្សាន្ត",
+    "descriptionKm": "ដំណើរជិះទូកលើទន្លេមេគង្គ ទន្លេសាប និងឈូងសមុទ្រ។",
     "group": "Activities & Experiences",
     "icon": "route",
     "image": "mekong-discovery-trail-3.jpg"
@@ -219,6 +273,8 @@
     "slug": "shopping",
     "name": "Shopping",
     "description": "Markets, craft quarters and the capital's shopping streets.",
+    "nameKm": "ការដើរទិញឥវ៉ាន់",
+    "descriptionKm": "ផ្សារ តំបន់សិប្បកម្ម និងផ្លូវទិញឥវ៉ាន់នៃរាជធានី។",
     "group": "Activities & Experiences",
     "icon": "briefcase",
     "image": "russian-market-3.jpg"
@@ -227,6 +283,8 @@
     "slug": "khmer-civilization",
     "name": "Khmer Civilization",
     "description": "Trails through the royal capitals of the Khmer empire, from Angkor to the Chaktomuk river junction.",
+    "nameKm": "អារ្យធម៌ខ្មែរ",
+    "descriptionKm": "ផ្លូវឆ្លងកាត់រាជធានីនៃចក្រភពខ្មែរ ចាប់ពីអង្គររហូតដល់ចតុមុខ។",
     "group": "Tourism Corridors",
     "icon": "temple",
     "image": "bayon-temple-3.jpg"
@@ -235,6 +293,8 @@
     "slug": "mekong-civilization",
     "name": "Mekong Civilization",
     "description": "Journeys on the Tonle Sap and the Mekong: floating villages, river islands and the dolphins upriver.",
+    "nameKm": "អារ្យធម៌មេគង្គ",
+    "descriptionKm": "ដំណើរលើទន្លេសាប និងទន្លេមេគង្គ៖ ភូមិបណ្ដែតទឹក កោះកណ្ដាលទន្លេ និងផ្សោតនៅខ្សែទឹកខាងលើ។",
     "group": "Tourism Corridors",
     "icon": "waves",
     "image": "kampi-dolphin-pool-3.jpg"
@@ -243,6 +303,8 @@
     "slug": "coastal-discovery",
     "name": "Coastal Discovery",
     "description": "Road trips down the gulf coast, from the pepper farms and crab markets to the islands.",
+    "nameKm": "ការរុករកតំបន់ឆ្នេរ",
+    "descriptionKm": "ដំណើរតាមផ្លូវគោកតាមឆ្នេរឈូងសមុទ្រ ចាប់ពីចម្ការម្រេច និងផ្សារក្ដាម រហូតដល់កោះនានា។",
     "group": "Tourism Corridors",
     "icon": "sun",
     "image": "koh-rong-sanloem-3.jpg"
@@ -251,6 +313,8 @@
     "slug": "mountain-adventure",
     "name": "Mountain Adventure",
     "description": "Routes into the Cardamom Mountains: rainforest, waterfalls and the Bokor plateau.",
+    "nameKm": "ការផ្សងព្រេងលើភ្នំ",
+    "descriptionKm": "ផ្លូវចូលទៅជួរភ្នំក្រវាញ៖ ព្រៃត្រូពិច ទឹកធ្លាក់ និងខ្ពង់រាបបូកគោ។",
     "group": "Tourism Corridors",
     "icon": "mountain",
     "image": "phnom-kulen-3.jpg"
@@ -259,6 +323,8 @@
     "slug": "khmer-culinary",
     "name": "Khmer Culinary",
     "description": "Food trails to cook, taste and shop the Khmer table, from the market to the farm.",
+    "nameKm": "ម្ហូបអាហារខ្មែរ",
+    "descriptionKm": "ដំណើរម្ហូបអាហារ ដើម្បីចម្អិន ភ្លក់ និងទិញគ្រឿងផ្សំម្ហូបខ្មែរ ចាប់ពីផ្សាររហូតដល់កសិដ្ឋាន។",
     "group": "Tourism Corridors",
     "icon": "utensils",
     "image": "kep-crab-market-3.jpg"

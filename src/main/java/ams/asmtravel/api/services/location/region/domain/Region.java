@@ -47,6 +47,10 @@ public class Region {
     @Column(nullable = false, length = 150)
     private String name;
 
+    /** Its Khmer name, typed by hand; null until written. */
+    @Column(length = 150)
+    private String nameKm;
+
     /** Upper-case and short ({@code COAST}); the website's URL for the region is it lower-cased. */
     @Column(nullable = false, unique = true, length = 20)
     private String code;
@@ -59,6 +63,10 @@ public class Region {
 
     @Column(columnDefinition = "text")
     private String description;
+
+    /** The description in Khmer; null until written. */
+    @Column(columnDefinition = "text")
+    private String descriptionKm;
 
     /** The picture on its card on Explore and the banner of its page in the app; null until one is chosen. */
     @Column(length = 512)
