@@ -35,7 +35,7 @@ class AccessRuleMatrixTests {
             "/api/v1/destinations", "/api/v1/regions", "/api/v1/provinces", "/api/v1/categories", "/api/v1/tags",
             "/api/v1/interests", "/api/v1/corridors", "/api/v1/corridors/" + ID + "/itinerary",
             "/api/v1/corridor-destinations", "/api/v1/stays", "/api/v1/stay-rooms",
-            "/api/v1/foods", "/api/v1/media?ownerType=FOOD", "/api/v1/media?ownerType=DESTINATION", "/api/v1/popular",
+            "/api/v1/foods", "/api/v1/activities", "/api/v1/media?ownerType=FOOD", "/api/v1/media?ownerType=ACTIVITY", "/api/v1/media?ownerType=DESTINATION", "/api/v1/popular",
             "/api/v1/recommendations/for-you", "/api/v1/seasons", "/api/v1/seasons/current",
             "/api/v1/badges", "/api/v1/badges/" + ID,
             "/api/v1/badges/shared/" + ID, "/api/v1/destination-verifications/status",
@@ -43,7 +43,7 @@ class AccessRuleMatrixTests {
             "/api/v1/destination-histories", "/api/v1/destination-monarchs", "/api/v1/ratings?targetType=DESTINATION&targetIds=" + ID,
             "/api/v1/reviews?targetType=DESTINATION&targetId=" + ID, "/api/v1/media?ownerType=STAY&ownerId=" + ID,
             "/api/v1/media?ownerType=CORRIDOR", "/api/v1/search/by-province", "/api/v1/badges/shared/" + ID + "/page",
-            "/api/v1/popular?type=STAY"
+            "/api/v1/popular?type=STAY", "/api/v1/stamps/scan/ABCD-EFGH-JKLM"
     })
     void anyoneReads(String path) throws Exception {
         assertThat(status(HttpMethod.GET, path, false)).isNotIn(401, 403);
@@ -54,10 +54,10 @@ class AccessRuleMatrixTests {
     @CsvSource({
             "GET, /api/v1/users/me", "GET, /api/v1/preferences/me", "GET, /api/v1/badges/me/progress",
             "PUT, /api/v1/badges/me/explorations/" + ID, "GET, /api/v1/badges/me/earned",
-            "GET, /api/v1/stamps/me", "POST, /api/v1/stamps",
+            "GET, /api/v1/stamps/me", "POST, /api/v1/stamps", "GET, /api/v1/stamps/codes?targetType=STAY&targetId=" + ID, "POST, /api/v1/stamps/codes",
             "GET, /api/v1/notifications", "GET, /api/v1/favorites", "GET, /api/v1/reviews/me", "POST, /api/v1/reviews",
             "GET, /api/v1/destination-verifications/queue",
-            "GET, /api/v1/destination-verifications", "GET, /api/v1/admin/audit", "GET, /api/v1/admin/overview", "GET, /api/v1/admin/destination-stats",
+            "GET, /api/v1/destination-verifications", "GET, /api/v1/admin/audit", "GET, /api/v1/admin/overview", "GET, /api/v1/admin/destination-stats", "GET, /api/v1/admin/destination-stats/" + ID,
             "GET, /api/v1/destinations/workspace", "GET, /api/v1/identities", "GET, /api/v1/user-roles",
             "GET, /api/v1/roles", "GET, /api/v1/permissions", "GET, /api/v1/staff", "POST, /api/v1/media/files",
             "GET, /api/v1/media/files/verification/" + ID + "/a.jpg"
@@ -69,8 +69,10 @@ class AccessRuleMatrixTests {
     /** What a visitor's account does not reach: the back office and every catalogue write. */
     @ParameterizedTest
     @CsvSource({
-            "GET, /api/v1/destination-verifications/queue", "GET, /api/v1/admin/audit", "GET, /api/v1/admin/overview", "GET, /api/v1/admin/destination-stats",
+            "GET, /api/v1/destination-verifications/queue", "GET, /api/v1/admin/audit", "GET, /api/v1/admin/overview", "GET, /api/v1/admin/destination-stats", "GET, /api/v1/admin/destination-stats/" + ID,
             "GET, /api/v1/destinations/workspace", "POST, /api/v1/seasons", "POST, /api/v1/badges",
+            "GET, /api/v1/stamps/codes?targetType=STAY&targetId=" + ID, "POST, /api/v1/stamps/codes", "DELETE, /api/v1/stamps/codes/" + ID,
+            "POST, /api/v1/stamps/codes/" + ID + "/retire",
             "POST, /api/v1/historical-coverage/periods",
             "POST, /api/v1/historical-coverage/monarchs", "POST, /api/v1/destination-histories", "PUT, /api/v1/destination-monarchs/" + ID,
             "PUT, /api/v1/corridor-destinations/" + ID, "PUT, /api/v1/corridors/" + ID + "/itinerary",
@@ -78,7 +80,7 @@ class AccessRuleMatrixTests {
             "POST, /api/v1/corridors", "POST, /api/v1/destination-verifications",
             "DELETE, /api/v1/admin/audit", "POST, /api/v1/regions", "GET, /api/v1/media/files/verification/" + ID + "/a.jpg",
             "GET, /api/v1/identities", "GET, /api/v1/user-roles", "GET, /api/v1/roles", "GET, /api/v1/staff",
-            "GET, /api/v1/reviews", "POST, /api/v1/stay-rooms", "PUT, /api/v1/stay-rooms/" + ID
+            "GET, /api/v1/reviews", "POST, /api/v1/stay-rooms", "PUT, /api/v1/stay-rooms/" + ID, "POST, /api/v1/activities", "DELETE, /api/v1/activities/" + ID
     })
     void aVisitorIsTurnedAway(String method, String path) throws Exception {
         assertThat(status(HttpMethod.valueOf(method), path, true)).isEqualTo(403);

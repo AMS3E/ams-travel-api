@@ -186,7 +186,6 @@ public class RegionServiceImpl implements RegionService {
         region.setName(request.name().trim());
         region.setParentId(parentId);
         region.setDescription(request.description());
-        region.setHistoryIntro(request.historyIntro());
         if (request.nameKm() != null) {
             region.setNameKm(request.nameKm().isBlank() ? null : request.nameKm().trim());
         }

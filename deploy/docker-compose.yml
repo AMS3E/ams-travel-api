@@ -1,0 +1,170 @@
+# The whole AMS Travel backend on one machine: Postgres with PostGIS, Keycloak with the two realms,
+# MinIO for pictures, Mailpit as the local inbox, and the API. The dashboard (CMS) is a profile,
+# because it needs the dashboard repo cloned next to this one.
+#
+#   cp .env.example .env            # once; fill in what the comments ask for
+#   docker compose up -d            # builds the images the first time (several minutes)
+#   docker compose --profile cms up -d   # the same, with the dashboard
+#   docker compose logs -f api      # watch the API seed the catalogue on its first start
+#
+# Everything is reachable on localhost by default; the ports and the public addresses are in .env.
+name: ams-travel
+
+services:
+  postgres:
+    image: imresamu/postgis:17-3.5
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      APP_DB_PASSWORD: ${APP_DB_PASSWORD:?set APP_DB_PASSWORD in .env}
+      KEYCLOAK_DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD:?set KEYCLOAK_DB_PASSWORD in .env}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./postgres/init.sh:/docker-entrypoint-initdb.d/10-ams-travel.sh:ro
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d ams_travel"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  minio:
+    build: ./minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:?set MINIO_ROOT_USER in .env}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:?set MINIO_ROOT_PASSWORD in .env}
+    volumes:
+      - minio-data:/data
+    ports:
+      - "${MINIO_PORT:-9000}:9000"
+      - "${MINIO_CONSOLE_PORT:-9001}:9001"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:9000/minio/health/live"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  mailpit:
+    # The local inbox: every mail Keycloak sends (verification codes, password resets) lands here.
+    image: axllent/mailpit:latest
+    ports:
+      - "${MAILPIT_PORT:-8025}:8025"
+    healthcheck:
+      test: ["CMD", "/mailpit", "readyz"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  keycloak:
+    build:
+      context: ..
+      target: keycloak
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KEYCLOAK_ADMIN_USER:-admin}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:?set KEYCLOAK_ADMIN_PASSWORD in .env}
+      KC_DB_URL: jdbc:postgresql://postgres:5432/keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
+      KC_HTTP_ENABLED: "true"
+      KC_HOSTNAME: ${KEYCLOAK_PUBLIC_URL:-http://localhost:9090}
+      KC_HOSTNAME_STRICT: "false"
+      KC_PROXY_HEADERS: xforwarded
+      # What the entrypoint writes into the realm files.
+      SMTP_HOST: mailpit
+      SMTP_PORT: "1025"
+      WEBSITE_URL: ${WEBSITE_URL:-http://localhost:3000}
+      DASHBOARD_URL: ${DASHBOARD_URL:-http://localhost:3001}
+      SSL_REQUIRED: ${KEYCLOAK_SSL_REQUIRED:-none}
+      AMSTRAVEL_API_SECRET: ${AMSTRAVEL_API_SECRET:?set AMSTRAVEL_API_SECRET in .env}
+      AMSADMIN_API_SECRET: ${AMSADMIN_API_SECRET:?set AMSADMIN_API_SECRET in .env}
+      AMSADMIN_DASHBOARD_SECRET: ${AMSADMIN_DASHBOARD_SECRET:?set AMSADMIN_DASHBOARD_SECRET in .env}
+      LOCAL_USER_PASSWORD: ${LOCAL_USER_PASSWORD:?set LOCAL_USER_PASSWORD in .env}
+    ports:
+      - "${KEYCLOAK_PORT:-9090}:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mailpit:
+        condition: service_healthy
+    healthcheck:
+      # bash by name: the image's /bin/sh has no /dev/tcp.
+      test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/127.0.0.1/9000 && printf 'GET /health/ready HTTP/1.0\\r\\n\\r\\n' >&3 && grep -q '200' <&3"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 60s
+
+  api:
+    build:
+      context: ..
+      target: runtime
+    environment:
+      SERVER_PORT: "8080"
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/ams_travel
+      SPRING_DATASOURCE_USERNAME: ams_user
+      SPRING_DATASOURCE_PASSWORD: ${APP_DB_PASSWORD}
+      LIQUIBASE_ENABLED: "true"
+      SEED_CATALOG: ${SEED_CATALOG:-true}
+      SPRING_CACHE_TYPE: none
+      OAUTH2_ENABLED: "true"
+      KEYCLOAK_SERVER_URL: http://keycloak:8080
+      KEYCLOAK_REALM: amstravel
+      KEYCLOAK_BACKOFFICE_REALM: amsadmin
+      # Tokens carry the public address, which is not the address this container dials.
+      KEYCLOAK_ISSUER_URI: ${KEYCLOAK_PUBLIC_URL:-http://localhost:9090}/realms/amstravel
+      KEYCLOAK_BACKOFFICE_ISSUER_URI: ${KEYCLOAK_PUBLIC_URL:-http://localhost:9090}/realms/amsadmin
+      KEYCLOAK_ADMIN_ENABLED: "true"
+      KEYCLOAK_CUSTOMER_CLIENT_SECRET: ${AMSTRAVEL_API_SECRET}
+      KEYCLOAK_BACKOFFICE_CLIENT_SECRET: ${AMSADMIN_API_SECRET}
+      MINIO_ENDPOINT: http://minio:9000
+      MINIO_ACCESS_KEY: ${MINIO_ROOT_USER}
+      MINIO_SECRET_KEY: ${MINIO_ROOT_PASSWORD}
+      MINIO_BUCKET: ams-travel-images
+      MEDIA_PREPARE_FOLDERS: "true"
+      CORS_ALLOWED_ORIGINS: ${WEBSITE_URL:-http://localhost:3000},${DASHBOARD_URL:-http://localhost:3001}
+      GOOGLE_MAPS_API_KEY: ${GOOGLE_MAPS_API_KEY:-}
+      # Where the API is reached from outside: a badge's share page link starts with it.
+      API_PUBLIC_URL: ${API_PUBLIC_URL:-http://localhost:${API_PORT:-8080}}
+      # A staging reset: a token never used before wipes the seeded catalogue and seeds it afresh on the next start.
+      SEED_RESET_TOKEN: ${SEED_RESET_TOKEN:-}
+    ports:
+      - "${API_PORT:-8080}:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+      keycloak:
+        condition: service_healthy
+    healthcheck:
+      # bash by name: the image's /bin/sh is dash, which has no /dev/tcp.
+      test: ["CMD", "bash", "-c", "exec 3<>/dev/tcp/127.0.0.1/8080 && printf 'GET /v3/api-docs HTTP/1.0\\r\\n\\r\\n' >&3 && grep -q '200' <&3"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 90s
+
+  dashboard:
+    # The CMS. Needs ams-travel-admin-dashboard cloned beside this repo: --profile cms
+    profiles: ["cms"]
+    build:
+      context: ../../ams-travel-admin-dashboard
+    environment:
+      NEXT_PUBLIC_SITE_URL: ${DASHBOARD_URL:-http://localhost:3001}
+      WEBSITE_URL: ${WEBSITE_URL:-http://localhost:3000}
+      API_BASE_URL: http://api:8080/api/v1
+      KEYCLOAK_ISSUER_URL: ${KEYCLOAK_PUBLIC_URL:-http://localhost:9090}/realms/amsadmin
+      KEYCLOAK_INTERNAL_URL: http://keycloak:8080/realms/amsadmin
+      KEYCLOAK_CLIENT_ID: amsadmin-dashboard
+      KEYCLOAK_CLIENT_SECRET: ${AMSADMIN_DASHBOARD_SECRET}
+    ports:
+      - "${DASHBOARD_PORT:-3001}:3001"
+    depends_on:
+      api:
+        condition: service_healthy
+
+volumes:
+  postgres-data:
+  minio-data:

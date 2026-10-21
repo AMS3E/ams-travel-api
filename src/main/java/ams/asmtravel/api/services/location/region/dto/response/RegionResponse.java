@@ -24,7 +24,6 @@ public record RegionResponse(
         RegionKind kind,
         UUID parentId,
         String description,
-        String historyIntro,
         String coverKey,
         String coverUrl,
         /** The Map panel picture on its page in the app, in place of the interactive map; null until one is uploaded. */

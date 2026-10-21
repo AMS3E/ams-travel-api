@@ -1,6 +1,7 @@
 package ams.asmtravel.api.services.search.mapper;
 
 import ams.asmtravel.api.services.corridor.dto.response.CorridorResponse;
+import ams.asmtravel.api.services.destination.activity.dto.response.ActivityResponse;
 import ams.asmtravel.api.services.destination.destination.dto.response.DestinationResponse;
 import ams.asmtravel.api.services.destination.food.dto.response.FoodResponse;
 import ams.asmtravel.api.services.destination.stay.dto.response.StayResponse;
@@ -35,24 +36,45 @@ public interface SearchMapper {
                 null, null, null, null, null, null, null, null, List.of());
     }
 
-    default SearchHitResponse toHit(StayResponse stay, Map<UUID, String> provinceNames, ReviewSummaryResponse review) {
+    default SearchHitResponse toHit(StayResponse stay, Map<UUID, String> provinceNames, ReviewSummaryResponse review,
+                                    VerificationResponse verification) {
         return new SearchHitResponse(SearchType.STAY, stay.id(), stay.name(), null, stay.shortDescription(), stay.coverUrl(),
                 stay.provinceId(), provinceNames.get(stay.provinceId()), stay.latitude(), stay.longitude(),
                 List.of(), List.of(), ids(stay.interestIds()), List.of(),
                 review == null ? null : review.averageRating(), review == null ? 0 : review.ratingCount(),
-                review == null ? 0 : review.reviewCount(), false, null, false,
+                review == null ? 0 : review.reviewCount(),
+                verification != null && verification.verified(),
+                verification == null || verification.basis() == null ? null : verification.basis().name(),
+                verification != null && Boolean.TRUE.equals(verification.travelerRecommended()),
                 stay.priceFrom(), stay.currency(), null, null, null, null, null, null, List.of());
     }
 
     default SearchHitResponse toHit(FoodResponse food, Map<UUID, String> provinceNames, Map<UUID, String> categoryNames,
-                                    ReviewSummaryResponse review) {
+                                    ReviewSummaryResponse review, VerificationResponse verification) {
         List<UUID> categoryIds = ids(food.categoryIds());
         return new SearchHitResponse(SearchType.FOOD, food.id(), food.name(), food.slug(), food.shortDescription(), food.coverUrl(),
                 food.provinceId(), provinceNames.get(food.provinceId()), food.latitude(), food.longitude(),
                 categoryIds, names(categoryIds, categoryNames), ids(food.interestIds()), List.of(),
                 review == null ? null : review.averageRating(), review == null ? 0 : review.ratingCount(),
-                review == null ? 0 : review.reviewCount(), false, null, false,
+                review == null ? 0 : review.reviewCount(),
+                verification != null && verification.verified(),
+                verification == null || verification.basis() == null ? null : verification.basis().name(),
+                verification != null && Boolean.TRUE.equals(verification.travelerRecommended()),
                 food.priceFrom(), food.currency(), null, food.openNow(), food.todayHours(), null, null, null, List.of());
+    }
+
+    /** An activity is classed by its interests alone, like a stay: no categories, no tourism regions on its card. */
+    default SearchHitResponse toHit(ActivityResponse activity, Map<UUID, String> provinceNames, ReviewSummaryResponse review,
+                                    VerificationResponse verification) {
+        return new SearchHitResponse(SearchType.ACTIVITY, activity.id(), activity.name(), activity.slug(), activity.shortDescription(),
+                activity.coverUrl(), activity.provinceId(), provinceNames.get(activity.provinceId()), activity.latitude(), activity.longitude(),
+                List.of(), List.of(), ids(activity.interestIds()), List.of(),
+                review == null ? null : review.averageRating(), review == null ? 0 : review.ratingCount(),
+                review == null ? 0 : review.reviewCount(),
+                verification != null && verification.verified(),
+                verification == null || verification.basis() == null ? null : verification.basis().name(),
+                verification != null && Boolean.TRUE.equals(verification.travelerRecommended()),
+                null, null, null, null, null, null, null, null, List.of());
     }
 
     default SearchHitResponse toHit(CorridorResponse corridor, ReviewSummaryResponse review) {

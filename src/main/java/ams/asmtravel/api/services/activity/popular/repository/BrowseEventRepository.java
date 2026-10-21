@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.time.Instant;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -41,10 +42,10 @@ public interface BrowseEventRepository extends JpaRepository<BrowseEvent, Long> 
 
     @Query("""
             select e from BrowseEvent e
-            where e.userId = :userId and e.targetType = :type and e.targetId is not null
+            where e.userId = :userId and e.targetType in :types and e.targetId is not null
               and e.createdAt >= :from and e.createdAt < :to
             """)
-    List<BrowseEvent> findByUserBetween(UUID userId, BrowseTarget type, Instant from, Instant to);
+    List<BrowseEvent> findByUserBetween(UUID userId, Collection<BrowseTarget> types, Instant from, Instant to);
 
     @Query("select distinct e.targetId from BrowseEvent e where e.userId = :userId and e.targetType = :type and e.targetId is not null")
     List<UUID> findBrowsedTargetIds(UUID userId, BrowseTarget type);

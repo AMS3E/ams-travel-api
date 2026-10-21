@@ -48,6 +48,9 @@ public class CorridorSeeder implements CatalogSeedContributor {
             corridor.setName(SeedJson.text(node, "name"));
             corridor.setShortDescription(SeedJson.text(node, "shortDescription"));
             corridor.setDescription(SeedJson.text(node, "description"));
+            corridor.setNameKm(SeedJson.text(node, "nameKm"));
+            corridor.setShortDescriptionKm(SeedJson.text(node, "shortDescriptionKm"));
+            corridor.setDescriptionKm(SeedJson.text(node, "descriptionKm"));
             corridor.setCoverKey(context.imageKey(node));
             corridor.setEstimatedBudgetMin(decimal(node, "estimatedBudgetMin"));
             corridor.setEstimatedBudgetMax(decimal(node, "estimatedBudgetMax"));

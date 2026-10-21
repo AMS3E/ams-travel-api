@@ -1,22 +1,34 @@
 package ams.asmtravel.api.services.activity.stamp.service.impl;
 
-import ams.asmtravel.api.services.destination.destination.domain.DestinationSummary;
-import ams.asmtravel.api.services.destination.destination.exception.DestinationNotFoundException;
-import ams.asmtravel.api.services.destination.destination.service.DestinationService;
-
-import ams.asmtravel.api.services.season.service.SeasonService;
 import ams.asmtravel.api.services.activity.stamp.config.StampProperties;
 import ams.asmtravel.api.services.activity.stamp.domain.DigitalStamp;
+import ams.asmtravel.api.services.activity.stamp.domain.StampCode;
 import ams.asmtravel.api.services.activity.stamp.domain.StampCollectedEvent;
 import ams.asmtravel.api.services.activity.stamp.domain.StampOutcome;
+import ams.asmtravel.api.services.activity.stamp.domain.StampTarget;
+import ams.asmtravel.api.services.activity.stamp.dto.request.StampCodeRequest;
 import ams.asmtravel.api.services.activity.stamp.dto.request.StampRequest;
+import ams.asmtravel.api.services.activity.stamp.dto.response.StampCodeResponse;
 import ams.asmtravel.api.services.activity.stamp.dto.response.StampResponse;
 import ams.asmtravel.api.services.activity.stamp.mapper.StampMapper;
+import ams.asmtravel.api.services.activity.stamp.repository.StampCodeRepository;
 import ams.asmtravel.api.services.activity.stamp.repository.StampRepository;
 import ams.asmtravel.api.services.activity.stamp.service.StampService;
-import ams.asmtravel.api.services.user.user.domain.UserDeletingEvent;
 import ams.asmtravel.api.services.badge.dto.response.UserBadgeResponse;
 import ams.asmtravel.api.services.badge.service.BadgeService;
+import ams.asmtravel.api.services.destination.destination.domain.ListingStatus;
+import ams.asmtravel.api.services.destination.destination.exception.DestinationNotFoundException;
+import ams.asmtravel.api.services.destination.destination.service.DestinationService;
+import ams.asmtravel.api.services.destination.activity.service.ActivityService;
+import ams.asmtravel.api.services.destination.food.dto.response.FoodResponse;
+import ams.asmtravel.api.services.destination.food.service.FoodService;
+import ams.asmtravel.api.services.destination.stay.dto.response.StayResponse;
+import ams.asmtravel.api.services.destination.stay.service.StayService;
+import ams.asmtravel.api.services.season.dto.response.SeasonResponse;
+import ams.asmtravel.api.services.season.service.SeasonService;
+import ams.asmtravel.api.services.user.user.domain.UserDeletingEvent;
+import ams.asmtravel.api.services.user.user.domain.UserSummary;
+import ams.asmtravel.api.services.user.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
@@ -25,35 +37,65 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.math.BigDecimal;
+import java.security.SecureRandom;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
-/** Digital stamps. Distance is plain haversine math, not a spatial query; the device position is trusted as sent. */
+/**
+ * Digital stamps. The scanned code names the place and the device position proves the visitor is there;
+ * distance is plain haversine math, not a spatial query, and the position is trusted as sent.
+ */
 @Service
 @RequiredArgsConstructor
 public class StampServiceImpl implements StampService {
 
     private static final double EARTH_RADIUS_METERS = 6_371_008.8;
+    /** Letters and digits a visitor can read back without doubt: no 0, O, 1 or I. */
+    private static final String ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+    private static final SecureRandom RANDOM = new SecureRandom();
 
     private final StampRepository stampRepository;
+    private final StampCodeRepository codeRepository;
     private final StampMapper mapper;
     private final DestinationService destinationService;
+    private final StayService stayService;
+    private final FoodService foodService;
+    private final ActivityService activityService;
     private final SeasonService seasonService;
     private final BadgeService badgeService;
+    private final UserService userService;
     private final StampProperties properties;
     private final ApplicationEventPublisher events;
 
-    /** Drafts and unknown ids both get 404. Badge listeners run in this transaction; the answer lists what they awarded. */
+    /** A destination of any kind as a check-in sees it. */
+    private record Place(StampTarget type, UUID id, String name, boolean published, BigDecimal latitude, BigDecimal longitude) {
+    }
+
+    /**
+     * An unknown or retired code answers INVALID_CODE; an unpublished place behind an active code answers 404 like a
+     * missing one. Badge listeners run in this transaction; the answer lists what they awarded.
+     */
     @Override
     @Transactional
     public StampResponse collect(UUID userId, StampRequest request) {
-        UUID destinationId = request.destinationId();
-        DestinationSummary place = destinationService.findSummary(destinationId)
-                .filter(DestinationSummary::published)
+        Optional<StampCode> code = activeCode(request.code());
+        if (code.isEmpty()) {
+            return answer(null, null, null, StampOutcome.INVALID_CODE, null, List.of());
+        }
+        Place place = find(code.get().getTargetType(), code.get().getTargetId())
+                .filter(Place::published)
                 .orElseThrow(() -> new DestinationNotFoundException());
         if (place.latitude() == null || place.longitude() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This destination has no location to check in against");
@@ -62,23 +104,25 @@ public class StampServiceImpl implements StampService {
         int distance = (int) Math.round(distanceMeters(request.latitude(), request.longitude(),
                 place.latitude().doubleValue(), place.longitude().doubleValue()));
         if (distance > properties.stampRadiusMeters()) {
-            return answer(null, destinationId, StampOutcome.TOO_FAR, distance, List.of());
+            return answer(null, place.type(), place.id(), StampOutcome.TOO_FAR, distance, List.of());
         }
-        LocalDate today = seasonService.today();
-        SeasonService.Window day = seasonService.windowOf(today, today);
+        SeasonService.Window season = seasonWindow();
         if (stampRepository.existsByUserIdAndDestinationIdAndCollectedAtGreaterThanEqualAndCollectedAtLessThan(
-                userId, destinationId, day.from(), day.until())) {
-            return answer(null, destinationId, StampOutcome.ALREADY_COLLECTED, distance, List.of());
+                userId, place.id(), season.from(), season.until())) {
+            return answer(null, place.type(), place.id(), StampOutcome.ALREADY_COLLECTED, distance, List.of());
         }
         Instant since = Instant.now().truncatedTo(ChronoUnit.MILLIS);
-        DigitalStamp stamp = stampRepository.saveAndFlush(new DigitalStamp(userId, destinationId));
-        events.publishEvent(new StampCollectedEvent(userId, destinationId, stamp.getId()));
-        return answer(stamp, destinationId, StampOutcome.COLLECTED, distance, badgeService.findEarnedSince(userId, since));
+        DigitalStamp stamp = stampRepository.saveAndFlush(new DigitalStamp(userId, place.type(), place.id(), code.get().getId()));
+        events.publishEvent(new StampCollectedEvent(userId, place.type(), place.id(), stamp.getId()));
+        return answer(stamp, place.type(), place.id(), StampOutcome.COLLECTED, distance, badgeService.findEarnedSince(userId, since));
     }
 
     @Override
-    public StampResponse alreadyCollected(UUID destinationId) {
-        return answer(null, destinationId, StampOutcome.ALREADY_COLLECTED, 0, List.of());
+    @Transactional(readOnly = true)
+    public StampResponse alreadyCollected(StampRequest request) {
+        StampCode code = activeCode(request.code()).orElse(null);
+        return answer(null, code == null ? null : code.getTargetType(), code == null ? null : code.getTargetId(),
+                code == null ? StampOutcome.INVALID_CODE : StampOutcome.ALREADY_COLLECTED, null, List.of());
     }
 
     @Override
@@ -86,6 +130,80 @@ public class StampServiceImpl implements StampService {
     public List<StampResponse> findMine(UUID userId) {
         return stampRepository.findByUserIdOrderByCollectedAtDesc(userId).stream().map(mapper::toResponse).toList();
     }
+
+    // Codes
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<StampCodeResponse> findCodes(StampTarget targetType, UUID targetId) {
+        List<StampCode> codes = codeRepository.findByTargetTypeAndTargetIdOrderByIssuedAtDesc(targetType, targetId).stream()
+                .sorted(Comparator.comparing(code -> !code.active()))
+                .toList();
+        Map<UUID, Long> checkIns = stampRepository
+                .countByCodeIds(codes.stream().map(StampCode::getId).toList()).stream()
+                .collect(Collectors.toMap(StampRepository.CodeCheckIns::getCodeId, StampRepository.CodeCheckIns::getCheckIns));
+        Set<UUID> people = new HashSet<>();
+        codes.forEach(code -> {
+            if (code.getIssuedBy() != null) {
+                people.add(code.getIssuedBy());
+            }
+            if (code.getRetiredBy() != null) {
+                people.add(code.getRetiredBy());
+            }
+        });
+        Map<UUID, UserSummary> names = userService.findSummaries(people);
+        return codes.stream()
+                .map(code -> respond(code, checkIns.getOrDefault(code.getId(), 0L), names))
+                .toList();
+    }
+
+    /** The place may still be a draft: a code can be printed before the listing goes live. */
+    @Override
+    @Transactional
+    public StampCodeResponse issueCode(StampCodeRequest request, UUID issuedBy) {
+        if (find(request.targetType(), request.targetId()).isEmpty()) {
+            throw new DestinationNotFoundException();
+        }
+        String code = newCode();
+        while (codeRepository.findByCode(code).isPresent()) {
+            code = newCode();
+        }
+        String label = request.label() == null || request.label().isBlank() ? null : request.label().trim();
+        StampCode issued = codeRepository.saveAndFlush(new StampCode(request.targetType(), request.targetId(), code, label, issuedBy));
+        return respond(issued, 0, namesOf(issued));
+    }
+
+    /** Retiring twice changes nothing: the first retirement stands. */
+    @Override
+    @Transactional
+    public StampCodeResponse retireCode(UUID codeId, UUID retiredBy) {
+        StampCode code = codeRepository.findById(codeId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No such check-in code"));
+        if (code.active()) {
+            code.retire(retiredBy);
+            codeRepository.saveAndFlush(code);
+        }
+        return respond(code, stampRepository.existsByCodeId(codeId) ? countOf(codeId) : 0, namesOf(code));
+    }
+
+    @Override
+    @Transactional
+    public void withdrawCode(UUID codeId) {
+        StampCode code = codeRepository.findById(codeId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No such check-in code"));
+        if (stampRepository.existsByCodeId(codeId)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "This code has collected check-ins; retire it instead");
+        }
+        codeRepository.delete(code);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<String> placeNameOf(String code) {
+        return activeCode(code).flatMap(active -> find(active.getTargetType(), active.getTargetId())).map(Place::name);
+    }
+
+    // For other services
 
     @Override
     @Transactional(readOnly = true)
@@ -107,14 +225,97 @@ public class StampServiceImpl implements StampService {
         stampRepository.deleteByUserId(event.userId());
     }
 
-    private StampResponse answer(DigitalStamp stamp, UUID destinationId, StampOutcome outcome, int distance,
-                                 List<UserBadgeResponse> earned) {
+    // Helpers
+
+    /** The active code the scanned text names: the code itself, or the scan link whose last part it is. */
+    private Optional<StampCode> activeCode(String scanned) {
+        if (scanned == null || scanned.isBlank()) {
+            return Optional.empty();
+        }
+        String text = scanned.trim();
+        int slash = text.lastIndexOf('/');
+        String code = (slash >= 0 ? text.substring(slash + 1) : text).trim().toUpperCase(Locale.ROOT);
+        return codeRepository.findByCode(code).filter(StampCode::active);
+    }
+
+    /** The season's window when one is active; all time otherwise, so a place is never stamped twice between seasons. */
+    private SeasonService.Window seasonWindow() {
+        Optional<SeasonResponse> season = seasonService.findCurrent();
+        return season.map(current -> seasonService.windowOf(current.startsOn(), current.endsOn()))
+                .orElseGet(() -> new SeasonService.Window(Instant.EPOCH, Instant.now().plus(1, ChronoUnit.DAYS)));
+    }
+
+    private Optional<Place> find(StampTarget type, UUID id) {
+        return switch (type) {
+            case DESTINATION -> destinationService.findSummary(id)
+                    .map(place -> new Place(type, place.id(), place.name(), place.published(), place.latitude(), place.longitude()));
+            case STAY -> stayService.exists(id) ? Optional.of(stayService.findById(id)).map(stay -> new Place(type, stay.id(),
+                    stay.name(), stay.status() == ListingStatus.PUBLISHED, stay.latitude(), stay.longitude())) : Optional.empty();
+            case FOOD -> foodService.exists(id) ? Optional.of(foodService.findById(id)).map(food -> new Place(type, food.id(),
+                    food.name(), food.status() == ListingStatus.PUBLISHED, food.latitude(), food.longitude())) : Optional.empty();
+            case ACTIVITY -> activityService.exists(id) ? Optional.of(activityService.findById(id)).map(activity -> new Place(type,
+                    activity.id(), activity.name(), activity.status() == ListingStatus.PUBLISHED, activity.latitude(), activity.longitude()))
+                    : Optional.empty();
+        };
+    }
+
+    private long countOf(UUID codeId) {
+        return stampRepository.countByCodeIds(List.of(codeId)).stream()
+                .mapToLong(StampRepository.CodeCheckIns::getCheckIns).sum();
+    }
+
+    /** Who issued and retired this one code, for a single-code answer. */
+    private Map<UUID, UserSummary> namesOf(StampCode code) {
+        Set<UUID> people = new HashSet<>();
+        if (code.getIssuedBy() != null) {
+            people.add(code.getIssuedBy());
+        }
+        if (code.getRetiredBy() != null) {
+            people.add(code.getRetiredBy());
+        }
+        return userService.findSummaries(people);
+    }
+
+    private StampCodeResponse respond(StampCode code, long checkIns, Map<UUID, UserSummary> names) {
+        Function<UUID, String> name = id -> id == null ? null
+                : Optional.ofNullable(names.get(id)).map(UserSummary::fullName).orElse(null);
+        return new StampCodeResponse(
+                code.getId(),
+                code.getTargetType(),
+                code.getTargetId(),
+                code.getCode(),
+                code.getLabel(),
+                properties.scanUrl(code.getCode()),
+                code.getIssuedAt(),
+                code.getIssuedBy(),
+                name.apply(code.getIssuedBy()),
+                checkIns,
+                code.getRetiredAt(),
+                code.getRetiredBy(),
+                name.apply(code.getRetiredBy()));
+    }
+
+    private StampResponse answer(DigitalStamp stamp, StampTarget type, UUID destinationId, StampOutcome outcome,
+                                 Integer distance, List<UserBadgeResponse> earned) {
         return new StampResponse(
                 stamp == null ? null : stamp.getId(),
+                type,
                 destinationId,
                 stamp == null ? null : stamp.getCollectedAt(),
                 stamp == null ? null : stamp.getSource(),
                 outcome, distance, properties.stampRadiusMeters(), earned);
+    }
+
+    /** Three groups of four, like ABCD-EFGH-JKLM: easy to read off a print. */
+    static String newCode() {
+        StringBuilder code = new StringBuilder(14);
+        for (int i = 0; i < 12; i++) {
+            if (i > 0 && i % 4 == 0) {
+                code.append('-');
+            }
+            code.append(ALPHABET.charAt(RANDOM.nextInt(ALPHABET.length())));
+        }
+        return code.toString();
     }
 
     /** Great-circle distance by the haversine formula. */

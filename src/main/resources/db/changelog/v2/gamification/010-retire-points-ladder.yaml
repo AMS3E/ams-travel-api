@@ -1,0 +1,16 @@
+# The Explorer ladder (points from ratings and reviews) is retired on 2026-10-20:
+# three badges remain, Browser, Reviewer and Adventure, each counting its own
+# thing. Points stay as a season total; no badge rests on them any more.
+databaseChangeLog:
+  - changeSet:
+      id: v2-gamification-retire-points-ladder
+      author: ams-travel-v2
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              DELETE FROM gamification.user_badges WHERE badge_id IN (SELECT id FROM gamification.badges WHERE type = 'POINTS');
+              DELETE FROM gamification.badges WHERE type = 'POINTS';
+      rollback:
+        - sql:
+            sql: SELECT 1

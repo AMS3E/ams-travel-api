@@ -6,7 +6,6 @@ import ams.asmtravel.api.services.taxonomy.category.service.CategoryService;
 import ams.asmtravel.api.services.destination.destination.domain.DestinationDeletingEvent;
 import ams.asmtravel.api.services.destination.destination.domain.KhmerText;
 import ams.asmtravel.api.services.destination.destination.domain.ListingStatus;
-import ams.asmtravel.api.services.destination.destination.exception.KhmerTextMissingException;
 import ams.asmtravel.api.services.destination.destination.domain.NearbyArea;
 import ams.asmtravel.api.services.destination.destination.domain.Slugs;
 import ams.asmtravel.api.services.destination.destination.service.DestinationService;
@@ -206,6 +205,12 @@ public class FoodServiceImpl implements FoodService {
     }
 
     @Override
+    @Transactional
+    public void recordView(UUID id) {
+        foodRepository.incrementViewCount(id);
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public boolean canWrite(UUID id, Authentication authentication) {
         return foodRepository.findById(id)
@@ -367,21 +372,7 @@ public class FoodServiceImpl implements FoodService {
                 : values.stream().map(String::trim).filter(one -> !one.isEmpty()).distinct().toList();
     }
 
-    /** Refused with 409 while any filled English field has no Khmer. */
-    @Override
-    @Transactional(readOnly = true)
-    public void requireKhmer(UUID id) {
-        Food food = find(id);
-        if (!food.missingKhmer().isEmpty()) {
-            throw new KhmerTextMissingException(food.missingKhmer());
-        }
-    }
-
-    /** On its way live, only with its Khmer written. */
     private void setStatus(Food food, ListingStatus status) {
-        if (status == ListingStatus.PUBLISHED && food.getStatus() != ListingStatus.PUBLISHED && !food.missingKhmer().isEmpty()) {
-            throw new KhmerTextMissingException(food.missingKhmer());
-        }
         if (status == ListingStatus.PUBLISHED && food.getStatus() != ListingStatus.PUBLISHED) {
             food.setPublishedAt(Instant.now());
         }

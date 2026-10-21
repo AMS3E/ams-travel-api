@@ -68,10 +68,6 @@ public class Region {
     @Column(columnDefinition = "text")
     private String descriptionKm;
 
-    /** The line under the Historical coverage heading, in the region's own words. */
-    @Column(columnDefinition = "text")
-    private String historyIntro;
-
     /** The picture on its card on Explore and the banner of its page in the app; null until one is chosen. */
     @Column(length = 512)
     private String coverKey;

@@ -218,6 +218,10 @@ public class Stay {
     @Column(nullable = false, length = 30)
     private ListingStatus status = ListingStatus.DRAFT;
 
+    /** First opens of a day, signed in or not, all time: the popular service bumps it. */
+    @Column(nullable = false)
+    private Long viewCount = 0L;
+
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private Instant createdAt;

@@ -418,6 +418,32 @@ class CorridorIntegrationTests {
                 .andExpect(jsonPath("$.interestIds", hasSize(0)));
     }
 
+    /** The Khmer is typed beside the English: an edit that leaves it out keeps it, a blank clears it. */
+    @Test
+    void aCorridorKeepsItsKhmerBesideTheEnglish() throws Exception {
+        String body = mvc.perform(post("/api/v1/corridors").with(CURATOR).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"Mekong loop\",\"slug\":\"ct-khmer\",\"shortDescription\":\"Up the river\","
+                                + "\"nameKm\":\"ដំណើរមេគង្គ\",\"shortDescriptionKm\":\"ឡើងតាមទន្លេ\",\"descriptionKm\":\"កោះមួយទៅកោះមួយ\"}"))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.nameKm").value("ដំណើរមេគង្គ"))
+                .andExpect(jsonPath("$.shortDescriptionKm").value("ឡើងតាមទន្លេ"))
+                .andExpect(jsonPath("$.descriptionKm").value("កោះមួយទៅកោះមួយ"))
+                .andReturn().getResponse().getContentAsString();
+        String id = JsonPath.read(body, "$.id");
+
+        mvc.perform(put("/api/v1/corridors/" + id).with(CURATOR).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"Mekong loop\",\"slug\":\"ct-khmer\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.nameKm").value("ដំណើរមេគង្គ"))
+                .andExpect(jsonPath("$.descriptionKm").value("កោះមួយទៅកោះមួយ"));
+
+        mvc.perform(put("/api/v1/corridors/" + id).with(CURATOR).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"Mekong loop\",\"slug\":\"ct-khmer\",\"shortDescriptionKm\":\" \"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.shortDescriptionKm").value(nullValue()))
+                .andExpect(jsonPath("$.nameKm").value("ដំណើរមេគង្គ"));
+    }
+
     /** What /corridor-destinations answered before days, it still answers. */
     @Test
     void theFlatRouteStillAnswers() throws Exception {

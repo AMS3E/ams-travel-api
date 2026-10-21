@@ -2,8 +2,8 @@
   {
     "code": "CAPITAL",
     "name": "Phnom Penh & Central Plains",
-    "nameKm": "ភ្នំពេញ និងវាលទំនាបកណ្ដាល",
     "description": "The capital at the meeting of four rivers, and the rice plains, silk islands and palm-sugar country around it.",
+    "nameKm": "ភ្នំពេញ និងវាលទំនាបកណ្ដាល",
     "descriptionKm": "រាជធានីនៅចំណុចប្រសព្វទន្លេចតុមុខ ព្រមទាំងវាលស្រែ កោះតម្បាញសូត្រ និងតំបន់ស្ករត្នោតជុំវិញ។",
     "kind": "ZONE",
     "image": "royal-palace.jpg"
@@ -11,8 +11,8 @@
   {
     "code": "ANGKOR",
     "name": "Angkor & the Tonle Sap",
-    "nameKm": "អង្គរ និងទន្លេសាប",
     "description": "The temples of Angkor and the great lake whose flood feeds the country, from Siem Reap to Battambang and the western hills.",
+    "nameKm": "អង្គរ និងទន្លេសាប",
     "descriptionKm": "ប្រាសាទអង្គរ និងបឹងទន្លេសាបដ៏ធំដែលទឹកជំនន់ផ្ដល់ជីវិតដល់ប្រទេស ចាប់ពីសៀមរាបរហូតដល់បាត់ដំបង និងតំបន់ភ្នំភាគខាងលិច។",
     "kind": "ZONE",
     "image": "angkor-wat.jpg"
@@ -20,8 +20,8 @@
   {
     "code": "NORTHEAST",
     "name": "Northeast Highlands",
-    "nameKm": "ខ្ពង់រាបភាគឦសាន",
     "description": "Cliff-top temples, crater lakes, river dolphins and the forests of the Bunong, Jarai and Kreung peoples.",
+    "nameKm": "ខ្ពង់រាបភាគឦសាន",
     "descriptionKm": "ប្រាសាទលើកំពូលច្រាំងថ្ម បឹងភ្នំភ្លើង ផ្សោតទន្លេ និងព្រៃឈើរបស់ជនជាតិព្នង ចារ៉ាយ និងគ្រឹង។",
     "kind": "ZONE",
     "image": "yeak-laom-lake.jpg"
@@ -29,8 +29,8 @@
   {
     "code": "MEKONG",
     "name": "Mekong Lowlands",
-    "nameKm": "តំបន់ទំនាបមេគង្គ",
     "description": "River towns, rubber plantations and the paddy fields east of the Mekong, down to the Vietnamese border.",
+    "nameKm": "តំបន់ទំនាបមេគង្គ",
     "descriptionKm": "ទីប្រជុំជនមាត់ទន្លេ ចម្ការកៅស៊ូ និងវាលស្រែនៅខាងកើតទន្លេមេគង្គ រហូតដល់ព្រំដែនវៀតណាម។",
     "kind": "ZONE",
     "image": "mekong-discovery-trail.jpg"
@@ -38,8 +38,8 @@
   {
     "code": "COAST",
     "name": "South Coast",
-    "nameKm": "ឆ្នេរភាគខាងត្បូង",
     "description": "Pepper farms, crab markets, the Cardamom rainforest and the islands of the Gulf of Thailand.",
+    "nameKm": "ឆ្នេរភាគខាងត្បូង",
     "descriptionKm": "ចម្ការម្រេច ផ្សារក្ដាម ព្រៃត្រូពិចជួរភ្នំក្រវាញ និងកោះនានាក្នុងឈូងសមុទ្រថៃ។",
     "kind": "ZONE",
     "image": "koh-rong.jpg"
@@ -47,8 +47,8 @@
   {
     "code": "ANCIENT-CAPITALS",
     "name": "Ancient Capitals & Khmer Civilization",
-    "nameKm": "រាជធានីបុរាណ និងអារ្យធម៌ខ្មែរ",
     "description": "The royal capitals of the Khmer empire and what they left behind: temple cities, the roads and bridges that joined them, the hospitals that served them, and the museums that keep them.",
+    "nameKm": "រាជធានីបុរាណ និងអារ្យធម៌ខ្មែរ",
     "descriptionKm": "រាជធានីនៃចក្រភពខ្មែរ និងកេរដំណែលដែលបន្សល់ទុក៖ ទីក្រុងប្រាសាទ ផ្លូវ និងស្ពានដែលតភ្ជាប់គ្នា អារោគ្យសាលាដែលបម្រើប្រជាជន និងសារមន្ទីរដែលថែរក្សាកេរដំណែលទាំងនោះ។",
     "kind": "TOURISM",
     "categories": [
@@ -81,8 +81,8 @@
   {
     "code": "NORTHEASTERN",
     "name": "Northeastern Civilization",
-    "nameKm": "អារ្យធម៌ភូមិភាគឦសាន",
     "description": "The highlands of Ratanakiri, Mondulkiri and Stung Treng: indigenous villages, a volcano lake, elephant forests and the waterfalls of the Sesan and Srepok.",
+    "nameKm": "អារ្យធម៌ភូមិភាគឦសាន",
     "descriptionKm": "តំបន់ខ្ពង់រាបនៃខេត្តរតនគិរី មណ្ឌលគិរី និងស្ទឹងត្រែង៖ ភូមិជនជាតិដើមភាគតិច បឹងភ្នំភ្លើង ព្រៃដំរី និងទឹកធ្លាក់តាមដងទន្លេសេសាន និងស្រែពក។",
     "kind": "TOURISM",
     "categories": [
@@ -122,8 +122,8 @@
   {
     "code": "MEKONG-TONLE-SAP",
     "name": "Mekong & Tonle Sap Civilization",
-    "nameKm": "អារ្យធម៌មេគង្គ និងទន្លេសាប",
     "description": "Life on the water: floating villages, fishing grounds, bird sanctuaries, river islands and the rice country the flood feeds.",
+    "nameKm": "អារ្យធម៌មេគង្គ និងទន្លេសាប",
     "descriptionKm": "ជីវិតលើផ្ទៃទឹក៖ ភូមិបណ្ដែតទឹក ដែននេសាទ ជម្រកសត្វស្លាប កោះកណ្ដាលទន្លេ និងតំបន់ស្រែស្រូវដែលទឹកជំនន់ផ្ដល់ជីជាតិ។",
     "kind": "TOURISM",
     "categories": [
@@ -163,8 +163,8 @@
   {
     "code": "MOUNTAIN-WATERFALL",
     "name": "Mountain & Waterfall Region",
-    "nameKm": "តំបន់ភ្នំ និងទឹកធ្លាក់",
     "description": "The Cardamoms, the Elephant Mountains and Preah Vihear: national parks, caves, trails to a peak and the waterfalls along them.",
+    "nameKm": "តំបន់ភ្នំ និងទឹកធ្លាក់",
     "descriptionKm": "ជួរភ្នំក្រវាញ ជួរភ្នំដំរី និងព្រះវិហារ៖ ឧទ្យានជាតិ រូងភ្នំ ផ្លូវដើរឡើងកំពូលភ្នំ និងទឹកធ្លាក់តាមផ្លូវ។",
     "kind": "TOURISM",
     "categories": [
@@ -203,8 +203,8 @@
   {
     "code": "COASTAL-ISLAND",
     "name": "Coastal & Island Region",
-    "nameKm": "តំបន់ឆ្នេរ និងកោះ",
     "description": "The Gulf of Thailand: beaches, islands, coral and mangrove, and the seafood between them.",
+    "nameKm": "តំបន់ឆ្នេរ និងកោះ",
     "descriptionKm": "ឈូងសមុទ្រថៃ៖ ឆ្នេរខ្សាច់ កោះ ផ្កាថ្មសមុទ្រ ព្រៃកោងកាង និងអាហារសមុទ្រនៅគ្រប់ទីកន្លែង។",
     "kind": "TOURISM",
     "categories": [
@@ -240,8 +240,8 @@
   {
     "code": "URBAN-LIFESTYLE",
     "name": "Urban Lifestyle & Nightlife",
-    "nameKm": "របៀបរស់នៅទីក្រុង និងជីវិតពេលរាត្រី",
     "description": "Phnom Penh, Siem Reap and Battambang after dark: night markets, sky bars, galleries, coffee and the street food between them.",
+    "nameKm": "របៀបរស់នៅទីក្រុង និងជីវិតពេលរាត្រី",
     "descriptionKm": "ភ្នំពេញ សៀមរាប និងបាត់ដំបង ពេលរាត្រី៖ ផ្សាររាត្រី បារលើដំបូល វិចិត្រសាល កាហ្វេ និងអាហារតាមផ្លូវ។",
     "kind": "TOURISM",
     "categories": [
@@ -278,8 +278,8 @@
   {
     "code": "KHMER-CULINARY",
     "name": "Khmer Culinary Region",
-    "nameKm": "តំបន់ម្ហូបអាហារខ្មែរ",
     "description": "What Cambodia eats and where it is cooked: the traditional table, the street, the fine dining room, the cooking class and the farm behind them.",
+    "nameKm": "តំបន់ម្ហូបអាហារខ្មែរ",
     "descriptionKm": "អ្វីដែលកម្ពុជាបរិភោគ និងកន្លែងដែលវាត្រូវបានចម្អិន៖ តុម្ហូបប្រពៃណី អាហារតាមផ្លូវ ភោជនីយដ្ឋានលំដាប់ខ្ពស់ ថ្នាក់រៀនធ្វើម្ហូប និងកសិដ្ឋានដែលផ្គត់ផ្គង់ទាំងអស់នោះ។",
     "kind": "TOURISM",
     "categories": [
@@ -313,8 +313,8 @@
   {
     "code": "ECO-COMMUNITY",
     "name": "Eco-Community Tourism",
-    "nameKm": "អេកូទេសចរណ៍សហគមន៍",
     "description": "Travel that stays in the village: homestays, craft and farming, eco lodges, birdwatching and the local guides who take you.",
+    "nameKm": "អេកូទេសចរណ៍សហគមន៍",
     "descriptionKm": "ការធ្វើដំណើរដែលស្នាក់នៅក្នុងភូមិ៖ ការស្នាក់នៅផ្ទះអ្នកភូមិ សិប្បកម្ម និងកសិកម្ម ផ្ទះសំណាក់បែបអេកូ ការមើលសត្វស្លាប និងមគ្គុទ្ទេសក៍ក្នុងស្រុកដែលនាំផ្លូវអ្នក។",
     "kind": "TOURISM",
     "categories": [
@@ -354,8 +354,8 @@
   {
     "code": "LUXURY-TOURISM",
     "name": "Luxury Tourism",
-    "nameKm": "ទេសចរណ៍ប្រណីត",
     "description": "The private end of Cambodia: island resorts, golf, spa, a helicopter or a yacht, and a guide of your own.",
+    "nameKm": "ទេសចរណ៍ប្រណីត",
     "descriptionKm": "កម្ពុជាបែបឯកជន៖ រមណីយដ្ឋានលើកោះ វាយកូនហ្គោល ស្ប៉ា ឧទ្ធម្ភាគចក្រ ឬទូកយ៉ុត និងមគ្គុទ្ទេសក៍ផ្ទាល់ខ្លួន។",
     "kind": "TOURISM",
     "categories": [

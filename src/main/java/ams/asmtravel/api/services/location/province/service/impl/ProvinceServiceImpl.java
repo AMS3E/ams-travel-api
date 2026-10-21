@@ -5,6 +5,7 @@ import ams.asmtravel.api.services.destination.destination.domain.DestinationSumm
 import ams.asmtravel.api.services.destination.destination.domain.ListingStatus;
 import ams.asmtravel.api.services.destination.destination.domain.Slugs;
 import ams.asmtravel.api.services.destination.destination.service.DestinationService;
+import ams.asmtravel.api.services.destination.activity.service.ActivityService;
 import ams.asmtravel.api.services.destination.food.service.FoodService;
 import ams.asmtravel.api.services.destination.stay.service.StayService;
 import ams.asmtravel.api.services.location.province.domain.Province;
@@ -59,12 +60,14 @@ public class ProvinceServiceImpl implements ProvinceService {
     private final ObjectProvider<DestinationService> destinationService;
     private final ObjectProvider<StayService> stayService;
     private final ObjectProvider<FoodService> foodService;
+    private final ObjectProvider<ActivityService> activityService;
     private final ObjectProvider<ReviewService> reviewService;
 
     public ProvinceServiceImpl(ProvinceRepository provinceRepository, RegionService regionService, ProvinceMapper mapper,
                                UserService userService, ApplicationEventPublisher events,
                                ObjectProvider<DestinationService> destinationService, ObjectProvider<StayService> stayService,
-                               ObjectProvider<FoodService> foodService, ObjectProvider<ReviewService> reviewService) {
+                               ObjectProvider<FoodService> foodService, ObjectProvider<ActivityService> activityService,
+                               ObjectProvider<ReviewService> reviewService) {
         this.provinceRepository = provinceRepository;
         this.regionService = regionService;
         this.mapper = mapper;
@@ -73,6 +76,7 @@ public class ProvinceServiceImpl implements ProvinceService {
         this.destinationService = destinationService;
         this.stayService = stayService;
         this.foodService = foodService;
+        this.activityService = activityService;
         this.reviewService = reviewService;
     }
 
@@ -233,6 +237,13 @@ public class ProvinceServiceImpl implements ProvinceService {
         Map<UUID, ReviewSummaryResponse> foodReviews = reviews(ReviewTargetType.FOOD, foods.stream().map(food -> food.id()).toList());
         foods.forEach(food -> listed.add(new Listed(food.provinceId(),
                 new GeoBounds.Point(food.latitude(), food.longitude()), foodReviews.get(food.id()))));
+
+        var activities = activityService.getObject().getAll(null, null).stream()
+                .filter(activity -> activity.status() == ListingStatus.PUBLISHED).toList();
+        Map<UUID, ReviewSummaryResponse> activityReviews = reviews(ReviewTargetType.ACTIVITY,
+                activities.stream().map(activity -> activity.id()).toList());
+        activities.forEach(activity -> listed.add(new Listed(activity.provinceId(),
+                new GeoBounds.Point(activity.latitude(), activity.longitude()), activityReviews.get(activity.id()))));
 
         Map<UUID, List<Listed>> byProvince = new HashMap<>();
         for (Listed row : listed) {

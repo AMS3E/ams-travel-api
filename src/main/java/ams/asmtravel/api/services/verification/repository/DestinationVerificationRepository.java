@@ -11,29 +11,18 @@ import java.util.UUID;
 
 public interface DestinationVerificationRepository extends JpaRepository<DestinationVerification, UUID> {
 
-    /** One destination's decisions, newest first. */
-    @Query("""
-            select v from DestinationVerification v join fetch v.destination
-            where v.destination.id = :destinationId
-            order by v.createdAt desc, v.id desc
-            """)
-    List<DestinationVerification> findHistory(UUID destinationId);
+    /** One place's decisions, newest first. */
+    List<DestinationVerification> findByTargetIdOrderByCreatedAtDescIdDesc(UUID targetId);
 
-    /** Decisions for these destinations, newest first. */
-    @Query("""
-            select v from DestinationVerification v join fetch v.destination
-            where v.destination.id in :destinationIds
-            order by v.createdAt desc, v.id desc
-            """)
-    List<DestinationVerification> findNewestFirst(Collection<UUID> destinationIds);
+    /** Decisions for these places, newest first. */
+    List<DestinationVerification> findByTargetIdInOrderByCreatedAtDescIdDesc(Collection<UUID> targetIds);
 
     /** Every decision, newest first. */
-    @Query("select v from DestinationVerification v join fetch v.destination order by v.createdAt desc, v.id desc")
-    List<DestinationVerification> findAllNewestFirst();
+    List<DestinationVerification> findAllByOrderByCreatedAtDescIdDesc();
 
     boolean existsByDecidedBy(UUID userId);
 
     @Modifying
-    @Query("delete from DestinationVerification v where v.destination.id = :destinationId")
-    int deleteByDestinationId(UUID destinationId);
+    @Query("delete from DestinationVerification v where v.targetId = :targetId")
+    int deleteByTargetId(UUID targetId);
 }

@@ -5,8 +5,6 @@ import ams.asmtravel.api.services.destination.destination.specification.Destinat
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import ams.asmtravel.api.services.history.architecture.domain.ArchitectureStyleDeletingEvent;
-import ams.asmtravel.api.services.history.architecture.service.ArchitectureStyleService;
 import ams.asmtravel.api.services.taxonomy.category.domain.CategoryDeletingEvent;
 import ams.asmtravel.api.services.taxonomy.category.service.CategoryService;
 import ams.asmtravel.api.services.destination.destination.domain.Destination;
@@ -21,7 +19,6 @@ import ams.asmtravel.api.services.destination.destination.domain.Slugs;
 import ams.asmtravel.api.services.destination.destination.dto.request.DestinationRequest;
 import ams.asmtravel.api.services.destination.destination.dto.response.DestinationResponse;
 import ams.asmtravel.api.services.destination.destination.exception.DestinationNotFoundException;
-import ams.asmtravel.api.services.destination.destination.exception.KhmerTextMissingException;
 import ams.asmtravel.api.services.destination.destination.mapper.DestinationMapper;
 import ams.asmtravel.api.services.destination.destination.repository.DestinationRepository;
 import ams.asmtravel.api.services.destination.destination.security.DestinationPermissionEvaluator;
@@ -32,10 +29,6 @@ import ams.asmtravel.api.services.location.province.domain.ProvinceDeletingEvent
 import ams.asmtravel.api.services.location.province.service.ProvinceService;
 import ams.asmtravel.api.services.location.region.domain.RegionDeletingEvent;
 import ams.asmtravel.api.services.location.region.service.RegionService;
-import ams.asmtravel.api.services.history.period.domain.HistoricalPeriodDeletingEvent;
-import ams.asmtravel.api.services.history.period.service.HistoricalPeriodService;
-import ams.asmtravel.api.services.history.religion.domain.ReligionDeletingEvent;
-import ams.asmtravel.api.services.history.religion.service.ReligionService;
 import ams.asmtravel.api.services.authorization.role.domain.RoleCode;
 import ams.asmtravel.api.services.taxonomy.tag.domain.TagDeletingEvent;
 import ams.asmtravel.api.services.taxonomy.tag.service.TagService;
@@ -77,9 +70,6 @@ public class DestinationServiceImpl implements DestinationService {
     private final TagService tagService;
     private final InterestService interestService;
     private final RegionService regionService;
-    private final ArchitectureStyleService architectureStyleService;
-    private final ReligionService religionService;
-    private final HistoricalPeriodService historicalPeriodService;
     private final UserService userService;
     private final DestinationPermissionEvaluator permission;
     private final DestinationMapper mapper;
@@ -209,16 +199,9 @@ public class DestinationServiceImpl implements DestinationService {
     @Transactional
     public DestinationResponse publish(UUID id) {
         Destination destination = find(id);
-        requireKhmer(destination);
         destination.setStatus(ListingStatus.PUBLISHED);
         destination.setPublishedAt(Instant.now());
         return mapper.toDestinationResponse(destinationRepository.saveAndFlush(destination));
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public void requireKhmer(UUID id) {
-        requireKhmer(find(id));
     }
 
     @Override
@@ -359,21 +342,6 @@ public class DestinationServiceImpl implements DestinationService {
         destinationRepository.unlinkRegion(event.regionId());
     }
 
-    @EventListener
-    public void onArchitectureStyleDeleting(ArchitectureStyleDeletingEvent event) {
-        destinationRepository.unlinkArchitectureStyle(event.styleId());
-    }
-
-    @EventListener
-    public void onReligionDeleting(ReligionDeletingEvent event) {
-        destinationRepository.unlinkReligion(event.religionId());
-    }
-
-    @EventListener
-    public void onHistoricalPeriodDeleting(HistoricalPeriodDeletingEvent event) {
-        destinationRepository.unlinkHistoricalPeriod(event.periodId());
-    }
-
     /** A province can be deleted only once its destinations have moved. */
     @EventListener
     public void onProvinceDeleting(ProvinceDeletingEvent event) {
@@ -421,22 +389,6 @@ public class DestinationServiceImpl implements DestinationService {
         if (request.tourismRegionIds() != null || destination.getId() == null) {
             destination.setTourismRegions(new HashSet<>(regionService.getTourismEntities(nullToEmpty(request.tourismRegionIds()))));
         }
-        if (request.architectureStyleIds() != null || destination.getId() == null) {
-            destination.setArchitectureStyles(new HashSet<>(
-                    architectureStyleService.getEntities(nullToEmpty(request.architectureStyleIds()))));
-        }
-        if (request.religionIds() != null || destination.getId() == null) {
-            destination.setReligions(new HashSet<>(religionService.getEntities(nullToEmpty(request.religionIds()))));
-        }
-        /* Ancient Capitals filters: Historical Period and Century. */
-        if (request.historicalPeriodIds() != null || destination.getId() == null) {
-            destination.setHistoricalPeriods(new HashSet<>(
-                    historicalPeriodService.getEntities(nullToEmpty(request.historicalPeriodIds()))));
-        }
-        if (request.centuries() != null || destination.getId() == null) {
-            destination.setCenturies(new ArrayList<>(request.centuries() == null ? List.of()
-                    : request.centuries().stream().distinct().sorted().toList()));
-        }
         /* Theme and its specialties; values from an old theme are kept. */
         String theme = blankToNull(request.theme());
         /* The nine first regions, or any tourism region made since: a new one simply has no specialties. */
@@ -454,14 +406,6 @@ public class DestinationServiceImpl implements DestinationService {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No such specialty: " + String.join(", ", unknown));
             }
             destination.setSpecialties(new ArrayList<>(specialties));
-        }
-    }
-
-    /** Nothing goes live with English text that has no Khmer beside it. */
-    private static void requireKhmer(Destination destination) {
-        List<String> missing = destination.missingKhmer();
-        if (!missing.isEmpty()) {
-            throw new KhmerTextMissingException(missing);
         }
     }
 

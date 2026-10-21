@@ -36,7 +36,7 @@ public class SearchController {
     private final SearchService searchService;
 
     /**
-     * {@code ?type=DESTINATION|STAY|FOOD|CORRIDOR} (destinations when left out), {@code ?q=} words, then
+     * {@code ?type=DESTINATION|STAY|FOOD|ACTIVITY|CORRIDOR} (destinations when left out), {@code ?q=} words, then
      * {@code regionIds}, {@code provinceIds}, {@code categoryIds}, {@code tagIds}, {@code interestIds} (ids, comma-separated;
      * {@code regionId} and {@code provinceId} still take one), {@code travelerRecommended=true} for the seal holders,
      * {@code near=} a destination's id for what lies around it, nearest first;

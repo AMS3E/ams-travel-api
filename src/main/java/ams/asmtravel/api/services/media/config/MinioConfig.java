@@ -7,6 +7,7 @@ import ams.asmtravel.api.services.admin.domain.SeedJson;
 import ams.asmtravel.api.services.destination.destination.domain.Destination;
 import java.util.UUID;
 import ams.asmtravel.api.services.destination.stay.domain.Stay;
+import ams.asmtravel.api.services.destination.activity.domain.Activity;
 import ams.asmtravel.api.services.destination.food.domain.Food;
 import ams.asmtravel.api.services.corridor.domain.Corridor;
 import ams.asmtravel.api.services.media.client.MinioStorageClient;
@@ -92,7 +93,7 @@ public class MinioConfig {
     }
 
     /**
-     * Every seeded gallery, whatever kind of place owns it: attractions, stays, food places and
+     * Every seeded gallery, whatever kind of place owns it: attractions, stays, food places, activities and
      * corridors, each item with its caption (the photographer's credit included) and the one that is
      * the cover marked so.
      */
@@ -149,6 +150,7 @@ public class MinioConfig {
                     case DESTINATION -> idOf(context.find(Destination.class, owner), Destination::getId);
                     case STAY -> idOf(context.find(Stay.class, owner), Stay::getId);
                     case FOOD -> idOf(context.find(Food.class, owner), Food::getId);
+                    case ACTIVITY -> idOf(context.find(Activity.class, owner), Activity::getId);
                     case CORRIDOR -> idOf(context.find(Corridor.class, owner), Corridor::getId);
                     default -> null;
                 };

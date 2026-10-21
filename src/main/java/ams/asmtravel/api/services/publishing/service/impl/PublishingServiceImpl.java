@@ -5,6 +5,9 @@ import ams.asmtravel.api.services.destination.destination.domain.Destination;
 import ams.asmtravel.api.services.destination.destination.domain.DestinationDeletingEvent;
 import ams.asmtravel.api.services.destination.destination.domain.ListingStatus;
 import ams.asmtravel.api.services.destination.destination.service.DestinationService;
+import ams.asmtravel.api.services.destination.activity.domain.Activity;
+import ams.asmtravel.api.services.destination.activity.domain.ActivityDeletingEvent;
+import ams.asmtravel.api.services.destination.activity.service.ActivityService;
 import ams.asmtravel.api.services.destination.food.domain.Food;
 import ams.asmtravel.api.services.destination.food.domain.FoodDeletingEvent;
 import ams.asmtravel.api.services.destination.food.service.FoodService;
@@ -64,6 +67,7 @@ public class PublishingServiceImpl implements PublishingService {
     private final DestinationService destinationService;
     private final StayService stayService;
     private final FoodService foodService;
+    private final ActivityService activityService;
     private final UserService userService;
     private final PublishingMapper mapper;
     private final ApplicationEventPublisher events;
@@ -103,12 +107,6 @@ public class PublishingServiceImpl implements PublishingService {
     public PublishingResponse approve(UUID id, ApprovePublishRequest decision, UUID reviewerId) {
         PublishingRequest request = answerable(id, true);
         expect(request, PublishingStatus.PENDING_REVIEW, "Only a request waiting for review can be approved");
-        /* Approved means ready to go live: not while its English has no Khmer beside it. */
-        switch (request.getTargetType()) {
-            case DESTINATION -> destinationService.requireKhmer(request.getTargetId());
-            case STAY -> stayService.requireKhmer(request.getTargetId());
-            case FOOD -> foodService.requireKhmer(request.getTargetId());
-        }
         return decide(request, PublishingStatus.APPROVED, decision == null ? null : decision.note(), reviewerId);
     }
 
@@ -130,6 +128,7 @@ public class PublishingServiceImpl implements PublishingService {
             case DESTINATION -> destinationService.publish(request.getTargetId());
             case STAY -> stayService.publish(request.getTargetId());
             case FOOD -> foodService.publish(request.getTargetId());
+            case ACTIVITY -> activityService.publish(request.getTargetId());
         }
         request.setPublishedAt(Instant.now());
         return decide(request, PublishingStatus.PUBLISHED, request.getReviewNote(), reviewerId);
@@ -147,6 +146,7 @@ public class PublishingServiceImpl implements PublishingService {
             case DESTINATION -> destinationService.unpublish(request.getTargetId());
             case STAY -> stayService.unpublish(request.getTargetId());
             case FOOD -> foodService.unpublish(request.getTargetId());
+            case ACTIVITY -> activityService.unpublish(request.getTargetId());
         }
         request.setUnpublishedAt(Instant.now());
         return decide(request, PublishingStatus.UNPUBLISHED, request.getReviewNote(), reviewerId);
@@ -239,6 +239,11 @@ public class PublishingServiceImpl implements PublishingService {
     }
 
     @EventListener
+    public void onActivityDeleting(ActivityDeletingEvent event) {
+        publishingRepository.deleteByTarget(PublishingTargetType.ACTIVITY, event.activityId());
+    }
+
+    @EventListener
     public void onUserDeleting(UserDeletingEvent event) {
         if (publishingRepository.involves(event.userId())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "This person has publishing history, so they cannot be "
@@ -264,6 +269,11 @@ public class PublishingServiceImpl implements PublishingService {
                 Food food = foodService.getEntity(id);
                 yield new Listing(food.getName(), authors(food.getOwnerUserId(), food.getCreatedBy()),
                         food.getStatus() == ListingStatus.PUBLISHED);
+            }
+            case ACTIVITY -> {
+                Activity activity = activityService.getEntity(id);
+                yield new Listing(activity.getName(), authors(activity.getOwnerUserId(), activity.getCreatedBy()),
+                        activity.getStatus() == ListingStatus.PUBLISHED);
             }
         };
     }

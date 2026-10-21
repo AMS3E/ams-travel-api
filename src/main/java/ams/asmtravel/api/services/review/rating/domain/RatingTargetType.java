@@ -5,5 +5,6 @@ public enum RatingTargetType {
     DESTINATION,
     STAY,
     FOOD,
+    ACTIVITY,
     CORRIDOR
 }

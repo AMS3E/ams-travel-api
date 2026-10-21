@@ -32,6 +32,10 @@ public record CorridorRequest(
         @DecimalMin("0") @DecimalMax("99999999") BigDecimal estimatedBudgetMin,
         @DecimalMin("0") @DecimalMax("99999999") BigDecimal estimatedBudgetMax,
         Set<UUID> interestIds,
-        @PositiveOrZero Integer sortOrder
+        @PositiveOrZero Integer sortOrder,
+        /** Khmer twins: null keeps what is stored, blank clears it. */
+        @Size(max = 200) String nameKm,
+        @Size(max = 500) String shortDescriptionKm,
+        String descriptionKm
 ) {
 }

@@ -1,19 +1,5 @@
 package ams.asmtravel.api.services.activity.popular.controller;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
-
-import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
-
 import ams.asmtravel.api.services.activity.popular.domain.BrowseTarget;
 import ams.asmtravel.api.services.activity.popular.dto.request.BrowseEventRequest;
 import ams.asmtravel.api.services.activity.popular.dto.response.PopularResponse;
@@ -24,6 +10,19 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 
 /** Browse events and the app's Popular lists. A signed-in visitor is read from the token. */
 @Tag(name = "Engagement · Popular", description = "What visitors browse, and the lists made from it.")
@@ -36,7 +35,7 @@ public class PopularController {
     private final UserService userService;
 
     /**
-     * {@code ?type=DESTINATION|STAY|FOOD|CORRIDOR} (destinations when left out); {@code ?regionIds=} and
+     * {@code ?type=DESTINATION|STAY|FOOD|ACTIVITY|CORRIDOR} (destinations when left out); {@code ?regionIds=} and
      * {@code ?provinceIds=} for any of several ({@code regionId} and {@code provinceId} still take one);
      * {@code ?interestIds=} for any of some interests; {@code ?limit=} for how many, 10 when left out.
      */

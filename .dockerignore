@@ -5,5 +5,3 @@
 build
 *.iml
 *.log
-deployment
-bin

@@ -49,14 +49,26 @@ public class Corridor {
     @Column(nullable = false, length = 200)
     private String name;
 
+    /** Its Khmer name, typed by hand; null until written. */
+    @Column(length = 200)
+    private String nameKm;
+
     @Column(nullable = false, unique = true, length = 120)
     private String slug;
 
     @Column(length = 500)
     private String shortDescription;
 
+    /** The short description in Khmer; null until written. */
+    @Column(length = 500)
+    private String shortDescriptionKm;
+
     @Column(columnDefinition = "text")
     private String description;
+
+    /** The description in Khmer; null until written. */
+    @Column(columnDefinition = "text")
+    private String descriptionKm;
 
     @Column(length = 512)
     private String coverKey;

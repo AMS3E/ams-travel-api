@@ -16,7 +16,6 @@ import java.util.UUID;
 /**
  * @param code         such as {@code COASTAL-ISLAND}; null makes one from the name (new) or keeps it (edit)
  * @param kind         null keeps it (new: ZONE)
- * @param historyIntro the line under its Historical coverage heading
  * @param coverKey     the uploaded picture's key; null keeps it, empty removes it
  * @param mapKey       its map picture's key, the same way
  * @param categoryIds  a tourism region's shelves, in order; null keeps them
@@ -32,7 +31,6 @@ public record RegionRequest(
         RegionKind kind,
         UUID parentId,
         String description,
-        String historyIntro,
         @MediaKey(allowEmpty = true, message = "Upload the picture first, then send its key") String coverKey,
         @MediaKey(allowEmpty = true, message = "Upload the map picture first, then send its key") String mapKey,
         List<UUID> categoryIds,

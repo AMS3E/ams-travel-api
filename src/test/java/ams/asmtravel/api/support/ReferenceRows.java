@@ -40,6 +40,7 @@ public class ReferenceRows implements ApplicationRunner {
             "db/changelog/v2/auth/007-verify-bdo-admin.yaml",
             "db/changelog/v2/gamification/008-badge-rows.yaml",
             "db/changelog/v2/gamification/009-season-rows.yaml",
+            "db/changelog/v2/gamification/010-retire-points-ladder.yaml",
             "db/changelog/v2/taxonomy/013-amenities.yaml");
 
     private final JdbcTemplate jdbc;

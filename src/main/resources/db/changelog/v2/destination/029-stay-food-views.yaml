@@ -1,0 +1,21 @@
+# How many times a stay's or a food place's page was opened: first opens of a
+# day, signed in or not, as attractions already count. Read by the dashboard's
+# Destination Detail; the popular service bumps it on a browse event.
+databaseChangeLog:
+  - changeSet:
+      id: v2-destination-stay-food-views
+      author: ams-travel-v2
+      changes:
+        - addColumn:
+            schemaName: destination
+            tableName: destination_stays
+            columns:
+              - column: {name: view_count, type: bigint, defaultValueNumeric: 0, constraints: {nullable: false}}
+        - addColumn:
+            schemaName: destination
+            tableName: destination_foods
+            columns:
+              - column: {name: view_count, type: bigint, defaultValueNumeric: 0, constraints: {nullable: false}}
+      rollback:
+        - dropColumn: {schemaName: destination, tableName: destination_stays, columnName: view_count}
+        - dropColumn: {schemaName: destination, tableName: destination_foods, columnName: view_count}

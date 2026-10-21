@@ -241,6 +241,15 @@ public class CorridorServiceImpl implements CorridorService {
         corridor.setName(request.name().trim());
         corridor.setShortDescription(blankToNull(request.shortDescription()));
         corridor.setDescription(blankToNull(request.description()));
+        if (request.nameKm() != null) {
+            corridor.setNameKm(blankToNull(request.nameKm()));
+        }
+        if (request.shortDescriptionKm() != null) {
+            corridor.setShortDescriptionKm(blankToNull(request.shortDescriptionKm()));
+        }
+        if (request.descriptionKm() != null) {
+            corridor.setDescriptionKm(blankToNull(request.descriptionKm()));
+        }
         corridor.setCoverKey(blankToNull(request.coverKey()));
         corridor.setEstimatedBudgetMin(request.estimatedBudgetMin());
         corridor.setEstimatedBudgetMax(request.estimatedBudgetMax());

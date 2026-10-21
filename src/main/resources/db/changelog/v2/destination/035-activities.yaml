@@ -1,0 +1,91 @@
+# Activities & Experiences (2026-10-21): the fourth kind of destination, beside
+# attractions, stays and food places. Something a traveller does rather than
+# visits, written like an attraction, with a type of its own (diving, kayak,
+# trekking, cruise…) and the contact details of whoever runs it. Like a stay
+# or a food place it may belong to a partner account and is classed by its
+# interests alone (no tourism region, category or tag); like an attraction it
+# sits in a province.
+databaseChangeLog:
+  - changeSet:
+      id: v2-destination-activities
+      author: ams-travel-v2
+      changes:
+        - createTable:
+            schemaName: destination
+            tableName: destination_activities
+            columns:
+              - column: {name: id, type: uuid, defaultValueComputed: "${fn.uuid}", constraints: {primaryKey: true, primaryKeyName: destination_activities_pkey, nullable: false}}
+              - column: {name: owner_user_id, type: uuid}
+              - column: {name: destination_id, type: uuid}
+              - column: {name: name, type: varchar(255), constraints: {nullable: false}}
+              - column: {name: slug, type: varchar(150), constraints: {nullable: false, unique: true, uniqueConstraintName: uk_destination_activities_slug}}
+              - column: {name: type, type: varchar(50), constraints: {nullable: false}}
+              - column: {name: short_description, type: varchar(500)}
+              - column: {name: description, type: text}
+              - column: {name: slogan, type: varchar(300)}
+              - column: {name: slogan_by, type: varchar(120)}
+              - column: {name: name_km, type: varchar(255)}
+              - column: {name: description_km, type: text}
+              - column: {name: slogan_km, type: varchar(300)}
+              - column: {name: slogan_by_km, type: varchar(120)}
+              - column: {name: address_km, type: text}
+              - column: {name: address, type: text}
+              - column: {name: province_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: latitude, type: "decimal(10,7)"}
+              - column: {name: longitude, type: "decimal(10,7)"}
+              - column: {name: phone, type: varchar(50)}
+              - column: {name: contact_email, type: varchar(255)}
+              - column: {name: website, type: varchar(255)}
+              - column: {name: telegram, type: varchar(100)}
+              - column: {name: whatsapp, type: varchar(50)}
+              - column: {name: facebook_url, type: varchar(512)}
+              - column: {name: cover_key, type: varchar(512)}
+              - column: {name: status, type: varchar(30), defaultValue: DRAFT, constraints: {nullable: false}}
+              - column: {name: view_count, type: bigint, defaultValueNumeric: 0, constraints: {nullable: false}}
+              - column: {name: created_by, type: uuid}
+              - column: {name: published_at, type: TIMESTAMP WITH TIME ZONE}
+              - column: {name: created_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+              - column: {name: updated_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+        - createIndex:
+            schemaName: destination
+            tableName: destination_activities
+            indexName: idx_destination_activities_province
+            columns:
+              - column: {name: province_id}
+        - createIndex:
+            schemaName: destination
+            tableName: destination_activities
+            indexName: idx_destination_activities_destination
+            columns:
+              - column: {name: destination_id}
+        - createIndex:
+            schemaName: destination
+            tableName: destination_activities
+            indexName: idx_destination_activities_owner
+            columns:
+              - column: {name: owner_user_id}
+        - createIndex:
+            schemaName: destination
+            tableName: destination_activities
+            indexName: idx_destination_activities_status
+            columns:
+              - column: {name: status}
+        # A deleted attraction leaves the activity where it is; a deleted account leaves its activities; a province with activities cannot go.
+        - addForeignKeyConstraint: {baseTableSchemaName: destination, baseTableName: destination_activities, baseColumnNames: destination_id, constraintName: fk_destination_activities_destination, referencedTableSchemaName: destination, referencedTableName: destinations, referencedColumnNames: id, onDelete: SET NULL}
+        - addForeignKeyConstraint: {baseTableSchemaName: destination, baseTableName: destination_activities, baseColumnNames: province_id, constraintName: fk_destination_activities_province, referencedTableSchemaName: taxonomy, referencedTableName: provinces, referencedColumnNames: id, onDelete: RESTRICT}
+        - addForeignKeyConstraint: {baseTableSchemaName: destination, baseTableName: destination_activities, baseColumnNames: owner_user_id, constraintName: fk_destination_activities_owner, referencedTableSchemaName: auth, referencedTableName: users, referencedColumnNames: id, onDelete: SET NULL}
+        - addForeignKeyConstraint: {baseTableSchemaName: destination, baseTableName: destination_activities, baseColumnNames: created_by, constraintName: fk_destination_activities_created_by, referencedTableSchemaName: auth, referencedTableName: users, referencedColumnNames: id, onDelete: SET NULL}
+
+        # What it is: its interests, the Activities & Experiences shelf. A deleted activity or interest takes its links along.
+        - createTable:
+            schemaName: destination
+            tableName: destination_activity_interests
+            columns:
+              - column: {name: activity_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: interest_id, type: uuid, constraints: {nullable: false}}
+        - addPrimaryKey: {schemaName: destination, tableName: destination_activity_interests, columnNames: "activity_id, interest_id", constraintName: destination_activity_interests_pkey}
+        - addForeignKeyConstraint: {baseTableSchemaName: destination, baseTableName: destination_activity_interests, baseColumnNames: activity_id, constraintName: fk_destination_activity_interests_activity, referencedTableSchemaName: destination, referencedTableName: destination_activities, referencedColumnNames: id, onDelete: CASCADE}
+        - addForeignKeyConstraint: {baseTableSchemaName: destination, baseTableName: destination_activity_interests, baseColumnNames: interest_id, constraintName: fk_destination_activity_interests_interest, referencedTableSchemaName: taxonomy, referencedTableName: interests, referencedColumnNames: id, onDelete: CASCADE}
+      rollback:
+        - dropTable: {schemaName: destination, tableName: destination_activity_interests}
+        - dropTable: {schemaName: destination, tableName: destination_activities}

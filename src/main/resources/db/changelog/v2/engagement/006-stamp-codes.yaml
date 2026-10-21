@@ -1,0 +1,35 @@
+# Check-ins by QR code: every kind of destination (an attraction, a stay, a food
+# place) carries a code the CMS prints and posts on site; a traveller scans it
+# and stands within the radius to collect the stamp, once per place per season.
+# A stamp now says which kind of place it is for.
+databaseChangeLog:
+  - changeSet:
+      id: v2-engagement-stamp-codes
+      author: ams-travel-v2
+      changes:
+        - addColumn:
+            schemaName: engagement
+            tableName: digital_stamps
+            columns:
+              - column: {name: target_type, type: varchar(20), defaultValue: DESTINATION, constraints: {nullable: false}}
+        - createTable:
+            schemaName: engagement
+            tableName: stamp_codes
+            columns:
+              - column: {name: id, type: uuid, defaultValueComputed: "${fn.uuid}", constraints: {primaryKey: true, primaryKeyName: stamp_codes_pkey, nullable: false}}
+              - column: {name: target_type, type: varchar(20), constraints: {nullable: false}}
+              - column: {name: target_id, type: uuid, constraints: {nullable: false}}
+              - column: {name: code, type: varchar(32), constraints: {nullable: false, unique: true, uniqueConstraintName: uk_stamp_codes_code}}
+              - column: {name: issued_at, type: TIMESTAMP WITH TIME ZONE, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+              - column: {name: issued_by, type: uuid}
+              - column: {name: replaced_at, type: TIMESTAMP WITH TIME ZONE}
+        - createIndex:
+            schemaName: engagement
+            tableName: stamp_codes
+            indexName: idx_stamp_codes_target
+            columns:
+              - column: {name: target_type}
+              - column: {name: target_id}
+      rollback:
+        - dropTable: {schemaName: engagement, tableName: stamp_codes}
+        - dropColumn: {schemaName: engagement, tableName: digital_stamps, columnName: target_type}

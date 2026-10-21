@@ -5,6 +5,8 @@ import ams.asmtravel.api.services.authorization.domain.Permissions;
 import ams.asmtravel.api.services.destination.destination.domain.DestinationDeletingEvent;
 import ams.asmtravel.api.services.corridor.service.CorridorService;
 import ams.asmtravel.api.services.destination.destination.service.DestinationService;
+import ams.asmtravel.api.services.destination.activity.domain.ActivityDeletingEvent;
+import ams.asmtravel.api.services.destination.activity.service.ActivityService;
 import ams.asmtravel.api.services.destination.food.domain.FoodDeletingEvent;
 import ams.asmtravel.api.services.destination.food.service.FoodService;
 import ams.asmtravel.api.services.destination.stay.domain.StayDeletingEvent;
@@ -69,6 +71,7 @@ public class MediaServiceImpl implements MediaService {
     private final ObjectProvider<DestinationService> destinationService;
     private final ObjectProvider<StayService> stayService;
     private final ObjectProvider<FoodService> foodService;
+    private final ObjectProvider<ActivityService> activityService;
     private final ObjectProvider<CorridorService> corridorService;
 
     // Files
@@ -288,6 +291,11 @@ public class MediaServiceImpl implements MediaService {
         mediaRepository.deleteByOwners(MediaType.FOOD, List.of(event.foodId()));
     }
 
+    @EventListener
+    public void onActivityDeleting(ActivityDeletingEvent event) {
+        mediaRepository.deleteByOwners(MediaType.ACTIVITY, List.of(event.activityId()));
+    }
+
     // Helpers
 
     private record Upload(StorageKey key, byte[] content, FileFormat format) {
@@ -341,7 +349,7 @@ public class MediaServiceImpl implements MediaService {
     ) {
     }
 
-    /** The one place that knows destination, stay and food. */
+    /** The one place that knows destination, stay, food and activity. */
     private Owner owner(MediaType type) {
         return switch (type) {
             case DESTINATION -> {
@@ -359,13 +367,18 @@ public class MediaServiceImpl implements MediaService {
                 yield new Owner(owners::exists, owners::canWrite, owners::isPublished,
                         id -> owners.getEntity(id).getCoverKey(), owners::setCover);
             }
+            case ACTIVITY -> {
+                ActivityService owners = activityService.getObject();
+                yield new Owner(owners::exists, owners::canWrite, owners::isPublished,
+                        id -> owners.getEntity(id).getCoverKey(), owners::setCover);
+            }
             case CORRIDOR -> {
                 CorridorService owners = corridorService.getObject();
                 yield new Owner(owners::exists, owners::canWrite, owners::isPublished,
                         id -> owners.getEntity(id).getCoverKey(), owners::setCover);
             }
             default -> throw new InvalidMediaException(
-                    "Galleries are DESTINATION, STAY, FOOD and CORRIDOR; review photos come with their review");
+                    "Galleries are DESTINATION, STAY, FOOD, ACTIVITY and CORRIDOR; review photos come with their review");
         };
     }
 

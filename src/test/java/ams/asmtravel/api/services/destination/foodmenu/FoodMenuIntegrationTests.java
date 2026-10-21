@@ -53,7 +53,7 @@ class FoodMenuIntegrationTests {
         User owner = person("owner@kitchen.test");
         RequestPostProcessor partner = staff("owner@kitchen.test", "PARTNER", "PERM_LISTING_EDIT_OWN", "PERM_LISTING_DELETE_OWN");
         String food = id(mvc.perform(post("/api/v1/foods").with(partner).contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"Mekong Kitchen\",\"nameKm\":\"ផ្ទះបាយមេគង្គ\",\"type\":\"RESTAURANT\",\"priceFrom\":99," + PIN + "}"))
+                        .content("{\"name\":\"Mekong Kitchen\",\"type\":\"RESTAURANT\",\"priceFrom\":99," + PIN + "}"))
                 .andExpect(status().isCreated()));
 
         String amok = id(dish(partner, "{\"foodId\":\"" + food + "\",\"name\":\"Fish amok\",\"localName\":\"អាម៉ុកត្រី\","

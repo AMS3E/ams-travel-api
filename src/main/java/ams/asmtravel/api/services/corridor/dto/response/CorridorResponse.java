@@ -51,6 +51,10 @@ public record CorridorResponse(
         List<UUID> stopDestinationIds,
         List<UUID> stopProvinceIds,
         /** The zones of its stops' provinces and the tourism regions its stops are shelved in. */
-        List<UUID> stopRegionIds
+        List<UUID> stopRegionIds,
+        /** Khmer twins of the name and descriptions; null until written. */
+        String nameKm,
+        String shortDescriptionKm,
+        String descriptionKm
 ) {
 }

@@ -1,0 +1,1078 @@
+{
+  "realm": "amsadmin",
+  "enabled": true,
+  "displayName": "AMS Travel back office",
+  "loginTheme": "amstravel",
+  "sslRequired": "__SSL_REQUIRED__",
+  "registrationAllowed": false,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "resetPasswordAllowed": true,
+  "bruteForceProtected": true,
+  "permanentLockout": false,
+  "failureFactor": 10,
+  "waitIncrementSeconds": 60,
+  "maxFailureWaitSeconds": 900,
+  "maxDeltaTimeSeconds": 43200,
+  "quickLoginCheckMilliSeconds": 1000,
+  "minimumQuickLoginWaitSeconds": 60,
+  "accessTokenLifespan": 900,
+  "ssoSessionIdleTimeout": 1800,
+  "ssoSessionMaxLifespan": 36000,
+  "roles": {
+    "realm": [
+      {
+        "name": "PERM_AUDIT_VIEW",
+        "description": "View audit log: View the immutable audit log"
+      },
+      {
+        "name": "PERM_CONTRIBUTOR_PUBLISH_APPROVE",
+        "description": "Approve contributor requests: Approve or reject contributor publishing requests"
+      },
+      {
+        "name": "PERM_CORRIDOR_CURATE",
+        "description": "Curate corridors: Create and edit curated corridors"
+      },
+      {
+        "name": "PERM_DESTINATION_DELETE",
+        "description": "Delete destinations: Delete a destination"
+      },
+      {
+        "name": "PERM_DESTINATION_DRAFT_CREATE",
+        "description": "Create drafts: Create a destination draft"
+      },
+      {
+        "name": "PERM_DESTINATION_DRAFT_DELETE_OWN",
+        "description": "Delete own drafts: Delete an owned destination draft that is not live"
+      },
+      {
+        "name": "PERM_DESTINATION_DRAFT_EDIT_OWN",
+        "description": "Edit own drafts: Edit an owned destination draft"
+      },
+      {
+        "name": "PERM_DESTINATION_EDIT_ANY",
+        "description": "Edit any destination: Edit any destination"
+      },
+      {
+        "name": "PERM_DESTINATION_PUBLISH",
+        "description": "Publish destinations: Publish a destination"
+      },
+      {
+        "name": "PERM_DESTINATION_UNPUBLISH",
+        "description": "Unpublish destinations: Unpublish a destination"
+      },
+      {
+        "name": "PERM_FULL_CONTROL",
+        "description": "Full control: Full access to every amstravel capability"
+      },
+      {
+        "name": "PERM_LISTING_DELETE_OWN",
+        "description": "Delete own listings: Delete an owned listing that is not live"
+      },
+      {
+        "name": "PERM_LISTING_EDIT_OWN",
+        "description": "Edit own listings: Edit listings owned by the signed-in partner"
+      },
+      {
+        "name": "PERM_MEDIA_UPLOAD",
+        "description": "Upload media: Upload and manage owned media"
+      },
+      {
+        "name": "PERM_PARTNER_LISTING_DELETE",
+        "description": "Delete partner listings: Delete a submitted partner listing that is not live"
+      },
+      {
+        "name": "PERM_PARTNER_LISTING_EDIT",
+        "description": "Edit partner listings: Edit a submitted partner listing that is not live"
+      },
+      {
+        "name": "PERM_PARTNER_PUBLISH_APPROVE",
+        "description": "Approve partner requests: Approve or reject partner publishing requests"
+      },
+      {
+        "name": "PERM_PUBLISH_REQUEST_SUBMIT",
+        "description": "Submit for publishing: Submit a listing or draft for publishing"
+      },
+      {
+        "name": "PERM_PUBLISH_REQUEST_VIEW_OWN",
+        "description": "Track own requests: Track the status of owned publishing requests"
+      },
+      {
+        "name": "PERM_REVIEW_MODERATE",
+        "description": "Moderate reviews: Moderate destination reviews"
+      },
+      {
+        "name": "PERM_ROLE_ASSIGN",
+        "description": "Assign roles: Assign business roles to back-office users"
+      },
+      {
+        "name": "PERM_TAXONOMY_MANAGE",
+        "description": "Manage taxonomy: Create and edit regions, provinces, interests, categories and tags"
+      },
+      {
+        "name": "PERM_USER_MANAGE",
+        "description": "Manage users: Manage all back-office accounts"
+      },
+      {
+        "name": "PERM_VERIFIED_BADGE_SET",
+        "description": "Verify destinations: Verify destinations submitted to the desk"
+      },
+      {
+        "name": "ADMIN",
+        "description": "Administrator: Manage users, roles, permissions, audit records, and the complete platform",
+        "composite": true,
+        "composites": {
+          "realm": [
+            "PARTNER",
+            "CONTRIBUTOR",
+            "EDITOR",
+            "BDO",
+            "PERM_FULL_CONTROL",
+            "PERM_USER_MANAGE",
+            "PERM_ROLE_ASSIGN",
+            "PERM_AUDIT_VIEW"
+          ]
+        }
+      },
+      {
+        "name": "BDO",
+        "description": "Business development officer: Review partner destinations, manage the catalogue, and submit own content to an administrator",
+        "composite": true,
+        "composites": {
+          "realm": [
+            "PERM_CORRIDOR_CURATE",
+            "PERM_DESTINATION_DRAFT_CREATE",
+            "PERM_DESTINATION_DRAFT_DELETE_OWN",
+            "PERM_DESTINATION_DRAFT_EDIT_OWN",
+            "PERM_DESTINATION_EDIT_ANY",
+            "PERM_DESTINATION_PUBLISH",
+            "PERM_MEDIA_UPLOAD",
+            "PERM_PARTNER_LISTING_DELETE",
+            "PERM_PARTNER_LISTING_EDIT",
+            "PERM_PARTNER_PUBLISH_APPROVE",
+            "PERM_PUBLISH_REQUEST_SUBMIT",
+            "PERM_PUBLISH_REQUEST_VIEW_OWN",
+            "PERM_TAXONOMY_MANAGE",
+            "PERM_VERIFIED_BADGE_SET"
+          ]
+        }
+      },
+      {
+        "name": "CONTRIBUTOR",
+        "description": "Contributor: Draft destinations and submit them to an editor",
+        "composite": true,
+        "composites": {
+          "realm": [
+            "PERM_DESTINATION_DRAFT_CREATE",
+            "PERM_DESTINATION_DRAFT_DELETE_OWN",
+            "PERM_DESTINATION_DRAFT_EDIT_OWN",
+            "PERM_LISTING_DELETE_OWN",
+            "PERM_LISTING_EDIT_OWN",
+            "PERM_MEDIA_UPLOAD",
+            "PERM_PUBLISH_REQUEST_SUBMIT",
+            "PERM_PUBLISH_REQUEST_VIEW_OWN"
+          ]
+        }
+      },
+      {
+        "name": "EDITOR",
+        "description": "Editor: Review contributor destinations, manage the catalogue, and submit own content to an administrator",
+        "composite": true,
+        "composites": {
+          "realm": [
+            "PERM_CONTRIBUTOR_PUBLISH_APPROVE",
+            "PERM_CORRIDOR_CURATE",
+            "PERM_DESTINATION_DELETE",
+            "PERM_DESTINATION_DRAFT_CREATE",
+            "PERM_DESTINATION_EDIT_ANY",
+            "PERM_DESTINATION_PUBLISH",
+            "PERM_DESTINATION_UNPUBLISH",
+            "PERM_MEDIA_UPLOAD",
+            "PERM_PUBLISH_REQUEST_SUBMIT",
+            "PERM_PUBLISH_REQUEST_VIEW_OWN",
+            "PERM_REVIEW_MODERATE",
+            "PERM_TAXONOMY_MANAGE"
+          ]
+        }
+      },
+      {
+        "name": "PARTNER",
+        "description": "Partner: Manage owned listings and submit them to BDO for publishing",
+        "composite": true,
+        "composites": {
+          "realm": [
+            "PERM_LISTING_DELETE_OWN",
+            "PERM_LISTING_EDIT_OWN",
+            "PERM_MEDIA_UPLOAD",
+            "PERM_PUBLISH_REQUEST_SUBMIT",
+            "PERM_PUBLISH_REQUEST_VIEW_OWN"
+          ]
+        }
+      }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "amsadmin-dashboard",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "secret": "__AMSADMIN_DASHBOARD_SECRET__",
+      "fullScopeAllowed": true,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "name": "Admin dashboard (Next.js)",
+      "rootUrl": "http://localhost:3001",
+      "baseUrl": "http://localhost:3001",
+      "redirectUris": [
+        "__DASHBOARD_URL__/api/auth/callback"
+      ],
+      "webOrigins": [
+        "__DASHBOARD_URL__"
+      ],
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "http://localhost:3001/*"
+      }
+    },
+    {
+      "clientId": "amsadmin-api",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "secret": "__AMSADMIN_API_SECRET__",
+      "fullScopeAllowed": true,
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": true,
+      "name": "Spring API (staff admin, client credentials)"
+    },
+    {
+      "clientId": "local-cli",
+      "name": "Local CLI (password grant, local only)",
+      "enabled": true,
+      "publicClient": true,
+      "protocol": "openid-connect",
+      "standardFlowEnabled": false,
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": false,
+      "fullScopeAllowed": true
+    }
+  ],
+  "users": [
+    {
+      "username": "service-account-amsadmin-api",
+      "enabled": true,
+      "serviceAccountClientId": "amsadmin-api",
+      "clientRoles": {
+        "realm-management": [
+          "manage-users",
+          "view-users",
+          "query-users",
+          "view-realm"
+        ]
+      }
+    },
+    {
+      "username": "admin@ams.test",
+      "email": "admin@ams.test",
+      "emailVerified": true,
+      "enabled": true,
+      "firstName": "Ada",
+      "lastName": "Admin",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "__LOCAL_USER_PASSWORD__",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "ADMIN"
+      ]
+    },
+    {
+      "username": "bdo@ams.test",
+      "email": "bdo@ams.test",
+      "emailVerified": true,
+      "enabled": true,
+      "firstName": "Bopha",
+      "lastName": "BDO",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "__LOCAL_USER_PASSWORD__",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "BDO"
+      ]
+    },
+    {
+      "username": "editor@ams.test",
+      "email": "editor@ams.test",
+      "emailVerified": true,
+      "enabled": true,
+      "firstName": "Ethan",
+      "lastName": "Editor",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "__LOCAL_USER_PASSWORD__",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "EDITOR"
+      ]
+    },
+    {
+      "username": "contributor@ams.test",
+      "email": "contributor@ams.test",
+      "emailVerified": true,
+      "enabled": true,
+      "firstName": "Chan",
+      "lastName": "Contributor",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "__LOCAL_USER_PASSWORD__",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "CONTRIBUTOR"
+      ]
+    },
+    {
+      "username": "partner@ams.test",
+      "email": "partner@ams.test",
+      "emailVerified": true,
+      "enabled": true,
+      "firstName": "Piseth",
+      "lastName": "Partner",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "__LOCAL_USER_PASSWORD__",
+          "temporary": false
+        }
+      ],
+      "realmRoles": [
+        "PARTNER"
+      ]
+    }
+  ],
+  "smtpServer": {
+    "host": "__SMTP_HOST__",
+    "port": "__SMTP_PORT__",
+    "from": "__SMTP_FROM__",
+    "fromDisplayName": "__SMTP_FROM_NAME__",
+    "auth": "__SMTP_AUTH__",
+    "user": "__SMTP_USER__",
+    "password": "__SMTP_PASSWORD__",
+    "ssl": "__SMTP_SSL__",
+    "starttls": "__SMTP_STARTTLS__",
+    "replyTo": ""
+  },
+  "authenticationFlows": [
+    {
+      "alias": "Account verification options",
+      "description": "Method with which to verity the existing account",
+      "providerId": "basic-flow",
+      "topLevel": false,
+      "builtIn": true,
+      "authenticationExecutions": [
+        {
+          "authenticator": "idp-email-verification",
+          "authenticatorFlow": false,
+          "requirement": "ALTERNATIVE",
+          "priority": 10,
+          "autheticatorFlow": false,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticatorFlow": true,
+          "requirement": "ALTERNATIVE",
+          "priority": 20,
+          "autheticatorFlow": true,
+          "flowAlias": "Verify Existing Account by Re-authentication",
+          "userSetupAllowed": false
+        }
+      ]
+    },
+    {
+      "alias": "Browser - Conditional 2FA",
+      "description": "Flow to determine if any 2FA is required for the authentication",
+      "providerId": "basic-flow",
+      "topLevel": false,
+      "builtIn": true,
+      "authenticationExecutions": [
+        {
+          "authenticator": "conditional-user-configured",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 10,
+          "autheticatorFlow": false,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticator": "auth-otp-form",
+          "authenticatorFlow": false,
+          "requirement": "ALTERNATIVE",
+          "priority": 20,
+          "autheticatorFlow": false,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticator": "webauthn-authenticator",
+          "authenticatorFlow": false,
+          "requirement": "DISABLED",
+          "priority": 30,
+          "autheticatorFlow": false,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticator": "auth-recovery-authn-code-form",
+          "authenticatorFlow": false,
+          "requirement": "DISABLED",
+          "priority": 40,
+          "autheticatorFlow": false,
+          "userSetupAllowed": false
+        }
+      ]
+    },
+    {
+      "alias": "Browser - Conditional Organization",
+      "description": "Flow to determine if the organization identity-first login is to be used",
+      "providerId": "basic-flow",
+      "topLevel": false,
+      "builtIn": true,
+      "authenticationExecutions": [
+        {
+          "authenticator": "conditional-user-configured",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 10,
+          "autheticatorFlow": false,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticator": "organization",
+          "authenticatorFlow": false,
+          "requirement": "ALTERNATIVE",
+          "priority": 20,
+          "autheticatorFlow": false,
+          "userSetupAllowed": false
+        }
+      ]
+    },
+    {
+      "alias": "Direct Grant - Conditional OTP",
+      "description": "Flow to determine if the OTP is required for the authentication",
+      "providerId": "basic-flow",
+      "topLevel": false,
+      "builtIn": true,
+      "authenticationExecutions": [
+        {
+          "authenticator": "conditional-user-configured",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 10,
+          "autheticatorFlow": false,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticator": "direct-grant-validate-otp",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 20,
+          "autheticatorFlow": false,
+          "userSetupAllowed": false
+        }
+      ]
+    },
+    {
+      "alias": "First Broker Login - Conditional Organization",
+      "description": "Flow to determine if the authenticator that adds organization members is to be used",
+      "providerId": "basic-flow",
+      "topLevel": false,
+      "builtIn": true,
+      "authenticationExecutions": [
+        {
+          "authenticator": "conditional-user-configured",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 10,
+          "autheticatorFlow": false,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticator": "idp-add-organization-member",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 20,
+          "autheticatorFlow": false,
+          "userSetupAllowed": false
+        }
+      ]
+    },
+    {
+      "alias": "First broker login - Conditional 2FA",
+      "description": "Flow to determine if any 2FA is required for the authentication",
+      "providerId": "basic-flow",
+      "topLevel": false,
+      "builtIn": true,
+      "authenticationExecutions": [
+        {
+          "authenticator": "conditional-user-configured",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 10,
+          "autheticatorFlow": false,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticator": "auth-otp-form",
+          "authenticatorFlow": false,
+          "requirement": "ALTERNATIVE",
+          "priority": 20,
+          "autheticatorFlow": false,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticator": "webauthn-authenticator",
+          "authenticatorFlow": false,
+          "requirement": "DISABLED",
+          "priority": 30,
+          "autheticatorFlow": false,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticator": "auth-recovery-authn-code-form",
+          "authenticatorFlow": false,
+          "requirement": "DISABLED",
+          "priority": 40,
+          "autheticatorFlow": false,
+          "userSetupAllowed": false
+        }
+      ]
+    },
+    {
+      "alias": "Handle Existing Account",
+      "description": "Handle what to do if there is existing account with same email/username like authenticated identity provider",
+      "providerId": "basic-flow",
+      "topLevel": false,
+      "builtIn": true,
+      "authenticationExecutions": [
+        {
+          "authenticator": "idp-confirm-link",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 10,
+          "autheticatorFlow": false,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticatorFlow": true,
+          "requirement": "REQUIRED",
+          "priority": 20,
+          "autheticatorFlow": true,
+          "flowAlias": "Account verification options",
+          "userSetupAllowed": false
+        }
+      ]
+    },
+    {
+      "alias": "Organization",
+      "providerId": "basic-flow",
+      "topLevel": false,
+      "builtIn": true,
+      "authenticationExecutions": [
+        {
+          "authenticatorFlow": true,
+          "requirement": "CONDITIONAL",
+          "priority": 10,
+          "autheticatorFlow": true,
+          "flowAlias": "Browser - Conditional Organization",
+          "userSetupAllowed": false
+        }
+      ]
+    },
+    {
+      "alias": "Reset - Conditional OTP",
+      "description": "Flow to determine if the OTP should be reset or not. Set to REQUIRED to force.",
+      "providerId": "basic-flow",
+      "topLevel": false,
+      "builtIn": true,
+      "authenticationExecutions": [
+        {
+          "authenticator": "conditional-user-configured",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 10,
+          "autheticatorFlow": false,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticator": "reset-otp",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 20,
+          "autheticatorFlow": false,
+          "userSetupAllowed": false
+        }
+      ]
+    },
+    {
+      "alias": "User creation or linking",
+      "description": "Flow for the existing/non-existing user alternatives",
+      "providerId": "basic-flow",
+      "topLevel": false,
+      "builtIn": true,
+      "authenticationExecutions": [
+        {
+          "authenticatorConfig": "create unique user config",
+          "authenticator": "idp-create-user-if-unique",
+          "authenticatorFlow": false,
+          "requirement": "ALTERNATIVE",
+          "priority": 10,
+          "autheticatorFlow": false,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticatorFlow": true,
+          "requirement": "ALTERNATIVE",
+          "priority": 20,
+          "autheticatorFlow": true,
+          "flowAlias": "Handle Existing Account",
+          "userSetupAllowed": false
+        }
+      ]
+    },
+    {
+      "alias": "Verify Existing Account by Re-authentication",
+      "description": "Reauthentication of existing account",
+      "providerId": "basic-flow",
+      "topLevel": false,
+      "builtIn": true,
+      "authenticationExecutions": [
+        {
+          "authenticator": "idp-username-password-form",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 10,
+          "autheticatorFlow": false,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticatorFlow": true,
+          "requirement": "CONDITIONAL",
+          "priority": 20,
+          "autheticatorFlow": true,
+          "flowAlias": "First broker login - Conditional 2FA",
+          "userSetupAllowed": false
+        }
+      ]
+    },
+    {
+      "alias": "browser",
+      "description": "Browser based authentication",
+      "providerId": "basic-flow",
+      "topLevel": true,
+      "builtIn": true,
+      "authenticationExecutions": [
+        {
+          "authenticator": "auth-cookie",
+          "authenticatorFlow": false,
+          "requirement": "ALTERNATIVE",
+          "priority": 10,
+          "autheticatorFlow": false,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticator": "auth-spnego",
+          "authenticatorFlow": false,
+          "requirement": "DISABLED",
+          "priority": 20,
+          "autheticatorFlow": false,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticator": "identity-provider-redirector",
+          "authenticatorFlow": false,
+          "requirement": "ALTERNATIVE",
+          "priority": 25,
+          "autheticatorFlow": false,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticatorFlow": true,
+          "requirement": "ALTERNATIVE",
+          "priority": 26,
+          "autheticatorFlow": true,
+          "flowAlias": "Organization",
+          "userSetupAllowed": false
+        },
+        {
+          "authenticatorFlow": true,
+          "requirement": "ALTERNATIVE",
+          "priority": 30,
+          "autheticatorFlow": true,
+          "flowAlias": "forms",
+          "userSetupAllowed": false
+        }
+      ]
+    },
+    {
+      "alias": "clients",
+      "description": "Base authentication for clients",
+      "providerId": "client-flow",
+      "topLevel": true,
+      "builtIn": true,
+      "authenticationExecutions": [
+        {
+          "authenticator": "client-secret",
+          "authenticatorFlow": false,
+          "requirement": "ALTERNATIVE",
+          "priority": 10,
+          "autheticatorFlow": false,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticator": "client-jwt",
+          "authenticatorFlow": false,
+          "requirement": "ALTERNATIVE",
+          "priority": 20,
+          "autheticatorFlow": false,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticator": "client-secret-jwt",
+          "authenticatorFlow": false,
+          "requirement": "ALTERNATIVE",
+          "priority": 30,
+          "autheticatorFlow": false,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticator": "client-x509",
+          "authenticatorFlow": false,
+          "requirement": "ALTERNATIVE",
+          "priority": 40,
+          "autheticatorFlow": false,
+          "userSetupAllowed": false
+        }
+      ]
+    },
+    {
+      "alias": "direct grant",
+      "description": "OpenID Connect Resource Owner Grant",
+      "providerId": "basic-flow",
+      "topLevel": true,
+      "builtIn": true,
+      "authenticationExecutions": [
+        {
+          "authenticator": "direct-grant-validate-username",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 10,
+          "autheticatorFlow": false,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticator": "direct-grant-validate-password",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 20,
+          "autheticatorFlow": false,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticatorFlow": true,
+          "requirement": "CONDITIONAL",
+          "priority": 30,
+          "autheticatorFlow": true,
+          "flowAlias": "Direct Grant - Conditional OTP",
+          "userSetupAllowed": false
+        }
+      ]
+    },
+    {
+      "alias": "docker auth",
+      "description": "Used by Docker clients to authenticate against the IDP",
+      "providerId": "basic-flow",
+      "topLevel": true,
+      "builtIn": true,
+      "authenticationExecutions": [
+        {
+          "authenticator": "docker-http-basic-authenticator",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 10,
+          "autheticatorFlow": false,
+          "userSetupAllowed": false
+        }
+      ]
+    },
+    {
+      "alias": "first broker login",
+      "description": "Actions taken after first broker login with identity provider account, which is not yet linked to any Keycloak account",
+      "providerId": "basic-flow",
+      "topLevel": true,
+      "builtIn": true,
+      "authenticationExecutions": [
+        {
+          "authenticatorConfig": "review profile config",
+          "authenticator": "idp-review-profile",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 10,
+          "autheticatorFlow": false,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticatorFlow": true,
+          "requirement": "REQUIRED",
+          "priority": 20,
+          "autheticatorFlow": true,
+          "flowAlias": "User creation or linking",
+          "userSetupAllowed": false
+        },
+        {
+          "authenticatorFlow": true,
+          "requirement": "CONDITIONAL",
+          "priority": 50,
+          "autheticatorFlow": true,
+          "flowAlias": "First Broker Login - Conditional Organization",
+          "userSetupAllowed": false
+        }
+      ]
+    },
+    {
+      "alias": "forms",
+      "description": "Username, password, otp and other auth forms.",
+      "providerId": "basic-flow",
+      "topLevel": false,
+      "builtIn": true,
+      "authenticationExecutions": [
+        {
+          "authenticator": "auth-username-password-form",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 10,
+          "autheticatorFlow": false,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticatorFlow": true,
+          "requirement": "CONDITIONAL",
+          "priority": 20,
+          "autheticatorFlow": true,
+          "flowAlias": "Browser - Conditional 2FA",
+          "userSetupAllowed": false
+        }
+      ]
+    },
+    {
+      "alias": "registration",
+      "description": "Registration flow",
+      "providerId": "basic-flow",
+      "topLevel": true,
+      "builtIn": true,
+      "authenticationExecutions": [
+        {
+          "authenticator": "registration-page-form",
+          "authenticatorFlow": true,
+          "requirement": "REQUIRED",
+          "priority": 10,
+          "autheticatorFlow": true,
+          "flowAlias": "registration form",
+          "userSetupAllowed": false
+        }
+      ]
+    },
+    {
+      "alias": "registration form",
+      "description": "Registration form",
+      "providerId": "form-flow",
+      "topLevel": false,
+      "builtIn": true,
+      "authenticationExecutions": [
+        {
+          "authenticator": "registration-user-creation",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 20,
+          "autheticatorFlow": false,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticator": "registration-password-action",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 50,
+          "autheticatorFlow": false,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticator": "registration-recaptcha-action",
+          "authenticatorFlow": false,
+          "requirement": "DISABLED",
+          "priority": 60,
+          "autheticatorFlow": false,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticator": "registration-terms-and-conditions",
+          "authenticatorFlow": false,
+          "requirement": "DISABLED",
+          "priority": 70,
+          "autheticatorFlow": false,
+          "userSetupAllowed": false
+        }
+      ]
+    },
+    {
+      "alias": "reset credentials",
+      "description": "Reset credentials for a user if they forgot their password or something",
+      "providerId": "basic-flow",
+      "topLevel": true,
+      "builtIn": true,
+      "authenticationExecutions": [
+        {
+          "authenticator": "reset-credentials-choose-user",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 10,
+          "autheticatorFlow": false,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticator": "reset-credential-email",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 20,
+          "autheticatorFlow": false,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticator": "reset-password",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 30,
+          "autheticatorFlow": false,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticatorFlow": true,
+          "requirement": "CONDITIONAL",
+          "priority": 40,
+          "autheticatorFlow": true,
+          "flowAlias": "Reset - Conditional OTP",
+          "userSetupAllowed": false
+        }
+      ]
+    },
+    {
+      "alias": "saml ecp",
+      "description": "SAML ECP Profile Authentication Flow",
+      "providerId": "basic-flow",
+      "topLevel": true,
+      "builtIn": true,
+      "authenticationExecutions": [
+        {
+          "authenticator": "http-basic-authenticator",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 10,
+          "autheticatorFlow": false,
+          "userSetupAllowed": false
+        }
+      ]
+    },
+    {
+      "alias": "browser with email code",
+      "description": "Sign-in for the back office: the password, then a six-digit code sent to the account's email address. A live Keycloak session (the cookie) skips both.",
+      "providerId": "basic-flow",
+      "topLevel": true,
+      "builtIn": false,
+      "authenticationExecutions": [
+        {
+          "authenticator": "auth-cookie",
+          "authenticatorFlow": false,
+          "requirement": "ALTERNATIVE",
+          "priority": 10,
+          "autheticatorFlow": false,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticator": "identity-provider-redirector",
+          "authenticatorFlow": false,
+          "requirement": "ALTERNATIVE",
+          "priority": 20,
+          "autheticatorFlow": false,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticatorFlow": true,
+          "requirement": "ALTERNATIVE",
+          "priority": 30,
+          "autheticatorFlow": true,
+          "flowAlias": "browser with email code forms",
+          "userSetupAllowed": false
+        }
+      ]
+    },
+    {
+      "alias": "browser with email code forms",
+      "description": "Username and password, then the email code; both are required.",
+      "providerId": "basic-flow",
+      "topLevel": false,
+      "builtIn": false,
+      "authenticationExecutions": [
+        {
+          "authenticator": "auth-username-password-form",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 10,
+          "autheticatorFlow": false,
+          "userSetupAllowed": false
+        },
+        {
+          "authenticator": "ams-email-code",
+          "authenticatorFlow": false,
+          "requirement": "REQUIRED",
+          "priority": 20,
+          "autheticatorFlow": false,
+          "userSetupAllowed": false
+        }
+      ]
+    }
+  ],
+  "authenticatorConfig": [
+    {
+      "id": "bd8dd4dd-ac7f-4a37-9698-2d18fd41a955",
+      "alias": "create unique user config",
+      "config": {
+        "require.password.update.after.registration": "false"
+      }
+    },
+    {
+      "id": "103ecc04-3a85-47ba-8bb3-db2fd56db78f",
+      "alias": "review profile config",
+      "config": {
+        "update.profile.on.first.login": "missing"
+      }
+    }
+  ],
+  "registrationFlow": "registration",
+  "browserFlow": "browser with email code",
+  "directGrantFlow": "direct grant",
+  "resetCredentialsFlow": "reset credentials",
+  "clientAuthenticationFlow": "clients",
+  "dockerAuthenticationFlow": "docker auth",
+  "firstBrokerLoginFlow": "first broker login"
+}

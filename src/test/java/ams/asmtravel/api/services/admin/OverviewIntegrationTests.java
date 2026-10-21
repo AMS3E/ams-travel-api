@@ -50,10 +50,11 @@ class OverviewIntegrationTests {
                 .andExpect(jsonPath("$.counts.corridors").value(notNullValue()))
                 .andExpect(jsonPath("$.counts.stays").value(notNullValue()))
                 .andExpect(jsonPath("$.counts.foods").value(notNullValue()))
+                .andExpect(jsonPath("$.counts.activities").value(notNullValue()))
                 .andExpect(jsonPath("$.counts.partners").value(notNullValue()))
                 .andExpect(jsonPath("$.counts.users").value(greaterThanOrEqualTo(1)))
                 .andExpect(jsonPath("$.counts.favorites").value(notNullValue()))
-                .andExpect(jsonPath("$.counts.badges").value(greaterThanOrEqualTo(12)))
+                .andExpect(jsonPath("$.counts.badges").value(greaterThanOrEqualTo(9)))
                 .andExpect(jsonPath("$.counts.reviews").value(notNullValue()))
                 .andExpect(jsonPath("$.reviews.total").value(notNullValue()))
                 .andExpect(jsonPath("$.recentReviews").isArray());

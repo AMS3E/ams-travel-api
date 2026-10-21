@@ -1,11 +1,11 @@
 package ams.asmtravel.api.services.verification.dto.response;
 
 import ams.asmtravel.api.services.destination.destination.domain.ListingStatus;
+import ams.asmtravel.api.services.publishing.domain.PublishingTargetType;
 import ams.asmtravel.api.services.publishing.service.PublishingService.Desk;
 import ams.asmtravel.api.services.verification.domain.VerificationBasis;
 
 import java.math.BigDecimal;
-
 import java.time.Instant;
 import java.util.UUID;
 
@@ -16,6 +16,8 @@ import java.util.UUID;
  * latest decision, or the travellers' seal when their reviews have earned it.
  *
  * @param id                  null for a place never decided on
+ * @param targetType          an attraction, a stay or a food place; null in a public status with no decision
+ * @param destinationId       the place's id, whatever its kind
  * @param desk                the place's desk; queue only
  * @param basis               what the verification rests on; TRAVELER_SCORE when only the reviews verify it
  * @param travelerRecommended whether the reviews have earned the Recommended by Traveler seal; null in a history row
@@ -26,6 +28,7 @@ import java.util.UUID;
  */
 public record VerificationResponse(
         UUID id,
+        PublishingTargetType targetType,
         UUID destinationId,
         String destinationName,
         String destinationSlug,

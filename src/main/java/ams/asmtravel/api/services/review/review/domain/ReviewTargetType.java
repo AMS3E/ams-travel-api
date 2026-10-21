@@ -5,5 +5,6 @@ public enum ReviewTargetType {
     DESTINATION,
     FOOD,
     STAY,
+    ACTIVITY,
     CORRIDOR
 }

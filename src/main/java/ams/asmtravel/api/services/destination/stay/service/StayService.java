@@ -33,9 +33,6 @@ public interface StayService {
     /** Publishes on approval; the publishing service checks the authority. */
     StayResponse publish(UUID id);
 
-    /** Refused with 409 while any filled English field has no Khmer: for a reviewer about to approve it. */
-    void requireKhmer(UUID id);
-
     /** Takes it off the site; it stays as a draft. */
     StayResponse unpublish(UUID id);
 
@@ -45,6 +42,9 @@ public interface StayService {
     Stay getEntity(UUID id);
 
     boolean exists(UUID id);
+
+    /** Counts one more view: a page's first open of the day, as the popular service decides. */
+    void recordView(UUID id);
 
     /** Whether the caller may write this stay and its gallery; false if it does not exist. */
     boolean canWrite(UUID id, Authentication authentication);

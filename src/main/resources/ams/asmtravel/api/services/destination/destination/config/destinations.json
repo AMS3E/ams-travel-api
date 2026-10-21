@@ -2,12 +2,12 @@
   {
     "slug": "angkor-wat",
     "name": "Angkor Wat",
-    "nameKm": "អង្គរវត្ត",
     "shortDescription": "The world's largest religious monument and Cambodia's national symbol.",
     "description": "Angkor Wat was raised in the first half of the twelfth century by Suryavarman II as a state temple to Vishnu, and it remains the largest religious monument on earth. The outer wall encloses more than 160 hectares, the moat is 190 metres wide, and the five lotus-bud towers of the central sanctuary stand for the peaks of Mount Meru. Unusually for a Khmer temple it faces west. The bas-reliefs of the third enclosure run for almost a kilometre, with the Churning of the Sea of Milk and the Battle of Kurukshetra the two panels everyone stops at.\n\nMost visitors come for sunrise over the northern reflecting pool, then return in mid-afternoon when the galleries empty. An Angkor pass is required, and shoulders and knees must be covered to climb to the upper level.",
     "slogan": "Five towers, one sunrise, and a thousand years still standing.",
     "sloganBy": "a Siem Reap guide",
     "address": "Angkor Wat, Siem Reap",
+    "nameKm": "អង្គរវត្ត",
     "addressKm": "អង្គរវត្ត សៀមរាប",
     "latitude": 13.4125,
     "longitude": 103.867,
@@ -28,30 +28,17 @@
     "interestSlugs": [
       "historical-sites"
     ],
-    "architectureStyleSlugs": [
-      "angkor-wat-style"
-    ],
-    "religionSlugs": [
-      "buddhism",
-      "hinduism"
-    ],
-    "historicalPeriodSlugs": [
-      "angkor-period"
-    ],
-    "centuries": [
-      12
-    ],
     "popularity": 5
   },
   {
     "slug": "bayon-temple",
     "name": "Bayon Temple",
-    "nameKm": "ប្រាសាទបាយ័ន",
     "shortDescription": "Two hundred serene stone faces at the exact center of Angkor Thom.",
     "description": "The Bayon was the state temple of Jayavarman VII, built at the end of the twelfth century at the exact centre of his walled capital, Angkor Thom. It was the first Angkorian state temple dedicated to Buddhism, and its signature is the forest of towers carved with serene faces, more than two hundred of them on the towers that still stand. Whether they show the bodhisattva Lokesvara or the king himself is still argued. The outer gallery holds some of the liveliest reliefs at Angkor: a naval battle against the Cham, market scenes, cockfights and a kitchen at work.\n\nThe upper terrace is tight and crowded by mid-morning, so come at opening or after three, when the low sun gives the faces their shadows. Allow an hour, more if you read the reliefs.",
     "slogan": "Two hundred stone smiles, and all of them looking at you.",
     "sloganBy": "a traveller from Battambang",
     "address": "Angkor Thom, Siem Reap",
+    "nameKm": "ប្រាសាទបាយ័ន",
     "addressKm": "អង្គរធំ សៀមរាប",
     "latitude": 13.4413,
     "longitude": 103.859,
@@ -71,30 +58,17 @@
     "interestSlugs": [
       "historical-sites"
     ],
-    "architectureStyleSlugs": [
-      "bayon-style"
-    ],
-    "religionSlugs": [
-      "buddhism",
-      "hinduism"
-    ],
-    "historicalPeriodSlugs": [
-      "angkor-period"
-    ],
-    "centuries": [
-      12
-    ],
     "popularity": 5
   },
   {
     "slug": "ta-prohm",
     "name": "Ta Prohm",
-    "nameKm": "ប្រាសាទតាព្រហ្ម",
     "shortDescription": "A monastery left in the grip of silk-cotton roots, deliberately unrestored.",
     "description": "Ta Prohm was founded in 1186 by Jayavarman VII as a Buddhist monastery and university, dedicated to his mother. Its inscription records a community of more than twelve thousand people living and working within its walls. When the French began clearing Angkor in the early twentieth century they left this one temple largely as they found it, so that visitors could see what the forest had done over five centuries. The silk-cotton and strangler-fig roots that pour over its galleries have since become the most photographed trees in Cambodia.\n\nA joint Indian and Cambodian team has stabilised the most fragile sections and laid out a one-way route on wooden walkways. It is busiest between nine and eleven; arrive at opening or come in the last hour before closing.",
     "slogan": "Where the jungle was given the last word.",
     "sloganBy": "a conservation volunteer in Siem Reap",
     "address": "Ta Prohm, Angkor Archaeological Park, Siem Reap",
+    "nameKm": "ប្រាសាទតាព្រហ្ម",
     "addressKm": "តាព្រហ្ម ឧទ្យានបុរាណវិទ្យាអង្គរ សៀមរាប",
     "latitude": 13.4348,
     "longitude": 103.8891,
@@ -114,29 +88,17 @@
     "interestSlugs": [
       "historical-sites"
     ],
-    "architectureStyleSlugs": [
-      "bayon-style"
-    ],
-    "religionSlugs": [
-      "buddhism"
-    ],
-    "historicalPeriodSlugs": [
-      "angkor-period"
-    ],
-    "centuries": [
-      12
-    ],
     "popularity": 4
   },
   {
     "slug": "banteay-srei",
     "name": "Banteay Srei",
-    "nameKm": "បន្ទាយស្រី",
     "shortDescription": "Pink sandstone cut so finely the carvings still read a thousand years on.",
     "description": "Banteay Srei was consecrated in 967 and dedicated to Shiva, built not by a king but by Yajnavaraha, a Brahmin counsellor at the court of Rajendravarman. It is tiny by Angkorian standards, its central towers barely taller than a person, yet the pink sandstone is carved so deeply and so finely that every lintel and pediment still reads clearly today: Indra on his three-headed elephant, Ravana shaking Mount Kailasa, Narasimha tearing a demon apart. The name means citadel of women, a modern nickname inspired by the delicacy of the work.\n\nThe temple sits about 35 kilometres north-east of Siem Reap on the road to Phnom Kulen, so it pairs naturally with Kbal Spean or the Landmine Museum. Early morning gives the softest light on the stone and the thinnest crowds.",
     "slogan": "The smallest temple at Angkor carries the finest hand.",
     "sloganBy": "an art historian visiting from Phnom Penh",
     "address": "Banteay Srei, Siem Reap",
+    "nameKm": "បន្ទាយស្រី",
     "addressKm": "បន្ទាយស្រី សៀមរាប",
     "latitude": 13.5989,
     "longitude": 103.9634,
@@ -156,29 +118,17 @@
     "interestSlugs": [
       "historical-sites"
     ],
-    "architectureStyleSlugs": [
-      "banteay-srei-style"
-    ],
-    "religionSlugs": [
-      "hinduism"
-    ],
-    "historicalPeriodSlugs": [
-      "angkor-period"
-    ],
-    "centuries": [
-      10
-    ],
     "popularity": 4
   },
   {
     "slug": "koh-ker",
     "name": "Koh Ker",
-    "nameKm": "កោះកេរ្តិ៍",
     "shortDescription": "A capital for only twenty years, and a seven-tier pyramid to prove it.",
     "description": "For twenty years from 928, when Jayavarman IV moved the court away from Angkor, Koh Ker was the capital of the Khmer empire. In that short time his builders raised a seven-tiered sandstone pyramid, Prasat Thom, thirty-six metres high and unlike anything else in the country, together with well over a hundred shrines spread through the forest around a great reservoir. The sculpture of the period is monumental and vigorous, and much of what survived is now in the National Museum. In 2023 the site was inscribed on the UNESCO World Heritage list.\n\nKoh Ker lies about 120 kilometres north-east of Siem Reap, usually combined with Beng Mealea in a long day. A wooden staircase climbs the pyramid; Prasat Pram, with its tree-wrapped towers, is the other essential stop.",
     "slogan": "An empire's brief detour, left standing in the forest.",
     "sloganBy": "a guide from Preah Vihear province",
     "address": "Koh Ker, Preah Vihear",
+    "nameKm": "កោះកេរ្តិ៍",
     "addressKm": "កោះកេរ្តិ៍ ព្រះវិហារ",
     "latitude": 13.7833,
     "longitude": 104.5333,
@@ -200,29 +150,17 @@
     "interestSlugs": [
       "historical-sites"
     ],
-    "architectureStyleSlugs": [
-      "koh-ker-style"
-    ],
-    "religionSlugs": [
-      "hinduism"
-    ],
-    "historicalPeriodSlugs": [
-      "angkor-period"
-    ],
-    "centuries": [
-      10
-    ],
     "popularity": 3
   },
   {
     "slug": "sambor-prei-kuk",
     "name": "Sambor Prei Kuk",
-    "nameKm": "សំបូរព្រៃគុក",
     "shortDescription": "Pre-Angkorian brick towers of Ishanapura, older than Angkor by three centuries.",
     "description": "Sambor Prei Kuk is what remains of Ishanapura, the capital of the Chenla kingdom under Isanavarman I in the early seventh century. More than a hundred brick temples stand in three main groups in light forest, among them the only octagonal towers in Khmer architecture, decorated with carved brick panels of flying palaces. The lion sculptures guarding Prasat Tao and the carved sandstone lintels show the beginnings of the style that Angkor would later perfect. UNESCO inscribed the site in 2017.\n\nIt lies about thirty kilometres north of Kampong Thom town, an easy stop on the road between Phnom Penh and Siem Reap. Local guides from the community association walk you between the groups in two or three hours; mornings are cooler, and the trees give shade for most of the route.",
     "slogan": "Brick towers in the trees, three centuries before Angkor.",
     "sloganBy": "a Kampong Thom schoolteacher",
     "address": "Sambor Prei Kuk, Kampong Thom",
+    "nameKm": "សំបូរព្រៃគុក",
     "addressKm": "សំបូរព្រៃគុក កំពង់ធំ",
     "latitude": 12.872,
     "longitude": 105.04,
@@ -244,29 +182,17 @@
     "interestSlugs": [
       "historical-sites"
     ],
-    "architectureStyleSlugs": [
-      "sambor-prei-kuk-style"
-    ],
-    "religionSlugs": [
-      "hinduism"
-    ],
-    "historicalPeriodSlugs": [
-      "pre-angkor-period"
-    ],
-    "centuries": [
-      7
-    ],
     "popularity": 3
   },
   {
     "slug": "royal-palace",
     "name": "Royal Palace",
-    "nameKm": "ព្រះបរមរាជវាំង",
     "shortDescription": "The working residence of the monarchy, and the Silver Pagoda beside it.",
     "description": "The Royal Palace has been the seat of the Cambodian monarchy since King Norodom moved his court from Oudong to Phnom Penh in 1866. Within its yellow walls stand the Throne Hall, completed in 1917 and still used for coronations and royal ceremonies, the Moonlight Pavilion on the eastern wall, and a small iron pavilion that was a gift from Napoleon III. The adjoining Silver Pagoda takes its name from a floor of more than five thousand silver tiles and houses an emerald-coloured Buddha and a life-sized gold Buddha set with diamonds.\n\nThe compound opens in the morning and again in the afternoon, closing over midday. The king's residence itself is off limits. Dress modestly, and come soon after opening before the tour buses arrive.",
     "slogan": "Gold roofs and silver floors in the heart of the capital.",
     "sloganBy": "a Phnom Penh tour guide",
     "address": "Samdach Sothearos Blvd, Phnom Penh",
+    "nameKm": "ព្រះបរមរាជវាំង",
     "addressKm": "មហាវិថីសម្ដេចសុធារស ភ្នំពេញ",
     "latitude": 11.5637,
     "longitude": 104.9314,
@@ -285,29 +211,17 @@
     "interestSlugs": [
       "historical-sites"
     ],
-    "architectureStyleSlugs": [
-      "post-angkorian-style"
-    ],
-    "religionSlugs": [
-      "buddhism"
-    ],
-    "historicalPeriodSlugs": [
-      "post-angkor-period"
-    ],
-    "centuries": [
-      19
-    ],
     "popularity": 5
   },
   {
     "slug": "national-museum",
     "name": "National Museum",
-    "nameKm": "សារមន្ទីរជាតិ",
     "shortDescription": "The largest collection of Khmer sculpture, held in a terracotta pavilion.",
     "description": "Opened in 1920 to a design by George Groslier, the National Museum of Cambodia holds the largest collection of Khmer sculpture anywhere, several thousand pieces spanning the pre-Angkorian, Angkorian and post-Angkorian periods. Its terracotta-red pavilions, built in a traditional style around a garden courtyard with lotus ponds, are a monument in their own right. The best-known works include the seated statue of Jayavarman VII, the eight-armed Vishnu from Angkor Wat and the bronze reclining Vishnu from the West Mebon.\n\nIt stands just north of the Royal Palace, and the two are easily seen in one morning. Allow ninety minutes; the audio guide is worth it, and the courtyard café is a pleasant place to wait out the midday heat.",
     "slogan": "Meet the gods of Angkor before you meet their temples.",
     "sloganBy": "a Siem Reap guide who sends his guests here first",
     "address": "Preah Ang Eng St, Phnom Penh",
+    "nameKm": "សារមន្ទីរជាតិ",
     "addressKm": "ផ្លូវព្រះអង្គអេង ភ្នំពេញ",
     "latitude": 11.5651,
     "longitude": 104.9289,
@@ -325,26 +239,17 @@
     "interestSlugs": [
       "culture"
     ],
-    "architectureStyleSlugs": [
-      "khmer-colonial-revival"
-    ],
-    "historicalPeriodSlugs": [
-      "post-angkor-period"
-    ],
-    "centuries": [
-      20
-    ],
     "popularity": 4
   },
   {
     "slug": "preah-vihear-temple",
     "name": "Preah Vihear Temple",
-    "nameKm": "ប្រាសាទព្រះវិហារ",
     "shortDescription": "A temple laid along an 800-metre axis on the cliff edge of the Dangrek range.",
     "description": "Preah Vihear stands on a 525-metre spur of the Dangrek escarpment, laid out along an 800-metre north-south axis that climbs through five gateways to a sanctuary at the cliff edge. Most of what stands dates from the eleventh and twelfth centuries, the reigns of Suryavarman I and Suryavarman II, and the temple was dedicated to Shiva. UNESCO listed it in 2008. The site has been contested with Thailand for a century, and the International Court of Justice confirmed Cambodian sovereignty in 1962 and again in 2013.\n\nAccess is from Sra Em, with the last steep climb by motorbike taxi or pickup. The view south over the Cambodian plain from the final terrace is the reward. Check locally before you travel, as access depends on the border situation.",
     "slogan": "A kilometre of stairs to the edge of the sky.",
     "sloganBy": "a motorbike driver from Sra Em",
     "address": "Preah Vihear Temple, Preah Vihear",
+    "nameKm": "ប្រាសាទព្រះវិហារ",
     "addressKm": "ប្រាសាទព្រះវិហារ ព្រះវិហារ",
     "latitude": 14.3933,
     "longitude": 104.68,
@@ -364,33 +269,17 @@
     "interestSlugs": [
       "historical-sites"
     ],
-    "architectureStyleSlugs": [
-      "baphuon-style",
-      "khleang-style",
-      "koh-ker-style"
-    ],
-    "religionSlugs": [
-      "hinduism"
-    ],
-    "historicalPeriodSlugs": [
-      "angkor-period"
-    ],
-    "centuries": [
-      9,
-      11,
-      12
-    ],
     "popularity": 3
   },
   {
     "slug": "spean-praptos",
     "name": "Spean Praptos",
-    "nameKm": "ស្ពានប្រាប់ទោស",
     "shortDescription": "The longest surviving Angkorian corbel-arch bridge, still carrying traffic after eight hundred years.",
     "description": "Spean Praptos, the Kampong Kdei bridge, carries the old line of National Road 6 across the Chikreng river about sixty kilometres south-east of Siem Reap. Built in laterite in the late twelfth century, it is roughly 85 metres long and 14 metres wide, and its twenty-one corbelled arches make it the longest surviving bridge of the Angkorian road system. Naga balustrades still run along both sides. Until a bypass opened in the 2000s the bridge took the full weight of lorries and buses between Phnom Penh and Siem Reap.\n\nIt is a short stop rather than a destination, best taken on the drive between the two cities. Walk down to the riverbank to see the arches properly; the stalls on the approach sell palm sugar and sticky rice.",
     "slogan": "Eight hundred years of traffic over twenty-one arches.",
     "sloganBy": "a bus driver on National Road 6",
     "address": "Kampong Kdei, Chikreng District, Siem Reap",
+    "nameKm": "ស្ពានប្រាប់ទោស",
     "addressKm": "កំពង់ក្ដី ស្រុកជីក្រែង សៀមរាប",
     "latitude": 13.1183,
     "longitude": 104.1019,
@@ -410,26 +299,17 @@
     "interestSlugs": [
       "historical-sites"
     ],
-    "architectureStyleSlugs": [
-      "bayon-style"
-    ],
-    "historicalPeriodSlugs": [
-      "angkor-period"
-    ],
-    "centuries": [
-      12
-    ],
     "popularity": 2
   },
   {
     "slug": "angkorian-royal-road",
     "name": "Angkorian Royal Road",
-    "nameKm": "ផ្លូវរាជសម័យអង្គរ",
     "shortDescription": "The 225 km highway east from Angkor to Bakan, with its bridges, fire houses, and hospital chapels.",
     "description": "The Khmer empire was held together by raised roads running out from Angkor, and the eastern road to Preah Khan of Kompong Svay is the one that can still be followed. Along it stand the stone bridges, the rest houses that inscriptions call fire houses, and the hospital chapels that Jayavarman VII placed at regular intervals for travellers. Beng Mealea sits on this route, and the long laterite bridge of Spean Ta Ong is one of the best preserved of its kind.\n\nThere is no single ticket office or entrance. Travellers follow it by car or motorbike from Beng Mealea towards Bakan, stopping at bridges and chapels as they appear beside the modern road. Go in the dry season with a driver who knows the track.",
     "slogan": "Follow the empire's own road out of Angkor.",
     "sloganBy": "an archaeologist with the Living Angkor Road Project",
     "address": "Angkor – Preah Khan of Kompong Svay route, Preah Vihear",
+    "nameKm": "ផ្លូវរាជសម័យអង្គរ",
     "addressKm": "ផ្លូវពីអង្គរទៅប្រាសាទព្រះខ័នកំពង់ស្វាយ ព្រះវិហារ",
     "latitude": 13.6194,
     "longitude": 104.3417,
@@ -452,30 +332,17 @@
     "interestSlugs": [
       "historical-sites"
     ],
-    "architectureStyleSlugs": [
-      "bayon-style"
-    ],
-    "religionSlugs": [
-      "buddhism"
-    ],
-    "historicalPeriodSlugs": [
-      "angkor-period"
-    ],
-    "centuries": [
-      11,
-      12
-    ],
     "popularity": 1
   },
   {
     "slug": "preah-khan-kompong-svay",
     "name": "Preah Khan of Kompong Svay",
-    "nameKm": "ប្រាសាទព្រះខ័នកំពង់ស្វាយ",
     "shortDescription": "The largest temple enclosure the Khmer empire ever walled, with one of its best-preserved hospital chapels.",
     "description": "Preah Khan of Kompong Svay, known locally as Bakan, is the largest enclosure ever built by the Khmer, an outer wall almost five kilometres on each side some hundred kilometres east of Angkor. It was begun in the eleventh century and greatly expanded under Jayavarman VII, who may have used it as a base before taking Angkor. Preah Stung, with its face tower, and Preah Thkol on an island in the baray are the finest buildings; a hospital chapel survives almost intact. The site was heavily looted in the 1990s and remains largely unrestored.\n\nThe track in from Ta Seng is rough and only practical in the dry season, and visitors are rare. Take water, a guide and a full day.",
     "slogan": "Five kilometres of moat and the forest to yourself.",
     "sloganBy": "a traveller from Kampong Thom",
     "address": "Bakan, Sangkum Thmey District, Preah Vihear",
+    "nameKm": "ប្រាសាទព្រះខ័នកំពង់ស្វាយ",
     "addressKm": "បាកាន ស្រុកសង្គមថ្មី ព្រះវិហារ",
     "latitude": 13.4372,
     "longitude": 104.9925,
@@ -497,32 +364,17 @@
     "interestSlugs": [
       "historical-sites"
     ],
-    "architectureStyleSlugs": [
-      "baphuon-style",
-      "bayon-style"
-    ],
-    "religionSlugs": [
-      "buddhism",
-      "hinduism"
-    ],
-    "historicalPeriodSlugs": [
-      "angkor-period"
-    ],
-    "centuries": [
-      11,
-      12
-    ],
     "popularity": 1
   },
   {
     "slug": "bou-sra-waterfall",
     "name": "Bou Sra Waterfall",
-    "nameKm": "ទឹកធ្លាក់ប៊ូស្រា",
     "shortDescription": "Cambodia's most powerful two-tier waterfall, deep in Bunong country.",
     "description": "Bou Sra is the best-known waterfall in Cambodia, about forty kilometres east of Sen Monorom in the heart of Bunong country. The river drops in two main tiers, the upper around ten metres and the lower more than twenty, into a gorge wrapped in forest. In the wet months from June to October the volume is enormous and the spray reaches the viewing platforms; in the dry season the flow shrinks and the pool below the lower fall becomes safe to swim. A zipline course crosses the gorge for those who want it.\n\nSteps lead down to the base of the second tier; they are slippery after rain. Weekends bring picnicking families from the town. The road from Sen Monorom is sealed, and a motorbike or shared taxi gets you there in an hour.",
     "slogan": "Hear it from the car park before you see it.",
     "sloganBy": "a Bunong guide from Pech Chreada",
     "address": "Pech Chreada District, Mondulkiri",
+    "nameKm": "ទឹកធ្លាក់ប៊ូស្រា",
     "addressKm": "ស្រុកពេជ្រាដា មណ្ឌលគិរី",
     "latitude": 12.4333,
     "longitude": 107.2167,
@@ -545,12 +397,12 @@
   {
     "slug": "elephant-valley-project",
     "name": "Elephant Valley Project",
-    "nameKm": "គម្រោងជ្រលងដំរី",
     "shortDescription": "A sanctuary where retired working elephants are walked, not ridden.",
     "description": "The Elephant Valley Project was set up in 2006 near Sen Monorom to take in retired and injured working elephants from the Bunong villages of Mondulkiri. The animals live in a valley of forest and grassland, and visitors follow them on foot with the mahouts, watching them forage, bathe and socialise. There is no riding, no bathing and no feeding by hand. Fees fund the sanctuary, the forest it protects and health and education programmes in the surrounding communities.\n\nHalf-day and full-day visits run most days, with overnight stays for longer. Booking ahead is essential because numbers are capped. Wear shoes you can walk in, as the trails are steep and muddy in the wet season, and expect to be collected from Sen Monorom early.",
     "slogan": "You walk the forest at the elephants' pace.",
     "sloganBy": "a volunteer who stayed a month",
     "address": "Sen Monorom, Mondulkiri",
+    "nameKm": "គម្រោងជ្រលងដំរី",
     "addressKm": "សែនមនោរម្យ មណ្ឌលគិរី",
     "latitude": 12.45,
     "longitude": 107.19,
@@ -578,12 +430,12 @@
   {
     "slug": "yeak-laom-lake",
     "name": "Yeak Laom Crater Lake",
-    "nameKm": "បឹងយក្សឡោម",
     "shortDescription": "A near-perfect volcanic crater lake, managed by the local Tampuan community.",
     "description": "Yeak Laom fills a volcanic crater five kilometres east of Banlung, almost perfectly round, about 800 metres across and nearly fifty metres deep. The water is clear and cool, the rim is forested, and a walking trail of about two and a half kilometres circles the whole lake. The site is sacred to the Tampuan people, who manage it through a community committee; the entrance fee funds the village, and a small cultural centre on the trail explains Tampuan life and crafts.\n\nWooden piers on the eastern shore are the swimming spots, with changing huts and simple stalls. Mornings are quiet; by late afternoon on weekends families from Banlung fill the piers. A motorbike or tuk-tuk from town takes fifteen minutes.",
     "slogan": "A perfect circle of green water in an old volcano.",
     "sloganBy": "a traveller from Phnom Penh",
     "address": "Yeak Laom, Banlung, Ratanakiri",
+    "nameKm": "បឹងយក្សឡោម",
     "addressKm": "យក្សឡោម បានលុង រតនគិរី",
     "latitude": 13.7167,
     "longitude": 107.0167,
@@ -613,12 +465,12 @@
   {
     "slug": "tonle-sap-floating-village",
     "name": "Kampong Phluk Floating Village",
-    "nameKm": "ភូមិបណ្ដែតទឹកកំពង់ភ្លុក",
     "shortDescription": "Stilt houses standing ten metres above the dry season lake bed.",
     "description": "The Tonle Sap is the largest freshwater lake in South-East Asia, and it swells to five times its dry-season size each year when the Mekong pushes the Tonle Sap river backwards. The communities around its edge live with that rise: in Kampong Phluk, about an hour south-east of Siem Reap, the houses stand on stilts six to ten metres tall, and in the high water of October and November boats tie up at the front doors. Behind the village a flooded forest of submerged trees is explored by small paddle boats rowed by local women.\n\nFrom March to May the lake retreats and you walk under the same houses. Late afternoon gives the best light, and the sunset over the open lake is the usual finish. Buy the boat ticket at the community office.",
     "slogan": "Houses on legs, waiting for the lake to rise.",
     "sloganBy": "a boatman from Kampong Phluk",
     "address": "Kampong Phluk, Siem Reap",
+    "nameKm": "ភូមិបណ្ដែតទឹកកំពង់ភ្លុក",
     "addressKm": "កំពង់ភ្លុក សៀមរាប",
     "latitude": 13.1667,
     "longitude": 104.0333,
@@ -650,12 +502,12 @@
   {
     "slug": "battambang-bamboo-train",
     "name": "Bamboo Train",
-    "nameKm": "រថភ្លើងឫស្សី (ណូរី)",
     "shortDescription": "A bamboo platform on rail wheels, run along a single warped track.",
     "description": "The bamboo train, or norry, began as a local answer to a railway that had stopped running: a bamboo platform on two axles, powered by a small engine, that could carry people, rice and motorbikes along the warped colonial track. When two meet, the lighter one is lifted off the rails to let the other pass. The original line ran from O Dambong, just outside Battambang. After the national railway was rebuilt, a second purpose-made track was laid near Wat Banan, south of town, and the ride now runs there with the same cars.\n\nThe trip is around twenty minutes each way at a rattling thirty kilometres an hour, with a stop at a village of stalls at the far end. Go late afternoon when the heat drops and the light turns the rice fields gold.",
     "slogan": "A bamboo bed on wheels, flat out through the paddies.",
     "sloganBy": "a traveller from Siem Reap",
     "address": "O Dambang, Battambang",
+    "nameKm": "រថភ្លើងឫស្សី (ណូរី)",
     "addressKm": "អូរដំបង បាត់ដំបង",
     "latitude": 13.0957,
     "longitude": 103.2022,
@@ -677,12 +529,12 @@
   {
     "slug": "mekong-discovery-trail",
     "name": "Mekong Discovery Trail",
-    "nameKm": "ផ្លូវរុករកមេគង្គ",
     "shortDescription": "A river-bank cycling route through rubber plantations and island villages.",
     "description": "The Mekong Discovery Trail is a network of cycling and boat routes along the river in north-eastern Cambodia, developed with the Ministry of Tourism to bring visitors to riverside villages. The Kampong Cham section is the gentlest: a ride along the riverfront, over the bamboo bridge to Koh Paen, which the islanders rebuild every dry season, past rubber plantations and through villages where silk is still woven. Wat Nokor Bachey, an eleventh-century sandstone temple with a modern pagoda built inside its walls, sits at the edge of town, and the twin hills of Phnom Pros and Phnom Srei are an easy afternoon further on.\n\nBicycles can be hired on the riverfront. Do it in sections rather than one long loop, start early, and carry water; shade is thin on the island roads.",
     "slogan": "Ride the riverbank, let the ferries set the pace.",
     "sloganBy": "a cycling guide in Kampong Cham",
     "address": "Kampong Cham riverfront, Kampong Cham",
+    "nameKm": "ផ្លូវរុករកមេគង្គ",
     "addressKm": "មាត់ទន្លេកំពង់ចាម កំពង់ចាម",
     "latitude": 11.9925,
     "longitude": 105.4638,
@@ -717,12 +569,12 @@
   {
     "slug": "phnom-kulen",
     "name": "Phnom Kulen",
-    "nameKm": "ភ្នំគូលែន",
     "shortDescription": "The sacred mountain where the Khmer Empire was declared in 802 CE.",
     "description": "Phnom Kulen is the sandstone plateau north-east of Angkor where, in 802, Jayavarman II had himself consecrated as universal monarch, the act that traditionally marks the beginning of the Khmer empire. The river that feeds Angkor rises here, and its bed near the summit was carved with hundreds of lingas and figures of Vishnu to bless the water. At Wat Preah Ang Thom a sixteenth-century reclining Buddha eight metres long is cut from the top of a single boulder. Below it the river drops over a twenty-metre waterfall into a pool where Khmer families picnic and swim at weekends.\n\nKulen needs its own ticket, separate from the Angkor pass. The mountain road is one-way: up before eleven, down after noon. Recent surveys with airborne laser scanning have mapped a whole lost city under the forest.",
     "slogan": "The mountain where Cambodia was declared, and still goes to pray.",
     "sloganBy": "a monk at Preah Ang Thom",
     "address": "Phnom Kulen National Park, Siem Reap",
+    "nameKm": "ភ្នំគូលែន",
     "addressKm": "ឧទ្យានជាតិភ្នំគូលែន សៀមរាប",
     "latitude": 13.5772,
     "longitude": 104.0367,
@@ -745,24 +597,17 @@
     "interestSlugs": [
       "waterfalls"
     ],
-    "architectureStyleSlugs": [
-      "kulen-style"
-    ],
-    "religionSlugs": [
-      "buddhism",
-      "hinduism"
-    ],
     "popularity": 4
   },
   {
     "slug": "bokor-mountain",
     "name": "Bokor Mountain",
-    "nameKm": "ភ្នំបូកគោ",
     "shortDescription": "A cool hill station plateau with abandoned colonial buildings in the mist.",
     "description": "Bokor is a plateau more than a thousand metres above Kampot, inside Preah Monivong National Park. The French built a hill station here in the early 1920s to escape the heat of the coast, and the shell of the old Bokor Palace Hotel, the stone Catholic church and the pagoda of Wat Sampov Pram, founded in 1924, still stand in the mist. The hotel has been restored, a casino and new resort buildings have grown around it, and a thirty-metre statue of Lok Yeay Mao watches over the road, but on a cloudy afternoon the place still feels abandoned. Popokvil waterfall and the cliff-edge viewpoints over the Gulf of Thailand are the other stops.\n\nThe thirty-two-kilometre road up from National Road 3 is sealed and steep. Bring a jacket; the temperature drops ten degrees.",
     "slogan": "Drive into the clouds and find a city nobody lives in.",
     "sloganBy": "a tuk-tuk driver in Kampot",
     "address": "Preah Monivong Bokor National Park, Kampot",
+    "nameKm": "ភ្នំបូកគោ",
     "addressKm": "ឧទ្យានជាតិព្រះមុនីវង្សបូកគោ កំពត",
     "latitude": 10.63,
     "longitude": 104.03,
@@ -790,12 +635,12 @@
   {
     "slug": "koh-rong",
     "name": "Koh Rong",
-    "nameKm": "កោះរ៉ុង",
     "shortDescription": "Long white beaches, bioluminescent water, and very little tarmac.",
     "description": "Koh Rong is the second-largest island in Cambodia, seventy-eight square kilometres of forested hills ringed by more than twenty beaches. Koh Touch, where the ferries land, is the busy end, with hostels, bars and dive shops along a short strip of sand. Long Set Beach, a walk to the east, is wide, quiet and the usual place to swim after dark, when the plankton light up around your hands. On the far west coast Sok San Beach runs for seven kilometres with hardly a building on it, and Prek Svay is still a working fishing village.\n\nFast ferries take about forty-five minutes from Sihanoukville. There are few roads and no cars, so beaches are reached by boat or on foot. The dry months from November to April bring calm seas; the wet season can cancel crossings.",
     "slogan": "Seven kilometres of white sand and a sea that glows at night.",
     "sloganBy": "a traveller from Preah Sihanouk",
     "address": "Koh Rong, Preah Sihanouk",
+    "nameKm": "កោះរ៉ុង",
     "addressKm": "កោះរ៉ុង ព្រះសីហនុ",
     "latitude": 10.72,
     "longitude": 103.26,
@@ -824,12 +669,12 @@
   {
     "slug": "song-saa-private-island",
     "name": "Song Saa Private Island",
-    "nameKm": "កោះឯកជនសង្សារ",
     "shortDescription": "Two small islands joined by a footbridge, and a protected marine reserve.",
     "description": "Song Saa occupies two tiny islands, Koh Ouen and Koh Bong, joined by a wooden footbridge off the north-east coast of Koh Rong. The resort opened in 2012 with a few dozen villas over the water, in the jungle and along the shore, and it was the first in Cambodia to be built around a marine reserve of its own. Its foundation funds reef monitoring, mangrove planting and health and schooling in the fishing village of Prek Svay across the channel. Rates include meals and most activities, from snorkelling the house reef to paddleboarding at dawn.\n\nGuests arrive by the resort's own speedboat from Sihanoukville in under an hour. It is a stay rather than a sight, and non-guests cannot land. Book well ahead for the dry season.",
     "slogan": "Two islands, one footbridge, and a reef that pays for itself.",
     "sloganBy": "a honeymooner from Melbourne",
     "address": "Koh Ouen & Koh Bong, Preah Sihanouk",
+    "nameKm": "កោះឯកជនសង្សារ",
     "addressKm": "កោះអួន និងកោះបង ព្រះសីហនុ",
     "latitude": 10.79,
     "longitude": 103.25,
@@ -861,12 +706,12 @@
   {
     "slug": "otres-beach",
     "name": "Otres Beach",
-    "nameKm": "ឆ្នេរអូរត្រេះ",
     "shortDescription": "The quiet end of the mainland coast, best at sunset.",
     "description": "Otres lies five kilometres south-east of the centre of Sihanoukville, a long straight stretch of pale sand backed by casuarina trees. For years it was a line of small beach bars and bungalows split into Otres 1 and Otres 2, with a village of guesthouses behind. Most of the beachfront buildings were cleared in 2020 ahead of planned development, and what remains is the sand itself, far quieter than the town beaches, with a handful of restaurants and resorts at either end and the Ream hills closing the view to the south.\n\nThe water is shallow and calm in the dry season, good for a long swim or a kayak. Come in the late afternoon: the sun sets straight into the sea, and the few bars that remain fill up for it.",
     "slogan": "The mainland's last quiet beach, best at six o'clock.",
     "sloganBy": "a traveller from Phnom Penh",
     "address": "Otres, Sihanoukville, Preah Sihanouk",
+    "nameKm": "ឆ្នេរអូរត្រេះ",
     "addressKm": "អូរត្រេះ ក្រុងព្រះសីហនុ ព្រះសីហនុ",
     "latitude": 10.585,
     "longitude": 103.523,
@@ -890,12 +735,12 @@
   {
     "slug": "kep-crab-market",
     "name": "Kep Crab Market",
-    "nameKm": "ផ្សារក្ដាមកែប",
     "shortDescription": "Blue swimmer crab pulled from baskets in the shallows and cooked with Kampot pepper.",
     "description": "Kep's crab market, Psar Kdam, sits on the waterfront west of the old seaside town. Blue swimmer crabs are kept alive in woven baskets anchored in the shallows, hauled out when a customer points, and sold by the kilo. Behind the stalls a row of restaurants on stilts cooks what you choose, the classic being crab stir-fried with strings of fresh green Kampot pepper, alongside grilled squid, prawns and whole fish. Kep was a French resort from 1908 and the ruined villas along the shore are the other half of a visit, with Kep National Park's eight-kilometre loop trail above them and boats to Rabbit Island from the pier.\n\nMornings are for watching the trade; lunch and sunset are for eating. Agree the price per kilo before the crabs go in the pan.",
     "slogan": "Crab from the basket, pepper from the vine, sea at your feet.",
     "sloganBy": "a Kep restaurant owner",
     "address": "Kep Crab Market, Kep",
+    "nameKm": "ផ្សារក្ដាមកែប",
     "addressKm": "ផ្សារក្ដាម កែប",
     "latitude": 10.4833,
     "longitude": 104.3167,
@@ -919,12 +764,12 @@
   {
     "slug": "kampot-riverfront",
     "name": "Kampot Riverfront",
-    "nameKm": "មាត់ទន្លេកំពត",
     "shortDescription": "A row of restored shophouses facing a slow river and the Bokor ridge.",
     "description": "Kampot grew as a river port in the French period, and its riverfront still has the look of one: a row of restored shophouses facing the Praek Tuek Chhu river, the old market building of Psar Samaki, and the rebuilt Old Bridge with its mismatched spans. Across the water the Bokor ridge fills the western sky. The town is a base for the pepper farms, the salt fields, the caves at Phnom Chhnork and the limestone country upriver, where kayaks drift through a tunnel of overhanging trees locals call the Green Cathedral.\n\nSunset boats leave the quay around five and return in the dark, when the fireflies are out along the banks. The riverside road is flat and good for cycling, and the night market behind it is the place to eat afterwards.",
     "slogan": "Slow river, old shophouses, and Bokor turning pink at dusk.",
     "sloganBy": "a traveller from Takeo",
     "address": "Riverside Road, Kampot",
+    "nameKm": "មាត់ទន្លេកំពត",
     "addressKm": "ផ្លូវមាត់ទន្លេ កំពត",
     "latitude": 10.594,
     "longitude": 104.164,
@@ -950,12 +795,12 @@
   {
     "slug": "kampot-pepper-farm",
     "name": "Kampot Pepper Farm",
-    "nameKm": "ចម្ការម្រេចកំពត",
     "shortDescription": "Protected-origin pepper vines, hand-picked and sorted by colour.",
     "description": "Kampot pepper has been grown on the red soil between Kampot and Kep for centuries, and in 2016 it became the first Cambodian product to receive protected geographical indication status in the European Union. The vines climb four-metre poles under shade made of palm leaves, and each colour of pepper is a different harvest: green picked fresh, black sun-dried, red left to ripen on the vine, white the ripe berry with its skin removed. Harvest runs from February to May, when the sorting tables are busiest.\n\nSeveral farms around Damnak Kantuot welcome visitors with free tours that end at the shop. A motorbike or tuk-tuk from Kampot takes half an hour, and the Secret Lake and the cave at Phnom Chhnork are on the same roads.",
     "slogan": "Pick a green peppercorn and taste why the name is protected.",
     "sloganBy": "a farmer near Damnak Kantuot",
     "address": "Damnak Kantuot, Kampot",
+    "nameKm": "ចម្ការម្រេចកំពត",
     "addressKm": "ដំណាក់កន្ទួត កំពត",
     "latitude": 10.66,
     "longitude": 104.35,
@@ -979,12 +824,12 @@
   {
     "slug": "virachey-national-park",
     "name": "Virachey National Park",
-    "nameKm": "ឧទ្យានជាតិវីរជ័យ",
     "shortDescription": "One of Cambodia's largest protected areas, reaching from the Ratanakiri highlands to the Lao border.",
     "description": "Virachey covers more than three thousand square kilometres of hills, rivers and evergreen forest in the far north-east, running from the Ratanakiri highlands to the borders with Laos and Vietnam. It is one of the largest protected areas in Cambodia and an ASEAN Heritage Park, home to gibbons, hornbills, sun bears and a few of the country's last wild elephants. The Kavet and Brao villages on its edge provide the guides, porters and boats for treks that run from three to eight days, the classic route climbing to the open grasslands of Phnom Veal Thom.\n\nEverything is arranged through the park office in Banlung, and nothing happens without a guide. Go between November and May, carry a filter for river water, and expect leeches in the wetter months.",
     "slogan": "Grassland plateaus and gibbon song, days from the nearest road.",
     "sloganBy": "a trekking guide from Banlung",
     "address": "Virachey National Park, Veun Sai District, Ratanakiri",
+    "nameKm": "ឧទ្យានជាតិវីរជ័យ",
     "addressKm": "ឧទ្យានជាតិវីរជ័យ ស្រុកវើនសៃ រតនគិរី",
     "latitude": 14.0333,
     "longitude": 107.0667,
@@ -1011,12 +856,12 @@
   {
     "slug": "romanear-waterfall",
     "name": "Romanear Waterfall",
-    "nameKm": "ទឹកធ្លាក់រមនា",
     "shortDescription": "Two falls in the forest north-west of Sen Monorom, quieter and closer to town than Bou Sra.",
     "description": "Romanear is a pair of waterfalls in the forest north-west of Sen Monorom, smaller and much closer than Bou Sra and visited mostly by families from the town. The first fall is a low, wide step over dark volcanic rock with picnic shelters beside it; a short walk through the trees reaches the second, which drops into a deep green pool that is the real reason to come. In the wet season the water turns brown and fast, and swimming is not sensible; from December to April it clears and calms.\n\nThe track off the main road is rough red earth, fine on a motorbike in the dry months. There is a small entrance fee and little else, so bring food and water and plan a long lazy afternoon.",
     "slogan": "Two falls, one pool, and the town half an hour away.",
     "sloganBy": "a traveller from Kampong Cham",
     "address": "Romanear, O Reang District, Mondulkiri",
+    "nameKm": "ទឹកធ្លាក់រមនា",
     "addressKm": "រមនា ស្រុកអូររាំង មណ្ឌលគិរី",
     "latitude": 12.4472,
     "longitude": 107.1611,
@@ -1039,12 +884,12 @@
   {
     "slug": "sesan-srepok-confluence",
     "name": "Sesan & Srepok Confluence",
-    "nameKm": "ប្រសព្វទន្លេសេសាន និងស្រែពក",
     "shortDescription": "Where the two great north-eastern rivers meet before joining the Mekong above Stung Treng.",
     "description": "The Sesan and the Srepok rise in the highlands of Vietnam and cross Ratanakiri and Mondulkiri before meeting in Stung Treng province, a short way above the point where their combined flow joins the Mekong at Stung Treng town. The confluence is wide and braided, with sandbars that emerge in the dry season and draw river terns, lapwings and pratincoles. Fishing villages line both banks, and the Lower Sesan 2 dam, completed in 2018 just below the junction, changed the river's rhythm and the lives along it.\n\nBoats can be hired on the Stung Treng riverfront for a half-day run up to the confluence and back. Leave at first light when the water is still and the birds are out; from December to April the sandbars are at their widest.",
     "slogan": "Two rivers become one before the Mekong takes them both.",
     "sloganBy": "a fisherman from Sesan district",
     "address": "Sesan District, Stung Treng",
+    "nameKm": "ប្រសព្វទន្លេសេសាន និងស្រែពក",
     "addressKm": "ស្រុកសេសាន ស្ទឹងត្រែង",
     "latitude": 13.5333,
     "longitude": 106.0167,
@@ -1072,12 +917,12 @@
   {
     "slug": "mondulkiri-coffee-highlands",
     "name": "Mondulkiri Coffee Highlands",
-    "nameKm": "ខ្ពង់រាបកាហ្វេមណ្ឌលគិរី",
     "shortDescription": "Smallholder coffee grown on the plateau around Sen Monorom, roasted and sold in the town.",
     "description": "The rolling plateau around Sen Monorom sits at about 800 metres, cool enough and wet enough for coffee, which the French planted here in the colonial period. Today the crop is grown by smallholders, many of them Bunong families, on plots scattered between forest and grassland, and most of it is robusta with a little arabica on the higher ground. The cherries are picked from November to January, dried in the sun on tarpaulins and roasted in small batches in the town, where a handful of roasters sell beans and pour cups of it.\n\nFarm visits are easy to arrange through the cafés in Sen Monorom, usually a short motorbike ride out. Combine a morning on a farm with the Sea Forest viewpoint for the plateau's famous view of hills folding away to the horizon.",
     "slogan": "Red soil, cool mornings, and the beans that make Khmer coffee.",
     "sloganBy": "a roaster in Sen Monorom",
     "address": "Sen Monorom, Mondulkiri",
+    "nameKm": "ខ្ពង់រាបកាហ្វេមណ្ឌលគិរី",
     "addressKm": "សែនមនោរម្យ មណ្ឌលគិរី",
     "latitude": 12.4581,
     "longitude": 107.1878,
@@ -1103,12 +948,12 @@
   {
     "slug": "prek-toal-bird-sanctuary",
     "name": "Prek Toal Bird Sanctuary",
-    "nameKm": "ជម្រកសត្វស្លាបព្រែកទាល់",
     "shortDescription": "The core bird reserve of the Tonle Sap biosphere, and the largest waterbird colony in South-East Asia.",
     "description": "Prek Toal is the core zone of the Tonle Sap Biosphere Reserve, some twenty thousand hectares of flooded forest at the north-west corner of the lake. It holds the largest colony of waterbirds in South-East Asia: spot-billed pelicans, painted and milky storks, greater and lesser adjutants, darters and openbills nest here by the thousand, with grey-headed fish eagles hunting over the channels. Rangers watch the colonies from platforms in the trees, and the same platforms are where visitors are taken.\n\nThe visit starts by boat from Chong Kneas near Siem Reap, about ninety minutes across the lake to the floating village of Prek Toal, then into the forest by small boat. The nesting season from December to March is the time to go, and dawn is the hour; book through a conservation operator and leave before five.",
     "slogan": "Pelicans at sunrise, by the thousand, in the flooded trees.",
     "sloganBy": "a birding guide from Siem Reap",
     "address": "Prek Toal, Ek Phnom District, Battambang",
+    "nameKm": "ជម្រកសត្វស្លាបព្រែកទាល់",
     "addressKm": "ព្រែកទាល់ ស្រុកឯកភ្នំ បាត់ដំបង",
     "latitude": 13.2167,
     "longitude": 103.6333,
@@ -1137,12 +982,12 @@
   {
     "slug": "kampong-phluk",
     "name": "Kampong Phluk",
-    "nameKm": "កំពង់ភ្លុក",
     "shortDescription": "A village of houses on six-metre stilts, with a flooded forest you paddle through behind it.",
     "description": "Kampong Phluk is a commune of three villages and some three thousand people on the floodplain of the Tonle Sap, about sixteen kilometres south-east of Siem Reap. Its houses stand on hardwood stilts six to ten metres high, and the whole village changes with the lake: a boat town in the wet season, a village of tall legs and dusty lanes in the dry. Fishing and shrimp farming are the living, and behind the houses a flooded forest of drowned trees is explored in small boats rowed by local women, who charge a few dollars for the detour.\n\nThe road from Siem Reap takes about forty minutes to the boat landing, and the trip itself around two hours. Late afternoon is best, finishing with sunset over the open lake.",
     "slogan": "Boat past the windows in October, walk beneath them in April.",
     "sloganBy": "a resident of Kampong Phluk",
     "address": "Kampong Phluk, Prasat Bakong District, Siem Reap",
+    "nameKm": "កំពង់ភ្លុក",
     "addressKm": "កំពង់ភ្លុក ស្រុកប្រាសាទបាគង សៀមរាប",
     "latitude": 13.1833,
     "longitude": 103.9667,
@@ -1169,12 +1014,12 @@
   {
     "slug": "kampong-khleang",
     "name": "Kampong Khleang",
-    "nameKm": "កំពង់ឃ្លាំង",
     "shortDescription": "The largest of the lake settlements — a working fishing town, not a day-trip stop.",
     "description": "Kampong Khleang is the largest settlement on the Tonle Sap, a working fishing town of several thousand families about fifty kilometres east of Siem Reap, reached by a side road from Dam Dek. Its stilt houses are the tallest on the lake, some ten metres off the ground, and a floating quarter sits further out on the water. Boats are built and nets mended along the channel, fish are smoked and dried on racks, and the pace is set by the catch rather than by visitors, who are far fewer here than at Chong Kneas or Kampong Phluk.\n\nBoats leave from the landing at the end of the village road. Come in the afternoon, when the light softens and the fishing boats return, and allow an hour and a half on the water.",
     "slogan": "The lake's biggest town, and still almost nobody's day trip.",
     "sloganBy": "a traveller from Kampong Thom",
     "address": "Kampong Khleang, Soutr Nikom District, Siem Reap",
+    "nameKm": "កំពង់ឃ្លាំង",
     "addressKm": "កំពង់ឃ្លាំង ស្រុកសូទ្រនិគម សៀមរាប",
     "latitude": 13.15,
     "longitude": 104.1167,
@@ -1202,12 +1047,12 @@
   {
     "slug": "koh-trong",
     "name": "Koh Trong",
-    "nameKm": "កោះទ្រង់",
     "shortDescription": "A nine-kilometre island in the Mekong opposite Kratie, ringed by a single flat cycling track.",
     "description": "Koh Trong is a long sandy island in the Mekong directly opposite Kratie town, a five-minute ferry ride from the riverfront. A single flat track circles it, about nine kilometres through pomelo orchards, vegetable gardens and two villages of wooden houses, passing a pagoda, a small floating Vietnamese community at the southern tip and, in the dry season, a wide sandbar for swimming. The island's pomelos are famous across the country. Community homestays and a couple of small lodges take guests overnight.\n\nBicycles are for hire at the ferry landing, and an ox-cart can be arranged for those who would rather ride. Give it an afternoon and stay for sunset, which falls behind Kratie across the water. Mornings are the quiet time.",
     "slogan": "An island of pomelos, one loop road, and no hurry at all.",
     "sloganBy": "a homestay owner on Koh Trong",
     "address": "Koh Trong, Kratie",
+    "nameKm": "កោះទ្រង់",
     "addressKm": "កោះទ្រង់ ក្រចេះ",
     "latitude": 12.4744,
     "longitude": 106.0119,
@@ -1240,12 +1085,12 @@
   {
     "slug": "kampi-dolphin-pool",
     "name": "Kampi Dolphin Pool",
-    "nameKm": "អន្លង់ផ្សោតកំពី",
     "shortDescription": "One of the last deep-water pools on the Mekong holding a resident group of Irrawaddy dolphins.",
     "description": "Kampi is one of a handful of deep pools on the Mekong between Kratie and the Lao border where Irrawaddy dolphins live year round. The Mekong population is small, fewer than a hundred animals, and slowly stabilising after years of decline, so the boats that take visitors out are tightly regulated: engines are cut once the dolphins are seen, and the boatmen keep their distance. The dolphins surface quietly to breathe, more often than not in small groups, and sightings are almost guaranteed in the dry season when the river is low.\n\nThe pool is fifteen kilometres north of Kratie on the Sambor road. Early morning and late afternoon give the calmest water and the best light; the trip lasts about an hour. Phnom Sambok, a hill pagoda with wide views, is on the way back.",
     "slogan": "Cut the engine, wait, and the river breathes beside you.",
     "sloganBy": "a boatman at Kampi",
     "address": "Kampi, Chetr Borei District, Kratie",
+    "nameKm": "អន្លង់ផ្សោតកំពី",
     "addressKm": "កំពី ស្រុកចិត្របុរី ក្រចេះ",
     "latitude": 12.5583,
     "longitude": 106.0333,
@@ -1270,12 +1115,12 @@
   {
     "slug": "kirirom-national-park",
     "name": "Kirirom National Park",
-    "nameKm": "ឧទ្យានជាតិគិរីរម្យ",
     "shortDescription": "Cambodia's first national park — pine forest on a plateau two hours from the capital.",
     "description": "Kirirom was the first national park in Cambodia, declared in 1993 over a plateau of about 350 square kilometres in Kampong Speu province, around 700 metres above the plain. Its signature is the pine forest, unexpected in Cambodia, standing in open stands with grass between the trunks. The French and later King Sihanouk built villas here as a cool retreat, and their ruins are scattered through the trees. Trails lead to small waterfalls and to the cliff-edge viewpoint locals call the end of the world, looking out over the Elephant Mountains.\n\nIt is about 110 kilometres from Phnom Penh, which makes it the capital's weekend escape: campsites and lodges fill on Saturdays. The Chambok community ecotourism site at the park's edge runs guided walks to a forty-metre waterfall.",
     "slogan": "Pine needles underfoot and a jacket at breakfast.",
     "sloganBy": "a camper from Phnom Penh",
     "address": "Kirirom, Phnom Sruoch District, Kampong Speu",
+    "nameKm": "ឧទ្យានជាតិគិរីរម្យ",
     "addressKm": "គិរីរម្យ ស្រុកភ្នំស្រួច កំពង់ស្ពឺ",
     "latitude": 11.3167,
     "longitude": 104.05,
@@ -1305,12 +1150,12 @@
   {
     "slug": "phnom-sampeau",
     "name": "Phnom Sampeau",
-    "nameKm": "ភ្នំសំពៅ",
     "shortDescription": "A limestone hill outside Battambang with caves, a hilltop pagoda, and a bat exodus at dusk.",
     "description": "Phnom Sampeau is a limestone hill about twelve kilometres south-west of Battambang, named for its resemblance to a ship. A pagoda and a cluster of stupas crown the summit with a wide view over the rice plain to the hills of Phnom Banan. Part way up, the caves known as the killing caves hold a memorial to the people the Khmer Rouge executed here, and a reclining Buddha watches over their bones. At the foot of the hill, a cave mouth releases millions of wrinkle-lipped bats every evening at dusk, a river of them that pours out for half an hour or more.\n\nMotorbike taxis run visitors up the steep road from the base. Climb in the late afternoon, come down for six, and sit on the roadside with everyone else for the bats.",
     "slogan": "Pray at the summit, remember in the caves, wait for the bats.",
     "sloganBy": "a traveller from Battambang",
     "address": "Phnom Sampeau, Banan District, Battambang",
+    "nameKm": "ភ្នំសំពៅ",
     "addressKm": "ភ្នំសំពៅ ស្រុកបាណន់ បាត់ដំបង",
     "latitude": 13.0417,
     "longitude": 103.1264,
@@ -1337,12 +1182,12 @@
   {
     "slug": "phnom-chhnork-cave",
     "name": "Phnom Chhnork Cave",
-    "nameKm": "រូងភ្នំឈ្នក់",
     "shortDescription": "A limestone cave north of Kampot holding a small brick sanctuary older than Angkor.",
     "description": "Phnom Chhnork is a limestone outcrop in the rice fields about eight kilometres north-east of Kampot. A stairway of two hundred steps climbs to a cave opening, and inside, lit from above, stands a small brick sanctuary from the seventh century, built in the pre-Angkorian Funan or early Chenla period and dedicated to Shiva. A stalactite has grown down to meet it and a stalagmite rises inside, so that the shrine and the cave are slowly becoming one. Deeper passages hold bats and rock shapes the local children will name for you.\n\nBoys from the village act as guides for a tip and are worth having. Go in the morning before the heat builds, and pair it with the pepper farms or Phnom Sorsia on the same road.",
     "slogan": "A seventh-century shrine, kept dry by a cave for thirteen hundred years.",
     "sloganBy": "a schoolboy guide at Phnom Chhnork",
     "address": "Phnom Chhnork, Kampot",
+    "nameKm": "រូងភ្នំឈ្នក់",
     "addressKm": "ភ្នំឈ្នក់ កំពត",
     "latitude": 10.6667,
     "longitude": 104.2333,
@@ -1364,26 +1209,17 @@
     "interestSlugs": [
       "cave"
     ],
-    "architectureStyleSlugs": [
-      "sambor-prei-kuk-style"
-    ],
-    "religionSlugs": [
-      "hinduism"
-    ],
-    "historicalPeriodSlugs": [
-      "pre-angkor-period"
-    ],
     "popularity": 2
   },
   {
     "slug": "tatai-waterfall",
     "name": "Tatai Waterfall",
-    "nameKm": "ទឹកធ្លាក់តាតៃ",
     "shortDescription": "A broad set of falls on the Tatai river, at the southern edge of the Cardamoms.",
     "description": "The Tatai river comes out of the Cardamom Mountains and reaches the sea near Koh Kong, and about twenty kilometres from the town, where National Road 48 crosses it, a broad shelf of rock drops the whole river in one wide fall. The height is modest, a few metres, but the width and the setting make it: rainforest to both banks, and nothing built in sight. In the wet season from June to October it is a roaring brown curtain; in the dry months it breaks into channels and clear pools you can swim in.\n\nThe usual approach is by boat from the Tatai bridge, twenty minutes upstream past floating lodges and mangrove. Kayaks can be hired at the lodges, and the fireflies on the way back after dark are a bonus.",
     "slogan": "A river wide as a road, falling in one long step.",
     "sloganBy": "a lodge owner on the Tatai",
     "address": "Tatai, Thma Bang District, Koh Kong",
+    "nameKm": "ទឹកធ្លាក់តាតៃ",
     "addressKm": "តាតៃ ស្រុកថ្មបាំង កោះកុង",
     "latitude": 11.5667,
     "longitude": 103.15,
@@ -1408,12 +1244,12 @@
   {
     "slug": "cardamom-mountains",
     "name": "Cardamom Mountains",
-    "nameKm": "ជួរភ្នំក្រវាញ",
     "shortDescription": "A rainforest range running from the coast to the Thai border, and the wildest country left in Cambodia.",
     "description": "The Cardamom Mountains run from the Gulf of Thailand north-east towards the Tonle Sap plain, more than a million hectares of rainforest, rivers and grassland that form the largest intact wilderness in mainland South-East Asia. Asian elephants, clouded leopards, sun bears, gibbons and the last pure-bred Siamese crocodiles live here, and the range is protected by a patchwork of national parks and sanctuaries patrolled by rangers. The Khmer Rouge held out in these hills until the late 1990s, and the forest kept much of its wildlife because of it.\n\nTreks of two to five days run from Chi Phat, Thma Bang and the Areng valley, with community guides and nights in hammocks or tented camps. Go between November and April; the wet season brings leeches and impassable rivers.",
     "slogan": "The biggest forest left in the country, and it still hides things.",
     "sloganBy": "a ranger with Wildlife Alliance",
     "address": "Central Cardamom Mountains, Koh Kong",
+    "nameKm": "ជួរភ្នំក្រវាញ",
     "addressKm": "ជួរភ្នំក្រវាញកណ្ដាល កោះកុង",
     "latitude": 11.85,
     "longitude": 103.3,
@@ -1442,12 +1278,12 @@
   {
     "slug": "koh-rong-sanloem",
     "name": "Koh Rong Sanloem",
-    "nameKm": "កោះរ៉ុងសន្លឹម",
     "shortDescription": "The quieter of the two big islands — one long bay on the east, a sunset beach on the west.",
     "description": "Koh Rong Sanloem is the smaller and quieter of the two big islands off Sihanoukville, nine kilometres of hills with no roads at all. Saracen Bay on the east is a three-kilometre crescent of white sand and shallow water lined with bungalow resorts; M'Pai Bay to the north is a fishing village with a traveller scene; and on the west coast Lazy Beach and Sunset Beach face the open sea, reached by jungle paths of twenty to forty minutes. The reefs off the south end are the island's dive sites, and the sea glows with plankton on dark nights.\n\nFerries from Sihanoukville take about forty-five minutes and call at Saracen Bay and M'Pai Bay. Electricity and signal are patchy, cash is still useful, and the dry season from November to April is the time to come.",
     "slogan": "A bay for the morning, a beach for the sunset.",
     "sloganBy": "a traveller from Phnom Penh",
     "address": "Koh Rong Sanloem, Preah Sihanouk",
+    "nameKm": "កោះរ៉ុងសន្លឹម",
     "addressKm": "កោះរ៉ុងសន្លឹម ព្រះសីហនុ",
     "latitude": 10.6167,
     "longitude": 103.3167,
@@ -1475,12 +1311,12 @@
   {
     "slug": "koh-tang",
     "name": "Koh Tang",
-    "nameKm": "កោះតាង",
     "shortDescription": "Cambodia's furthest dive island — four hours out, and the clearest water in the gulf.",
     "description": "Koh Tang lies far out in the Gulf of Thailand, well beyond Koh Rong, and it is the destination for serious diving in Cambodia. The water is clear to twenty or thirty metres, the reefs are healthier than anything nearer the coast, and sites such as Explosion Reef and the Three Bears hold schooling fish, nudibranchs and the occasional reef shark. The island is also where the last battle of the Vietnam War was fought, in May 1975, when US Marines landed during the Mayaguez incident. It is uninhabited apart from a small military post.\n\nDive shops in Sihanoukville run overnight and two-night liveaboard trips, usually combined with nearby Koh Prins and its wreck. Day trips are mostly spent at sea. The calm season from December to May is the only sensible time.",
     "slogan": "Four hours of open sea for the clearest water in Cambodia.",
     "sloganBy": "a dive instructor from Sihanoukville",
     "address": "Koh Tang, Preah Sihanouk",
+    "nameKm": "កោះតាង",
     "addressKm": "កោះតាង ព្រះសីហនុ",
     "latitude": 10.1167,
     "longitude": 103.1,
@@ -1504,12 +1340,12 @@
   {
     "slug": "peam-krasop-mangrove",
     "name": "Peam Krasop Mangrove Sanctuary",
-    "nameKm": "ដែនជម្រកព្រៃកោងកាងពាមក្រសោប",
     "shortDescription": "Twenty-three thousand hectares of mangrove estuary, crossed by a walkway on stilts.",
     "description": "Peam Krasop is a sanctuary of nearly 24,000 hectares of mangrove estuary south of Koh Kong town, declared in 1993 and listed as a Ramsar wetland in 1999. A concrete walkway about a kilometre long winds through the mangrove on stilts to a fifteen-metre observation tower with views over the channels to the islands. Kingfishers, egrets and storks feed in the mud, fishermen set traps between the roots, and the Irrawaddy dolphins that live in the estuary are seen now and then from the boats. The village of Koh Kapi inside the sanctuary lives from the fishing.\n\nThe walkway is easy at any tide, but the boat trips through the channels are better at high water, when you glide among the roots rather than look down at mud. Late afternoon brings the birds and the best light.",
     "slogan": "Walk above the roots, then take the boat through them.",
     "sloganBy": "a guide from Koh Kong",
     "address": "Peam Krasop, Mondol Seima District, Koh Kong",
+    "nameKm": "ដែនជម្រកព្រៃកោងកាងពាមក្រសោប",
     "addressKm": "ពាមក្រសោប ស្រុកមណ្ឌលសីមា កោះកុង",
     "latitude": 11.5167,
     "longitude": 102.9833,
@@ -1538,12 +1374,12 @@
   {
     "slug": "ream-national-park",
     "name": "Ream National Park",
-    "nameKm": "ឧទ្យានជាតិរាម",
     "shortDescription": "Coastal park south-east of Sihanoukville — mangrove river, beaches, and offshore islands.",
     "description": "Ream National Park covers about 210 square kilometres of coast and sea south-east of Sihanoukville, declared in 1993, half an hour from the town past the airport. The heart of a visit is the Prek Toek Sap river, a tidal channel through mangrove where macaques watch from the trees, kingfishers hunt and fishing eagles sit on the snags; boats run from the park headquarters down to the sea and a beach near the river mouth. The islands of Koh Thmei and Koh Seh lie within the park boundary, and the forest behind holds trails to small waterfalls.\n\nParts of the park have been given over to development in recent years, so the river trip is the thing to do. Arrange boats at the headquarters, go in the morning, and take sun protection; there is little shade on the water.",
     "slogan": "A mangrove river, two islands, and the beach at the end.",
     "sloganBy": "a park ranger at Ream",
     "address": "Ream, Prey Nob District, Preah Sihanouk",
+    "nameKm": "ឧទ្យានជាតិរាម",
     "addressKm": "រាម ស្រុកព្រៃនប់ ព្រះសីហនុ",
     "latitude": 10.5333,
     "longitude": 103.6333,
@@ -1571,12 +1407,12 @@
   {
     "slug": "phnom-penh-riverside",
     "name": "Phnom Penh Riverside",
-    "nameKm": "មាត់ទន្លេភ្នំពេញ",
     "shortDescription": "Sisowath Quay along the Chaktomuk — the promenade the whole city walks at dusk.",
     "description": "Sisowath Quay runs for about three kilometres along the west bank of the Tonle Sap river where it meets the Mekong and the Bassac, the junction the Khmer call Chaktomuk, the four faces. The promenade is lined with flags, and at dusk it fills with families, joggers, aerobics classes, sugar-cane juice carts and grilled squid sellers. Behind it stand the Royal Palace, Wat Ounalom and the restored Foreign Correspondents' Club building; the Preah Ang Dorngkeu shrine on the waterfront is where people release caged birds for luck. In November the Water Festival boat races pack the whole quay for three days.\n\nArrive an hour before sunset and walk north from the palace. Small boats leave the quay for an hour on the river at dusk, cheap and worth it for the view back at the city.",
     "slogan": "The whole city comes down to the river at six.",
     "sloganBy": "a Phnom Penh resident",
     "address": "Sisowath Quay, Daun Penh, Phnom Penh",
+    "nameKm": "មាត់ទន្លេភ្នំពេញ",
     "addressKm": "មហាវិថីព្រះស៊ីសុវត្ថិ ខណ្ឌដូនពេញ ភ្នំពេញ",
     "latitude": 11.5686,
     "longitude": 104.9319,
@@ -1602,12 +1438,12 @@
   {
     "slug": "central-market",
     "name": "Central Market",
-    "nameKm": "ផ្សារធំថ្មី",
     "shortDescription": "Psar Thmei — a 1937 Art Deco dome with four arms of stalls running off it.",
     "description": "Psar Thmei, the Central Market, opened in 1937 to a design by French architects Jean Desbois and Louis Chauchon, and its Art Deco dome was one of the largest in Asia at the time. Four wings run out from the dome in a cross, each with its own trade: clothing and fabric, electronics and watches, flowers and fruit, and a food hall where the city eats lunch. Under the dome itself sit the gold and jewellery dealers, their counters lit in the yellow light that filters down from the lattice windows. A thorough restoration funded by France finished in 2011.\n\nIt opens early and winds down by late afternoon. Mornings are coolest; the ventilation of the dome works best before the sun is high. Bargain gently and keep bags in front of you in the crowds.",
     "slogan": "Look up at the dome before you look down at the gold.",
     "sloganBy": "an architecture student from Phnom Penh",
     "address": "Kampuchea Krom Blvd, Daun Penh, Phnom Penh",
+    "nameKm": "ផ្សារធំថ្មី",
     "addressKm": "មហាវិថីកម្ពុជាក្រោម ខណ្ឌដូនពេញ ភ្នំពេញ",
     "latitude": 11.5694,
     "longitude": 104.9211,
@@ -1631,12 +1467,12 @@
   {
     "slug": "russian-market",
     "name": "Russian Market",
-    "nameKm": "ផ្សារទួលទំពូង",
     "shortDescription": "Psar Toul Tom Poung — a low tin-roofed maze of textiles, silver, spare parts and food stalls.",
     "description": "Psar Toul Tom Poung earned its nickname in the 1980s, when the foreigners shopping here were mostly Russian. It is a low maze of aisles under tin roofing in the south of the city, packed with garment-factory overruns, silk and krama scarves, silver, carvings, Kampot pepper, pirated everything, and an entire quarter of motorbike parts. The food stalls at the south-east corner serve noodle soups, num banh chok and iced coffee from dawn, and are what bring the neighbourhood in. The streets around it have become one of Phnom Penh's café districts, with roasters and small restaurants on every corner.\n\nIt is hot inside by late morning, so come early or in the last hour before it closes around five. Prices are negotiable, but the opening ones are not outrageous.",
     "slogan": "Everything you forgot to pack, under one hot tin roof.",
     "sloganBy": "a traveller from Kandal",
     "address": "St 163, Boeng Keng Kang, Phnom Penh",
+    "nameKm": "ផ្សារទួលទំពូង",
     "addressKm": "ផ្លូវលេខ ១៦៣ បឹងកេងកង ភ្នំពេញ",
     "latitude": 11.5478,
     "longitude": 104.9186,
@@ -1660,12 +1496,12 @@
   {
     "slug": "siem-reap-night-market",
     "name": "Siem Reap Night Market",
-    "nameKm": "ផ្សាររាត្រីសៀមរាប",
     "shortDescription": "The night market quarter west of the river, and the bar street that runs beside it.",
     "description": "Siem Reap's evening quarter sits west of the river around the Old Market, Psar Chas. The Angkor Night Market, which opened in 2007 as the first of its kind in the country, spreads through lanes of thatched stalls selling krama scarves, silver, paintings and spices; the Noon Night Market and the Art Center Market across the footbridge do the same. One street over, Pub Street fills from dusk with bars, restaurants, rolled ice cream and fried insects, and shuts to traffic for the night. Massage parlours charge a few dollars for half an hour.\n\nStalls open around five and run until midnight. Eat at the market's food lane, drink one street over, and walk home along the river, where the lanterns hang in the trees.",
     "slogan": "Temples by day, a thousand lanterns and a cold beer by night.",
     "sloganBy": "a bartender on Pub Street",
     "address": "Old Market area, Siem Reap",
+    "nameKm": "ផ្សាររាត្រីសៀមរាប",
     "addressKm": "តំបន់ផ្សារចាស់ សៀមរាប",
     "latitude": 13.3544,
     "longitude": 103.855,
@@ -1690,12 +1526,12 @@
   {
     "slug": "sora-sky-bar",
     "name": "Sora Sky Bar",
-    "nameKm": "បារលើដំបូលសូរ៉ា",
     "shortDescription": "A rooftop bar on the upper floors of Vattanac Capital Tower, looking down over the Chaktomuk.",
     "description": "Sora is the rooftop bar of the Rosewood hotel on the upper floors of Vattanac Capital Tower, the dragon-scaled skyscraper that has marked the Phnom Penh skyline since 2014. The bar opened with the hotel in 2018 on the 37th floor, with a glass-floored terrace cantilevered out from the tower, and from it the whole junction of the Mekong, Tonle Sap and Bassac is laid out below, with the Royal Palace roofs and the lights of the riverside in the foreground. Cocktails are priced for the view.\n\nIt opens in the late afternoon; arrive before sunset for a terrace seat and watch the city lights come on. The dress code is smart casual, and shorts and sandals are turned away. Reservations are wise on weekends.",
     "slogan": "The four rivers meet thirty-seven floors beneath your glass.",
     "sloganBy": "a traveller from Ho Chi Minh City",
     "address": "Vattanac Capital Tower, Monivong Blvd, Daun Penh, Phnom Penh",
+    "nameKm": "បារលើដំបូលសូរ៉ា",
     "addressKm": "អគារវឌ្ឍនៈ ខេភីថល មហាវិថីព្រះមុនីវង្ស ខណ្ឌដូនពេញ ភ្នំពេញ",
     "latitude": 11.5747,
     "longitude": 104.9203,
@@ -1719,12 +1555,12 @@
   {
     "slug": "phnom-penh-coffee-quarter",
     "name": "Phnom Penh Coffee Quarter",
-    "nameKm": "តំបន់ហាងកាហ្វេភ្នំពេញ",
     "shortDescription": "The roasteries and shophouse cafés of Boeng Keng Kang and Daun Penh, walkable in an afternoon.",
     "description": "Phnom Penh has two coffee traditions and both are alive on the same streets. The old one is the street-corner cafe tuk doh ko: dark-roasted robusta dripped through a cloth filter, poured over ice and sweetened with condensed milk. The new one grew up in the shophouses of Boeng Keng Kang and Daun Penh over the past fifteen years, where home-grown chains and single-room roasters pull espresso from beans grown in Mondulkiri and Ratanakiri and serve pour-overs beside Khmer pastries. Many of the best rooms are 1960s villas and shophouses with their original tiles.\n\nThe quarter is walkable in an afternoon; Street 240 and the streets off Norodom Boulevard are a good start, and the roasters around the Russian Market are the other cluster. Ask what is on the grinder.",
     "slogan": "Grown in Mondulkiri, roasted on the corner, poured in a shophouse.",
     "sloganBy": "a barista in Boeng Keng Kang",
     "address": "Boeng Keng Kang & Daun Penh, Phnom Penh",
+    "nameKm": "តំបន់ហាងកាហ្វេភ្នំពេញ",
     "addressKm": "បឹងកេងកង និងដូនពេញ ភ្នំពេញ",
     "latitude": 11.5511,
     "longitude": 104.9231,
@@ -1747,12 +1583,12 @@
   {
     "slug": "battambang-art-quarter",
     "name": "Battambang Art Quarter",
-    "nameKm": "តំបន់សិល្បៈបាត់ដំបង",
     "shortDescription": "Cambodia's art capital — galleries, circus school and craft studios in the riverside shophouses.",
     "description": "Battambang has the best-preserved French-era shophouse streets in Cambodia, running along the Sangker river from the 1936 market of Psar Nat to the old governor's residence, and in the past twenty years artists have moved into them. Galleries, studios and craft shops open behind the wooden shutters, cafés serve coffee from the north-east, and the circus school Phare Ponleu Selpak, founded in 1994 by returnees from the refugee camps, performs under its big top on the edge of town. The city is also the home of a distinctive school of Khmer painting.\n\nWalk the three riverside streets in the late afternoon, when the galleries open and the light hits the facades. A Phare show, if one is on, makes the evening.",
     "slogan": "Behind every shuttered shophouse, somebody is painting.",
     "sloganBy": "a gallery owner on the Sangker",
     "address": "Riverside quarter, Battambang",
+    "nameKm": "តំបន់សិល្បៈបាត់ដំបង",
     "addressKm": "តំបន់មាត់ស្ទឹង បាត់ដំបង",
     "latitude": 13.0957,
     "longitude": 103.2022,
@@ -1778,12 +1614,12 @@
   {
     "slug": "num-banh-chok-markets",
     "name": "Num Banh Chok Morning Markets",
-    "nameKm": "ផ្សារនំបញ្ចុកពេលព្រឹក",
     "shortDescription": "The morning stalls where Cambodia's national breakfast is pressed, boiled and sauced to order.",
     "description": "Num banh chok is the Khmer national breakfast: soft fermented rice noodles under a thin green fish gravy built on kroeung, the paste of lemongrass, turmeric, galangal and kaffir lime, with prahok for depth. On top go shaved banana blossom, cucumber, water lily stems, long beans and a handful of herbs. In Siem Reap the women who make it carry the pots in baskets on a shoulder yoke to the morning markets, Psar Leu above all, and sell bowl after bowl from dawn until the noodles run out. A red-curry version appears at some stalls.\n\nBe at a market between six and eight; by nine the sellers are packing up. Point, sit on a plastic stool and pile on the herbs. The village of Preah Dak, near Banteay Srei, is famous for its noodle stalls.",
     "slogan": "Breakfast that is finished by nine and remembered all day.",
     "sloganBy": "a noodle seller at Psar Leu",
     "address": "Psar Leu and neighbourhood markets, Siem Reap",
+    "nameKm": "ផ្សារនំបញ្ចុកពេលព្រឹក",
     "addressKm": "ផ្សារលើ និងផ្សារតាមសង្កាត់ សៀមរាប",
     "latitude": 13.3556,
     "longitude": 103.8681,
@@ -1806,12 +1642,12 @@
   {
     "slug": "khmer-cooking-class-siem-reap",
     "name": "Khmer Cooking Classes, Siem Reap",
-    "nameKm": "ថ្នាក់ធ្វើម្ហូបខ្មែរ សៀមរាប",
     "shortDescription": "Half-day classes that start at the market and end with amok you pounded the paste for.",
     "description": "Half-day cooking classes are one of Siem Reap's best-established activities, and most follow the same good pattern. They start with an hour in a market, Psar Leu or the Old Market, learning the herbs and the fish, then move to a kitchen where a small group pounds kroeung paste in a stone mortar, steams fish amok in banana-leaf cups, sears beef lok lak and shreds a green mango salad before sitting down to eat it all. Many classes finish with pumpkin custard or sticky rice. Morning and afternoon sessions run daily, and most schools offer vegetarian menus on request.\n\nBook a day ahead, go hungry, and choose the morning slot, when the market is at its liveliest. Prices are modest and recipes are usually handed over to take home.",
     "slogan": "Pound the paste yourself and amok stops being a mystery.",
     "sloganBy": "a cooking teacher in Siem Reap",
     "address": "Siem Reap",
+    "nameKm": "ថ្នាក់ធ្វើម្ហូបខ្មែរ សៀមរាប",
     "addressKm": "សៀមរាប",
     "latitude": 13.3622,
     "longitude": 103.8597,
@@ -1835,12 +1671,12 @@
   {
     "slug": "kampong-speu-palm-sugar",
     "name": "Kampong Speu Palm Sugar Farms",
-    "nameKm": "ចម្ការស្ករត្នោតកំពង់ស្ពឺ",
     "shortDescription": "Sugar palms tapped at dawn and boiled the same morning, in the province that gave the sugar its name.",
     "description": "Kampong Speu palm sugar was registered as a geographical indication in 2010, alongside Kampot pepper, the first two products in Cambodia to be protected that way. It comes from the sugar palm, the tree on the national coat of arms. Tappers climb each tree twice a day on a bamboo ladder lashed to the trunk, cut the flower stalks and hang bamboo tubes to catch the sap, which is boiled down the same morning in wide pans over a fire of palm fronds. The thick syrup is stirred until it sets into pale discs or packed soft into palm-leaf tubes.\n\nThe season runs from November to May. Family producers along the roads west of the provincial town welcome visitors in the early morning; ask at the sugar stalls on National Road 4 and someone will take you.",
     "slogan": "Up the palm at dawn, into the pan by breakfast.",
     "sloganBy": "a sugar maker from Oral district",
     "address": "Kampong Speu",
+    "nameKm": "ចម្ការស្ករត្នោតកំពង់ស្ពឺ",
     "addressKm": "កំពង់ស្ពឺ",
     "latitude": 11.4531,
     "longitude": 104.5208,
@@ -1867,12 +1703,12 @@
   {
     "slug": "malis-phnom-penh",
     "name": "Malis",
-    "nameKm": "ម្លិះ",
     "shortDescription": "Chef-led modern Khmer cooking in a garden courtyard off Norodom Boulevard.",
     "description": "Malis opened in 2004 on Norodom Boulevard under chef Luu Meng, with the ambition of serving Cambodian food at the standard of the French and Thai restaurants that then dominated the capital. Twenty years on it is the reference for what the kitchen calls living Cambodian cuisine: Kampot pepper crab, prahok ktis with fresh vegetables, fish amok, Takeo lobster and dishes revived from royal and provincial recipes, served in a garden courtyard around pools of water with the traffic hidden behind the walls. A sister restaurant opened in Siem Reap in 2016.\n\nLunch set menus are the gentle way in; dinner is the full occasion. Breakfast, with kuy teav noodle soup, is an insider's choice. Reserve for the evening, and ask for a table by the water.",
     "slogan": "The room that proved Khmer cooking belongs on a white tablecloth.",
     "sloganBy": "a food writer from Phnom Penh",
     "address": "Norodom Blvd, Chamkarmon, Phnom Penh",
+    "nameKm": "ម្លិះ",
     "addressKm": "មហាវិថីនរោត្តម ខណ្ឌចំការមន ភ្នំពេញ",
     "latitude": 11.5464,
     "longitude": 104.9236,
@@ -1895,12 +1731,12 @@
   {
     "slug": "chi-phat",
     "name": "Chi Phat",
-    "nameKm": "ជីផាត",
     "shortDescription": "A Cardamom village that turned from logging and poaching to running its own ecotourism.",
     "description": "Chi Phat is a village of some five hundred families on the Preak Piphot river in the southern Cardamoms, seventeen kilometres upstream from Andoung Tuek on National Road 48. Until 2007 its income came from logging and hunting; since then a community ecotourism programme, set up with Wildlife Alliance, has turned the same people into guides, cooks and homestay hosts. Visitors book everything at the community office: treks of one to five days, mountain-bike rides to waterfalls, kayaking, bat caves and the mysterious jar burial sites in the hills. Income is shared across the village and funds the forest patrols.\n\nCome by boat from Andoung Tuek for the river approach or by motorbike on the dirt road. The dry season from November to April is the trekking time, and two nights is the minimum.",
     "slogan": "The village that stopped cutting the forest and started showing it.",
     "sloganBy": "a former logger, now a trekking guide",
     "address": "Chi Phat, Thma Bang District, Koh Kong",
+    "nameKm": "ជីផាត",
     "addressKm": "ជីផាត ស្រុកថ្មបាំង កោះកុង",
     "latitude": 11.4667,
     "longitude": 103.4667,
@@ -1933,12 +1769,12 @@
   {
     "slug": "banteay-chhmar-community",
     "name": "Banteay Chhmar",
-    "nameKm": "បន្ទាយឆ្មារ",
     "shortDescription": "A vast Jayavarman VII temple city in the north-west, with a community homestay inside the village beside it.",
     "description": "Banteay Chhmar is one of the great temple cities of Jayavarman VII, built in the late twelfth century in the far north-west and dedicated, the inscriptions say, to a prince and four generals who died fighting the Cham. A nine-square-kilometre enclosure with a moat surrounds face towers, collapsed galleries and the famous bas-reliefs of many-armed Avalokiteshvara, two of which survive in place after the others were looted in the 1990s. Since 2007 a community tourism group in the village beside the moat has run homestays, meals, ox-cart rides and guided visits, with the income shared among the families.\n\nIt is about sixty kilometres north of Sisophon on a sealed road, with almost no other visitors. Stay a night; the temple at dawn, with the mist still on the moat, is the reason.",
     "slogan": "Face towers, a thousand-armed god, and the village as your host.",
     "sloganBy": "a homestay host in Banteay Chhmar",
     "address": "Banteay Chhmar, Thmar Puok District, Banteay Meanchey",
+    "nameKm": "បន្ទាយឆ្មារ",
     "addressKm": "បន្ទាយឆ្មារ ស្រុកថ្មពួក បន្ទាយមានជ័យ",
     "latitude": 14.0333,
     "longitude": 103.0833,
@@ -1962,24 +1798,17 @@
     "interestSlugs": [
       "homestay"
     ],
-    "architectureStyleSlugs": [
-      "bayon-style"
-    ],
-    "religionSlugs": [
-      "buddhism",
-      "hinduism"
-    ],
     "popularity": 2
   },
   {
     "slug": "koh-dach-silk-island",
     "name": "Koh Dach Silk Island",
-    "nameKm": "កោះដាច់ (កោះសូត្រ)",
     "shortDescription": "A Mekong island half an hour from the capital, where weaving households still work hand looms.",
     "description": "Koh Dach, Silk Island, is a long island in the Mekong about fifteen kilometres north of central Phnom Penh, reached by a short ferry from the east bank. Weaving households under the stilt houses work wooden hand looms, producing plain and ikat silk for sampot skirts and scarves; much of the thread now comes from Vietnam and China, but the dyeing and weaving are done here, and the weavers are happy to be watched. A silk centre near the ferry explains the process from cocoon to cloth. Lanes between vegetable plots lead to temples and, in the dry season, to a sandy beach at the northern tip with bamboo huts for hire.\n\nTake a tuk-tuk or bicycle across on the ferry and stop wherever you hear a loom. Half a day is enough, mornings cooler.",
     "slogan": "Follow the sound of the looms down a Mekong lane.",
     "sloganBy": "a weaver on Koh Dach",
     "address": "Koh Dach, Mukh Kampul District, Kandal",
+    "nameKm": "កោះដាច់ (កោះសូត្រ)",
     "addressKm": "កោះដាច់ ស្រុកមុខកំពូល កណ្ដាល",
     "latitude": 11.6289,
     "longitude": 104.9622,
@@ -2008,12 +1837,12 @@
   {
     "slug": "angkor-golf-resort",
     "name": "Angkor Golf Resort",
-    "nameKm": "រមណីយដ្ឋានវាយកូនហ្គោលអង្គរ",
     "shortDescription": "An eighteen-hole championship course on the western edge of Siem Reap, designed by Nick Faldo.",
     "description": "Angkor Golf Resort opened in 2007 on the western edge of Siem Reap, an eighteen-hole, par-72 championship course of just over 7,000 yards designed by Nick Faldo. It is routinely named the best course in Cambodia, with generous fairways, well-kept greens, water on several holes and a clubhouse, driving range and caddies to international standards. Green fees are at international rather than Cambodian prices, and clubs and shoes can be hired. The course sits ten minutes from the town and about the same from the temples.\n\nTee off at first light; by eleven the heat is the hardest hazard. The dry season from November to February is the season, though the course drains well and plays through the rains. A collared shirt is expected.",
     "slogan": "Eighteen holes with temple towers on the horizon.",
     "sloganBy": "a golfer from Bangkok",
     "address": "Kasekam Village, Siem Reap",
+    "nameKm": "រមណីយដ្ឋានវាយកូនហ្គោលអង្គរ",
     "addressKm": "ភូមិកសិកម្ម សៀមរាប",
     "latitude": 13.3536,
     "longitude": 103.8022,

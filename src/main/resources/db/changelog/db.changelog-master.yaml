@@ -1,6 +1,6 @@
 # AMS Travel database: the 41-table ERD in 8 schemas, plus the tables of the
-# features restored beside it — history & heritage (schema `history`), the
-# season calendar, and destination verification.
+# features restored beside it — the season calendar and destination
+# verification.
 #
 # Order matters: legacy tables go first, then the schemas, then each schema's
 # tables (only their own foreign keys), then the foreign keys that cross
@@ -29,9 +29,7 @@ databaseChangeLog:
   - include: { file: v2/gamification/001-tables.yaml, relativeToChangelogFile: true }
   - include: { file: v2/gamification/003-seasons.yaml, relativeToChangelogFile: true }
   - include: { file: v2/system/001-tables.yaml, relativeToChangelogFile: true }
-  - include: { file: v2/history/001-tables.yaml, relativeToChangelogFile: true }
   - include: { file: v2/destination/003-stay-details.yaml, relativeToChangelogFile: true }
-  - include: { file: v2/history/002-region-coverage.yaml, relativeToChangelogFile: true }
   - include: { file: v2/800-cross-schema-foreign-keys.yaml, relativeToChangelogFile: true }
   - include: { file: v2/810-postgresql-indexes.yaml, relativeToChangelogFile: true }
   # Last of the schema changes: it drops keys that 800 creates.
@@ -50,7 +48,6 @@ databaseChangeLog:
   - include: { file: v2/destination/016-food-specialties.yaml, relativeToChangelogFile: true }
   - include: { file: v2/destination/017-stay-specialties.yaml, relativeToChangelogFile: true }
   - include: { file: v2/destination/018-destination-themes.yaml, relativeToChangelogFile: true }
-  - include: { file: v2/destination/019-destination-heritage-filters.yaml, relativeToChangelogFile: true }
   - include: { file: v2/destination/020-bakery-into-cafe.yaml, relativeToChangelogFile: true }
   - include: { file: v2/destination/021-bar-into-restaurant.yaml, relativeToChangelogFile: true }
   - include: { file: v2/destination/022-plain-cafe.yaml, relativeToChangelogFile: true }
@@ -79,12 +76,10 @@ databaseChangeLog:
   - include: { file: v2/taxonomy/003-discover-rows.yaml, relativeToChangelogFile: true }
   - include: { file: v2/destination/002-unesco-tag.yaml, relativeToChangelogFile: true }
   - include: { file: v2/taxonomy/004-spec-filters.yaml, relativeToChangelogFile: true }
-  - include: { file: v2/history/003-region-coverage-rows.yaml, relativeToChangelogFile: true }
   - include: { file: v2/auth/005-drop-partner-manage.yaml, relativeToChangelogFile: true }
   - include: { file: v2/destination/006-tourism-region-rows.yaml, relativeToChangelogFile: true }
   - include: { file: v2/taxonomy/006-mekong-discovery-rows.yaml, relativeToChangelogFile: true }
   - include: { file: v2/taxonomy/007-region-interests.yaml, relativeToChangelogFile: true }
-  - include: { file: v2/taxonomy/008-heritage-tags.yaml, relativeToChangelogFile: true }
   - include: { file: v2/taxonomy/010-corridor-interest-rows.yaml, relativeToChangelogFile: true }
   - include: { file: v2/taxonomy/012-display-order-rows.yaml, relativeToChangelogFile: true }
   - include: { file: v2/auth/006-contributor-listings.yaml, relativeToChangelogFile: true }
@@ -111,10 +106,18 @@ databaseChangeLog:
   - include: { file: v2/taxonomy/022-interest-cover.yaml, relativeToChangelogFile: true }
   - include: { file: v2/taxonomy/023-region-ams-recommended.yaml, relativeToChangelogFile: true }
   - include: { file: v2/taxonomy/024-region-map.yaml, relativeToChangelogFile: true }
-  - include: { file: v2/destination/029-destination-khmer.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/destination/029-stay-food-views.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/engagement/006-stamp-codes.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/engagement/007-stamp-code-management.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/gamification/010-retire-points-ladder.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/publishing/005-verification-targets.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/destination/030-destination-khmer.yaml, relativeToChangelogFile: true }
   - include: { file: v2/taxonomy/025-khmer-names.yaml, relativeToChangelogFile: true }
-  - include: { file: v2/destination/030-stay-food-khmer.yaml, relativeToChangelogFile: true }
-  - include: { file: v2/destination/031-khmer-text-rows.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/destination/031-stay-food-khmer.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/destination/032-khmer-text-rows.yaml, relativeToChangelogFile: true }
   - include: { file: v2/taxonomy/026-khmer-text-rows.yaml, relativeToChangelogFile: true }
-  - include: { file: v2/destination/032-khmer-text-fixes.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/destination/033-khmer-text-fixes.yaml, relativeToChangelogFile: true }
   - include: { file: v2/taxonomy/027-khmer-text-fixes.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/destination/034-stay-food-khmer-text-rows.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/destination/035-activities.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/taxonomy/028-corridor-khmer.yaml, relativeToChangelogFile: true }

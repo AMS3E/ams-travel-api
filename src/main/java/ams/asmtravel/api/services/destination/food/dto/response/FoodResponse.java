@@ -44,6 +44,8 @@ public record FoodResponse(
         Boolean isLocalSpecialty,
         BigDecimal averageRating,
         Integer reviewCount,
+        /** First opens of a day, signed in or not, all time. */
+        Long viewCount,
         UUID createdBy,
         Instant publishedAt,
         Instant createdAt,

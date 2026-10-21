@@ -24,7 +24,6 @@ import java.util.UUID;
  * @param slogan           one line someone said about it, quoted on its page; sloganBy says who
  * @param tourismRegionIds zones are refused
  * @param theme            main tourism region code, see {@link ams.asmtravel.api.services.destination.destination.domain.DestinationThemes}
- * @param centuries        1 to 21
  * @param nameKm           Khmer twins of the English text: null keeps what is stored, blank clears it
  */
 public record DestinationRequest(
@@ -45,12 +44,8 @@ public record DestinationRequest(
         Set<UUID> tagIds,
         Set<UUID> interestIds,
         Set<UUID> tourismRegionIds,
-        Set<UUID> architectureStyleIds,
-        Set<UUID> religionIds,
         @Size(max = 40) String theme,
         List<@NotBlank @Size(max = 100) String> specialties,
-        Set<UUID> historicalPeriodIds,
-        List<@NotNull @Min(1) @Max(21) Integer> centuries,
         @Size(max = 255) String nameKm,
         String descriptionKm,
         @Size(max = 300) String sloganKm,

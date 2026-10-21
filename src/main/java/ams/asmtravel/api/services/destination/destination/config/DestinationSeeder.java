@@ -7,9 +7,6 @@ import ams.asmtravel.api.services.destination.destination.domain.Destination;
 import ams.asmtravel.api.services.destination.destination.domain.DestinationThemes;
 import ams.asmtravel.api.services.destination.destination.domain.ListingStatus;
 import ams.asmtravel.api.services.destination.destination.repository.DestinationRepository;
-import ams.asmtravel.api.services.history.architecture.domain.ArchitectureStyle;
-import ams.asmtravel.api.services.history.period.domain.HistoricalPeriod;
-import ams.asmtravel.api.services.history.religion.domain.Religion;
 import ams.asmtravel.api.services.taxonomy.category.domain.Category;
 import ams.asmtravel.api.services.taxonomy.interest.domain.Interest;
 import ams.asmtravel.api.services.location.province.domain.Province;
@@ -81,15 +78,6 @@ public class DestinationSeeder implements CatalogSeedContributor {
             destination.setInterests(new HashSet<>(context.resolve(Interest.class, SeedJson.strings(node, "interestSlugs"))));
             destination.setTourismRegions(new HashSet<>(regionService.getTourismEntities(themesOf(destination, themes))));
             destination.setTheme(mainTheme(destination, themes));
-            destination.setArchitectureStyles(new HashSet<>(
-                    context.resolve(ArchitectureStyle.class, SeedJson.strings(node, "architectureStyleSlugs"))));
-            destination.setReligions(new HashSet<>(context.resolve(Religion.class, SeedJson.strings(node, "religionSlugs"))));
-            /* Historical Period and Century, dated from its timeline and kings. */
-            destination.setHistoricalPeriods(new HashSet<>(
-                    context.resolve(HistoricalPeriod.class, SeedJson.strings(node, "historicalPeriodSlugs"))));
-            List<Integer> centuries = new ArrayList<>();
-            SeedJson.array(node, "centuries").forEach(century -> centuries.add(century.asInt()));
-            destination.setCenturies(centuries);
             destination.setStatus(ListingStatus.PUBLISHED);
             destination.setPublishedAt(now);
             context.publish(Destination.class, destination.getSlug(), destinationRepository.save(destination));

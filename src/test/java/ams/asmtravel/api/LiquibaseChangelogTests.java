@@ -38,19 +38,24 @@ class LiquibaseChangelogTests {
         List<String> tables = jdbc.queryForList("""
                 select lower(table_schema) || '.' || lower(table_name) from information_schema.tables
                 where lower(table_schema) in ('auth', 'taxonomy', 'destination', 'publishing',
-                                              'engagement', 'gamification', 'system', 'history', 'media')
+                                              'engagement', 'gamification', 'system', 'media')
                 """, String.class);
         // The ERD less the two partner tables it dissolved into the listings, plus
-        // seasons, verifications, the history schema, the two region link tables, a
-        // region's historical coverage, a stay's gallery, a destination's tourism regions, a corridor's days,
-        // a stay's interests, its rooms, a food listing's menu, a tourism region's interests,
-        // an ancient site's historical periods, and a corridor's interests; the four galleries became one media table, and ratings got their own; points and season progress are three more, and six badge tables became three.
-        // The amenities taxonomy is one more; system.seed_runs (2026-10-14) another.
-        assertThat(tables).hasSize(41 - 2 + 1 + 1 + 8 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 - 4 + 1 + 1 + 3 - 3 + 1 + 1);
-        assertThat(tables).contains("taxonomy.region_interests", "history.destination_periods", "taxonomy.corridor_interests",
-                "taxonomy.amenities");
+        // seasons, verifications, the two region link tables, a stay's gallery, a
+        // destination's tourism regions, a corridor's days, a stay's interests, its rooms,
+        // a food listing's menu, a tourism region's interests and a corridor's interests;
+        // the four galleries became one media table, and ratings got their own; points and
+        // season progress are three more, and six badge tables became three. The history
+        // schema and its ten tables went with the History & Heritage module (2026-10-08);
+        // the amenities taxonomy is one more; system.seed_runs (2026-10-14) another; the check-in codes
+        // (engagement.stamp_codes, 2026-10-20) one more; Activities & Experiences (2026-10-21) are a
+        // table and its interests link.
+        assertThat(tables).hasSize(41 - 2 + 1 + 1 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 - 4 + 1 + 1 + 3 - 3 + 1 + 1 + 1 + 2);
+        assertThat(tables).contains("taxonomy.region_interests", "taxonomy.corridor_interests", "taxonomy.amenities",
+                "destination.destination_activities", "destination.destination_activity_interests");
+        assertThat(tables).doesNotContain("history.destination_history", "history.destination_periods");
         assertThat(tables).contains("publishing.destination_verifications", "gamification.seasons",
-                "history.destination_history", "system.audit_logs", "engagement.digital_stamps",
+                "system.audit_logs", "engagement.digital_stamps", "engagement.stamp_codes",
                 "destination.destination_stay_interests", "destination.destination_stay_rooms",
                 "destination.destination_food_menu_items", "media.media_items", "engagement.ratings");
     }
@@ -81,7 +86,10 @@ class LiquibaseChangelogTests {
         assertThat(jdbc.queryForObject("select count(*) from auth.roles", Integer.class)).isEqualTo(6);
         assertThat(jdbc.queryForList("select code from auth.permissions", String.class))
                 .containsExactlyInAnyOrderElementsOf(permissionsTheApiChecks());
-        assertThat(jdbc.queryForObject("select count(*) from gamification.badges", Integer.class)).isEqualTo(12);
+        // Three ladders of three since the Explorer (POINTS) ladder was retired on 2026-10-20.
+        assertThat(jdbc.queryForObject("select count(*) from gamification.badges", Integer.class)).isEqualTo(9);
+        assertThat(jdbc.queryForList("select distinct type from gamification.badges", String.class))
+                .containsExactlyInAnyOrder("BROWSES", "REVIEWS", "STAMPS");
         assertThat(jdbc.queryForList("select kind from gamification.seasons order by starts_on", String.class))
                 .containsExactly("HIGH_SEASON", "GREEN_SEASON", "HIGH_SEASON", "GREEN_SEASON");
     }

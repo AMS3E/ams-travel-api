@@ -27,7 +27,7 @@ public interface DestinationService {
     /** The published places among these ids, in no particular order; unknown and unpublished ids are left out. */
     List<DestinationResponse> findPublished(Collection<UUID> ids);
 
-    /** Up to {@code limit} published places whose English or Khmer name contains the text, A to Z. */
+    /** Up to {@code limit} published places whose name contains the text, A to Z. */
     List<DestinationResponse> suggestPublished(String text, int limit);
 
     /** Published for anyone; unpublished only for desks that reach it; 404 otherwise. */
@@ -47,11 +47,7 @@ public interface DestinationService {
     /** Deletes it with its listings, gallery and stops; see {@code DestinationDeletingEvent}. */
     void delete(UUID id);
 
-    /** Refused with 409 while any filled English field has no Khmer. */
     DestinationResponse publish(UUID id);
-
-    /** The same 409 as {@link #publish}, for a reviewer about to approve it. */
-    void requireKhmer(UUID id);
 
     /** Back to DRAFT, off the public site. */
     DestinationResponse unpublish(UUID id);

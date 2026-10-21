@@ -10,7 +10,7 @@ import java.util.UUID;
 /**
  * A page opened in the app.
  *
- * @param targetType    DESTINATION (when left out), STAY, FOOD or CORRIDOR
+ * @param targetType    DESTINATION (when left out), STAY, FOOD, ACTIVITY or CORRIDOR
  * @param targetId      the page's id
  * @param destinationId the older name for a destination's id; {@code targetId} says the same
  * @param eventType     what happened, e.g. {@code VIEW}

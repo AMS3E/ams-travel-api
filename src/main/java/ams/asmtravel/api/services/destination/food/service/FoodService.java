@@ -34,9 +34,6 @@ public interface FoodService {
     /** Publishes on approval; the publishing service checks the authority. */
     FoodResponse publish(UUID id);
 
-    /** Refused with 409 while any filled English field has no Khmer: for a reviewer about to approve it. */
-    void requireKhmer(UUID id);
-
     /** Takes it off the site; it stays as a draft. */
     FoodResponse unpublish(UUID id);
 
@@ -49,6 +46,9 @@ public interface FoodService {
     Food getEntity(UUID id);
 
     boolean exists(UUID id);
+
+    /** Counts one more view: a page's first open of the day, as the popular service decides. */
+    void recordView(UUID id);
 
     /** Whether the caller may write this listing and its gallery; false if it does not exist. */
     boolean canWrite(UUID id, Authentication authentication);

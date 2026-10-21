@@ -1,7 +1,5 @@
 package ams.asmtravel.api.services.publishing;
 
-import ams.asmtravel.api.services.location.province.domain.Province;
-import ams.asmtravel.api.services.location.province.repository.ProvinceRepository;
 import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +37,6 @@ class ListingPublishingIntegrationTests {
     private static final String PIN = "\"latitude\":11.5564,\"longitude\":104.9282";
 
     @Autowired MockMvc mvc;
-    @Autowired ProvinceRepository provinces;
 
     private static RequestPostProcessor partner(String email) {
         return staff(email, "PARTNER", "PERM_LISTING_EDIT_OWN", "PERM_LISTING_DELETE_OWN", "PERM_MEDIA_UPLOAD",
@@ -68,7 +65,7 @@ class ListingPublishingIntegrationTests {
     void aPartnersStayGoesToTheBdoDeskAndLiveOnApproval() throws Exception {
         RequestPostProcessor partner = partner("owner@guesthouse.test");
         String stay = id(mvc.perform(post("/api/v1/stays").with(partner).contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"Memo Guesthouse\",\"nameKm\":\"ផ្ទះសំណាក់មេម៉ូ\",\"type\":\"GUESTHOUSE\"," + PIN + "}"))
+                        .content("{\"name\":\"Memo Guesthouse\",\"type\":\"GUESTHOUSE\"," + PIN + "}"))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.status").value("DRAFT")));
         mvc.perform(get("/api/v1/stays/" + stay)).andExpect(status().isNotFound());
@@ -123,11 +120,12 @@ class ListingPublishingIntegrationTests {
     }
 
     /**
-     * A stay or a place to eat waits for its Khmer however it would go live: approved from the desk, published
-     * by an editor, or saved straight as published. Its Khmer then shows on the Khmer cards.
+     * Khmer is optional for now (2026-10-21): a stay or a place to eat goes live without it, from the desk or saved
+     * straight as published, and {@code missingKhmer} says what is still to write. Once written, the Khmer cards
+     * speak Khmer; until then they say what is still English.
      */
     @Test
-    void staysAndFoodPlacesGoLiveOnlyWithTheirKhmer() throws Exception {
+    void staysAndFoodPlacesGoLiveWithoutTheirKhmerAndSayWhatIsMissing() throws Exception {
         RequestPostProcessor partner = partner("owner@khmer.test");
         String english = "\"name\":\"Lotus Guesthouse\",\"type\":\"GUESTHOUSE\",\"slogan\":\"Quiet nights\"," + PIN;
         String stay = id(mvc.perform(post("/api/v1/stays").with(partner).contentType(MediaType.APPLICATION_JSON)
@@ -136,71 +134,33 @@ class ListingPublishingIntegrationTests {
         String request = id(submit(partner, "{\"targetType\":\"STAY\",\"targetId\":\"" + stay + "\"}").andExpect(status().isCreated()));
         mvc.perform(post("/api/v1/publish-requests/" + request + "/approve").with(bdo())
                         .contentType(MediaType.APPLICATION_JSON).content("{}"))
-                .andExpect(status().isConflict())
-                .andExpect(jsonPath("$.missingKhmer", contains("nameKm", "sloganKm")));
-
-        mvc.perform(put("/api/v1/stays/" + stay).with(partner).contentType(MediaType.APPLICATION_JSON)
-                        .content("{" + english + ",\"nameKm\":\"ផ្ទះសំណាក់ផ្កាឈូក\",\"sloganKm\":\"យប់ស្ងាត់\"}"))
-                .andExpect(jsonPath("$.missingKhmer", hasSize(0)));
-        mvc.perform(post("/api/v1/publish-requests/" + request + "/approve").with(bdo())
-                        .contentType(MediaType.APPLICATION_JSON).content("{}"))
                 .andExpect(jsonPath("$.status").value("APPROVED"));
         mvc.perform(post("/api/v1/publish-requests/" + request + "/publish").with(bdo()))
                 .andExpect(jsonPath("$.status").value("PUBLISHED"));
+        mvc.perform(get("/api/v1/search").param("type", "STAY").param("lang", "km").param("q", "lotus"))
+                .andExpect(jsonPath("$.content[0].name").value("Lotus Guesthouse"))
+                .andExpect(jsonPath("$.content[0].untranslated", hasItem("name")));
+
+        mvc.perform(put("/api/v1/stays/" + stay).with(editorDesk()).contentType(MediaType.APPLICATION_JSON)
+                        .content("{" + english + ",\"nameKm\":\"ផ្ទះសំណាក់ផ្កាឈូក\",\"sloganKm\":\"យប់ស្ងាត់\"}"))
+                .andExpect(jsonPath("$.missingKhmer", hasSize(0)));
         mvc.perform(get("/api/v1/search").param("type", "STAY").param("lang", "km").param("q", "ផ្កាឈូក"))
                 .andExpect(jsonPath("$.content[0].name").value("ផ្ទះសំណាក់ផ្កាឈូក"))
                 .andExpect(jsonPath("$.content[0].untranslated", not(hasItem("name"))));
 
-        // An editor saving a food place straight as published is held to the same rule, and nothing is saved.
+        // An editor saving a food place straight as published is not held back either.
         String food = "\"name\":\"Lotus Noodles\",\"type\":\"RESTAURANT\",\"status\":\"PUBLISHED\"," + PIN;
         mvc.perform(post("/api/v1/foods").with(editorDesk()).contentType(MediaType.APPLICATION_JSON).content("{" + food + "}"))
-                .andExpect(status().isConflict())
-                .andExpect(jsonPath("$.missingKhmer", contains("nameKm")));
-        mvc.perform(get("/api/v1/search").param("type", "FOOD").param("q", "lotus")).andExpect(jsonPath("$.content", hasSize(0)));
-        mvc.perform(post("/api/v1/foods").with(editorDesk()).contentType(MediaType.APPLICATION_JSON)
-                        .content("{" + food + ",\"nameKm\":\"គុយទាវផ្កាឈូក\"}"))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.status").value("PUBLISHED"))
-                .andExpect(jsonPath("$.nameKm").value("គុយទាវផ្កាឈូក"));
-    }
-
-    /** A contributor's attraction is not approved while its English has no Khmer beside it. */
-    @Test
-    void anAttractionIsApprovedOnlyWithItsKhmer() throws Exception {
-        Province province = new Province();
-        province.setName("Kampot");
-        province.setSlug("kampot-khmer-test");
-        province = provinces.save(province);
-        RequestPostProcessor contributor = contributor("writer@places.test");
-        String english = "\"name\":\"Bokor Hill Station\",\"provinceId\":\"" + province.getId() + "\"";
-        String place = id(mvc.perform(post("/api/v1/destinations").with(contributor).contentType(MediaType.APPLICATION_JSON)
-                        .content("{" + english + "}"))
-                .andExpect(status().isCreated()));
-        String request = id(submit(contributor, "{\"targetType\":\"DESTINATION\",\"targetId\":\"" + place + "\"}")
-                .andExpect(status().isCreated()));
-
-        mvc.perform(post("/api/v1/publish-requests/" + request + "/approve").with(editor())
-                        .contentType(MediaType.APPLICATION_JSON).content("{}"))
-                .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.missingKhmer", contains("nameKm")));
-        mvc.perform(get("/api/v1/publish-requests/pending").with(editor())).andExpect(jsonPath("$[*].id", hasItem(request)));
-
-        mvc.perform(put("/api/v1/destinations/" + place).with(contributor).contentType(MediaType.APPLICATION_JSON)
-                        .content("{" + english + ",\"nameKm\":\"ស្ថានីយ៍ភ្នំបូកគោ\"}"))
-                .andExpect(status().isOk());
-        mvc.perform(post("/api/v1/publish-requests/" + request + "/approve").with(editor())
-                        .contentType(MediaType.APPLICATION_JSON).content("{}"))
-                .andExpect(jsonPath("$.status").value("APPROVED"));
-        mvc.perform(post("/api/v1/publish-requests/" + request + "/publish").with(editor()))
-                .andExpect(jsonPath("$.status").value("PUBLISHED"));
-        mvc.perform(get("/api/v1/destinations/" + place)).andExpect(jsonPath("$.nameKm").value("ស្ថានីយ៍ភ្នំបូកគោ"));
     }
 
     @Test
     void aContributorsStayGoesToTheEditorDeskAndLiveOnApproval() throws Exception {
         RequestPostProcessor contributor = contributor("writer@stays.test");
         String stay = id(mvc.perform(post("/api/v1/stays").with(contributor).contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"Kampot River Homestay\",\"nameKm\":\"ផ្ទះស្នាក់មាត់ទន្លេកំពត\",\"type\":\"HOMESTAY\"," + PIN + "}"))
+                        .content("{\"name\":\"Kampot River Homestay\",\"type\":\"HOMESTAY\"," + PIN + "}"))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.status").value("DRAFT"))
                 .andExpect(jsonPath("$.ownerUserId").isNotEmpty()));
@@ -240,7 +200,7 @@ class ListingPublishingIntegrationTests {
     void anEditorApprovesTheirOwnSubmissionRatherThanWaitingForAnAdministrator() throws Exception {
         RequestPostProcessor editor = editorDesk();
         String food = id(mvc.perform(post("/api/v1/foods").with(editor).contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"Editorial Kitchen\",\"nameKm\":\"ផ្ទះបាយវិចារណកថា\",\"type\":\"RESTAURANT\"," + PIN + "}"))
+                        .content("{\"name\":\"Editorial Kitchen\",\"type\":\"RESTAURANT\"," + PIN + "}"))
                 .andExpect(status().isCreated()));
         String request = id(submit(editor, "{\"targetType\":\"FOOD\",\"targetId\":\"" + food + "\"}")
                 .andExpect(status().isCreated())
@@ -282,7 +242,7 @@ class ListingPublishingIntegrationTests {
     void aPartnersFoodListingIsPublishedTheSameWay() throws Exception {
         RequestPostProcessor partner = partner("owner@noodles.test");
         String food = id(mvc.perform(post("/api/v1/foods").with(partner).contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"Memo Noodles\",\"nameKm\":\"គុយទាវមេម៉ូ\",\"type\":\"RESTAURANT\"," + PIN + "}"))
+                        .content("{\"name\":\"Memo Noodles\",\"type\":\"RESTAURANT\"," + PIN + "}"))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.status").value("DRAFT")));
 

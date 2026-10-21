@@ -13,6 +13,15 @@ import com.jayway.jsonpath.JsonPath;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ams.asmtravel.api.services.destination.stay.domain.Stay;
+import ams.asmtravel.api.services.destination.stay.domain.StayType;
+import ams.asmtravel.api.services.destination.stay.repository.StayRepository;
+import java.math.BigDecimal;
+import java.time.Instant;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.matchesPattern;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
@@ -51,6 +60,7 @@ class BadgeIntegrationTests {
     @Autowired TestCatalogue catalogue;
     @Autowired SeasonService seasons;
     @Autowired BadgeRepository badges;
+    @Autowired StayRepository stays;
 
     private Province province;
 
@@ -86,31 +96,99 @@ class BadgeIntegrationTests {
     }
 
     @Test
-    void aStampOnSiteCountsOnceADayAndCanEarnABadge() throws Exception {
+    void aStampNeedsTheCodeAndThePositionAndCountsOncePerSeason() throws Exception {
         threshold("ADVENTURE_SILVER", 1);
         Destination temple = catalogue.published(province, "Ta Som", 13.4618, 103.9129);
         RequestPostProcessor me = customer("stamper@visit.test");
 
+        // No code posted yet: nothing to scan, nothing to collect. A visitor's account may not issue one.
         mvc.perform(post("/api/v1/stamps").with(me).contentType(MediaType.APPLICATION_JSON)
-                        .content(checkIn(temple, 11.5564, 104.9282)))
+                        .content(checkIn("ABCD-EFGH-JKLM", 13.4620, 103.9131)))
+                .andExpect(jsonPath("$.outcome").value("INVALID_CODE"))
+                .andExpect(jsonPath("$.destinationId").value(nullValue()));
+        mvc.perform(post("/api/v1/stamps/codes").with(me).contentType(MediaType.APPLICATION_JSON)
+                        .content(codeRequest("DESTINATION", temple.getId())))
+                .andExpect(status().isForbidden());
+        String issued = mvc.perform(post("/api/v1/stamps/codes").with(editor()).contentType(MediaType.APPLICATION_JSON)
+                        .content(codeRequest("DESTINATION", temple.getId())))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.code").value(matchesPattern("[A-Z2-9]{4}-[A-Z2-9]{4}-[A-Z2-9]{4}")))
+                .andExpect(jsonPath("$.payload").value(matchesPattern("http://localhost:8080/api/v1/stamps/scan/[A-Z2-9-]{14}")))
+                .andExpect(jsonPath("$.label").value(nullValue()))
+                .andExpect(jsonPath("$.checkIns").value(0))
+                .andExpect(jsonPath("$.retiredAt").value(nullValue()))
+                .andReturn().getResponse().getContentAsString();
+        String code = JsonPath.read(issued, "$.code");
+        String codeId = JsonPath.read(issued, "$.id");
+        String payload = JsonPath.read(issued, "$.payload");
+
+        // The code alone is not enough: the phone must stand within the radius.
+        mvc.perform(post("/api/v1/stamps").with(me).contentType(MediaType.APPLICATION_JSON)
+                        .content(checkIn(code, 11.5564, 104.9282)))
                 .andExpect(jsonPath("$.outcome").value("TOO_FAR"))
+                .andExpect(jsonPath("$.destinationId").value(temple.getId().toString()))
                 .andExpect(jsonPath("$.badgesEarned", hasSize(0)));
+        // The scanned link reads like the code; the first check-in collects, and the badge follows.
         String stamp = mvc.perform(post("/api/v1/stamps").with(me).contentType(MediaType.APPLICATION_JSON)
-                        .content(checkIn(temple, 13.4620, 103.9131)))
+                        .content(checkIn(payload, 13.4620, 103.9131)))
                 .andExpect(jsonPath("$.outcome").value("COLLECTED"))
+                .andExpect(jsonPath("$.targetType").value("DESTINATION"))
+                .andExpect(jsonPath("$.source").value("QR"))
                 .andExpect(jsonPath("$.badgesEarned", hasSize(1)))
                 .andExpect(jsonPath("$.badgesEarned[0].code").value("ADVENTURE_SILVER"))
                 .andExpect(jsonPath("$.badgesEarned[0].level").value("SILVER"))
                 .andReturn().getResponse().getContentAsString();
+        // Once per place per season, whatever the day.
         mvc.perform(post("/api/v1/stamps").with(me).contentType(MediaType.APPLICATION_JSON)
-                        .content(checkIn(temple, 13.4620, 103.9131)))
+                        .content(checkIn(code, 13.4620, 103.9131)))
                 .andExpect(jsonPath("$.outcome").value("ALREADY_COLLECTED"))
                 .andExpect(jsonPath("$.badgesEarned", hasSize(0)));
+        // A second print joins the first; both keep working until one is deliberately retired.
+        String second = mvc.perform(post("/api/v1/stamps/codes").with(editor()).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"targetType\":\"DESTINATION\",\"targetId\":\"" + temple.getId() + "\",\"label\":\"Brochure 2026\"}"))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.label").value("Brochure 2026"))
+                .andReturn().getResponse().getContentAsString();
+        String renewed = JsonPath.read(second, "$.code");
+        mvc.perform(post("/api/v1/stamps").with(me).contentType(MediaType.APPLICATION_JSON)
+                        .content(checkIn(code, 13.4620, 103.9131)))
+                .andExpect(jsonPath("$.outcome").value("ALREADY_COLLECTED"));
+        // Retiring the first print alone kills it; the second keeps going, and the list says what each print did.
+        mvc.perform(post("/api/v1/stamps/codes/" + codeId + "/retire").with(editor()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.retiredAt").value(notNullValue()))
+                .andExpect(jsonPath("$.checkIns").value(1));
+        mvc.perform(post("/api/v1/stamps").with(me).contentType(MediaType.APPLICATION_JSON)
+                        .content(checkIn(code, 13.4620, 103.9131)))
+                .andExpect(jsonPath("$.outcome").value("INVALID_CODE"));
+        mvc.perform(get("/api/v1/stamps/codes").with(editor())
+                        .param("targetType", "DESTINATION").param("targetId", temple.getId().toString()))
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].code").value(renewed))
+                .andExpect(jsonPath("$[0].retiredAt").value(nullValue()))
+                .andExpect(jsonPath("$[1].code").value(code))
+                .andExpect(jsonPath("$[1].retiredAt").value(notNullValue()))
+                .andExpect(jsonPath("$[1].retiredByName").value(notNullValue()))
+                .andExpect(jsonPath("$[1].checkIns").value(1));
+        mvc.perform(get("/api/v1/stamps/scan/" + renewed))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Check in at Ta Som")));
+        mvc.perform(get("/api/v1/stamps/scan/" + code)).andExpect(content().string(containsString("no longer valid")));
+        // A scanned code is history, never deleted; one issued by mistake and never scanned may go for good.
+        mvc.perform(delete("/api/v1/stamps/codes/" + codeId).with(editor())).andExpect(status().isConflict());
+        String mistake = JsonPath.read(mvc.perform(post("/api/v1/stamps/codes").with(editor()).contentType(MediaType.APPLICATION_JSON)
+                        .content(codeRequest("DESTINATION", temple.getId())))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString(), "$.id");
+        mvc.perform(delete("/api/v1/stamps/codes/" + mistake).with(editor())).andExpect(status().isNoContent());
+        mvc.perform(get("/api/v1/stamps/codes").with(editor())
+                        .param("targetType", "DESTINATION").param("targetId", temple.getId().toString()))
+                .andExpect(jsonPath("$", hasSize(2)));
 
         String current = seasons.findCurrent().orElseThrow().name();
         mvc.perform(get("/api/v1/badges/me/progress").with(me))
                 .andExpect(jsonPath("$.seasonName").value(current))
-                .andExpect(jsonPath("$.tracks", hasSize(4)))
+                .andExpect(jsonPath("$.tracks", hasSize(3)))
                 .andExpect(jsonPath("$.tracks[?(@.type == 'STAMPS')].count").value(contains(1)))
                 .andExpect(jsonPath("$.tracks[?(@.type == 'STAMPS')].level").value(contains("SILVER")))
                 .andExpect(jsonPath("$.tracks[?(@.type == 'STAMPS')].nextLevel").value(contains("GOLDEN")))
@@ -154,10 +232,46 @@ class BadgeIntegrationTests {
         mvc.perform(get("/api/v1/destinations/" + museum.getId())).andExpect(jsonPath("$.viewCount").value(1));
     }
 
+    /** A stay is a destination like any other: stamped by its posted code, browsed for the Browser badge, viewed. */
+    @Test
+    void aStayIsStampedAndBrowsedLikeAnAttraction() throws Exception {
+        threshold("ADVENTURE_SILVER", 1);
+        threshold("BROWSER_SILVER", 1);
+        Stay stay = new Stay();
+        stay.setName("Memo Guesthouse");
+        stay.setType(StayType.GUESTHOUSE);
+        stay.setStatus(ListingStatus.PUBLISHED);
+        stay.setLatitude(new BigDecimal("13.3600"));
+        stay.setLongitude(new BigDecimal("103.8600"));
+        stay.setCreatedAt(Instant.now());
+        stay.setUpdatedAt(Instant.now());
+        UUID stayId = stays.save(stay).getId();
+        String code = codeOf("STAY", stayId);
+        RequestPostProcessor me = customer("guest@visit.test");
+
+        mvc.perform(post("/api/v1/stamps").with(me).contentType(MediaType.APPLICATION_JSON)
+                        .content(checkIn(code, 13.3601, 103.8601)))
+                .andExpect(jsonPath("$.outcome").value("COLLECTED"))
+                .andExpect(jsonPath("$.targetType").value("STAY"))
+                .andExpect(jsonPath("$.destinationId").value(stayId.toString()))
+                .andExpect(jsonPath("$.badgesEarned[0].code").value("ADVENTURE_SILVER"));
+        mvc.perform(put("/api/v1/badges/me/explorations/" + stayId).with(me))
+                .andExpect(jsonPath("$.browseCounted").value(true))
+                .andExpect(jsonPath("$.earned[0].code").value("BROWSER_SILVER"))
+                .andExpect(jsonPath("$.tracks[?(@.type == 'BROWSES')].count").value(contains(1)));
+        mvc.perform(get("/api/v1/stamps/me").with(me))
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].targetType").value("STAY"));
+        nextRequest();
+        mvc.perform(get("/api/v1/stays/" + stayId)).andExpect(jsonPath("$.viewCount").value(1));
+    }
+
     @Test
     void aCollectionBadgeIsEarnedByStampingItsPlaces() throws Exception {
         Destination first = catalogue.published(province, "Preah Khan", 13.4623, 103.8716);
         Destination second = catalogue.published(province, "Neak Pean", 13.4617, 103.8952);
+        String firstCode = codeOf("DESTINATION", first.getId());
+        String secondCode = codeOf("DESTINATION", second.getId());
         mvc.perform(post("/api/v1/badges").with(owner()).contentType(MediaType.APPLICATION_JSON)
                         .content("{\"code\":\"lonely\",\"name\":\"Lonely\",\"type\":\"DESTINATION_STAMPS\",\"threshold\":1}"))
                 .andExpect(status().isBadRequest());
@@ -172,10 +286,10 @@ class BadgeIntegrationTests {
 
         RequestPostProcessor me = customer("trail@visit.test");
         mvc.perform(post("/api/v1/stamps").with(me).contentType(MediaType.APPLICATION_JSON)
-                        .content(checkIn(first, 13.4623, 103.8716)))
+                        .content(checkIn(firstCode, 13.4623, 103.8716)))
                 .andExpect(jsonPath("$.badgesEarned", hasSize(0)));
         mvc.perform(post("/api/v1/stamps").with(me).contentType(MediaType.APPLICATION_JSON)
-                        .content(checkIn(second, 13.4617, 103.8952)))
+                        .content(checkIn(secondCode, 13.4617, 103.8952)))
                 .andExpect(jsonPath("$.badgesEarned[0].code").value("JAYAVARMAN_TRAIL"));
 
         // Earned, so it may not be deleted any more; it can be made inactive instead.
@@ -196,7 +310,8 @@ class BadgeIntegrationTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize((int) badges.count())))
                 .andExpect(jsonPath("$[?(@.code == 'REVIEWER_GOLDEN')].level").value(contains("GOLDEN")));
-        mvc.perform(get("/api/v1/badges").param("type", "POINTS")).andExpect(jsonPath("$", hasSize(3)));
+        mvc.perform(get("/api/v1/badges").param("type", "STAMPS")).andExpect(jsonPath("$", hasSize(3)));
+        mvc.perform(get("/api/v1/badges").param("type", "BROWSES")).andExpect(jsonPath("$", hasSize(3)));
         mvc.perform(post("/api/v1/badges").with(editor()).contentType(MediaType.APPLICATION_JSON)
                         .content("{\"code\":\"X\",\"name\":\"X\",\"type\":\"BROWSES\",\"level\":\"SILVER\",\"threshold\":1}"))
                 .andExpect(status().isForbidden());
@@ -206,8 +321,20 @@ class BadgeIntegrationTests {
         mvc.perform(get("/api/v1/badges/shared/" + UUID.randomUUID())).andExpect(status().isNotFound());
     }
 
-    private static String checkIn(Destination place, double latitude, double longitude) {
-        return "{\"destinationId\":\"" + place.getId() + "\",\"latitude\":" + latitude + ",\"longitude\":" + longitude + "}";
+    private static String checkIn(String code, double latitude, double longitude) {
+        return "{\"code\":\"" + code + "\",\"latitude\":" + latitude + ",\"longitude\":" + longitude + "}";
+    }
+
+    private static String codeRequest(String targetType, UUID targetId) {
+        return "{\"targetType\":\"" + targetType + "\",\"targetId\":\"" + targetId + "\"}";
+    }
+
+    /** The desk issues the code the CMS would print for a place. */
+    private String codeOf(String targetType, UUID targetId) throws Exception {
+        return JsonPath.read(mvc.perform(post("/api/v1/stamps/codes").with(owner()).contentType(MediaType.APPLICATION_JSON)
+                        .content(codeRequest(targetType, targetId)))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString(), "$.code");
     }
 
     private void threshold(String code, int value) {

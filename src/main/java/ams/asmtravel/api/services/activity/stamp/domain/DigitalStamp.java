@@ -16,7 +16,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.time.Instant;
 import java.util.UUID;
 
-/** An on-site check-in: one per person, place and day. The place is a plain id, so stamps outlive it. */
+/** An on-site check-in: one per person, place and season. The place is a plain id, so stamps outlive it. */
 @Entity
 @NoArgsConstructor
 @Getter
@@ -31,6 +31,11 @@ public class DigitalStamp {
     @Column(nullable = false)
     private UUID userId;
 
+    /** Which kind of destination; the column keeps its old name. */
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    private StampTarget targetType = StampTarget.DESTINATION;
+
     @Column(nullable = false)
     private UUID destinationId;
 
@@ -40,10 +45,15 @@ public class DigitalStamp {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 50)
-    private StampSource source = StampSource.GPS;
+    private StampSource source = StampSource.QR;
 
-    public DigitalStamp(UUID userId, UUID destinationId) {
+    /** The code that was scanned, so the CMS counts check-ins per print; null for stamps older than the codes. */
+    private UUID codeId;
+
+    public DigitalStamp(UUID userId, StampTarget targetType, UUID destinationId, UUID codeId) {
         this.userId = userId;
+        this.targetType = targetType;
         this.destinationId = destinationId;
+        this.codeId = codeId;
     }
 }

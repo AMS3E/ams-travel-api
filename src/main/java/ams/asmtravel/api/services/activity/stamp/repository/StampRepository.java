@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public interface StampRepository extends JpaRepository<DigitalStamp, UUID> {
 
-    /** Whether this place was stamped in the window: today's, for one stamp a day. */
+    /** Whether this place was stamped in the window: the season's, for one stamp per place per season. */
     boolean existsByUserIdAndDestinationIdAndCollectedAtGreaterThanEqualAndCollectedAtLessThan(
             UUID userId, UUID destinationId, Instant from, Instant to);
 
@@ -29,6 +29,22 @@ public interface StampRepository extends JpaRepository<DigitalStamp, UUID> {
 
     /** A person's stamps, newest first. */
     List<DigitalStamp> findByUserIdOrderByCollectedAtDesc(UUID userId);
+
+    /** Whether a code was ever scanned into a stamp: such a code is retired, not deleted. */
+    boolean existsByCodeId(UUID codeId);
+
+    /** How many check-ins each of these codes collected; codes never scanned are absent. */
+    @Query("""
+            select s.codeId as codeId, count(s) as checkIns from DigitalStamp s
+            where s.codeId in :codeIds group by s.codeId
+            """)
+    List<CodeCheckIns> countByCodeIds(Collection<UUID> codeIds);
+
+    interface CodeCheckIns {
+        UUID getCodeId();
+
+        long getCheckIns();
+    }
 
     @Modifying
     @Query("delete from DigitalStamp s where s.userId = :userId")

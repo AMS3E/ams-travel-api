@@ -6,6 +6,16 @@ import ams.asmtravel.api.services.location.province.domain.Province;
 import ams.asmtravel.api.support.TestCatalogue;
 import com.jayway.jsonpath.JsonPath;
 import io.minio.MinioClient;
+import ams.asmtravel.api.services.destination.food.domain.Food;
+import ams.asmtravel.api.services.destination.food.domain.FoodType;
+import ams.asmtravel.api.services.destination.food.repository.FoodRepository;
+import ams.asmtravel.api.services.destination.stay.domain.Stay;
+import ams.asmtravel.api.services.destination.stay.domain.StayType;
+import ams.asmtravel.api.services.destination.stay.repository.StayRepository;
+import java.time.Instant;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.hasSize;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +60,8 @@ class VerificationIntegrationTests {
     @MockitoBean MinioClient minioClient;
     @Autowired MockMvc mvc;
     @Autowired TestCatalogue catalogue;
+    @Autowired StayRepository stays;
+    @Autowired FoodRepository foods;
 
     private Province province;
     private Destination contributorsPlace;
@@ -261,6 +273,74 @@ class VerificationIntegrationTests {
                 .andExpect(status().isCreated());
         mvc.perform(get(status).param("destinationIds", id))
                 .andExpect(jsonPath("$[0].basis").value("PAID"))
+                .andExpect(jsonPath("$[0].travelerRecommended").value(true));
+    }
+
+    /** A stay and a food place are verified like attractions: a partner's stay on its agreement, a food place on its invoice, and the seal from reviews. */
+    @Test
+    void staysAndFoodPlacesAreVerifiedLikeAttractions() throws Exception {
+        RequestPostProcessor host = staff("host2@verify.test", "PARTNER", "PERM_LISTING_EDIT_OWN");
+        UUID hostId = UUID.fromString(JsonPath.read(mvc.perform(get("/api/v1/users/me").with(host))
+                .andReturn().getResponse().getContentAsString(), "$.id"));
+        Stay stay = new Stay();
+        stay.setName("Sala Lodges");
+        stay.setType(StayType.GUESTHOUSE);
+        stay.setStatus(ListingStatus.PUBLISHED);
+        stay.setOwnerUserId(hostId);
+        stay.setCreatedAt(Instant.now());
+        stay.setUpdatedAt(Instant.now());
+        UUID stayId = stays.save(stay).getId();
+        Food food = new Food();
+        food.setName("Memo Noodles");
+        food.setSlug("memo-noodles-verified");
+        food.setType(FoodType.RESTAURANT);
+        food.setStatus(ListingStatus.PUBLISHED);
+        food.setCreatedAt(Instant.now());
+        food.setUpdatedAt(Instant.now());
+        UUID foodId = foods.save(food).getId();
+
+        // Both are on the queue: the stay as its partner's, the food place as our team's.
+        mvc.perform(get("/api/v1/destination-verifications/queue").with(owner()))
+                .andExpect(jsonPath("$[?(@.destinationId=='" + stayId + "')].targetType").value(contains("STAY")))
+                .andExpect(jsonPath("$[?(@.destinationId=='" + stayId + "')].desk").value(contains("PARTNER")))
+                .andExpect(jsonPath("$[?(@.destinationId=='" + foodId + "')].targetType").value(contains("FOOD")))
+                .andExpect(jsonPath("$[?(@.destinationId=='" + foodId + "')].desk").value(contains("STAFF")));
+        mvc.perform(post("/api/v1/destination-verifications").with(owner()).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"destinationId\":\"" + stayId + "\",\"verified\":true,\"basis\":\"PARTNER\",\"reference\":\"AGR-2026-09\"}"))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.targetType").value("STAY"))
+                .andExpect(jsonPath("$.destinationName").value("Sala Lodges"))
+                .andExpect(jsonPath("$.basis").value("PARTNER"));
+        mvc.perform(post("/api/v1/destination-verifications").with(owner()).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"destinationId\":\"" + foodId + "\",\"verified\":true,\"basis\":\"PAID\",\"reference\":\"INV-2026-077\"}"))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.targetType").value("FOOD"));
+        mvc.perform(get("/api/v1/destination-verifications").with(owner()).param("destinationId", stayId.toString()))
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].destinationSlug").value(nullValue()));
+
+        // The public status and the search cards say so, for the app.
+        mvc.perform(get("/api/v1/destination-verifications/status").param("destinationIds", stayId.toString(), foodId.toString()))
+                .andExpect(jsonPath("$[0].verified").value(true))
+                .andExpect(jsonPath("$[0].basis").value("PARTNER"))
+                .andExpect(jsonPath("$[1].verified").value(true))
+                .andExpect(jsonPath("$[1].basis").value("PAID"));
+        mvc.perform(get("/api/v1/search/cards").param("type", "STAY").param("ids", stayId.toString()))
+                .andExpect(jsonPath("$[0].verified").value(true))
+                .andExpect(jsonPath("$[0].basis").value("PARTNER"));
+        mvc.perform(get("/api/v1/destination-verifications/status"))
+                .andExpect(jsonPath("$[*].destinationId", hasItem(foodId.toString())));
+
+        // The travellers' seal is earned by a food place's reviews too.
+        for (String visitor : new String[] {"c@visit.test", "d@visit.test"}) {
+            mvc.perform(post("/api/v1/reviews").with(customer(visitor)).contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"targetType\":\"FOOD\",\"targetId\":\"" + foodId + "\",\"rating\":5,\"content\":\"Best noodles in town\"}"))
+                    .andExpect(status().isCreated());
+        }
+        mvc.perform(get("/api/v1/destination-verifications/status").param("destinationIds", foodId.toString()))
+                .andExpect(jsonPath("$[0].travelerRecommended").value(true))
+                .andExpect(jsonPath("$[0].ratingCount").value(2));
+        mvc.perform(get("/api/v1/search/cards").param("type", "FOOD").param("ids", foodId.toString()))
                 .andExpect(jsonPath("$[0].travelerRecommended").value(true));
     }
 }

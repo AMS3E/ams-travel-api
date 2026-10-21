@@ -209,6 +209,10 @@ public class Food {
     @Column(nullable = false, length = 30)
     private ListingStatus status = ListingStatus.DRAFT;
 
+    /** First opens of a day, signed in or not, all time: the popular service bumps it. */
+    @Column(nullable = false)
+    private Long viewCount = 0L;
+
     @Column(nullable = false)
     private Boolean isLocalSpecialty = false;
 

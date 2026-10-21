@@ -15,6 +15,11 @@ public interface StayRepository extends JpaRepository<Stay, UUID> {
 
     List<Stay> findAllByOrderByNameAsc();
 
+    /** Bulk update on purpose: a visit writes no audit row and no {@code updated_at}. */
+    @Modifying
+    @Query("update Stay x set x.viewCount = x.viewCount + 1 where x.id = :id")
+    int incrementViewCount(UUID id);
+
     List<Stay> findByStatusOrderByNameAsc(ListingStatus status);
 
     List<Stay> findByDestinationIdOrderByNameAsc(UUID destinationId);

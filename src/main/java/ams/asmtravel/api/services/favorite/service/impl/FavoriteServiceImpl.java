@@ -17,6 +17,8 @@ import ams.asmtravel.api.services.favorite.exception.FavoriteNotFoundException;
 import ams.asmtravel.api.services.favorite.mapper.FavoriteMapper;
 import ams.asmtravel.api.services.favorite.repository.FavoriteRepository;
 import ams.asmtravel.api.services.favorite.service.FavoriteService;
+import ams.asmtravel.api.services.destination.activity.domain.ActivityDeletingEvent;
+import ams.asmtravel.api.services.destination.activity.service.ActivityService;
 import ams.asmtravel.api.services.destination.food.domain.FoodDeletingEvent;
 import ams.asmtravel.api.services.destination.food.service.FoodService;
 import ams.asmtravel.api.services.destination.stay.domain.StayDeletingEvent;
@@ -40,6 +42,7 @@ public class FavoriteServiceImpl implements FavoriteService {
     private final DestinationService destinationService;
     private final StayService stayService;
     private final FoodService foodService;
+    private final ActivityService activityService;
     private final CorridorService corridorService;
     private final RegionService regionService;
     private final ProvinceService provinceService;
@@ -103,6 +106,11 @@ public class FavoriteServiceImpl implements FavoriteService {
     }
 
     @EventListener
+    public void onActivityDeleting(ActivityDeletingEvent event) {
+        favoriteRepository.deleteByTarget(FavoriteTarget.ACTIVITY, event.activityId());
+    }
+
+    @EventListener
     public void onCorridorDeleting(CorridorDeletingEvent event) {
         favoriteRepository.deleteByTarget(FavoriteTarget.CORRIDOR, event.corridorId());
     }
@@ -122,6 +130,7 @@ public class FavoriteServiceImpl implements FavoriteService {
             case DESTINATION -> destinationService.isPublished(targetId);
             case STAY -> stayService.isPublished(targetId);
             case FOOD -> foodService.isPublished(targetId);
+            case ACTIVITY -> activityService.isPublished(targetId);
             case CORRIDOR -> corridorService.isPublished(targetId);
             case REGION -> regionService.exists(targetId);
             case PROVINCE -> provinceService.exists(targetId);

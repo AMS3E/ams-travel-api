@@ -10,7 +10,7 @@ import java.util.UUID;
 /**
  * @param regionId         the zone, through the province
  * @param tourismRegionIds the tourism regions chosen for it
- * @param missingKhmer     Khmer fields still empty while their English is filled; publishing waits on them
+ * @param missingKhmer     Khmer fields still empty while their English is filled; the dashboard marks them
  */
 public record DestinationResponse(
         UUID id,
@@ -37,12 +37,8 @@ public record DestinationResponse(
         List<UUID> tagIds,
         List<UUID> interestIds,
         List<UUID> tourismRegionIds,
-        List<UUID> architectureStyleIds,
-        List<UUID> religionIds,
         String theme,
         List<String> specialties,
-        List<UUID> historicalPeriodIds,
-        List<Integer> centuries,
         String nameKm,
         String descriptionKm,
         String sloganKm,
