@@ -1,0 +1,46 @@
+# QR code management: a place holds any number of active check-in codes at once
+# (the gate, a second entrance, a brochure), each print told apart by a label.
+# Issuing a new code no longer kills the previous print; a code stops working
+# only when deliberately retired, and the retirement says who and when. A stamp
+# remembers which code was scanned, so the CMS can count check-ins per print.
+databaseChangeLog:
+  - changeSet:
+      id: v2-engagement-stamp-code-management
+      author: ams-travel-v2
+      changes:
+        - renameColumn:
+            schemaName: engagement
+            tableName: stamp_codes
+            oldColumnName: replaced_at
+            newColumnName: retired_at
+            columnDataType: TIMESTAMP WITH TIME ZONE
+        - addColumn:
+            schemaName: engagement
+            tableName: stamp_codes
+            columns:
+              - column: {name: label, type: varchar(80)}
+              - column: {name: retired_by, type: uuid}
+        - addColumn:
+            schemaName: engagement
+            tableName: digital_stamps
+            columns:
+              - column: {name: code_id, type: uuid}
+        - addForeignKeyConstraint: {baseTableSchemaName: engagement, baseTableName: digital_stamps, baseColumnNames: code_id, constraintName: fk_digital_stamps_code, referencedTableSchemaName: engagement, referencedTableName: stamp_codes, referencedColumnNames: id, onDelete: SET NULL}
+        - createIndex:
+            schemaName: engagement
+            tableName: digital_stamps
+            indexName: idx_digital_stamps_code
+            columns:
+              - column: {name: code_id}
+      rollback:
+        - dropIndex: {schemaName: engagement, tableName: digital_stamps, indexName: idx_digital_stamps_code}
+        - dropForeignKeyConstraint: {baseTableSchemaName: engagement, baseTableName: digital_stamps, constraintName: fk_digital_stamps_code}
+        - dropColumn: {schemaName: engagement, tableName: digital_stamps, columnName: code_id}
+        - dropColumn: {schemaName: engagement, tableName: stamp_codes, columnName: retired_by}
+        - dropColumn: {schemaName: engagement, tableName: stamp_codes, columnName: label}
+        - renameColumn:
+            schemaName: engagement
+            tableName: stamp_codes
+            oldColumnName: retired_at
+            newColumnName: replaced_at
+            columnDataType: TIMESTAMP WITH TIME ZONE

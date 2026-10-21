@@ -27,6 +27,8 @@ import ams.asmtravel.api.services.destination.stay.service.StayService;
 import ams.asmtravel.api.services.season.dto.response.SeasonResponse;
 import ams.asmtravel.api.services.season.service.SeasonService;
 import ams.asmtravel.api.services.user.user.domain.UserDeletingEvent;
+import ams.asmtravel.api.services.user.user.domain.UserSummary;
+import ams.asmtravel.api.services.user.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
@@ -40,10 +42,16 @@ import java.security.SecureRandom;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * Digital stamps. The scanned code names the place and the device position proves the visitor is there;
@@ -67,6 +75,7 @@ public class StampServiceImpl implements StampService {
     private final ActivityService activityService;
     private final SeasonService seasonService;
     private final BadgeService badgeService;
+    private final UserService userService;
     private final StampProperties properties;
     private final ApplicationEventPublisher events;
 
@@ -75,13 +84,13 @@ public class StampServiceImpl implements StampService {
     }
 
     /**
-     * A code nobody current holds answers INVALID_CODE; an unpublished place behind a current code answers 404 like a
+     * An unknown or retired code answers INVALID_CODE; an unpublished place behind an active code answers 404 like a
      * missing one. Badge listeners run in this transaction; the answer lists what they awarded.
      */
     @Override
     @Transactional
     public StampResponse collect(UUID userId, StampRequest request) {
-        Optional<StampCode> code = currentCode(request.code());
+        Optional<StampCode> code = activeCode(request.code());
         if (code.isEmpty()) {
             return answer(null, null, null, StampOutcome.INVALID_CODE, null, List.of());
         }
@@ -103,7 +112,7 @@ public class StampServiceImpl implements StampService {
             return answer(null, place.type(), place.id(), StampOutcome.ALREADY_COLLECTED, distance, List.of());
         }
         Instant since = Instant.now().truncatedTo(ChronoUnit.MILLIS);
-        DigitalStamp stamp = stampRepository.saveAndFlush(new DigitalStamp(userId, place.type(), place.id()));
+        DigitalStamp stamp = stampRepository.saveAndFlush(new DigitalStamp(userId, place.type(), place.id(), code.get().getId()));
         events.publishEvent(new StampCollectedEvent(userId, place.type(), place.id(), stamp.getId()));
         return answer(stamp, place.type(), place.id(), StampOutcome.COLLECTED, distance, badgeService.findEarnedSince(userId, since));
     }
@@ -111,7 +120,7 @@ public class StampServiceImpl implements StampService {
     @Override
     @Transactional(readOnly = true)
     public StampResponse alreadyCollected(StampRequest request) {
-        StampCode code = currentCode(request.code()).orElse(null);
+        StampCode code = activeCode(request.code()).orElse(null);
         return answer(null, code == null ? null : code.getTargetType(), code == null ? null : code.getTargetId(),
                 code == null ? StampOutcome.INVALID_CODE : StampOutcome.ALREADY_COLLECTED, null, List.of());
     }
@@ -127,8 +136,24 @@ public class StampServiceImpl implements StampService {
     @Override
     @Transactional(readOnly = true)
     public List<StampCodeResponse> findCodes(StampTarget targetType, UUID targetId) {
-        return codeRepository.findByTargetTypeAndTargetIdOrderByIssuedAtDesc(targetType, targetId).stream()
-                .map(this::respond)
+        List<StampCode> codes = codeRepository.findByTargetTypeAndTargetIdOrderByIssuedAtDesc(targetType, targetId).stream()
+                .sorted(Comparator.comparing(code -> !code.active()))
+                .toList();
+        Map<UUID, Long> checkIns = stampRepository
+                .countByCodeIds(codes.stream().map(StampCode::getId).toList()).stream()
+                .collect(Collectors.toMap(StampRepository.CodeCheckIns::getCodeId, StampRepository.CodeCheckIns::getCheckIns));
+        Set<UUID> people = new HashSet<>();
+        codes.forEach(code -> {
+            if (code.getIssuedBy() != null) {
+                people.add(code.getIssuedBy());
+            }
+            if (code.getRetiredBy() != null) {
+                people.add(code.getRetiredBy());
+            }
+        });
+        Map<UUID, UserSummary> names = userService.findSummaries(people);
+        return codes.stream()
+                .map(code -> respond(code, checkIns.getOrDefault(code.getId(), 0L), names))
                 .toList();
     }
 
@@ -139,14 +164,26 @@ public class StampServiceImpl implements StampService {
         if (find(request.targetType(), request.targetId()).isEmpty()) {
             throw new DestinationNotFoundException();
         }
-        Instant now = Instant.now();
-        codeRepository.findByTargetTypeAndTargetIdAndReplacedAtIsNull(request.targetType(), request.targetId())
-                .ifPresent(previous -> previous.setReplacedAt(now));
         String code = newCode();
         while (codeRepository.findByCode(code).isPresent()) {
             code = newCode();
         }
-        return respond(codeRepository.saveAndFlush(new StampCode(request.targetType(), request.targetId(), code, issuedBy)));
+        String label = request.label() == null || request.label().isBlank() ? null : request.label().trim();
+        StampCode issued = codeRepository.saveAndFlush(new StampCode(request.targetType(), request.targetId(), code, label, issuedBy));
+        return respond(issued, 0, namesOf(issued));
+    }
+
+    /** Retiring twice changes nothing: the first retirement stands. */
+    @Override
+    @Transactional
+    public StampCodeResponse retireCode(UUID codeId, UUID retiredBy) {
+        StampCode code = codeRepository.findById(codeId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No such check-in code"));
+        if (code.active()) {
+            code.retire(retiredBy);
+            codeRepository.saveAndFlush(code);
+        }
+        return respond(code, stampRepository.existsByCodeId(codeId) ? countOf(codeId) : 0, namesOf(code));
     }
 
     @Override
@@ -154,13 +191,16 @@ public class StampServiceImpl implements StampService {
     public void withdrawCode(UUID codeId) {
         StampCode code = codeRepository.findById(codeId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No such check-in code"));
+        if (stampRepository.existsByCodeId(codeId)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "This code has collected check-ins; retire it instead");
+        }
         codeRepository.delete(code);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Optional<String> placeNameOf(String code) {
-        return currentCode(code).flatMap(current -> find(current.getTargetType(), current.getTargetId())).map(Place::name);
+        return activeCode(code).flatMap(active -> find(active.getTargetType(), active.getTargetId())).map(Place::name);
     }
 
     // For other services
@@ -187,15 +227,15 @@ public class StampServiceImpl implements StampService {
 
     // Helpers
 
-    /** The current code the scanned text names: the code itself, or the scan link whose last part it is. */
-    private Optional<StampCode> currentCode(String scanned) {
+    /** The active code the scanned text names: the code itself, or the scan link whose last part it is. */
+    private Optional<StampCode> activeCode(String scanned) {
         if (scanned == null || scanned.isBlank()) {
             return Optional.empty();
         }
         String text = scanned.trim();
         int slash = text.lastIndexOf('/');
         String code = (slash >= 0 ? text.substring(slash + 1) : text).trim().toUpperCase(Locale.ROOT);
-        return codeRepository.findByCode(code).filter(StampCode::current);
+        return codeRepository.findByCode(code).filter(StampCode::active);
     }
 
     /** The season's window when one is active; all time otherwise, so a place is never stamped twice between seasons. */
@@ -219,8 +259,40 @@ public class StampServiceImpl implements StampService {
         };
     }
 
-    private StampCodeResponse respond(StampCode code) {
-        return mapper.toResponse(code, properties.scanUrl(code.getCode()));
+    private long countOf(UUID codeId) {
+        return stampRepository.countByCodeIds(List.of(codeId)).stream()
+                .mapToLong(StampRepository.CodeCheckIns::getCheckIns).sum();
+    }
+
+    /** Who issued and retired this one code, for a single-code answer. */
+    private Map<UUID, UserSummary> namesOf(StampCode code) {
+        Set<UUID> people = new HashSet<>();
+        if (code.getIssuedBy() != null) {
+            people.add(code.getIssuedBy());
+        }
+        if (code.getRetiredBy() != null) {
+            people.add(code.getRetiredBy());
+        }
+        return userService.findSummaries(people);
+    }
+
+    private StampCodeResponse respond(StampCode code, long checkIns, Map<UUID, UserSummary> names) {
+        Function<UUID, String> name = id -> id == null ? null
+                : Optional.ofNullable(names.get(id)).map(UserSummary::fullName).orElse(null);
+        return new StampCodeResponse(
+                code.getId(),
+                code.getTargetType(),
+                code.getTargetId(),
+                code.getCode(),
+                code.getLabel(),
+                properties.scanUrl(code.getCode()),
+                code.getIssuedAt(),
+                code.getIssuedBy(),
+                name.apply(code.getIssuedBy()),
+                checkIns,
+                code.getRetiredAt(),
+                code.getRetiredBy(),
+                name.apply(code.getRetiredBy()));
     }
 
     private StampResponse answer(DigitalStamp stamp, StampTarget type, UUID destinationId, StampOutcome outcome,

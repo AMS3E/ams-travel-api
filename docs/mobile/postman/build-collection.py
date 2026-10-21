@@ -49,7 +49,7 @@ SCREENS = [
         ("POST", "/api/v1/media/files", "Upload a review photo (multipart, type=review)", {"type": "review"}, "multipart"),
         ("POST", "/api/v1/reviews", "Write a review", {}, {"targetType": "DESTINATION", "targetId": "{{destinationId}}", "rating": 5, "title": "Breathtaking sunrise", "content": "Arrive before five and walk the west causeway.", "visitType": "FAMILY", "visitedOn": "2026-08", "photoKeys": []}),
         ("PUT", "/api/v1/badges/me/explorations/{destinationId}", "Opened it (Browser badge + Popular)", {}, None),
-        ("POST", "/api/v1/stamps", "Check in (GPS stamp, Adventure badge)", {}, {"destinationId": "{{destinationId}}", "latitude": 13.4125, "longitude": 103.8670}),
+        ("POST", "/api/v1/stamps", "Check in (scanned QR code + position, Adventure badge)", {}, {"code": "ABCD-EFGH-JKLM", "latitude": 13.4125, "longitude": 103.8670}),
     ]),
     ("5 · Popular page", [
         ("GET", "/api/v1/popular", "Popular with province and interest chips (filled up to limit; items[].reason)", {"type": "DESTINATION", "provinceIds": "", "interestIds": "", "limit": "50"}, None),

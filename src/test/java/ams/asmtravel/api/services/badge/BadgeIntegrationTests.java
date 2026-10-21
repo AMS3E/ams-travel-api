@@ -114,9 +114,12 @@ class BadgeIntegrationTests {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.code").value(matchesPattern("[A-Z2-9]{4}-[A-Z2-9]{4}-[A-Z2-9]{4}")))
                 .andExpect(jsonPath("$.payload").value(matchesPattern("http://localhost:8080/api/v1/stamps/scan/[A-Z2-9-]{14}")))
-                .andExpect(jsonPath("$.replacedAt").value(nullValue()))
+                .andExpect(jsonPath("$.label").value(nullValue()))
+                .andExpect(jsonPath("$.checkIns").value(0))
+                .andExpect(jsonPath("$.retiredAt").value(nullValue()))
                 .andReturn().getResponse().getContentAsString();
         String code = JsonPath.read(issued, "$.code");
+        String codeId = JsonPath.read(issued, "$.id");
         String payload = JsonPath.read(issued, "$.payload");
 
         // The code alone is not enough: the phone must stand within the radius.
@@ -140,23 +143,47 @@ class BadgeIntegrationTests {
                         .content(checkIn(code, 13.4620, 103.9131)))
                 .andExpect(jsonPath("$.outcome").value("ALREADY_COLLECTED"))
                 .andExpect(jsonPath("$.badgesEarned", hasSize(0)));
-        // A new print replaces the old one, which stops working; the list keeps both, and the scan page says which.
-        String renewed = JsonPath.read(mvc.perform(post("/api/v1/stamps/codes").with(editor()).contentType(MediaType.APPLICATION_JSON)
-                        .content(codeRequest("DESTINATION", temple.getId())))
+        // A second print joins the first; both keep working until one is deliberately retired.
+        String second = mvc.perform(post("/api/v1/stamps/codes").with(editor()).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"targetType\":\"DESTINATION\",\"targetId\":\"" + temple.getId() + "\",\"label\":\"Brochure 2026\"}"))
                 .andExpect(status().isCreated())
-                .andReturn().getResponse().getContentAsString(), "$.code");
+                .andExpect(jsonPath("$.label").value("Brochure 2026"))
+                .andReturn().getResponse().getContentAsString();
+        String renewed = JsonPath.read(second, "$.code");
+        mvc.perform(post("/api/v1/stamps").with(me).contentType(MediaType.APPLICATION_JSON)
+                        .content(checkIn(code, 13.4620, 103.9131)))
+                .andExpect(jsonPath("$.outcome").value("ALREADY_COLLECTED"));
+        // Retiring the first print alone kills it; the second keeps going, and the list says what each print did.
+        mvc.perform(post("/api/v1/stamps/codes/" + codeId + "/retire").with(editor()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.retiredAt").value(notNullValue()))
+                .andExpect(jsonPath("$.checkIns").value(1));
         mvc.perform(post("/api/v1/stamps").with(me).contentType(MediaType.APPLICATION_JSON)
                         .content(checkIn(code, 13.4620, 103.9131)))
                 .andExpect(jsonPath("$.outcome").value("INVALID_CODE"));
         mvc.perform(get("/api/v1/stamps/codes").with(editor())
                         .param("targetType", "DESTINATION").param("targetId", temple.getId().toString()))
                 .andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[?(@.code == '" + renewed + "')].replacedAt").value(contains(nullValue())))
-                .andExpect(jsonPath("$[?(@.code == '" + code + "')].replacedAt").value(contains(notNullValue())));
+                .andExpect(jsonPath("$[0].code").value(renewed))
+                .andExpect(jsonPath("$[0].retiredAt").value(nullValue()))
+                .andExpect(jsonPath("$[1].code").value(code))
+                .andExpect(jsonPath("$[1].retiredAt").value(notNullValue()))
+                .andExpect(jsonPath("$[1].retiredByName").value(notNullValue()))
+                .andExpect(jsonPath("$[1].checkIns").value(1));
         mvc.perform(get("/api/v1/stamps/scan/" + renewed))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Check in at Ta Som")));
         mvc.perform(get("/api/v1/stamps/scan/" + code)).andExpect(content().string(containsString("no longer valid")));
+        // A scanned code is history, never deleted; one issued by mistake and never scanned may go for good.
+        mvc.perform(delete("/api/v1/stamps/codes/" + codeId).with(editor())).andExpect(status().isConflict());
+        String mistake = JsonPath.read(mvc.perform(post("/api/v1/stamps/codes").with(editor()).contentType(MediaType.APPLICATION_JSON)
+                        .content(codeRequest("DESTINATION", temple.getId())))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString(), "$.id");
+        mvc.perform(delete("/api/v1/stamps/codes/" + mistake).with(editor())).andExpect(status().isNoContent());
+        mvc.perform(get("/api/v1/stamps/codes").with(editor())
+                        .param("targetType", "DESTINATION").param("targetId", temple.getId().toString()))
+                .andExpect(jsonPath("$", hasSize(2)));
 
         String current = seasons.findCurrent().orElseThrow().name();
         mvc.perform(get("/api/v1/badges/me/progress").with(me))

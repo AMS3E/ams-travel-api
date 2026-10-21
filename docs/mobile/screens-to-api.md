@@ -226,25 +226,30 @@ Static text and links. No endpoint; ship them in the app, or add a small setting
 - Food: 40+ fields served, about 10 read by the design. Stay: 20 policy fields served, the design shows one policies box plus check-in/out. Room: 50 fields served, about 10 read. The Postman collection documents what the app reads.
 - Preferences `theme`, `preferredRegionId`.
 
-## Content on the server today (staging seed of 2026-10-14)
+## Content on the server today (staging seed, last reseeded 2026-10-21)
 
 The staging server is seeded with a full, lively catalogue, so every screen has something to show: 59 published
-attractions with long descriptions, slogans and galleries of 3 to 5 photos; 5 corridors with itineraries and
-galleries; 25 provinces with a cover, a centre and counts; 14 tourism regions and zones with covers; 33 interests
-in 6 groups, 65 categories, 53 tags, 72 amenities; 20 sample stays with 56 rooms and price previews; 25 sample
-food places with opening hours; 24 sample travellers with 193 published reviews and ratings over the last five
-months, browses over the last month (so Popular is real), and 12 Verified decisions; 12 badge definitions and
-4 seasons. The stays, food places, travellers and reviews are fictional staging content; photos come from
-Wikimedia Commons, credited in each gallery caption. A reset reseeds all of it: nothing you create on the staging
-server is kept across one.
+attractions with long descriptions, slogans and galleries of 3 to 5 photos; 5 activities with contact details;
+5 corridors with itineraries and galleries; 25 provinces with a cover, a centre and counts; 14 tourism regions
+and zones with covers; 33 interests in 6 groups, 65 categories, 53 tags, 72 amenities; 20 sample stays with 56
+rooms and price previews; 25 sample food places with opening hours; 24 sample travellers with published reviews
+and ratings over the last five months, browses over the last month (so Popular is real), and Verified decisions;
+badge definitions and seasons. Since 2026-10-21 every seeded place, province, region, category, tag and interest
+carries Khmer text beside the English. The stays, food places, activities, travellers and reviews are fictional
+staging content; photos come from Wikimedia Commons, credited in each gallery caption. A reset reseeds all of
+it: nothing you create on the staging server is kept across one, and every id changes — the last reset ran on
+2026-10-21, so ids cached before that date are stale.
 
 ## What changed on 2026-10-21
 
 - **Activities & Experiences, a fourth kind of destination.** `type=ACTIVITY` on `GET /search`, `/search/by-province`, `/search/cards` and `GET /popular`; `kind` ACTIVITY in `/search/suggest`; `GET /activities` and `GET /activities/{id}`; `targetType` ACTIVITY on reviews, ratings, favorites, browse events, stamps and `GET /destination-verifications/status`; `ownerType` ACTIVITY on `GET /media`. The card is the same; an activity is classed by its interests alone, like a stay. See the Activities & Experiences section. The staging seed ships five.
+- **Khmer content (R-004, declined before, now BUILT).** With the app's language on Khmer, ask `?lang=km` on `GET /search`, `/search/by-province`, `/search/suggest` and `/search/cards`: cards and suggestions come in Khmer where written, and `untranslated` names the fields still in English. Detail answers carry the Khmer beside the English: `nameKm`, `descriptionKm`, `sloganKm`, `sloganByKm`, `addressKm` on attractions, stays, food places and activities; `nameKm` (and `descriptionKm` on regions and interests) on provinces, regions, categories, tags and interests. Fall back to the English field when the Khmer one is null — Khmer is optional on the CMS side. Any search also matches Khmer names and addresses, whatever the `lang`.
+- **The staging catalogue was reseeded on 2026-10-21** (for the activities and the Khmer text): every id changed again — clear caches and saved test data first.
 
 ## What changed on 2026-10-20
 
-- **Check-in by QR code.** `POST /stamps` now takes `{code, latitude, longitude}`; `destinationId` is gone. The code is what the QR posted on site encodes: a link like `https://api.travel.ams.com.kh/api/v1/stamps/scan/ABCD-EFGH-JKLM`; send the whole scanned text or just its last part. Both the code and the position are checked; a new `outcome` INVALID_CODE says the code is unknown, withdrawn or replaced. One stamp per place per season (was per day). A stamp carries `targetType` (DESTINATION, STAY, FOOD) and `source` QR.
+- **Check-in by QR code.** `POST /stamps` now takes `{code, latitude, longitude}`; `destinationId` is gone. The code is what the QR posted on site encodes: a link like `https://api.travel.ams.com.kh/api/v1/stamps/scan/ABCD-EFGH-JKLM`; send the whole scanned text or just its last part. Both the code and the position are checked; a new `outcome` INVALID_CODE says the code is unknown, withdrawn or retired. One stamp per place per season (was per day). A stamp carries `targetType` (DESTINATION, STAY, FOOD) and `source` QR.
+- **The scanned code names the place, not the screen.** A place may post several codes at once (the gate, a brochure), and any scan button may scan any place's code. Show the check-in result for the place the RESPONSE names (`targetType`, `destinationId`), never for the screen the scanner was opened from: scanning place A's code from place B's page checks in at A.
 - **Every kind is a destination.** Stays and food places (and, since 2026-10-21, activities) are stamped (their own codes), browsed for the Browser badge (`PUT /badges/me/explorations/{id}` takes any kind's id) and viewed (`viewCount` on `GET /stays/{id}`, `GET /foods/{id}` and `GET /activities/{id}`) exactly like attractions.
 - **The Explorer (POINTS) ladder is retired.** `GET /badges` and `GET /badges/me/progress` answer three ladders. Points stay as season totals (`GET /points/me`, `GET /seasons/me/progress`).
 - **Destination Detail in the CMS** reads one place's standing by id: `GET /admin/destination-stats/{id}` (staff only; not for the app).

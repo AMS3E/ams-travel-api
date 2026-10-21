@@ -29,16 +29,19 @@ public interface StampService {
 
     // Check-in codes: what the CMS prints and posts on site.
 
-    /** A place's codes, the current one first; empty when none was issued. */
+    /** A place's codes with their check-in counts, the active ones first; empty when none was issued. */
     List<StampCodeResponse> findCodes(StampTarget targetType, UUID targetId);
 
-    /** Issues a place's code, replacing the current one; the place must exist. */
+    /** Issues a place's code beside the ones already posted, which keep working; the place must exist. */
     StampCodeResponse issueCode(StampCodeRequest request, UUID issuedBy);
 
-    /** Withdraws a code for good, printed by mistake or never posted. */
+    /** Retires a print deliberately: it stops scanning while the place's other codes keep going. */
+    StampCodeResponse retireCode(UUID codeId, UUID retiredBy);
+
+    /** Deletes a code issued by mistake and never posted; 409 once it has collected check-ins. */
     void withdrawCode(UUID codeId);
 
-    /** The name of the place a current code belongs to, for the scan page; empty when the code is not current. */
+    /** The name of the place an active code belongs to, for the scan page; empty when the code is retired or unknown. */
     Optional<String> placeNameOf(String code);
 
     // For other services.

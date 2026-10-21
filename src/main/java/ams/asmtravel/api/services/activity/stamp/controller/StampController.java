@@ -54,19 +54,26 @@ public class StampController {
         return stampService.findMine(userService.requireUserId(authentication));
     }
 
-    /** A place's codes, current first: {@code ?targetType=DESTINATION|STAY|FOOD|ACTIVITY&targetId=}. */
+    /** A place's codes with their check-in counts, active first: {@code ?targetType=DESTINATION|STAY|FOOD|ACTIVITY&targetId=}. */
     @GetMapping("/codes")
     public List<StampCodeResponse> getCodes(@RequestParam StampTarget targetType, @RequestParam UUID targetId) {
         return stampService.findCodes(targetType, targetId);
     }
 
-    /** Issues a place's code; the current one, if any, stops working. */
+    /** Issues a place's code beside the ones already posted, which keep working. */
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/codes")
     public StampCodeResponse issueCode(Authentication authentication, @Valid @RequestBody StampCodeRequest request) {
         return stampService.issueCode(request, userService.requireUserId(authentication));
     }
 
+    /** Retires a print deliberately: it stops scanning while the place's other codes keep going. */
+    @PostMapping("/codes/{id}/retire")
+    public StampCodeResponse retireCode(Authentication authentication, @PathVariable UUID id) {
+        return stampService.retireCode(id, userService.requireUserId(authentication));
+    }
+
+    /** Deletes a code issued by mistake and never posted; 409 once it has collected check-ins (retire it instead). */
     @DeleteMapping("/codes/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void withdrawCode(@PathVariable UUID id) {

@@ -72,6 +72,7 @@ class AccessRuleMatrixTests {
             "GET, /api/v1/destination-verifications/queue", "GET, /api/v1/admin/audit", "GET, /api/v1/admin/overview", "GET, /api/v1/admin/destination-stats", "GET, /api/v1/admin/destination-stats/" + ID,
             "GET, /api/v1/destinations/workspace", "POST, /api/v1/seasons", "POST, /api/v1/badges",
             "GET, /api/v1/stamps/codes?targetType=STAY&targetId=" + ID, "POST, /api/v1/stamps/codes", "DELETE, /api/v1/stamps/codes/" + ID,
+            "POST, /api/v1/stamps/codes/" + ID + "/retire",
             "POST, /api/v1/historical-coverage/periods",
             "POST, /api/v1/historical-coverage/monarchs", "POST, /api/v1/destination-histories", "PUT, /api/v1/destination-monarchs/" + ID,
             "PUT, /api/v1/corridor-destinations/" + ID, "PUT, /api/v1/corridors/" + ID + "/itinerary",

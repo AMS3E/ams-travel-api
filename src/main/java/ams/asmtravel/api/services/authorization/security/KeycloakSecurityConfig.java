@@ -303,9 +303,9 @@ public class KeycloakSecurityConfig {
                 .requestMatchers("/api/v1/staff", "/api/v1/staff/**")
                         .hasAnyAuthority(Permissions.USER_MANAGE, Permissions.FULL_CONTROL)
 
-                /* Check-in codes: the editorial desks issue and withdraw them; a printed code's page is public. */
+                /* Check-in codes: the editorial desks issue, retire and withdraw them; a printed code's page is public. */
                 .requestMatchers(HttpMethod.GET, "/api/v1/stamps/scan/*").permitAll()
-                .requestMatchers("/api/v1/stamps/codes", "/api/v1/stamps/codes/*")
+                .requestMatchers("/api/v1/stamps/codes", "/api/v1/stamps/codes/**")
                         .hasAnyAuthority(Permissions.FULL_CONTROL, Permissions.DESTINATION_EDIT_ANY)
                 /* Stamps (check-ins): signed-in users. */
                 .requestMatchers("/api/v1/stamps", "/api/v1/stamps/**").authenticated()
