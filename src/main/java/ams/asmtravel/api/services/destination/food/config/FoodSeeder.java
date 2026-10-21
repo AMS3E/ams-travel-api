@@ -59,6 +59,11 @@ public class FoodSeeder implements CatalogSeedContributor {
             food.setDescription(SeedJson.text(node, "description"));
             food.setSlogan(SeedJson.text(node, "slogan"));
             food.setSloganBy(SeedJson.text(node, "sloganBy"));
+            food.setNameKm(SeedJson.text(node, "nameKm"));
+            food.setDescriptionKm(SeedJson.text(node, "descriptionKm"));
+            food.setSloganKm(SeedJson.text(node, "sloganKm"));
+            food.setSloganByKm(SeedJson.text(node, "sloganByKm"));
+            food.setAddressKm(SeedJson.text(node, "addressKm"));
             food.setAddress(SeedJson.text(node, "address"));
             food.setProvince(context.require(Province.class, SeedJson.text(node, "provinceSlug"), "province"));
             food.setLatitude(SeedJson.money(node, "latitude"));
