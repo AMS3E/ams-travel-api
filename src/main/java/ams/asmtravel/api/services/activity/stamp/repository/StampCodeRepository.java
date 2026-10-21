@@ -12,8 +12,6 @@ public interface StampCodeRepository extends JpaRepository<StampCode, UUID> {
 
     Optional<StampCode> findByCode(String code);
 
-    /** A place's codes, the current one first. */
+    /** A place's codes, newest first; the service puts the active ones on top. */
     List<StampCode> findByTargetTypeAndTargetIdOrderByIssuedAtDesc(StampTarget targetType, UUID targetId);
-
-    Optional<StampCode> findByTargetTypeAndTargetIdAndReplacedAtIsNull(StampTarget targetType, UUID targetId);
 }

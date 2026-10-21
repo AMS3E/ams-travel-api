@@ -17,9 +17,10 @@ import java.time.Instant;
 import java.util.UUID;
 
 /**
- * The code posted at a destination for check-ins, printed as a QR by the CMS.
- * One is current per place; issuing another replaces it, so a leaked print
- * stops working without touching the app.
+ * A code posted at a destination for check-ins, printed as a QR by the CMS. A place
+ * may hold several active prints at once (the gate, a brochure, a partner's desk),
+ * told apart by their labels; a code stops working only when deliberately retired,
+ * so a leaked print is retired alone and the others keep going.
  */
 @Entity
 @NoArgsConstructor
@@ -42,6 +43,10 @@ public class StampCode {
     @Column(nullable = false, length = 32, unique = true)
     private String code;
 
+    /** Where this print is posted, so staff can tell prints apart; null when not said. */
+    @Column(length = 80)
+    private String label;
+
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private Instant issuedAt;
@@ -49,17 +54,26 @@ public class StampCode {
     /** The staff account that issued it; null for one issued by the system. */
     private UUID issuedBy;
 
-    /** When a newer code took its place; null while current. */
-    private Instant replacedAt;
+    /** When it was deliberately retired; null while the code works. */
+    private Instant retiredAt;
 
-    public StampCode(StampTarget targetType, UUID targetId, String code, UUID issuedBy) {
+    /** The staff account that retired it; null while active. */
+    private UUID retiredBy;
+
+    public StampCode(StampTarget targetType, UUID targetId, String code, String label, UUID issuedBy) {
         this.targetType = targetType;
         this.targetId = targetId;
         this.code = code;
+        this.label = label;
         this.issuedBy = issuedBy;
     }
 
-    public boolean current() {
-        return replacedAt == null;
+    public boolean active() {
+        return retiredAt == null;
+    }
+
+    public void retire(UUID by) {
+        this.retiredAt = Instant.now();
+        this.retiredBy = by;
     }
 }

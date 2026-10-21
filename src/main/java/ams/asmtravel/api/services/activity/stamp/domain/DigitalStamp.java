@@ -47,9 +47,13 @@ public class DigitalStamp {
     @Column(nullable = false, length = 50)
     private StampSource source = StampSource.QR;
 
-    public DigitalStamp(UUID userId, StampTarget targetType, UUID destinationId) {
+    /** The code that was scanned, so the CMS counts check-ins per print; null for stamps older than the codes. */
+    private UUID codeId;
+
+    public DigitalStamp(UUID userId, StampTarget targetType, UUID destinationId, UUID codeId) {
         this.userId = userId;
         this.targetType = targetType;
         this.destinationId = destinationId;
+        this.codeId = codeId;
     }
 }
