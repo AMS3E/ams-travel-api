@@ -88,7 +88,7 @@ public interface SearchMapper {
 
     /**
      * The card in Khmer: each word swapped where a Khmer one is written, the rest left in English and named in
-     * {@code untranslated}. Corridors have no Khmer text of their own yet.
+     * {@code untranslated}. A corridor's stop names stay English and say so.
      */
     default SearchHitResponse inKhmer(SearchHitResponse hit, String nameKm, String summaryKm, KhmerNames names) {
         List<String> untranslated = new ArrayList<>();

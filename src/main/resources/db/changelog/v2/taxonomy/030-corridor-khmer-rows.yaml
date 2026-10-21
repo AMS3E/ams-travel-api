@@ -1,0 +1,37 @@
+# The Khmer of the five seeded corridors, written in-house on 2026-10-22.
+# Fills only empty Khmer columns, so text an editor wrote is never overwritten.
+databaseChangeLog:
+  - changeSet:
+      id: v2-corridor-khmer-rows
+      author: ams-travel-v2
+      dbms: postgresql
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              UPDATE taxonomy.corridors c SET name_km = v.km FROM (VALUES
+                ('khmer-civilization-trail', E'អារ្យធម៌ខ្មែរ'),
+                ('mekong-civilization', E'អារ្យធម៌មេគង្គ'),
+                ('coastal-paradise-route', E'ស្វែងយល់តំបន់ឆ្នេរ'),
+                ('cardamom-peaks-explorer', E'ដំណើរផ្សងព្រេងលើភ្នំ'),
+                ('khmer-culinary', E'ម្ហូបអាហារខ្មែរ')
+              ) AS v (slug, km)
+              WHERE v.slug = c.slug AND c.name_km IS NULL;
+
+              UPDATE taxonomy.corridors c SET short_description_km = v.km FROM (VALUES
+                ('khmer-civilization-trail', E'រាជធានីបុរាណតាមលំដាប់ ពីអង្គររហូតដល់ទីប្រសព្វទន្លេចតុមុខ។'),
+                ('mekong-civilization', E'ភូមិបណ្តែតទឹក កោះសូត្រ ផ្សោតទន្លេ និងផ្លូវទេសចរណ៍សហគមន៍តាមដងទន្លេ។'),
+                ('coastal-paradise-route', E'ស្រុកម្រេច ផ្សារក្តាម និងកោះនានាក្នុងឈូងសមុទ្រ ក្នុងដំណើរឆ្នេរតែមួយ។'),
+                ('cardamom-peaks-explorer', E'ពីរាជធានីចូលទៅព្រៃក្រវាញ បញ្ចប់នៅខ្ពង់រាបបូកគោ។'),
+                ('khmer-culinary', E'ចម្អិន ភ្លក្ស និងទិញទំនិញ ពីសៀមរាបដល់ឆ្នេរម្រេច។')
+              ) AS v (slug, km)
+              WHERE v.slug = c.slug AND c.short_description_km IS NULL;
+
+              UPDATE taxonomy.corridors c SET description_km = v.km FROM (VALUES
+                ('khmer-civilization-trail', E'រាជធានីបុរាណតាមលំដាប់ ពីអង្គររហូតដល់ទីប្រសព្វទន្លេចតុមុខ។'),
+                ('mekong-civilization', E'ជីវិតនៅលើទឹក ពីទន្លេសាបទៅទន្លេមេគង្គ — ភូមិបណ្តែតទឹក កោះសូត្រ ផ្សោតទន្លេ និងផ្លូវទេសចរណ៍សហគមន៍តាមដងទន្លេ។'),
+                ('coastal-paradise-route', E'ស្រុកម្រេច ផ្សារក្តាម និងកោះនានាក្នុងឈូងសមុទ្រ ក្នុងដំណើរឆ្នេរតែមួយ។'),
+                ('cardamom-peaks-explorer', E'ពីរាជធានីចូលទៅព្រៃក្រវាញ បញ្ចប់នៅខ្ពង់រាបបូកគោ។'),
+                ('khmer-culinary', E'ចម្អិន ភ្លក្ស និងទិញទំនិញ ពីសៀមរាបដល់ឆ្នេរម្រេច — ថ្នាក់រៀនធ្វើម្ហូប ផ្សារនំបញ្ចុក ផ្ទះបាយភ្នំពេញ ស្ករត្នោត ម្រេចកំពត និងផ្សារក្តាមកែប។')
+              ) AS v (slug, km)
+              WHERE v.slug = c.slug AND c.description_km IS NULL;

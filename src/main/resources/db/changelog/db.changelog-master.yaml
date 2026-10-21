@@ -120,3 +120,6 @@ databaseChangeLog:
   - include: { file: v2/taxonomy/027-khmer-text-fixes.yaml, relativeToChangelogFile: true }
   - include: { file: v2/destination/034-stay-food-khmer-text-rows.yaml, relativeToChangelogFile: true }
   - include: { file: v2/destination/035-activities.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/taxonomy/028-corridor-expectations.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/taxonomy/029-corridor-khmer.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/taxonomy/030-corridor-khmer-rows.yaml, relativeToChangelogFile: true }
