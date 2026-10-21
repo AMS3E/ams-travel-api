@@ -5,5 +5,6 @@ public enum SearchType {
     DESTINATION,
     STAY,
     FOOD,
+    ACTIVITY,
     CORRIDOR
 }

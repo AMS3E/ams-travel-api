@@ -9,6 +9,7 @@ public enum MediaType {
     DESTINATION,
     STAY,
     FOOD,
+    ACTIVITY,
     CORRIDOR,
     REGION,
     PROVINCE,
@@ -34,6 +35,6 @@ public enum MediaType {
 
     /** Has a gallery at /api/v1/media; review photos come with their review. */
     public boolean hasGallery() {
-        return this == DESTINATION || this == STAY || this == FOOD || this == CORRIDOR;
+        return this == DESTINATION || this == STAY || this == FOOD || this == ACTIVITY || this == CORRIDOR;
     }
 }

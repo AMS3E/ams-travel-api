@@ -19,6 +19,7 @@ import ams.asmtravel.api.services.badge.service.BadgeService;
 import ams.asmtravel.api.services.destination.destination.domain.ListingStatus;
 import ams.asmtravel.api.services.destination.destination.exception.DestinationNotFoundException;
 import ams.asmtravel.api.services.destination.destination.service.DestinationService;
+import ams.asmtravel.api.services.destination.activity.service.ActivityService;
 import ams.asmtravel.api.services.destination.food.dto.response.FoodResponse;
 import ams.asmtravel.api.services.destination.food.service.FoodService;
 import ams.asmtravel.api.services.destination.stay.dto.response.StayResponse;
@@ -63,6 +64,7 @@ public class StampServiceImpl implements StampService {
     private final DestinationService destinationService;
     private final StayService stayService;
     private final FoodService foodService;
+    private final ActivityService activityService;
     private final SeasonService seasonService;
     private final BadgeService badgeService;
     private final StampProperties properties;
@@ -211,6 +213,9 @@ public class StampServiceImpl implements StampService {
                     stay.name(), stay.status() == ListingStatus.PUBLISHED, stay.latitude(), stay.longitude())) : Optional.empty();
             case FOOD -> foodService.exists(id) ? Optional.of(foodService.findById(id)).map(food -> new Place(type, food.id(),
                     food.name(), food.status() == ListingStatus.PUBLISHED, food.latitude(), food.longitude())) : Optional.empty();
+            case ACTIVITY -> activityService.exists(id) ? Optional.of(activityService.findById(id)).map(activity -> new Place(type,
+                    activity.id(), activity.name(), activity.status() == ListingStatus.PUBLISHED, activity.latitude(), activity.longitude()))
+                    : Optional.empty();
         };
     }
 

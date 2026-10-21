@@ -8,6 +8,7 @@ import ams.asmtravel.api.services.admin.domain.CatalogSeedContributor;
 import ams.asmtravel.api.services.admin.domain.SeedJson;
 import ams.asmtravel.api.services.corridor.domain.Corridor;
 import ams.asmtravel.api.services.destination.destination.domain.Destination;
+import ams.asmtravel.api.services.destination.activity.domain.Activity;
 import ams.asmtravel.api.services.destination.food.domain.Food;
 import ams.asmtravel.api.services.destination.stay.domain.Stay;
 import ams.asmtravel.api.services.user.user.domain.User;
@@ -99,6 +100,10 @@ public class BrowseSeeder implements CatalogSeedContributor {
             case FOOD -> {
                 Food food = context.find(Food.class, slug);
                 yield food == null ? null : food.getId();
+            }
+            case ACTIVITY -> {
+                Activity activity = context.find(Activity.class, slug);
+                yield activity == null ? null : activity.getId();
             }
             case CORRIDOR -> {
                 Corridor corridor = context.find(Corridor.class, slug);

@@ -543,5 +543,30 @@
     "targetType": "CORRIDOR",
     "target": "khmer-culinary",
     "popularity": 3
+  },
+  {
+    "targetType": "ACTIVITY",
+    "target": "koh-rong-sanloem-reef-dive",
+    "popularity": 4
+  },
+  {
+    "targetType": "ACTIVITY",
+    "target": "kampong-phluk-flooded-forest-kayak",
+    "popularity": 5
+  },
+  {
+    "targetType": "ACTIVITY",
+    "target": "prek-toal-bird-safari",
+    "popularity": 3
+  },
+  {
+    "targetType": "ACTIVITY",
+    "target": "mondulkiri-jungle-trek-bou-sra",
+    "popularity": 3
+  },
+  {
+    "targetType": "ACTIVITY",
+    "target": "kampi-dolphin-sunset-cruise",
+    "popularity": 4
   }
 ]

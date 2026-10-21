@@ -4,5 +4,6 @@ package ams.asmtravel.api.services.admin.domain;
 public enum PlaceType {
     DESTINATION,
     STAY,
-    FOOD
+    FOOD,
+    ACTIVITY
 }

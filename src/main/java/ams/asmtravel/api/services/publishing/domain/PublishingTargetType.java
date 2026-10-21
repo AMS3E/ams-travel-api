@@ -4,5 +4,6 @@ package ams.asmtravel.api.services.publishing.domain;
 public enum PublishingTargetType {
     DESTINATION,
     STAY,
-    FOOD
+    FOOD,
+    ACTIVITY
 }

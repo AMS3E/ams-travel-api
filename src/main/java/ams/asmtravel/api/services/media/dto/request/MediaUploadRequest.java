@@ -12,7 +12,7 @@ import java.util.UUID;
  * New gallery photos: each file sent is stored and becomes one photo;
  * without files, {@code mediaKey} names an earlier upload.
  *
- * @param ownerType DESTINATION, STAY or FOOD
+ * @param ownerType DESTINATION, STAY, FOOD, ACTIVITY or CORRIDOR
  * @param sortOrder the first photo's place; null puts them after the last one
  * @param isCover   true makes the first photo the owner's only cover
  */

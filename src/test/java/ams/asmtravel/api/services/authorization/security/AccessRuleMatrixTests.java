@@ -35,7 +35,7 @@ class AccessRuleMatrixTests {
             "/api/v1/destinations", "/api/v1/regions", "/api/v1/provinces", "/api/v1/categories", "/api/v1/tags",
             "/api/v1/interests", "/api/v1/corridors", "/api/v1/corridors/" + ID + "/itinerary",
             "/api/v1/corridor-destinations", "/api/v1/stays", "/api/v1/stay-rooms",
-            "/api/v1/foods", "/api/v1/media?ownerType=FOOD", "/api/v1/media?ownerType=DESTINATION", "/api/v1/popular",
+            "/api/v1/foods", "/api/v1/activities", "/api/v1/media?ownerType=FOOD", "/api/v1/media?ownerType=ACTIVITY", "/api/v1/media?ownerType=DESTINATION", "/api/v1/popular",
             "/api/v1/recommendations/for-you", "/api/v1/seasons", "/api/v1/seasons/current",
             "/api/v1/badges", "/api/v1/badges/" + ID,
             "/api/v1/badges/shared/" + ID, "/api/v1/destination-verifications/status",
@@ -79,7 +79,7 @@ class AccessRuleMatrixTests {
             "POST, /api/v1/corridors", "POST, /api/v1/destination-verifications",
             "DELETE, /api/v1/admin/audit", "POST, /api/v1/regions", "GET, /api/v1/media/files/verification/" + ID + "/a.jpg",
             "GET, /api/v1/identities", "GET, /api/v1/user-roles", "GET, /api/v1/roles", "GET, /api/v1/staff",
-            "GET, /api/v1/reviews", "POST, /api/v1/stay-rooms", "PUT, /api/v1/stay-rooms/" + ID
+            "GET, /api/v1/reviews", "POST, /api/v1/stay-rooms", "PUT, /api/v1/stay-rooms/" + ID, "POST, /api/v1/activities", "DELETE, /api/v1/activities/" + ID
     })
     void aVisitorIsTurnedAway(String method, String path) throws Exception {
         assertThat(status(HttpMethod.valueOf(method), path, true)).isEqualTo(403);

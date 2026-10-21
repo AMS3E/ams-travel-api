@@ -118,3 +118,4 @@ databaseChangeLog:
   - include: { file: v2/destination/033-khmer-text-fixes.yaml, relativeToChangelogFile: true }
   - include: { file: v2/taxonomy/027-khmer-text-fixes.yaml, relativeToChangelogFile: true }
   - include: { file: v2/destination/034-stay-food-khmer-text-rows.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/destination/035-activities.yaml, relativeToChangelogFile: true }

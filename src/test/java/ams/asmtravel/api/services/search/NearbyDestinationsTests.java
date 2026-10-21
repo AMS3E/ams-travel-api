@@ -6,6 +6,7 @@ import ams.asmtravel.api.services.destination.destination.domain.ListingStatus;
 import ams.asmtravel.api.services.destination.destination.domain.NearbyDestination;
 import ams.asmtravel.api.services.destination.destination.dto.response.DestinationResponse;
 import ams.asmtravel.api.services.destination.destination.service.DestinationService;
+import ams.asmtravel.api.services.destination.activity.service.ActivityService;
 import ams.asmtravel.api.services.destination.food.service.FoodService;
 import ams.asmtravel.api.services.destination.stay.service.StayService;
 import ams.asmtravel.api.services.location.province.service.ProvinceService;
@@ -50,7 +51,7 @@ class NearbyDestinationsTests {
 
     @BeforeEach
     void setUp() {
-        search = new SearchServiceImpl(destinations, mock(StayService.class), mock(FoodService.class), mock(CorridorService.class),
+        search = new SearchServiceImpl(destinations, mock(StayService.class), mock(FoodService.class), mock(ActivityService.class), mock(CorridorService.class),
                 mock(RegionService.class), mock(ProvinceService.class), mock(ReviewService.class), mock(VerificationService.class),
                 mock(NameLookupRepository.class), new SearchMapper() { });
         centre = UUID.randomUUID();

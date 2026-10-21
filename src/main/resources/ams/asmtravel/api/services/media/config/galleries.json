@@ -2560,5 +2560,95 @@
         "cover": false
       }
     ]
+  },
+  {
+    "ownerType": "ACTIVITY",
+    "owner": "koh-rong-sanloem-reef-dive",
+    "media": [
+      {
+        "image": "koh-tang-3.jpg",
+        "caption": "Coral and schooling fish in clear water off the island (Photo: User: (WT-shared) Asfintesco at wts wikivoyage, Public domain)",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "koh-rong-sanloem-3.jpg",
+        "caption": "Saracen Bay's white sand curving towards the headland, where the dive boats leave from (Photo: Wikirictor, CC BY-SA 3.0)",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "ACTIVITY",
+    "owner": "kampong-phluk-flooded-forest-kayak",
+    "media": [
+      {
+        "image": "tonle-sap-floating-village-3.jpg",
+        "caption": "Paddle boats threading through the flooded forest at high water (Photo: Krzysztof Golik, CC BY-SA 4.0)",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "kampong-phluk-3.jpg",
+        "caption": "Houses on tall hardwood stilts lining the village channel (Photo: Krzysztof Golik, CC BY-SA 4.0)",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "ACTIVITY",
+    "owner": "prek-toal-bird-safari",
+    "media": [
+      {
+        "image": "prek-toal-bird-sanctuary-3.jpg",
+        "caption": "Painted storks and pelicans crowding a nesting tree (Photo: Charles J. Sharp, CC BY-SA 4.0)",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "prek-toal-bird-sanctuary-4.jpg",
+        "caption": "A small boat pushing into the flooded forest at dawn (Photo: PIERRE ANDRE LECLERCQ, CC BY-SA 4.0)",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "ACTIVITY",
+    "owner": "mondulkiri-jungle-trek-bou-sra",
+    "media": [
+      {
+        "image": "bou-sra-waterfall-3.jpg",
+        "caption": "The lower tier of Bou Sra thundering into its gorge, the end of the walk (Photo: Kiensvay, CC BY-SA 4.0)",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "bou-sra-waterfall-2.jpg",
+        "caption": "Visitors on the rocks above the upper tier, where lunch is eaten",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
+  },
+  {
+    "ownerType": "ACTIVITY",
+    "owner": "kampi-dolphin-sunset-cruise",
+    "media": [
+      {
+        "image": "kampi-dolphin-pool-3.jpg",
+        "caption": "An Irrawaddy dolphin surfacing on the calm brown river (Photo: Pierre André, CC BY-SA 4.0)",
+        "sortOrder": 1,
+        "cover": true
+      },
+      {
+        "image": "kampi-dolphin-pool-4.jpg",
+        "caption": "Wooden tourist boats waiting at the Kampi landing (Photo: Pierre André, CC BY-SA 4.0)",
+        "sortOrder": 2,
+        "cover": false
+      }
+    ]
   }
 ]

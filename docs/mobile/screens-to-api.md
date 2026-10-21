@@ -52,7 +52,7 @@ first/last name split (one Full name stays).
 | Explore by Provinces cards | `GET /provinces` (public) → `name`, `coverUrl`, `averageRating`, `reviewCount`, `placeCount`; the heart: `POST /favorites` `{targetType: PROVINCE, targetId}` | ✅ |
 | "Recommend by Traveler" on a region card | nothing: the seal is per destination | design filler |
 | Explore by Popular | `GET /popular?limit=10` (public; `type`, `regionIds`, `provinceIds`, `interestIds` optional) → `items[{type, id, browses, reason}]`, filled up to `limit` (MOST_BROWSED, then VERIFIED, TOP_RATED, CATALOGUE), then `GET /search/cards?type=&ids=` for the rows | ✅ |
-| Recording a browse (feeds Popular) | `POST /popular/events` `{targetType: DESTINATION|STAY|FOOD|CORRIDOR, targetId, eventType, sessionId}` (public, counts when signed in; `destinationId` still accepted); or `PUT /badges/me/explorations/{destinationId}` when signed in (also the Browser badge) | ✅ |
+| Recording a browse (feeds Popular) | `POST /popular/events` `{targetType: DESTINATION|STAY|FOOD|ACTIVITY|CORRIDOR, targetId, eventType, sessionId}` (public, counts when signed in; `destinationId` still accepted); or `PUT /badges/me/explorations/{destinationId}` when signed in (also the Browser badge) | ✅ |
 | Location, notification bell | device location; `GET /notifications?unreadOnly=true&limit=1` | ✅ |
 
 ## Search
@@ -60,13 +60,13 @@ first/last name split (one Full name stays).
 | Element | Endpoint | State |
 | --- | --- | --- |
 | Keyword search | `GET /search?q=angkor&page=0&size=20` (public): published places only, name order, size ≤ 100 | ✅ |
-| Kind chips (All, Stays, Food, Corridors) | `GET /search?type=DESTINATION|STAY|FOOD|CORRIDOR` | ✅ |
+| Kind chips (All, Stays, Food, Activities, Corridors) | `GET /search?type=DESTINATION|STAY|FOOD|ACTIVITY|CORRIDOR` | ✅ |
 | Filters: Tourism Regions, Provinces, Interests, Categories, Tags | `GET /search?regionIds=a,b&provinceIds=c,d&interestIds=&categoryIds=&tagIds=` (several of each; `regionId`/`provinceId` still take one; a region id may be a zone or a tourism region); the chips come from `GET /regions?kind=TOURISM`, `GET /provinces`, `GET /interests`, `GET /categories`, `GET /tags` (all public) | ✅ |
 | Only the Traveler seal holders | `GET /search?travelerRecommended=true` (destinations; the bar is 10,000 ratings at 4.5, so empty until a place reaches it: hide the panel while `content` is empty) | ✅ |
-| Typing suggestions ("Angkor Wat", "Battambang") | `GET /search/suggest?q=ang&limit=8` (public) → `kind` (DESTINATION, STAY, FOOD, CORRIDOR, PROVINCE, REGION), `id`, `name`, `slug`; names starting with the text first | ✅ |
+| Typing suggestions ("Angkor Wat", "Battambang") | `GET /search/suggest?q=ang&limit=8` (public) → `kind` (DESTINATION, STAY, FOOD, ACTIVITY, CORRIDOR, PROVINCE, REGION), `id`, `name`, `slug`; names starting with the text first | ✅ |
 | Recent keywords | on the device | ✅ |
 | Explore by Nearby | `GET /destinations/nearby?latitude=&longitude=&radiusKm=25&limit=20` (public) → ids, then `GET /search/cards?ids=` | ✅ |
-| Around a destination, as cards | `GET /search?type=STAY|FOOD|DESTINATION|CORRIDOR&near={destinationId}` → `{content, page}` nearest first (stays and food within the Nearby radius, attractions within `radiusKm` (0.1 to 50; 25 when left out) each with `distanceMeters`, corridors stopping there) | ✅ |
+| Around a destination, as cards | `GET /search?type=STAY|FOOD|ACTIVITY|DESTINATION|CORRIDOR&near={destinationId}` → `{content, page}` nearest first (stays, food and activities within the Nearby radius, attractions within `radiusKm` (0.1 to 50; 25 when left out) each with `distanceMeters`, corridors stopping there) | ✅ |
 | Recommend Corridors | `GET /search?type=CORRIDOR` (public) | ✅ (the seal and review count on a corridor are filler until corridors have reviews) |
 
 ## Tourism Regions
@@ -98,7 +98,7 @@ first/last name split (one Full name stays).
 
 | Element | Endpoint | State |
 | --- | --- | --- |
-| Long list filtered by province chips and kind chips | `GET /popular?type=DESTINATION|STAY|FOOD|CORRIDOR&provinceIds=a,b&interestIds=&limit=50` → `items[]`, then `GET /search/cards?type=&ids=`; the kind chips are `type`, the interest chips `interestIds` | ✅ |
+| Long list filtered by province chips and kind chips | `GET /popular?type=DESTINATION|STAY|FOOD|ACTIVITY|CORRIDOR&provinceIds=a,b&interestIds=&limit=50` → `items[]`, then `GET /search/cards?type=&ids=`; the kind chips are `type`, the interest chips `interestIds` | ✅ |
 | Results state (typing) | `GET /search/suggest` and `GET /search?q=` | ✅ |
 
 ## Interests, Stays and Food
@@ -116,6 +116,18 @@ first/last name split (one Full name stays).
 | Food detail: cover, name, price range, hours (open/closed), cuisines, meals served, phone, website, slogan, description, map, nearby | `GET /foods/{id}` (public) → `priceRange`, `openingHours` (keys `mon`…`sun`; `07:00-22:00`, `closed` or no key for a shut day; a close before its open runs past midnight; `24:00` is midnight), `openNow` (boolean, null when no hours), `todayHours`, `cuisines`, `mealsServed`, `phone`, `website`, `slogan`, `description`, `latitude`, `longitude`, `averageRating`, `reviewCount` | ✅ |
 | Food near a destination | `GET /search?type=FOOD&near={destinationId}` (public) → cards, nearest first; `GET /foods?near=` still answers the full details | ✅ |
 | Menu | out of scope | skip |
+
+## Activities & Experiences (since 2026-10-21)
+
+The fourth kind of destination: something a traveller does rather than visits (a dive trip, a kayak tour, a bird safari, a trek, a cruise). It is built like an attraction and run by someone you can contact.
+
+| Element | Endpoint | State |
+| --- | --- | --- |
+| Activities list and the chips Diving, Kayak, Bird Sanctuary, Wildlife, Hiking/Trekking, Fishing, Camping, Viewpoint, Cruise, Shopping | `GET /search?type=ACTIVITY` (public; `q`, `regionIds`, `provinceIds`, `categoryIds`, `tagIds`, `interestIds`, `travelerRecommended`, `lang=km` as for any kind) → the same card, `type` ACTIVITY, with `categoryIds`, `interestIds` and `tourismRegionIds` like an attraction's; the ten chips are the interests of the "Activities & Experiences" group (`GET /interests`), so a chip is `interestIds=`. `GET /activities/{id}` answers `type` (DIVING, KAYAK, BIRD_SANCTUARY, WILDLIFE, HIKING_TREKKING, FISHING, CAMPING, VIEWPOINT, CRUISE, SHOPPING, OTHER) | ✅ |
+| Activity detail: cover, gallery, name, type, slogan, description, address, map, contact | `GET /activities/{id}` (public) → `type`, `slogan`, `sloganBy`, `description`, `address`, `latitude`, `longitude`, `phone`, `contactEmail`, `website`, `telegram`, `whatsapp`, `facebookUrl`, `provinceId`, `categoryIds`, `tagIds`, `interestIds`, `tourismRegionIds`, `viewCount`, the Khmer twins (`nameKm`, `descriptionKm`, `sloganKm`, `sloganByKm`, `addressKm`); gallery `GET /media?ownerType=ACTIVITY&ownerId=` | ✅ |
+| Activities near a destination | `GET /search?type=ACTIVITY&near={destinationId}` (public) → cards, nearest first; `GET /activities?near=` still answers the full details | ✅ |
+| Rating, reviews, the heart, check-in, the Browser badge | `GET /ratings/summary?targetType=ACTIVITY`, `GET /reviews?targetType=ACTIVITY&targetId=`, `POST /reviews` `{targetType: ACTIVITY, …}`, `POST /favorites` `{targetType: ACTIVITY, targetId}`, the QR code posted on site (`POST /stamps`), `PUT /badges/me/explorations/{id}`, `POST /popular/events` `{targetType: ACTIVITY, …}` | ✅ |
+| Price, duration, opening hours | not yet: an activity has no price, duration or hours for now | design filler |
 
 ## Provinces
 
@@ -226,10 +238,14 @@ months, browses over the last month (so Popular is real), and 12 Verified decisi
 Wikimedia Commons, credited in each gallery caption. A reset reseeds all of it: nothing you create on the staging
 server is kept across one.
 
+## What changed on 2026-10-21
+
+- **Activities & Experiences, a fourth kind of destination.** `type=ACTIVITY` on `GET /search`, `/search/by-province`, `/search/cards` and `GET /popular`; `kind` ACTIVITY in `/search/suggest`; `GET /activities` and `GET /activities/{id}`; `targetType` ACTIVITY on reviews, ratings, favorites, browse events, stamps and `GET /destination-verifications/status`; `ownerType` ACTIVITY on `GET /media`. The card is the same; an activity carries `tourismRegionIds` and `categoryIds` like an attraction. See the Activities & Experiences section. The staging seed ships five.
+
 ## What changed on 2026-10-20
 
 - **Check-in by QR code.** `POST /stamps` now takes `{code, latitude, longitude}`; `destinationId` is gone. The code is what the QR posted on site encodes: a link like `https://api.travel.ams.com.kh/api/v1/stamps/scan/ABCD-EFGH-JKLM`; send the whole scanned text or just its last part. Both the code and the position are checked; a new `outcome` INVALID_CODE says the code is unknown, withdrawn or replaced. One stamp per place per season (was per day). A stamp carries `targetType` (DESTINATION, STAY, FOOD) and `source` QR.
-- **Every kind is a destination.** Stays and food places are stamped (their own codes), browsed for the Browser badge (`PUT /badges/me/explorations/{id}` takes any kind's id) and viewed (`viewCount` on `GET /stays/{id}` and `GET /foods/{id}`) exactly like attractions.
+- **Every kind is a destination.** Stays and food places (and, since 2026-10-21, activities) are stamped (their own codes), browsed for the Browser badge (`PUT /badges/me/explorations/{id}` takes any kind's id) and viewed (`viewCount` on `GET /stays/{id}`, `GET /foods/{id}` and `GET /activities/{id}`) exactly like attractions.
 - **The Explorer (POINTS) ladder is retired.** `GET /badges` and `GET /badges/me/progress` answer three ladders. Points stay as season totals (`GET /points/me`, `GET /seasons/me/progress`).
 - **Destination Detail in the CMS** reads one place's standing by id: `GET /admin/destination-stats/{id}` (staff only; not for the app).
 - **Verified for every kind.** `verified`, `basis` and `travelerRecommended` on stay and food cards are real now (they were always false before): a stay or a food place is verified by a desk like an attraction, and its reviews earn the Traveler seal. `GET /destination-verifications/status?destinationIds=` takes any kind's id and answers `targetType`; a `travelerRecommended=true` search keeps sealed stays and food places too.

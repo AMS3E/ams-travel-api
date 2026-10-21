@@ -5,6 +5,7 @@ public enum FavoriteTarget {
     DESTINATION,
     FOOD,
     STAY,
+    ACTIVITY,
     CORRIDOR,
     REGION,
     PROVINCE

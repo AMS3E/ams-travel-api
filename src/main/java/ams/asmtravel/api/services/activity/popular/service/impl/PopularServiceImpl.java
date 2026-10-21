@@ -16,6 +16,7 @@ import ams.asmtravel.api.services.corridor.domain.CorridorStatus;
 import ams.asmtravel.api.services.corridor.service.CorridorService;
 import ams.asmtravel.api.services.destination.destination.domain.ListingStatus;
 import ams.asmtravel.api.services.destination.destination.service.DestinationService;
+import ams.asmtravel.api.services.destination.activity.service.ActivityService;
 import ams.asmtravel.api.services.destination.food.service.FoodService;
 import ams.asmtravel.api.services.destination.stay.service.StayService;
 import ams.asmtravel.api.services.location.province.domain.ProvinceSummary;
@@ -61,6 +62,7 @@ public class PopularServiceImpl implements PopularService {
     private final DestinationService destinationService;
     private final StayService stayService;
     private final FoodService foodService;
+    private final ActivityService activityService;
     private final CorridorService corridorService;
     private final RegionService regionService;
     private final ProvinceService provinceService;
@@ -70,13 +72,14 @@ public class PopularServiceImpl implements PopularService {
     private final PopularProperties properties;
 
     public PopularServiceImpl(BrowseEventRepository eventRepository, DestinationService destinationService, StayService stayService,
-                              FoodService foodService, CorridorService corridorService, RegionService regionService,
+                              FoodService foodService, ActivityService activityService, CorridorService corridorService, RegionService regionService,
                               ProvinceService provinceService, ObjectProvider<ReviewService> reviewService,
                               ObjectProvider<VerificationService> verificationService, PopularMapper mapper, PopularProperties properties) {
         this.eventRepository = eventRepository;
         this.destinationService = destinationService;
         this.stayService = stayService;
         this.foodService = foodService;
+        this.activityService = activityService;
         this.corridorService = corridorService;
         this.regionService = regionService;
         this.provinceService = provinceService;
@@ -117,6 +120,11 @@ public class PopularServiceImpl implements PopularService {
             case FOOD -> {
                 if (foodService.exists(target)) {
                     foodService.recordView(target);
+                }
+            }
+            case ACTIVITY -> {
+                if (activityService.exists(target)) {
+                    activityService.recordView(target);
                 }
             }
             case CORRIDOR -> {
@@ -225,8 +233,8 @@ public class PopularServiceImpl implements PopularService {
     @Transactional(readOnly = true)
     public long countDailyBrowses(UUID userId, Instant from, Instant to) {
         Set<String> daily = new HashSet<>();
-        // Attractions, stays and food places alike are destinations; a corridor is not.
-        List<BrowseTarget> kinds = List.of(BrowseTarget.DESTINATION, BrowseTarget.STAY, BrowseTarget.FOOD);
+        // Attractions, stays, food places and activities alike are destinations; a corridor is not.
+        List<BrowseTarget> kinds = List.of(BrowseTarget.DESTINATION, BrowseTarget.STAY, BrowseTarget.FOOD, BrowseTarget.ACTIVITY);
         for (BrowseEvent event : eventRepository.findByUserBetween(userId, kinds, from, to)) {
             daily.add(event.getTargetId() + "@" + event.getCreatedAt().atZone(properties.zone()).toLocalDate());
         }
@@ -288,6 +296,18 @@ public class PopularServiceImpl implements PopularService {
                         .filter(food -> anyOf(interestIds, food.interestIds()))
                         .sorted(Comparator.comparing(food -> food.name(), String.CASE_INSENSITIVE_ORDER))
                         .map(food -> new Candidate(food.id(), food.name(), false, null, 0))
+                        .toList();
+            }
+            case ACTIVITY -> {
+                Map<UUID, UUID> zones = zones();
+                yield activityService.getAll(null, null).stream()
+                        .filter(activity -> activity.status() == ListingStatus.PUBLISHED)
+                        /* Shelved in tourism regions like an attraction, in a zone through its province like a stay. */
+                        .filter(activity -> inRegions(regionIds, activity.provinceId(), zones) || anyOf(regionIds, activity.tourismRegionIds()))
+                        .filter(activity -> provinceIds.isEmpty() || provinceIds.contains(activity.provinceId()))
+                        .filter(activity -> anyOf(interestIds, activity.interestIds()))
+                        .sorted(Comparator.comparing(activity -> activity.name(), String.CASE_INSENSITIVE_ORDER))
+                        .map(activity -> new Candidate(activity.id(), activity.name(), false, null, 0))
                         .toList();
             }
             case CORRIDOR -> corridorService.getAll(null).stream()

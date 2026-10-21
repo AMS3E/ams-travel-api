@@ -4,6 +4,8 @@ import ams.asmtravel.api.services.destination.destination.domain.DestinationSumm
 import ams.asmtravel.api.services.destination.destination.domain.DestinationDeletingEvent;
 import ams.asmtravel.api.services.destination.destination.exception.DestinationNotFoundException;
 import ams.asmtravel.api.services.destination.destination.service.DestinationService;
+import ams.asmtravel.api.services.destination.activity.domain.ActivityDeletingEvent;
+import ams.asmtravel.api.services.destination.activity.service.ActivityService;
 import ams.asmtravel.api.services.destination.food.domain.FoodDeletingEvent;
 import ams.asmtravel.api.services.destination.food.service.FoodService;
 import ams.asmtravel.api.services.destination.stay.domain.StayDeletingEvent;
@@ -65,6 +67,7 @@ public class VerificationServiceImpl implements VerificationService {
     private final DestinationService destinationService;
     private final StayService stayService;
     private final FoodService foodService;
+    private final ActivityService activityService;
     private final UserService userService;
     private final MediaService mediaService;
     private final VerifierDesks verifierDesks;
@@ -219,6 +222,11 @@ public class VerificationServiceImpl implements VerificationService {
     }
 
     @EventListener
+    public void onActivityDeleting(ActivityDeletingEvent event) {
+        verificationRepository.deleteByTargetId(event.activityId());
+    }
+
+    @EventListener
     public void onUserDeleting(UserDeletingEvent event) {
         if (verificationRepository.existsByDecidedBy(event.userId())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT,
@@ -253,6 +261,9 @@ public class VerificationServiceImpl implements VerificationService {
         if (foodService.exists(id)) {
             return Optional.of(VerifiedPlace.of(foodService.findById(id)));
         }
+        if (activityService.exists(id)) {
+            return Optional.of(VerifiedPlace.of(activityService.findById(id)));
+        }
         return Optional.empty();
     }
 
@@ -262,6 +273,7 @@ public class VerificationServiceImpl implements VerificationService {
         destinationService.findAllSummaries().forEach(place -> places.add(VerifiedPlace.of(place)));
         stayService.getAll(null).forEach(stay -> places.add(VerifiedPlace.of(stay)));
         foodService.getAll(null, null).forEach(food -> places.add(VerifiedPlace.of(food)));
+        activityService.getAll(null, null).forEach(activity -> places.add(VerifiedPlace.of(activity)));
         return places;
     }
 
@@ -271,6 +283,7 @@ public class VerificationServiceImpl implements VerificationService {
         destinationService.findPublishedSummaries().forEach(place -> places.add(VerifiedPlace.of(place)));
         stayService.getAll(null).stream().map(VerifiedPlace::of).filter(VerifiedPlace::published).forEach(places::add);
         foodService.getAll(null, null).stream().map(VerifiedPlace::of).filter(VerifiedPlace::published).forEach(places::add);
+        activityService.getAll(null, null).stream().map(VerifiedPlace::of).filter(VerifiedPlace::published).forEach(places::add);
         return places;
     }
 
@@ -316,6 +329,7 @@ public class VerificationServiceImpl implements VerificationService {
             case DESTINATION -> ReviewTargetType.DESTINATION;
             case STAY -> ReviewTargetType.STAY;
             case FOOD -> ReviewTargetType.FOOD;
+            case ACTIVITY -> ReviewTargetType.ACTIVITY;
         };
     }
 

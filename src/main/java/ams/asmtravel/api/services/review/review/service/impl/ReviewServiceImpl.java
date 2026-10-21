@@ -6,6 +6,8 @@ import ams.asmtravel.api.services.corridor.service.CorridorService;
 import ams.asmtravel.api.services.point.service.PointService;
 import ams.asmtravel.api.services.destination.destination.domain.DestinationDeletingEvent;
 import ams.asmtravel.api.services.destination.destination.service.DestinationService;
+import ams.asmtravel.api.services.destination.activity.domain.ActivityDeletingEvent;
+import ams.asmtravel.api.services.destination.activity.service.ActivityService;
 import ams.asmtravel.api.services.destination.food.domain.FoodDeletingEvent;
 import ams.asmtravel.api.services.destination.food.service.FoodService;
 import ams.asmtravel.api.services.destination.stay.domain.StayDeletingEvent;
@@ -80,6 +82,7 @@ public class ReviewServiceImpl implements ReviewService {
     private final DestinationService destinationService;
     private final StayService stayService;
     private final FoodService foodService;
+    private final ActivityService activityService;
     private final CorridorService corridorService;
     private final UserService userService;
     private final ReviewMapper mapper;
@@ -276,6 +279,11 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @EventListener
+    public void onActivityDeleting(ActivityDeletingEvent event) {
+        removeAll(reviewRepository.findByTargetTypeAndTargetId(ReviewTargetType.ACTIVITY, event.activityId()));
+    }
+
+    @EventListener
     public void onCorridorDeleting(CorridorDeletingEvent event) {
         removeAll(reviewRepository.findByTargetTypeAndTargetId(ReviewTargetType.CORRIDOR, event.corridorId()));
     }
@@ -353,6 +361,7 @@ public class ReviewServiceImpl implements ReviewService {
             case DESTINATION -> destinationService.isPublished(targetId);
             case STAY -> stayService.isPublished(targetId);
             case FOOD -> foodService.isPublished(targetId);
+            case ACTIVITY -> activityService.isPublished(targetId);
             case CORRIDOR -> corridorService.isPublished(targetId);
         };
     }

@@ -5,6 +5,7 @@ public enum SuggestionKind {
     DESTINATION,
     STAY,
     FOOD,
+    ACTIVITY,
     CORRIDOR,
     PROVINCE,
     REGION
