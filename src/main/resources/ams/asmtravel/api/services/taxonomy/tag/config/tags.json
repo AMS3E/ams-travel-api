@@ -1,214 +1,267 @@
 [
   {
     "slug": "five-stars",
-    "name": "5 Stars"
+    "name": "5 Stars",
+    "nameKm": "ផ្កាយ៥"
   },
   {
     "slug": "architecture",
-    "name": "Architecture"
+    "name": "Architecture",
+    "nameKm": "ស្ថាបត្យកម្ម"
   },
   {
     "slug": "architecture-style",
-    "name": "Architecture Style"
+    "name": "Architecture Style",
+    "nameKm": "រចនាបថស្ថាបត្យកម្ម"
   },
   {
     "slug": "beach",
-    "name": "Beach"
+    "name": "Beach",
+    "nameKm": "ឆ្នេរខ្សាច់"
   },
   {
     "slug": "bird",
-    "name": "Bird"
+    "name": "Bird",
+    "nameKm": "សត្វស្លាប"
   },
   {
     "slug": "birding",
-    "name": "Birding"
+    "name": "Birding",
+    "nameKm": "ការមើលសត្វស្លាប"
   },
   {
     "slug": "boat",
-    "name": "Boat"
+    "name": "Boat",
+    "nameKm": "ទូក"
   },
   {
     "slug": "cafe",
-    "name": "Cafe"
+    "name": "Cafe",
+    "nameKm": "ហាងកាហ្វេ"
   },
   {
     "slug": "camping",
-    "name": "Camping"
+    "name": "Camping",
+    "nameKm": "ការបោះជំរុំ"
   },
   {
     "slug": "century",
-    "name": "Century"
+    "name": "Century",
+    "nameKm": "សតវត្ស"
   },
   {
     "slug": "community",
-    "name": "Community"
+    "name": "Community",
+    "nameKm": "សហគមន៍"
   },
   {
     "slug": "cycling",
-    "name": "Cycling"
+    "name": "Cycling",
+    "nameKm": "ការជិះកង់"
   },
   {
     "slug": "diving",
-    "name": "Diving"
+    "name": "Diving",
+    "nameKm": "ការមុជទឹក"
   },
   {
     "slug": "elephant",
-    "name": "Elephant"
+    "name": "Elephant",
+    "nameKm": "ដំរី"
   },
   {
     "slug": "exclusive",
-    "name": "Exclusive"
+    "name": "Exclusive",
+    "nameKm": "ពិសេសផ្ដាច់មុខ"
   },
   {
     "slug": "farm",
-    "name": "Farm"
+    "name": "Farm",
+    "nameKm": "កសិដ្ឋាន"
   },
   {
     "slug": "festival",
-    "name": "Festival"
+    "name": "Festival",
+    "nameKm": "ពិធីបុណ្យ"
   },
   {
     "slug": "fish-amok",
-    "name": "Fish Amok"
+    "name": "Fish Amok",
+    "nameKm": "អាម៉ុកត្រី"
   },
   {
     "slug": "fishing",
-    "name": "Fishing"
+    "name": "Fishing",
+    "nameKm": "ការនេសាទ"
   },
   {
     "slug": "food",
-    "name": "Food"
+    "name": "Food",
+    "nameKm": "អាហារ"
   },
   {
     "slug": "forest",
-    "name": "Forest"
+    "name": "Forest",
+    "nameKm": "ព្រៃឈើ"
   },
   {
     "slug": "golf-spa",
-    "name": "Golf Spa"
+    "name": "Golf Spa",
+    "nameKm": "វាយកូនហ្គោល និងស្ប៉ា"
   },
   {
     "slug": "helicopter",
-    "name": "Helicopter"
+    "name": "Helicopter",
+    "nameKm": "ឧទ្ធម្ភាគចក្រ"
   },
   {
     "slug": "hiking",
-    "name": "Hiking"
+    "name": "Hiking",
+    "nameKm": "ការដើរឡើងភ្នំ"
   },
   {
     "slug": "historical-period",
-    "name": "Historical Period"
+    "name": "Historical Period",
+    "nameKm": "សម័យកាលប្រវត្តិសាស្ត្រ"
   },
   {
     "slug": "homestay",
-    "name": "Homestay"
+    "name": "Homestay",
+    "nameKm": "ស្នាក់នៅផ្ទះអ្នកភូមិ"
   },
   {
     "slug": "island",
-    "name": "Island"
+    "name": "Island",
+    "nameKm": "កោះ"
   },
   {
     "slug": "kayak",
-    "name": "Kayak"
+    "name": "Kayak",
+    "nameKm": "កាយ៉ាក់"
   },
   {
     "slug": "khmer-curry",
-    "name": "Khmer Curry"
+    "name": "Khmer Curry",
+    "nameKm": "ការីខ្មែរ"
   },
   {
     "slug": "king",
-    "name": "King"
+    "name": "King",
+    "nameKm": "ព្រះមហាក្សត្រ"
   },
   {
     "slug": "landscape",
-    "name": "Landscape"
+    "name": "Landscape",
+    "nameKm": "ទេសភាព"
   },
   {
     "slug": "local-food",
-    "name": "Local Food"
+    "name": "Local Food",
+    "nameKm": "ម្ហូបក្នុងស្រុក"
   },
   {
     "slug": "lotus",
-    "name": "Lotus"
+    "name": "Lotus",
+    "nameKm": "ផ្កាឈូក"
   },
   {
     "slug": "luxury",
-    "name": "Luxury"
+    "name": "Luxury",
+    "nameKm": "ប្រណីត"
   },
   {
     "slug": "luxury-resort",
-    "name": "Luxury Resort"
+    "name": "Luxury Resort",
+    "nameKm": "រមណីយដ្ឋានប្រណីត"
   },
   {
     "slug": "music",
-    "name": "Music"
+    "name": "Music",
+    "nameKm": "តន្ត្រី"
   },
   {
     "slug": "nightlife",
-    "name": "Night Life"
+    "name": "Night Life",
+    "nameKm": "ជីវិតពេលរាត្រី"
   },
   {
     "slug": "num-banh-chok",
-    "name": "Num Banh Chok"
+    "name": "Num Banh Chok",
+    "nameKm": "នំបញ្ចុក"
   },
   {
     "slug": "palm-sugar",
-    "name": "Palm Sugar"
+    "name": "Palm Sugar",
+    "nameKm": "ស្ករត្នោត"
   },
   {
     "slug": "peak",
-    "name": "Peak"
+    "name": "Peak",
+    "nameKm": "កំពូលភ្នំ"
   },
   {
     "slug": "pepper-rice-wine",
-    "name": "Pepper Rice Wine"
+    "name": "Pepper Rice Wine",
+    "nameKm": "ម្រេច និងស្រាស"
   },
   {
     "slug": "private",
-    "name": "Private"
+    "name": "Private",
+    "nameKm": "ឯកជន"
   },
   {
     "slug": "religion",
-    "name": "Religion"
+    "name": "Religion",
+    "nameKm": "សាសនា"
   },
   {
     "slug": "rice",
-    "name": "Rice"
+    "name": "Rice",
+    "nameKm": "ស្រូវ"
   },
   {
     "slug": "sesan",
-    "name": "Sesan"
+    "name": "Sesan",
+    "nameKm": "សេសាន"
   },
   {
     "slug": "shopping",
-    "name": "Shopping"
+    "name": "Shopping",
+    "nameKm": "ការដើរទិញឥវ៉ាន់"
   },
   {
     "slug": "srepok",
-    "name": "Srepok"
+    "name": "Srepok",
+    "nameKm": "ស្រែពក"
   },
   {
     "slug": "sunrise",
-    "name": "Sunrise"
+    "name": "Sunrise",
+    "nameKm": "ថ្ងៃរះ"
   },
   {
     "slug": "sunset",
-    "name": "Sunset"
+    "name": "Sunset",
+    "nameKm": "ថ្ងៃលិច"
   },
   {
     "slug": "trail",
-    "name": "Trail"
+    "name": "Trail",
+    "nameKm": "ផ្លូវដើរ"
   },
   {
     "slug": "tribe",
-    "name": "Tribe"
+    "name": "Tribe",
+    "nameKm": "ជនជាតិដើមភាគតិច"
   },
   {
     "slug": "unesco",
-    "name": "UNESCO"
+    "name": "UNESCO",
+    "nameKm": "យូណេស្កូ"
   },
   {
     "slug": "wetland",
-    "name": "Wetland"
+    "name": "Wetland",
+    "nameKm": "តំបន់ដីសើម"
   }
 ]

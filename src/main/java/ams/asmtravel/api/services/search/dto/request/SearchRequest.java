@@ -3,6 +3,7 @@ package ams.asmtravel.api.services.search.dto.request;
 import ams.asmtravel.api.services.search.domain.SearchType;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 import java.util.HashSet;
@@ -24,6 +25,7 @@ import java.util.UUID;
  * @param near                a destination's id: what lies around it, nearest first, instead of A to Z. Stays and food
  *                            within the Nearby radius, attractions within 25 km, corridors stopping there
  * @param radiusKm            how far {@code near} reaches for attractions, 0.1 to 50 km; 25 when left out
+ * @param lang                {@code km} for the cards' text in Khmer where it is written; English when left out
  */
 public record SearchRequest(
         SearchType type,
@@ -37,7 +39,8 @@ public record SearchRequest(
         @Size(max = 20) Set<UUID> interestIds,
         Boolean travelerRecommended,
         UUID near,
-        @DecimalMin("0.1") @DecimalMax("50") Double radiusKm
+        @DecimalMin("0.1") @DecimalMax("50") Double radiusKm,
+        @Pattern(regexp = "^(en|km)?$", message = "Use en or km") String lang
 ) {
     public SearchType typeOrDefault() {
         return type == null ? SearchType.DESTINATION : type;
@@ -55,6 +58,10 @@ public record SearchRequest(
     /** The attraction radius asked for, else the given default. */
     public double radiusKmOr(double fallback) {
         return radiusKm == null ? fallback : radiusKm;
+    }
+
+    public boolean khmer() {
+        return "km".equals(lang);
     }
 
     public boolean sealOnly() {

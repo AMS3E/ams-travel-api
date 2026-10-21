@@ -40,6 +40,9 @@ public record RegionResponse(
         BigDecimal longitude,
         boolean centreSet,
         GeoBounds bounds,
-        Instant createdAt
+        Instant createdAt,
+        /** Khmer name and description; null until an editor writes them. */
+        String nameKm,
+        String descriptionKm
 ) {
 }

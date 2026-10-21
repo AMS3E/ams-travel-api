@@ -23,6 +23,9 @@ public record InterestRequest(
         @Size(max = 512) String iconKey,
         @MediaKey(allowEmpty = true, message = "Upload the picture first, then send its key") String coverKey,
         Boolean isActive,
-        @PositiveOrZero Integer sortOrder
+        @PositiveOrZero Integer sortOrder,
+        /** Khmer twins: null keeps what is stored, blank clears it. */
+        @Size(max = 100) String nameKm,
+        String descriptionKm
 ) {
 }

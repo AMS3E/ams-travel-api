@@ -78,6 +78,22 @@ public class Destination {
     @Column(length = 512)
     private String coverKey;
 
+    /** Khmer twins of the English text, typed by hand; null until written. */
+    @Column(length = 255)
+    private String nameKm;
+
+    @Column(columnDefinition = "text")
+    private String descriptionKm;
+
+    @Column(length = 300)
+    private String sloganKm;
+
+    @Column(length = 120)
+    private String sloganByKm;
+
+    @Column(columnDefinition = "text")
+    private String addressKm;
+
     /** Main tourism region code; drives its form and page. See {@link DestinationThemes}. */
     @Column(length = 40)
     private String theme;
@@ -138,5 +154,26 @@ public class Destination {
 
     public boolean isPublished() {
         return status == ListingStatus.PUBLISHED;
+    }
+
+    /** Filled English fields with no Khmer yet, by request name: what the dashboard marks, and what a Khmer card still shows in English. */
+    public List<String> missingKhmer() {
+        List<String> missing = new ArrayList<>();
+        if (KhmerText.lacks(name, nameKm)) {
+            missing.add("nameKm");
+        }
+        if (KhmerText.lacks(description, descriptionKm)) {
+            missing.add("descriptionKm");
+        }
+        if (KhmerText.lacks(slogan, sloganKm)) {
+            missing.add("sloganKm");
+        }
+        if (KhmerText.lacks(sloganBy, sloganByKm)) {
+            missing.add("sloganByKm");
+        }
+        if (KhmerText.lacks(address, addressKm)) {
+            missing.add("addressKm");
+        }
+        return missing;
     }
 }

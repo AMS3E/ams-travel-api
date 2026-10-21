@@ -21,8 +21,8 @@ public interface SearchService {
     List<ProvinceGroupResponse> byProvince(SearchRequest request, int perProvince);
 
     /** Up to {@code limit} names containing the text, those starting with it first. */
-    List<SuggestionResponse> suggest(String text, int limit);
+    List<SuggestionResponse> suggest(String text, int limit, boolean khmer);
 
     /** The cards of known ids, in the order asked; unknown and unpublished ids are left out. */
-    List<SearchHitResponse> cards(SearchType type, List<UUID> ids);
+    List<SearchHitResponse> cards(SearchType type, List<UUID> ids, boolean khmer);
 }

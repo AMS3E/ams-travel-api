@@ -94,6 +94,9 @@ public class TagServiceImpl implements TagService {
 
     private void apply(Tag tag, TagRequest request) {
         tag.setName(request.name().trim());
+        if (request.nameKm() != null) {
+            tag.setNameKm(request.nameKm().isBlank() ? null : request.nameKm().trim());
+        }
         tag.setDescription(request.description());
     }
 

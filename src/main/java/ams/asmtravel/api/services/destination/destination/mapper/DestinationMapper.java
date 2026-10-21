@@ -34,6 +34,7 @@ public abstract class DestinationMapper {
     @Mapping(target = "tagIds", expression = "java(ids(destination.getTags(), Tag::getId))")
     @Mapping(target = "interestIds", expression = "java(ids(destination.getInterests(), Interest::getId))")
     @Mapping(target = "tourismRegionIds", expression = "java(ids(destination.getTourismRegions(), Region::getId))")
+    @Mapping(target = "missingKhmer", expression = "java(destination.missingKhmer())")
     public abstract DestinationResponse toDestinationResponse(Destination destination);
 
     @Mapping(target = "provinceId", source = "province.id")

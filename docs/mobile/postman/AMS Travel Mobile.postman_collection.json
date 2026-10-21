@@ -1,6 +1,6 @@
 {
   "info": {
-    "_postman_id": "2a5675b9-9423-4053-ab2b-026114974519",
+    "_postman_id": "a4611e3e-93f6-4f75-99e4-7eae86c8bc19",
     "name": "AMS Travel Mobile",
     "description": "The AMS Travel API as the mobile app uses it, one folder per screen. Built by docs/mobile/postman/build-collection.py from the API's OpenAPI description on 2026-10-14. Reads marked public need no token; the rest send the traveller's bearer token from {{token}}. See docs/mobile/screens-to-api.md for what each screen needs.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -411,6 +411,12 @@
                   "value": "",
                   "disabled": true,
                   "description": ""
+                },
+                {
+                  "key": "radiusKm",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
                 }
               ]
             },
@@ -503,6 +509,12 @@
                 },
                 {
                   "key": "near",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "radiusKm",
                   "value": "",
                   "disabled": true,
                   "description": ""
@@ -601,6 +613,12 @@
                   "value": "",
                   "disabled": true,
                   "description": ""
+                },
+                {
+                  "key": "radiusKm",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
                 }
               ]
             },
@@ -635,6 +653,155 @@
                 {
                   "key": "limit",
                   "value": "8",
+                  "disabled": false,
+                  "description": ""
+                }
+              ]
+            },
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "The same in Khmer: cards in Khmer where written, `untranslated` names the rest (also on by-province, suggest, cards)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/search?type=DESTINATION&q=អង្គរ&lang=km&size=20",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "DESTINATION",
+                  "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "q",
+                  "value": "អង្គរ",
+                  "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "lang",
+                  "value": "km",
+                  "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "size",
+                  "value": "20",
+                  "disabled": false,
+                  "description": "The size of the page to be returned"
+                },
+                {
+                  "key": "regionId",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "provinceId",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "regionIds",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "provinceIds",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "categoryIds",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "tagIds",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "interestIds",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "travelerRecommended",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "near",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "radiusKm",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                }
+              ]
+            },
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Suggestions in Khmer",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/search/suggest?q=អង្គ&limit=8&lang=km",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "search",
+                "suggest"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "អង្គ",
+                  "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "limit",
+                  "value": "8",
+                  "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "lang",
+                  "value": "km",
                   "disabled": false,
                   "description": ""
                 }
@@ -871,6 +1038,12 @@
                 },
                 {
                   "key": "near",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "radiusKm",
                   "value": "",
                   "disabled": true,
                   "description": ""
@@ -1542,6 +1715,12 @@
                   "value": "",
                   "disabled": true,
                   "description": ""
+                },
+                {
+                  "key": "radiusKm",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
                 }
               ]
             },
@@ -1868,6 +2047,12 @@
                   "value": "",
                   "disabled": true,
                   "description": ""
+                },
+                {
+                  "key": "radiusKm",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
                 }
               ]
             },
@@ -2001,6 +2186,12 @@
                 },
                 {
                   "key": "near",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "radiusKm",
                   "value": "",
                   "disabled": true,
                   "description": ""
@@ -2162,6 +2353,12 @@
                   "value": "",
                   "disabled": true,
                   "description": ""
+                },
+                {
+                  "key": "radiusKm",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
                 }
               ]
             },
@@ -2257,6 +2454,12 @@
                   "value": "",
                   "disabled": true,
                   "description": ""
+                },
+                {
+                  "key": "radiusKm",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
                 }
               ]
             },
@@ -2343,6 +2546,12 @@
                 },
                 {
                   "key": "near",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "radiusKm",
                   "value": "",
                   "disabled": true,
                   "description": ""
@@ -2527,6 +2736,12 @@
                   "value": "",
                   "disabled": true,
                   "description": ""
+                },
+                {
+                  "key": "radiusKm",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
                 }
               ]
             },
@@ -2671,6 +2886,12 @@
                 },
                 {
                   "key": "near",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "radiusKm",
                   "value": "",
                   "disabled": true,
                   "description": ""

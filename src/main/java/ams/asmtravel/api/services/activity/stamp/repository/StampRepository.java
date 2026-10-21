@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public interface StampRepository extends JpaRepository<DigitalStamp, UUID> {
 
-    /** Whether this place was stamped in the window: today's, for one stamp a day. */
+    /** Whether this place was stamped in the window: the season's, for one stamp per place per season. */
     boolean existsByUserIdAndDestinationIdAndCollectedAtGreaterThanEqualAndCollectedAtLessThan(
             UUID userId, UUID destinationId, Instant from, Instant to);
 

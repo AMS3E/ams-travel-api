@@ -9,9 +9,10 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Destination verification: a desk's decision on what it rests on, or the
- * travellers' seal earned from reviews. Status is public; decisions and
- * evidence are for verifying desks.
+ * Destination verification, for attractions, stays and food places alike: a
+ * desk's decision on what it rests on, or the travellers' seal earned from
+ * reviews. Status is public; decisions and evidence are for verifying desks.
+ * A {@code destinationId} is the id of a place of any kind.
  */
 public interface VerificationService {
 

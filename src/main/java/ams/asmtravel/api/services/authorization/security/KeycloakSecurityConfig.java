@@ -100,8 +100,8 @@ public class KeycloakSecurityConfig {
                 /* Admin dashboard overview: admin and editors. */
                 .requestMatchers(HttpMethod.GET, "/api/v1/admin/overview")
                         .hasAnyAuthority(Permissions.FULL_CONTROL, Permissions.REVIEW_MODERATE)
-                /* Destination Stats: ratings, browses and the Verified standing of every place; the editorial desks. */
-                .requestMatchers(HttpMethod.GET, "/api/v1/admin/destination-stats")
+                /* Destination Stats and Destination Detail: ratings, browses and the Verified standing of every place; the editorial desks. */
+                .requestMatchers(HttpMethod.GET, "/api/v1/admin/destination-stats", "/api/v1/admin/destination-stats/*")
                         .hasAnyAuthority(Permissions.FULL_CONTROL, Permissions.DESTINATION_EDIT_ANY)
 
                 /* Amenities: what a stay offers, at the property and in the room. */
@@ -294,6 +294,10 @@ public class KeycloakSecurityConfig {
                 .requestMatchers("/api/v1/staff", "/api/v1/staff/**")
                         .hasAnyAuthority(Permissions.USER_MANAGE, Permissions.FULL_CONTROL)
 
+                /* Check-in codes: the editorial desks issue and withdraw them; a printed code's page is public. */
+                .requestMatchers(HttpMethod.GET, "/api/v1/stamps/scan/*").permitAll()
+                .requestMatchers("/api/v1/stamps/codes", "/api/v1/stamps/codes/*")
+                        .hasAnyAuthority(Permissions.FULL_CONTROL, Permissions.DESTINATION_EDIT_ANY)
                 /* Stamps (check-ins): signed-in users. */
                 .requestMatchers("/api/v1/stamps", "/api/v1/stamps/**").authenticated()
 

@@ -29,6 +29,10 @@ public class Category {
     @Column(nullable = false, length = 100)
     private String name;
 
+    /** Its Khmer name, typed by hand; null until written. */
+    @Column(length = 100)
+    private String nameKm;
+
     @Column(nullable = false, unique = true, length = 100)
     private String slug;
 

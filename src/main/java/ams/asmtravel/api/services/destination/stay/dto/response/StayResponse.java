@@ -41,6 +41,8 @@ public record StayResponse(
         BigDecimal latitude,
         BigDecimal longitude,
         ListingStatus status,
+        /** First opens of a day, signed in or not, all time. */
+        Long viewCount,
         Instant createdAt,
         Instant updatedAt,
         List<UUID> interestIds,
@@ -65,6 +67,13 @@ public record StayResponse(
         String licenseNumber,
         Integer yearOpened,
         List<String> specialties,
-        List<String> weekendNights
+        List<String> weekendNights,
+        /* Khmer twins of the English text, and those still empty while their English is filled: publishing waits on them. */
+        String nameKm,
+        String descriptionKm,
+        String sloganKm,
+        String sloganByKm,
+        String addressKm,
+        List<String> missingKhmer
 ) {
 }

@@ -53,7 +53,7 @@ class OverviewIntegrationTests {
                 .andExpect(jsonPath("$.counts.partners").value(notNullValue()))
                 .andExpect(jsonPath("$.counts.users").value(greaterThanOrEqualTo(1)))
                 .andExpect(jsonPath("$.counts.favorites").value(notNullValue()))
-                .andExpect(jsonPath("$.counts.badges").value(greaterThanOrEqualTo(12)))
+                .andExpect(jsonPath("$.counts.badges").value(greaterThanOrEqualTo(9)))
                 .andExpect(jsonPath("$.counts.reviews").value(notNullValue()))
                 .andExpect(jsonPath("$.reviews.total").value(notNullValue()))
                 .andExpect(jsonPath("$.recentReviews").isArray());

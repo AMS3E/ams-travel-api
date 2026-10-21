@@ -46,7 +46,7 @@ public interface BadgeService {
     /** One earned badge by its share link. */
     UserBadgeResponse findShared(UUID userBadgeId);
 
-    /** Records a destination opened (once per place per day) and checks the BROWSES ladder. */
+    /** Records a destination of any kind opened (once per place per day) and checks the BROWSES ladder. */
     BadgeProgressResponse explore(UUID userId, UUID destinationId);
 
     /** Badges a person unlocked since then; the stamp service shows what a stamp just earned. */

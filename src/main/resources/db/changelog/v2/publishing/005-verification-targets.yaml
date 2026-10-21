@@ -1,0 +1,17 @@
+# Verified applies to every kind of destination (2026-10-20): a decision names
+# which kind it is on, and the id column, which keeps its name, may hold a
+# stay's or a food place's id, so the key to the attractions table goes.
+databaseChangeLog:
+  - changeSet:
+      id: v2-publishing-verification-targets
+      author: ams-travel-v2
+      changes:
+        - addColumn:
+            schemaName: publishing
+            tableName: destination_verifications
+            columns:
+              - column: {name: target_type, type: varchar(20), defaultValue: DESTINATION, constraints: {nullable: false}}
+        - dropForeignKeyConstraint: {baseTableSchemaName: publishing, baseTableName: destination_verifications, constraintName: fk_destination_verifications_destination}
+      rollback:
+        - addForeignKeyConstraint: {baseTableSchemaName: publishing, baseTableName: destination_verifications, baseColumnNames: destination_id, constraintName: fk_destination_verifications_destination, referencedTableSchemaName: destination, referencedTableName: destinations, referencedColumnNames: id, onDelete: CASCADE}
+        - dropColumn: {schemaName: publishing, tableName: destination_verifications, columnName: target_type}

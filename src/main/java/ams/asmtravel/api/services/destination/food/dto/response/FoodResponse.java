@@ -44,6 +44,8 @@ public record FoodResponse(
         Boolean isLocalSpecialty,
         BigDecimal averageRating,
         Integer reviewCount,
+        /** First opens of a day, signed in or not, all time. */
+        Long viewCount,
         UUID createdBy,
         Instant publishedAt,
         Instant createdAt,
@@ -70,6 +72,13 @@ public record FoodResponse(
         String whatsapp,
         String facebookUrl,
         Integer yearOpened,
-        List<String> specialties
+        List<String> specialties,
+        /* Khmer twins of the English text, and those still empty while their English is filled: publishing waits on them. */
+        String nameKm,
+        String descriptionKm,
+        String sloganKm,
+        String sloganByKm,
+        String addressKm,
+        List<String> missingKhmer
 ) {
 }

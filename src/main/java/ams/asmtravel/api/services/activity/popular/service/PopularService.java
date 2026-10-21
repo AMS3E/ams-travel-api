@@ -15,8 +15,8 @@ public interface PopularService {
 
     void record(BrowseEventRequest request, UUID userId);
 
-    /** A signed-in visitor opened a destination; true when it is their first time today in Cambodia. */
-    boolean recordBrowse(UUID userId, UUID destinationId);
+    /** A signed-in visitor opened a destination of any kind; true when it is their first time today in Cambodia. */
+    boolean recordBrowse(UUID userId, BrowseTarget type, UUID targetId);
 
     /**
      * The Popular list of one kind (destinations when null), kept to any of the regions, provinces and
@@ -33,6 +33,9 @@ public interface PopularService {
     int windowDays();
 
     List<BrowseTotal> totalsBetween(Instant from, Instant to);
+
+    /** The same for places of one kind. */
+    List<BrowseTotal> totalsBetween(BrowseTarget type, Instant from, Instant to);
 
     ZoneId zone();
 

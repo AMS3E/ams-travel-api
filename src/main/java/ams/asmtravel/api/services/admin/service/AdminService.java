@@ -3,9 +3,11 @@ package ams.asmtravel.api.services.admin.service;
 import ams.asmtravel.api.services.admin.dto.request.OverviewRequest;
 import ams.asmtravel.api.services.admin.dto.response.DestinationStatsResponse;
 import ams.asmtravel.api.services.admin.dto.response.OverviewResponse;
+import ams.asmtravel.api.services.admin.dto.response.PlaceStatsResponse;
 import org.springframework.security.core.Authentication;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 /** The dashboards' summary tiles; the admin service owns no rows. */
 public interface AdminService {
@@ -21,4 +23,10 @@ public interface AdminService {
      * @param to   its last day, inclusive; null for up to today
      */
     DestinationStatsResponse destinationStats(LocalDate from, LocalDate to);
+
+    /**
+     * One place's standing by its id, an attraction, a stay or a food place,
+     * over the same period; 404 when no place has the id.
+     */
+    PlaceStatsResponse placeStats(UUID id, LocalDate from, LocalDate to);
 }

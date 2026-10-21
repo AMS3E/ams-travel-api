@@ -1,6 +1,9 @@
 package ams.asmtravel.api.services.admin.repository;
 
+import ams.asmtravel.api.services.activity.popular.domain.BrowseTarget;
 import ams.asmtravel.api.services.activity.popular.domain.BrowseTotal;
+import ams.asmtravel.api.services.admin.domain.PlaceSummary;
+import ams.asmtravel.api.services.admin.domain.PlaceType;
 import ams.asmtravel.api.services.activity.popular.service.PopularService;
 import ams.asmtravel.api.services.authorization.role.domain.RoleCode;
 import ams.asmtravel.api.services.destination.destination.domain.DestinationSummary;
@@ -95,9 +98,27 @@ public class OverviewRepository {
 
     /* --- Destination Stats: one read across the services that know a place's standing --- */
 
-    /** Every place in any status, by name. */
+    /** Every attraction in any status, by name. */
     public List<DestinationSummary> destinations() {
         return destinationService.findAllSummaries();
+    }
+
+    /** One place of any kind as of today, found by its id among the attractions, the stays and the food places. */
+    public Optional<PlaceSummary> place(UUID id) {
+        if (id == null) {
+            return Optional.empty();
+        }
+        Optional<PlaceSummary> attraction = destinationService.findSummary(id).map(PlaceSummary::of);
+        if (attraction.isPresent()) {
+            return attraction;
+        }
+        if (stayService.exists(id)) {
+            return Optional.of(PlaceSummary.of(stayService.findById(id)));
+        }
+        if (foodService.exists(id)) {
+            return Optional.of(PlaceSummary.of(foodService.findById(id)));
+        }
+        return Optional.empty();
     }
 
     /** The zone a day is counted in: Cambodia. */
@@ -105,10 +126,15 @@ public class OverviewRepository {
         return popularService.zone();
     }
 
-    /** Different signed-in visitors per place in a window; {@code to} exclusive. */
+    /** Different signed-in visitors per attraction in a window; {@code to} exclusive. */
     public Map<UUID, Long> browses(Instant from, Instant to) {
+        return browses(PlaceType.DESTINATION, from, to);
+    }
+
+    /** The same for every place of one kind. */
+    public Map<UUID, Long> browses(PlaceType type, Instant from, Instant to) {
         Map<UUID, Long> browses = new LinkedHashMap<>();
-        for (BrowseTotal total : popularService.totalsBetween(from, to)) {
+        for (BrowseTotal total : popularService.totalsBetween(browseTarget(type), from, to)) {
             browses.put(total.targetId(), total.browses());
         }
         return browses;
@@ -121,12 +147,18 @@ public class OverviewRepository {
      * @param from null, with {@code to} null, for all time; otherwise the window, {@code to} exclusive
      */
     public Map<UUID, ReviewSummaryResponse> reviewSummaries(List<UUID> destinationIds, Instant from, Instant to) {
+        return reviewSummaries(PlaceType.DESTINATION, destinationIds, from, to);
+    }
+
+    /** The same for places of one kind. */
+    public Map<UUID, ReviewSummaryResponse> reviewSummaries(PlaceType type, List<UUID> ids, Instant from, Instant to) {
+        ReviewTargetType target = reviewTarget(type);
         Map<UUID, ReviewSummaryResponse> summaries = new LinkedHashMap<>();
-        for (int start = 0; start < destinationIds.size(); start += 100) {
-            List<UUID> chunk = destinationIds.subList(start, Math.min(start + 100, destinationIds.size()));
+        for (int start = 0; start < ids.size(); start += 100) {
+            List<UUID> chunk = ids.subList(start, Math.min(start + 100, ids.size()));
             List<ReviewSummaryResponse> page = from == null && to == null
-                    ? reviewService.summaries(ReviewTargetType.DESTINATION, chunk)
-                    : reviewService.summariesBetween(ReviewTargetType.DESTINATION, chunk, from, to);
+                    ? reviewService.summaries(target, chunk)
+                    : reviewService.summariesBetween(target, chunk, from, to);
             page.forEach(summary -> summaries.put(summary.targetId(), summary));
         }
         return summaries;
@@ -139,5 +171,21 @@ public class OverviewRepository {
             verificationService.findStatuses(destinationIds).forEach(status -> statuses.put(status.destinationId(), status));
         }
         return statuses;
+    }
+
+    private static BrowseTarget browseTarget(PlaceType type) {
+        return switch (type) {
+            case DESTINATION -> BrowseTarget.DESTINATION;
+            case STAY -> BrowseTarget.STAY;
+            case FOOD -> BrowseTarget.FOOD;
+        };
+    }
+
+    private static ReviewTargetType reviewTarget(PlaceType type) {
+        return switch (type) {
+            case DESTINATION -> ReviewTargetType.DESTINATION;
+            case STAY -> ReviewTargetType.STAY;
+            case FOOD -> ReviewTargetType.FOOD;
+        };
     }
 }

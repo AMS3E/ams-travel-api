@@ -41,6 +41,9 @@ public record RegionRequest(
         @PositiveOrZero Integer sortOrder,
         /** Its centre on the Map screen, with {@code longitude}: both or neither; neither keeps the current one. */
         @DecimalMin("-90") @DecimalMax("90") BigDecimal latitude,
-        @DecimalMin("-180") @DecimalMax("180") BigDecimal longitude
+        @DecimalMin("-180") @DecimalMax("180") BigDecimal longitude,
+        /** Khmer twins: null keeps what is stored, blank clears it. */
+        @Size(max = 150) String nameKm,
+        String descriptionKm
 ) {
 }

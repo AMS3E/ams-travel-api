@@ -93,24 +93,49 @@ public class PopularServiceImpl implements PopularService {
         UUID target = request.resolvedTarget();
         boolean firstToday = target != null && !seenToday(type, target, userId, request.sessionId());
         eventRepository.save(mapper.toEvent(request, userId));
-        if (firstToday && type == BrowseTarget.DESTINATION && (userId != null || request.sessionId() != null)
-                && destinationService.exists(target)) {
-            destinationService.recordView(target);
+        if (firstToday && (userId != null || request.sessionId() != null)) {
+            recordView(type, target);
+        }
+    }
+
+    /** A page's first open of the day counts as a view on the place itself; a corridor keeps no count. */
+    private void recordView(BrowseTarget type, UUID target) {
+        if (type == null) {
+            return;
+        }
+        switch (type) {
+            case DESTINATION -> {
+                if (destinationService.exists(target)) {
+                    destinationService.recordView(target);
+                }
+            }
+            case STAY -> {
+                if (stayService.exists(target)) {
+                    stayService.recordView(target);
+                }
+            }
+            case FOOD -> {
+                if (foodService.exists(target)) {
+                    foodService.recordView(target);
+                }
+            }
+            case CORRIDOR -> {
+            }
         }
     }
 
     @Override
     @Transactional
-    public boolean recordBrowse(UUID userId, UUID destinationId) {
-        boolean firstToday = !seenToday(BrowseTarget.DESTINATION, destinationId, userId, null);
+    public boolean recordBrowse(UUID userId, BrowseTarget type, UUID targetId) {
+        boolean firstToday = !seenToday(type, targetId, userId, null);
         BrowseEvent event = new BrowseEvent();
         event.setUserId(userId);
-        event.setTargetType(BrowseTarget.DESTINATION);
-        event.setTargetId(destinationId);
+        event.setTargetType(type);
+        event.setTargetId(targetId);
         event.setEventType(BrowseKinds.EXPLORATION);
         eventRepository.save(event);
         if (firstToday) {
-            destinationService.recordView(destinationId);
+            recordView(type, targetId);
         }
         return firstToday;
     }
@@ -170,7 +195,13 @@ public class PopularServiceImpl implements PopularService {
     @Override
     @Transactional(readOnly = true)
     public List<BrowseTotal> totalsBetween(Instant from, Instant to) {
-        return eventRepository.totalsBetween(BrowseTarget.DESTINATION, from, to);
+        return totalsBetween(BrowseTarget.DESTINATION, from, to);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<BrowseTotal> totalsBetween(BrowseTarget type, Instant from, Instant to) {
+        return eventRepository.totalsBetween(type, from, to);
     }
 
     @Override
@@ -194,7 +225,9 @@ public class PopularServiceImpl implements PopularService {
     @Transactional(readOnly = true)
     public long countDailyBrowses(UUID userId, Instant from, Instant to) {
         Set<String> daily = new HashSet<>();
-        for (BrowseEvent event : eventRepository.findByUserBetween(userId, BrowseTarget.DESTINATION, from, to)) {
+        // Attractions, stays and food places alike are destinations; a corridor is not.
+        List<BrowseTarget> kinds = List.of(BrowseTarget.DESTINATION, BrowseTarget.STAY, BrowseTarget.FOOD);
+        for (BrowseEvent event : eventRepository.findByUserBetween(userId, kinds, from, to)) {
             daily.add(event.getTargetId() + "@" + event.getCreatedAt().atZone(properties.zone()).toLocalDate());
         }
         return daily.size();
@@ -268,14 +301,14 @@ public class PopularServiceImpl implements PopularService {
         };
     }
 
-    /** Verified places first (destinations only), then the best rated, then the rest A to Z. */
+    /** Verified places first (a corridor is never verified), then the best rated, then the rest A to Z. */
     private void fill(List<PopularItem> items, Set<UUID> taken, BrowseTarget kind, Collection<Candidate> catalogue, int size) {
         List<Candidate> left = catalogue.stream().filter(candidate -> !taken.contains(candidate.id())).toList();
         if (left.isEmpty()) {
             return;
         }
         Map<UUID, ReviewSummaryResponse> ratings = ratings(kind, left.stream().map(Candidate::id).toList());
-        Set<UUID> verified = kind == BrowseTarget.DESTINATION ? verified(left.stream().map(Candidate::id).toList()) : Set.of();
+        Set<UUID> verified = kind == BrowseTarget.CORRIDOR ? Set.of() : verified(left.stream().map(Candidate::id).toList());
         List<Candidate> ranked = left.stream()
                 .map(candidate -> candidate.rated(ratings.get(candidate.id())).markVerified(verified.contains(candidate.id())))
                 .sorted(Comparator.comparing(Candidate::verified, Comparator.reverseOrder())

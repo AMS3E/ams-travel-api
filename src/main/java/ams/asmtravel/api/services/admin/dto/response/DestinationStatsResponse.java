@@ -1,5 +1,6 @@
 package ams.asmtravel.api.services.admin.dto.response;
 
+import ams.asmtravel.api.services.admin.domain.PlaceType;
 import ams.asmtravel.api.services.destination.destination.domain.ListingStatus;
 import ams.asmtravel.api.services.verification.domain.VerificationBasis;
 
@@ -20,6 +21,7 @@ import java.util.UUID;
 public record DestinationStatsResponse(LocalDate from, LocalDate to, List<Place> places) {
 
     /**
+     * @param type                an attraction, a stay or a food place; this list holds attractions only
      * @param browses             different signed-in visitors who opened it in the period
      * @param viewCount           first opens of a day, all time, signed in or not
      * @param ratingCount         star ratings given in the period; every review carries one
@@ -31,6 +33,7 @@ public record DestinationStatsResponse(LocalDate from, LocalDate to, List<Place>
      */
     public record Place(
             UUID id,
+            PlaceType type,
             String name,
             String slug,
             UUID provinceId,

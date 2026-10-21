@@ -8,11 +8,12 @@ import java.util.UUID;
 
 /**
  * One row of a list in the app, complete: name, picture, where it is, what it is, how it is rated and
- * whether it is verified. Fields a kind does not have are null: a stay has no slug, a corridor no province
+ * whether it is verified (any kind of destination). Fields a kind does not have are null: a stay has no slug, a corridor no province
  * and no pin, only a stay or a food place has a price, only a corridor a duration.
  *
- * @param basis               OFFICIAL_SITE, PARTNER, PAID or TRAVELER_SCORE when verified; destinations only
- * @param travelerRecommended the "Recommended by Traveler" seal; destinations only
+ * @param basis               OFFICIAL_SITE, PARTNER, PAID or TRAVELER_SCORE when verified
+ * @param travelerRecommended the "Recommended by Traveler" seal
+ * @param untranslated        asked in Khmer: the fields still in English because no Khmer is written; empty otherwise
  */
 public record SearchHitResponse(
         SearchType type,
@@ -45,13 +46,23 @@ public record SearchHitResponse(
         List<String> stopNames,
         String encodedPolyline,
         /** Attractions searched {@code near} a destination: metres from it, measured on the map; null otherwise. */
-        Integer distanceMeters
+        Integer distanceMeters,
+        List<String> untranslated
 ) {
 
     /** The same card, with its distance from the place it was searched around. */
     public SearchHitResponse withDistanceMeters(Integer metres) {
         return new SearchHitResponse(type, id, name, slug, shortDescription, coverUrl, provinceId, provinceName, latitude, longitude,
                 categoryIds, categoryNames, interestIds, tourismRegionIds, averageRating, ratingCount, reviewCount, verified, basis,
-                travelerRecommended, priceFrom, currency, durationDays, openNow, todayHours, stopNames, encodedPolyline, metres);
+                travelerRecommended, priceFrom, currency, durationDays, openNow, todayHours, stopNames, encodedPolyline, metres, untranslated);
+    }
+
+    /** The same card with its words swapped for Khmer ones. */
+    public SearchHitResponse withText(String name, String shortDescription, String provinceName, List<String> categoryNames,
+                                      List<String> untranslated) {
+        return new SearchHitResponse(type, id, name, slug, shortDescription, coverUrl, provinceId, provinceName, latitude, longitude,
+                categoryIds, categoryNames, interestIds, tourismRegionIds, averageRating, ratingCount, reviewCount, verified, basis,
+                travelerRecommended, priceFrom, currency, durationDays, openNow, todayHours, stopNames, encodedPolyline, distanceMeters,
+                untranslated);
     }
 }

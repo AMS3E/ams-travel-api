@@ -1,5 +1,6 @@
 package ams.asmtravel.api.services.badge.service.impl;
 
+import ams.asmtravel.api.services.activity.popular.domain.BrowseTarget;
 import ams.asmtravel.api.services.activity.popular.service.PopularService;
 import ams.asmtravel.api.services.activity.stamp.domain.StampCollectedEvent;
 import ams.asmtravel.api.services.activity.stamp.service.StampService;
@@ -23,7 +24,8 @@ import ams.asmtravel.api.services.badge.service.BadgeService;
 import ams.asmtravel.api.services.destination.destination.domain.DestinationDeletingEvent;
 import ams.asmtravel.api.services.destination.destination.exception.DestinationNotFoundException;
 import ams.asmtravel.api.services.destination.destination.service.DestinationService;
-import ams.asmtravel.api.services.point.service.PointService;
+import ams.asmtravel.api.services.destination.food.service.FoodService;
+import ams.asmtravel.api.services.destination.stay.service.StayService;
 import ams.asmtravel.api.services.review.review.service.ReviewService;
 import ams.asmtravel.api.services.season.dto.response.SeasonResponse;
 import ams.asmtravel.api.services.season.service.SeasonService;
@@ -69,10 +71,11 @@ public class BadgeServiceImpl implements BadgeService {
     private final UserBadgeRepository userBadgeRepository;
     private final BadgeMapper mapper;
     private final SeasonService seasonService;
-    private final PointService pointService;
     private final ReviewService reviewService;
     private final PopularService popularService;
     private final DestinationService destinationService;
+    private final StayService stayService;
+    private final FoodService foodService;
     private final UserService userService;
     // A provider: the stamp service asks this one what a stamp earned.
     private final ObjectProvider<StampService> stampService;
@@ -81,8 +84,9 @@ public class BadgeServiceImpl implements BadgeService {
     private final BadgeProperties properties;
 
     public BadgeServiceImpl(BadgeRepository badgeRepository, UserBadgeRepository userBadgeRepository, BadgeMapper mapper,
-                            SeasonService seasonService, PointService pointService, ReviewService reviewService,
-                            PopularService popularService, DestinationService destinationService, UserService userService,
+                            SeasonService seasonService, ReviewService reviewService,
+                            PopularService popularService, DestinationService destinationService,
+                            StayService stayService, FoodService foodService, UserService userService,
                             ObjectProvider<StampService> stampService, ApplicationEventPublisher events,
                             PlatformTransactionManager transactionManager, BadgeProperties properties) {
         this.properties = properties;
@@ -90,10 +94,11 @@ public class BadgeServiceImpl implements BadgeService {
         this.userBadgeRepository = userBadgeRepository;
         this.mapper = mapper;
         this.seasonService = seasonService;
-        this.pointService = pointService;
         this.reviewService = reviewService;
         this.popularService = popularService;
         this.destinationService = destinationService;
+        this.stayService = stayService;
+        this.foodService = foodService;
         this.userService = userService;
         this.stampService = stampService;
         this.events = events;
@@ -190,10 +195,14 @@ public class BadgeServiceImpl implements BadgeService {
     @Override
     @Transactional
     public BadgeProgressResponse explore(UUID userId, UUID destinationId) {
-        if (!destinationService.isPublished(destinationId)) {
+        BrowseTarget kind = destinationService.isPublished(destinationId) ? BrowseTarget.DESTINATION
+                : stayService.isPublished(destinationId) ? BrowseTarget.STAY
+                : foodService.isPublished(destinationId) ? BrowseTarget.FOOD
+                : null;
+        if (kind == null) {
             throw new DestinationNotFoundException();
         }
-        boolean counted = popularService.recordBrowse(userId, destinationId);
+        boolean counted = popularService.recordBrowse(userId, kind, destinationId);
         List<UserBadgeResponse> earned = evaluate(userId, EnumSet.of(BadgeType.BROWSES));
         return respond(userId, seasonService.findCurrent().orElse(null), earned, counted);
     }
@@ -216,12 +225,6 @@ public class BadgeServiceImpl implements BadgeService {
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void onReviewPublished(ReviewService.ReviewPublishedEvent event) {
         evaluateAfterCommit(event.userId(), BadgeType.REVIEWS);
-    }
-
-    /** After the point commits, in its own transaction, so a failure never undoes the rating or review. */
-    @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    public void onPointsAwarded(PointService.PointsAwardedEvent event) {
-        evaluateAfterCommit(event.userId(), BadgeType.POINTS);
     }
 
     @EventListener
@@ -283,7 +286,6 @@ public class BadgeServiceImpl implements BadgeService {
             case BROWSES -> popularService.countDailyBrowses(userId, window.from(), window.until());
             case REVIEWS -> reviewService.countPublishedByUserBetween(userId, window.from(), window.until());
             case STAMPS -> stampService.getObject().countBetween(userId, window.from(), window.until());
-            case POINTS -> pointService.sumPoints(userId, season.startsOn(), season.endsOn());
             case DESTINATION_STAMPS -> stampService.getObject().countPlacesStamped(userId,
                     Set.copyOf(badge.getDestinationIds()), window.from(), window.until());
         };

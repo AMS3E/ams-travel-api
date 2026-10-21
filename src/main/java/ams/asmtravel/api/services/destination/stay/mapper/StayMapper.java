@@ -21,6 +21,7 @@ public abstract class StayMapper {
     @Mapping(target = "provinceId", source = "province.id")
     @Mapping(target = "coverUrl", expression = "java(mediaService.url(stay.getCoverKey()))")
     @Mapping(target = "interestIds", expression = "java(interestIds(stay))")
+    @Mapping(target = "missingKhmer", expression = "java(stay.missingKhmer())")
     public abstract StayResponse toStayResponse(Stay stay);
 
     /** Stable order so responses do not reshuffle. */

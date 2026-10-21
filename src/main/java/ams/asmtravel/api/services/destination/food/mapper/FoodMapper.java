@@ -31,6 +31,7 @@ public abstract class FoodMapper {
     @Mapping(target = "categoryIds", expression = "java(ids(food.getCategories(), Category::getId))")
     @Mapping(target = "tagIds", expression = "java(ids(food.getTags(), Tag::getId))")
     @Mapping(target = "interestIds", expression = "java(ids(food.getInterests(), Interest::getId))")
+    @Mapping(target = "missingKhmer", expression = "java(food.missingKhmer())")
     public abstract FoodResponse toFoodResponse(Food food);
 
     /** Stable order so responses do not reshuffle. */

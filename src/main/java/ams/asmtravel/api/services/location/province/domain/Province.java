@@ -34,6 +34,10 @@ public class Province {
     @Column(nullable = false, length = 150)
     private String name;
 
+    /** Its Khmer name, typed by hand; null until written. */
+    @Column(length = 150)
+    private String nameKm;
+
     /** Its address on the website: {@code siem-reap}, made from its name. */
     @Column(nullable = false, unique = true, length = 120)
     private String slug;

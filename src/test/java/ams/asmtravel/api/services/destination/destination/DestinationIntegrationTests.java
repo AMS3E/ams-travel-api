@@ -135,6 +135,48 @@ class DestinationIntegrationTests {
     }
 
     /**
+     * The Khmer is typed beside the English and kept apart from it: an edit that leaves it out keeps what is
+     * stored, a blank clears it, and {@code missingKhmer} names the English fields still without Khmer. Khmer is
+     * optional for now (2026-10-21), so publishing does not wait on it.
+     */
+    @Test
+    void theKhmerIsKeptBesideTheEnglishAndPublishingDoesNotWaitForIt() throws Exception {
+        String english = "\"name\":\"Bakong\",\"provinceId\":\"" + province.getId()
+                + "\",\"description\":\"<p>The first temple mountain.</p>\",\"address\":\"Roluos\"";
+        String id = create(editor(), "{" + english + ",\"nameKm\":\"ប្រាសាទបាគង\"}");
+
+        mvc.perform(get("/api/v1/destinations/" + id).with(editor()))
+                .andExpect(jsonPath("$.name").value("Bakong"))
+                .andExpect(jsonPath("$.nameKm").value("ប្រាសាទបាគង"))
+                .andExpect(jsonPath("$.missingKhmer", contains("descriptionKm", "addressKm")));
+        mvc.perform(patch("/api/v1/destinations/" + id + "/publish").with(owner()))
+                .andExpect(jsonPath("$.status").value("PUBLISHED"))
+                .andExpect(jsonPath("$.missingKhmer", contains("descriptionKm", "addressKm")));
+
+        // Left out, the Khmer name stands; an empty paragraph is no Khmer description.
+        mvc.perform(put("/api/v1/destinations/" + id).with(editor()).contentType(MediaType.APPLICATION_JSON)
+                        .content("{" + english + ",\"descriptionKm\":\"<p></p>\",\"addressKm\":\"រលួស\"}"))
+                .andExpect(jsonPath("$.nameKm").value("ប្រាសាទបាគង"))
+                .andExpect(jsonPath("$.descriptionKm").value(nullValue()))
+                .andExpect(jsonPath("$.missingKhmer", contains("descriptionKm")));
+        mvc.perform(put("/api/v1/destinations/" + id).with(editor()).contentType(MediaType.APPLICATION_JSON)
+                        .content("{" + english + ",\"descriptionKm\":\"<p>ភ្នំប្រាសាទដំបូង។</p>\"}"))
+                .andExpect(jsonPath("$.addressKm").value("រលួស"))
+                .andExpect(jsonPath("$.missingKhmer", hasSize(0)));
+
+        // Both languages are public, side by side; blank clears a Khmer field.
+        mvc.perform(get("/api/v1/destinations/" + id))
+                .andExpect(jsonPath("$.name").value("Bakong"))
+                .andExpect(jsonPath("$.address").value("Roluos"))
+                .andExpect(jsonPath("$.addressKm").value("រលួស"))
+                .andExpect(jsonPath("$.descriptionKm").value("<p>ភ្នំប្រាសាទដំបូង។</p>"));
+        mvc.perform(put("/api/v1/destinations/" + id).with(editor()).contentType(MediaType.APPLICATION_JSON)
+                        .content("{" + english + ",\"addressKm\":\" \"}"))
+                .andExpect(jsonPath("$.addressKm").value(nullValue()))
+                .andExpect(jsonPath("$.missingKhmer", contains("addressKm")));
+    }
+
+    /**
      * A place is shelved in the tourism regions chosen for it, not in every
      * region one of its categories happens to belong to. Its zone is where its
      * province is, and cannot be chosen.

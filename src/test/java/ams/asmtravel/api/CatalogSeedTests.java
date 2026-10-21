@@ -164,7 +164,7 @@ class CatalogSeedTests {
 
         // What the changelog ships, the test fixture replays: roles, badges and the season calendar.
         assertThat(count("auth.roles")).isEqualTo(6);
-        assertThat(count("gamification.badges")).isEqualTo(12);
+        assertThat(count("gamification.badges")).isEqualTo(9);
         assertThat(count("gamification.seasons")).isEqualTo(4);
     }
 

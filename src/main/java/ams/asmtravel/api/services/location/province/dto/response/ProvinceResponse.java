@@ -33,6 +33,8 @@ public record ProvinceResponse(
         /** Who made it; null for the ones the seed wrote. */
         UUID createdBy,
         /** When it was made: what "Newest first" sorts on. */
-        Instant createdAt
+        Instant createdAt,
+        /** Its Khmer name; null until an editor writes it. */
+        String nameKm
 ) {
 }

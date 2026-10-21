@@ -55,6 +55,11 @@ public class StaySeeder implements CatalogSeedContributor {
             stay.setDescription(SeedJson.text(node, "description"));
             stay.setSlogan(SeedJson.text(node, "slogan"));
             stay.setSloganBy(SeedJson.text(node, "sloganBy"));
+            stay.setNameKm(SeedJson.text(node, "nameKm"));
+            stay.setDescriptionKm(SeedJson.text(node, "descriptionKm"));
+            stay.setSloganKm(SeedJson.text(node, "sloganKm"));
+            stay.setSloganByKm(SeedJson.text(node, "sloganByKm"));
+            stay.setAddressKm(SeedJson.text(node, "addressKm"));
             stay.setPolicies(SeedJson.text(node, "policies"));
             stay.setPriceFrom(SeedJson.money(node, "priceFrom"));
             stay.setCurrency(SeedJson.textOr(node, "currency", "USD"));
