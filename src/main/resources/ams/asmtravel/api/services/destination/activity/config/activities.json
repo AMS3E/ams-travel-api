@@ -23,21 +23,9 @@
     "telegram": "@sanloemreefdive",
     "whatsapp": "+855 12 555 221",
     "facebookUrl": "https://facebook.com/sanloemreefdive.example",
-    "categorySlugs": [
-      "diving",
-      "coral",
-      "snorkeling"
-    ],
-    "tagSlugs": [
-      "diving",
-      "island"
-    ],
     "interestSlugs": [
       "diving",
       "beaches-islands"
-    ],
-    "tourismRegionCodes": [
-      "COASTAL-ISLAND"
     ],
     "image": "koh-tang-3.jpg",
     "popularity": 4
@@ -66,21 +54,9 @@
     "telegram": "@phlukkayak",
     "whatsapp": "+855 92 555 447",
     "facebookUrl": "https://facebook.com/phlukkayak.example",
-    "categorySlugs": [
-      "floating-village",
-      "boat-trip",
-      "sunset"
-    ],
-    "tagSlugs": [
-      "boat",
-      "wetland"
-    ],
     "interestSlugs": [
       "kayak",
       "floating-village"
-    ],
-    "tourismRegionCodes": [
-      "MEKONG-TONLE-SAP"
     ],
     "image": "tonle-sap-floating-village-3.jpg",
     "popularity": 5
@@ -109,21 +85,9 @@
     "telegram": "@prektoalsafari",
     "whatsapp": "+855 17 555 883",
     "facebookUrl": "https://facebook.com/prektoalsafari.example",
-    "categorySlugs": [
-      "bird-sanctuary",
-      "boat-trip"
-    ],
-    "tagSlugs": [
-      "bird",
-      "boat",
-      "wetland"
-    ],
     "interestSlugs": [
       "bird-sanctuary",
       "wildlife"
-    ],
-    "tourismRegionCodes": [
-      "MEKONG-TONLE-SAP"
     ],
     "image": "prek-toal-bird-sanctuary-3.jpg",
     "popularity": 3
@@ -152,22 +116,9 @@
     "telegram": "@bunongtrails",
     "whatsapp": "+855 97 555 661",
     "facebookUrl": "https://facebook.com/bunongtrails.example",
-    "categorySlugs": [
-      "trekking",
-      "waterfalls",
-      "viewpoint"
-    ],
-    "tagSlugs": [
-      "hiking",
-      "trail",
-      "landscape"
-    ],
     "interestSlugs": [
       "hiking-trekking",
       "waterfalls"
-    ],
-    "tourismRegionCodes": [
-      "MOUNTAIN-WATERFALL"
     ],
     "image": "bou-sra-waterfall-3.jpg",
     "popularity": 3
@@ -196,21 +147,9 @@
     "telegram": "@kampicruise",
     "whatsapp": "+855 10 555 339",
     "facebookUrl": "https://facebook.com/kampicruise.example",
-    "categorySlugs": [
-      "boat-trip",
-      "sunset",
-      "river-island"
-    ],
-    "tagSlugs": [
-      "boat",
-      "island"
-    ],
     "interestSlugs": [
       "cruise",
       "wildlife"
-    ],
-    "tourismRegionCodes": [
-      "MEKONG-TONLE-SAP"
     ],
     "image": "kampi-dolphin-pool-3.jpg",
     "popularity": 4

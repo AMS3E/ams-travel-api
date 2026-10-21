@@ -68,7 +68,7 @@ class ActivityIntegrationTests {
                 .andExpect(jsonPath("$.provinceId").value(province.getId().toString()))
                 .andExpect(jsonPath("$.missingKhmer", containsInAnyOrder("nameKm", "descriptionKm", "sloganKm", "sloganByKm", "addressKm"))));
 
-        // The type and the province are required; a zone is not a tourism region.
+        // The type and the province are required.
         mvc.perform(post("/api/v1/activities").with(editor()).contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"No type\",\"provinceId\":\"" + province.getId() + "\"}"))
                 .andExpect(status().isBadRequest())
@@ -77,9 +77,6 @@ class ActivityIntegrationTests {
                         .content("{\"name\":\"No province\",\"type\":\"KAYAK\"}"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.errors[*].field", hasItem("provinceId")));
-        mvc.perform(post("/api/v1/activities").with(editor()).contentType(MediaType.APPLICATION_JSON)
-                        .content(cruise(province, ",\"tourismRegionIds\":[\"" + province.getRegion().getId() + "\"]")))
-                .andExpect(status().is4xxClientError());
 
         // A draft is the back office's alone.
         mvc.perform(get("/api/v1/activities/" + id)).andExpect(status().isNotFound());

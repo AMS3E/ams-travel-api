@@ -4,10 +4,7 @@ import ams.asmtravel.api.services.destination.destination.domain.Destination;
 import ams.asmtravel.api.services.destination.destination.domain.KhmerText;
 import ams.asmtravel.api.services.destination.destination.domain.ListingStatus;
 import ams.asmtravel.api.services.location.province.domain.Province;
-import ams.asmtravel.api.services.location.region.domain.Region;
-import ams.asmtravel.api.services.taxonomy.category.domain.Category;
 import ams.asmtravel.api.services.taxonomy.interest.domain.Interest;
-import ams.asmtravel.api.services.taxonomy.tag.domain.Tag;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -39,8 +36,9 @@ import java.util.UUID;
 
 /**
  * Something a traveller does rather than visits: a dive trip, a kayak tour, a trek, a cruise. The fourth
- * kind of destination (2026-10-21), written like an attraction, with a type of its own and the contact
- * details of whoever runs it, which is why it is a partner's listing like a stay or a food place.
+ * kind of destination (2026-10-21), written like an attraction, with a type of its own (its interests, the
+ * Activities & Experiences shelf: no tourism region, category or tag, as for a stay or a food place) and the
+ * contact details of whoever runs it, which is why it is a partner's listing like a stay or a food place.
  */
 @Entity
 @NoArgsConstructor
@@ -157,29 +155,10 @@ public class Activity {
     private Destination destination;
 
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(schema = "destination", name = "destination_activity_categories",
-            joinColumns = @JoinColumn(name = "activity_id"),
-            inverseJoinColumns = @JoinColumn(name = "category_id"))
-    private Set<Category> categories = new HashSet<>();
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(schema = "destination", name = "destination_activity_tags",
-            joinColumns = @JoinColumn(name = "activity_id"),
-            inverseJoinColumns = @JoinColumn(name = "tag_id"))
-    private Set<Tag> tags = new HashSet<>();
-
-    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(schema = "destination", name = "destination_activity_interests",
             joinColumns = @JoinColumn(name = "activity_id"),
             inverseJoinColumns = @JoinColumn(name = "interest_id"))
     private Set<Interest> interests = new HashSet<>();
-
-    /** Tourism regions only; its zone comes from its province. */
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(schema = "destination", name = "destination_activity_regions",
-            joinColumns = @JoinColumn(name = "activity_id"),
-            inverseJoinColumns = @JoinColumn(name = "region_id"))
-    private Set<Region> tourismRegions = new HashSet<>();
 
     /** Filled English fields with no Khmer yet, by request name; the dashboard counts them. */
     public List<String> missingKhmer() {

@@ -25,7 +25,7 @@ import java.util.UUID;
  * @param slug             blank: made from the name on create, kept on edit
  * @param slogan           one line someone said about it, quoted on its page; sloganBy says who
  * @param provinceId       required: the zone follows from it
- * @param tourismRegionIds zones are refused
+ * @param interestIds      its type: the Activities & Experiences shelf
  * @param status           null keeps it (new is DRAFT); only an editor may set PUBLISHED
  * @param nameKm           Khmer twins of the English text: null keeps what is stored, blank clears it
  */
@@ -53,10 +53,7 @@ public record ActivityRequest(
         @MediaKey(allowEmpty = true, message = "Upload the cover first, then send its key")
         String coverKey,
         ListingStatus status,
-        Set<UUID> categoryIds,
-        Set<UUID> tagIds,
         Set<UUID> interestIds,
-        Set<UUID> tourismRegionIds,
         @Size(max = 255) String nameKm,
         String descriptionKm,
         @Size(max = 300) String sloganKm,

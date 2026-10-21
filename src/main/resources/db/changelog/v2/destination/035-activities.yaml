@@ -2,8 +2,9 @@
 # attractions, stays and food places. Something a traveller does rather than
 # visits, written like an attraction, with a type of its own (diving, kayak,
 # trekking, cruise…) and the contact details of whoever runs it. Like a stay
-# or a food place it may belong to a partner account; like an attraction it
-# sits in a province and on the tourism regions' shelves.
+# or a food place it may belong to a partner account and is classed by its
+# interests alone (no tourism region, category or tag); like an attraction it
+# sits in a province.
 databaseChangeLog:
   - changeSet:
       id: v2-destination-activities
@@ -75,26 +76,7 @@ databaseChangeLog:
         - addForeignKeyConstraint: {baseTableSchemaName: destination, baseTableName: destination_activities, baseColumnNames: owner_user_id, constraintName: fk_destination_activities_owner, referencedTableSchemaName: auth, referencedTableName: users, referencedColumnNames: id, onDelete: SET NULL}
         - addForeignKeyConstraint: {baseTableSchemaName: destination, baseTableName: destination_activities, baseColumnNames: created_by, constraintName: fk_destination_activities_created_by, referencedTableSchemaName: auth, referencedTableName: users, referencedColumnNames: id, onDelete: SET NULL}
 
-        # What it is: its categories and tags, its interests, and the tourism regions it is shelved in. A deleted
-        # activity, or a deleted category, tag, interest or region, takes its links along.
-        - createTable:
-            schemaName: destination
-            tableName: destination_activity_categories
-            columns:
-              - column: {name: activity_id, type: uuid, constraints: {nullable: false}}
-              - column: {name: category_id, type: uuid, constraints: {nullable: false}}
-        - addPrimaryKey: {schemaName: destination, tableName: destination_activity_categories, columnNames: "activity_id, category_id", constraintName: destination_activity_categories_pkey}
-        - addForeignKeyConstraint: {baseTableSchemaName: destination, baseTableName: destination_activity_categories, baseColumnNames: activity_id, constraintName: fk_destination_activity_categories_activity, referencedTableSchemaName: destination, referencedTableName: destination_activities, referencedColumnNames: id, onDelete: CASCADE}
-        - addForeignKeyConstraint: {baseTableSchemaName: destination, baseTableName: destination_activity_categories, baseColumnNames: category_id, constraintName: fk_destination_activity_categories_category, referencedTableSchemaName: taxonomy, referencedTableName: categories, referencedColumnNames: id, onDelete: CASCADE}
-        - createTable:
-            schemaName: destination
-            tableName: destination_activity_tags
-            columns:
-              - column: {name: activity_id, type: uuid, constraints: {nullable: false}}
-              - column: {name: tag_id, type: uuid, constraints: {nullable: false}}
-        - addPrimaryKey: {schemaName: destination, tableName: destination_activity_tags, columnNames: "activity_id, tag_id", constraintName: destination_activity_tags_pkey}
-        - addForeignKeyConstraint: {baseTableSchemaName: destination, baseTableName: destination_activity_tags, baseColumnNames: activity_id, constraintName: fk_destination_activity_tags_activity, referencedTableSchemaName: destination, referencedTableName: destination_activities, referencedColumnNames: id, onDelete: CASCADE}
-        - addForeignKeyConstraint: {baseTableSchemaName: destination, baseTableName: destination_activity_tags, baseColumnNames: tag_id, constraintName: fk_destination_activity_tags_tag, referencedTableSchemaName: taxonomy, referencedTableName: tags, referencedColumnNames: id, onDelete: CASCADE}
+        # What it is: its interests, the Activities & Experiences shelf. A deleted activity or interest takes its links along.
         - createTable:
             schemaName: destination
             tableName: destination_activity_interests
@@ -104,24 +86,6 @@ databaseChangeLog:
         - addPrimaryKey: {schemaName: destination, tableName: destination_activity_interests, columnNames: "activity_id, interest_id", constraintName: destination_activity_interests_pkey}
         - addForeignKeyConstraint: {baseTableSchemaName: destination, baseTableName: destination_activity_interests, baseColumnNames: activity_id, constraintName: fk_destination_activity_interests_activity, referencedTableSchemaName: destination, referencedTableName: destination_activities, referencedColumnNames: id, onDelete: CASCADE}
         - addForeignKeyConstraint: {baseTableSchemaName: destination, baseTableName: destination_activity_interests, baseColumnNames: interest_id, constraintName: fk_destination_activity_interests_interest, referencedTableSchemaName: taxonomy, referencedTableName: interests, referencedColumnNames: id, onDelete: CASCADE}
-        - createTable:
-            schemaName: destination
-            tableName: destination_activity_regions
-            columns:
-              - column: {name: activity_id, type: uuid, constraints: {nullable: false}}
-              - column: {name: region_id, type: uuid, constraints: {nullable: false}}
-        - addPrimaryKey: {schemaName: destination, tableName: destination_activity_regions, columnNames: "activity_id, region_id", constraintName: destination_activity_regions_pkey}
-        - createIndex:
-            schemaName: destination
-            tableName: destination_activity_regions
-            indexName: idx_destination_activity_regions_region
-            columns:
-              - column: {name: region_id}
-        - addForeignKeyConstraint: {baseTableSchemaName: destination, baseTableName: destination_activity_regions, baseColumnNames: activity_id, constraintName: fk_destination_activity_regions_activity, referencedTableSchemaName: destination, referencedTableName: destination_activities, referencedColumnNames: id, onDelete: CASCADE}
-        - addForeignKeyConstraint: {baseTableSchemaName: destination, baseTableName: destination_activity_regions, baseColumnNames: region_id, constraintName: fk_destination_activity_regions_region, referencedTableSchemaName: taxonomy, referencedTableName: regions, referencedColumnNames: id, onDelete: CASCADE}
       rollback:
-        - dropTable: {schemaName: destination, tableName: destination_activity_regions}
         - dropTable: {schemaName: destination, tableName: destination_activity_interests}
-        - dropTable: {schemaName: destination, tableName: destination_activity_tags}
-        - dropTable: {schemaName: destination, tableName: destination_activity_categories}
         - dropTable: {schemaName: destination, tableName: destination_activities}

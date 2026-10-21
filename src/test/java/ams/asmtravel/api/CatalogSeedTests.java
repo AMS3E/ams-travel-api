@@ -152,12 +152,10 @@ class CatalogSeedTests {
         assertThat(count("destination.destination_stay_rooms")).isEqualTo(nested(StayRoomSeeder.class, "stay-rooms.json", "rooms"));
         assertThat(count("destination.destination_foods")).isEqualTo(rows(FoodSeeder.class, "foods.json").size());
         assertThat(count("destination.destination_foods where status <> 'PUBLISHED' or cover_key is null")).isZero();
-        // Activities & Experiences (2026-10-21): five, each with its type, its contact, its Khmer and a tourism region.
+        // Activities & Experiences (2026-10-21): five, each with its type (its interests), its contact and its Khmer.
         assertThat(count("destination.destination_activities")).isEqualTo(5).isEqualTo(rows(ActivitySeeder.class, "activities.json").size());
         assertThat(count("destination.destination_activities where status <> 'PUBLISHED' or cover_key is null")).isZero();
         assertThat(count("destination.destination_activities where name_km is null or description_km is null or phone is null")).isZero();
-        assertThat(count("destination.destination_activity_regions")).isEqualTo(nested(ActivitySeeder.class, "activities.json", "tourismRegionCodes"));
-        assertThat(count("destination.destination_activity_categories")).isEqualTo(nested(ActivitySeeder.class, "activities.json", "categorySlugs"));
         assertThat(count("destination.destination_activity_interests")).isEqualTo(nested(ActivitySeeder.class, "activities.json", "interestSlugs"));
         assertThat(count("engagement.reviews where target_type = 'ACTIVITY'")).isEqualTo(10);
         assertThat(count("auth.users where email like '%" + TravellerSeeder.SEED_DOMAIN + "'"))

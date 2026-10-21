@@ -15,7 +15,7 @@ import java.util.UUID;
 
 public interface ActivityRepository extends JpaRepository<Activity, UUID> {
 
-    @EntityGraph(attributePaths = {"categories", "tags", "interests", "tourismRegions"})
+    @EntityGraph(attributePaths = {"interests"})
     List<Activity> findAllByOrderByNameAsc();
 
     /** Bulk update on purpose: a visit writes no audit row and no {@code updated_at}. */
@@ -23,22 +23,22 @@ public interface ActivityRepository extends JpaRepository<Activity, UUID> {
     @Query("update Activity x set x.viewCount = x.viewCount + 1 where x.id = :id")
     int incrementViewCount(UUID id);
 
-    @EntityGraph(attributePaths = {"categories", "tags", "interests", "tourismRegions"})
+    @EntityGraph(attributePaths = {"interests"})
     List<Activity> findByStatusOrderByNameAsc(ListingStatus status);
 
-    @EntityGraph(attributePaths = {"categories", "tags", "interests", "tourismRegions"})
+    @EntityGraph(attributePaths = {"interests"})
     List<Activity> findByDestinationIdOrderByNameAsc(UUID destinationId);
 
     /** Activities inside a lat/long box; the service measures the real distance. */
-    @EntityGraph(attributePaths = {"categories", "tags", "interests", "tourismRegions"})
+    @EntityGraph(attributePaths = {"interests"})
     List<Activity> findByStatusAndLatitudeBetweenAndLongitudeBetween(ListingStatus status,
                                                                      BigDecimal south, BigDecimal north,
                                                                      BigDecimal west, BigDecimal east);
 
-    @EntityGraph(attributePaths = {"categories", "tags", "interests", "tourismRegions"})
+    @EntityGraph(attributePaths = {"interests"})
     Optional<Activity> findWithLinksById(UUID id);
 
-    @EntityGraph(attributePaths = {"categories", "tags", "interests", "tourismRegions"})
+    @EntityGraph(attributePaths = {"interests"})
     Optional<Activity> findBySlug(String slug);
 
     boolean existsBySlug(String slug);
@@ -59,18 +59,6 @@ public interface ActivityRepository extends JpaRepository<Activity, UUID> {
     int releaseDestination(UUID destinationId);
 
     @Modifying
-    @Query(value = "DELETE FROM destination.destination_activity_categories WHERE category_id = :id", nativeQuery = true)
-    int unlinkCategory(@Param("id") UUID id);
-
-    @Modifying
-    @Query(value = "DELETE FROM destination.destination_activity_tags WHERE tag_id = :id", nativeQuery = true)
-    int unlinkTag(@Param("id") UUID id);
-
-    @Modifying
     @Query(value = "DELETE FROM destination.destination_activity_interests WHERE interest_id = :id", nativeQuery = true)
     int unlinkInterest(@Param("id") UUID id);
-
-    @Modifying
-    @Query(value = "DELETE FROM destination.destination_activity_regions WHERE region_id = :id", nativeQuery = true)
-    int unlinkRegion(@Param("id") UUID id);
 }

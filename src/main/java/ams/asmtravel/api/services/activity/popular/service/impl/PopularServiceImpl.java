@@ -302,8 +302,7 @@ public class PopularServiceImpl implements PopularService {
                 Map<UUID, UUID> zones = zones();
                 yield activityService.getAll(null, null).stream()
                         .filter(activity -> activity.status() == ListingStatus.PUBLISHED)
-                        /* Shelved in tourism regions like an attraction, in a zone through its province like a stay. */
-                        .filter(activity -> inRegions(regionIds, activity.provinceId(), zones) || anyOf(regionIds, activity.tourismRegionIds()))
+                        .filter(activity -> inRegions(regionIds, activity.provinceId(), zones))
                         .filter(activity -> provinceIds.isEmpty() || provinceIds.contains(activity.provinceId()))
                         .filter(activity -> anyOf(interestIds, activity.interestIds()))
                         .sorted(Comparator.comparing(activity -> activity.name(), String.CASE_INSENSITIVE_ORDER))

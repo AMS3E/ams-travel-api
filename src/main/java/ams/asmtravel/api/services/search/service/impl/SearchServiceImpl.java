@@ -260,7 +260,7 @@ public class SearchServiceImpl implements SearchService {
         return request.sealOnly() ? sealed(foods, FoodResponse::id) : foods;
     }
 
-    /** Activities are shelved in tourism regions like attractions, so a region filter reaches them both ways. */
+    /** An activity is classed by its interests alone, like a stay: a region filter reaches it through its province's zone. */
     private List<ActivityResponse> activities(SearchRequest request) {
         Map<UUID, UUID> zones = zones();
         Stream<ActivityResponse> kept = (request.near() != null ? activityService.getNear(request.near())
@@ -269,9 +269,7 @@ public class SearchServiceImpl implements SearchService {
                 .filter(activity -> matches(request.q(), activity.name(), activity.shortDescription(), activity.address(),
                         activity.nameKm(), activity.addressKm()))
                 .filter(activity -> inProvinces(request.provinces(), activity.provinceId()))
-                .filter(activity -> inRegions(request.regions(), activity.provinceId(), activity.tourismRegionIds(), zones))
-                .filter(activity -> anyOf(request.categoryIds(), activity.categoryIds()))
-                .filter(activity -> anyOf(request.tagIds(), activity.tagIds()))
+                .filter(activity -> inRegions(request.regions(), activity.provinceId(), List.of(), zones))
                 .filter(activity -> anyOf(request.interestIds(), activity.interestIds()));
         List<ActivityResponse> activities = request.near() != null ? kept.toList()
                 : kept.sorted(Comparator.comparing(ActivityResponse::name, String.CASE_INSENSITIVE_ORDER)).toList();
@@ -399,11 +397,10 @@ public class SearchServiceImpl implements SearchService {
         Map<UUID, ReviewSummaryResponse> reviews = reviews(ReviewTargetType.ACTIVITY, ids);
         Map<UUID, VerificationResponse> standing = standings(ids);
         Map<UUID, String> provinces = names.provinceNames();
-        Map<UUID, String> categories = names.categoryNames();
         KhmerNames words = khmer ? names.khmerNames() : null;
         return activities.stream()
                 .map(activity -> {
-                    SearchHitResponse hit = mapper.toHit(activity, provinces, categories, reviews.get(activity.id()), standing.get(activity.id()));
+                    SearchHitResponse hit = mapper.toHit(activity, provinces, reviews.get(activity.id()), standing.get(activity.id()));
                     return khmer ? mapper.inKhmer(hit, activity.nameKm(), KhmerText.excerpt(activity.descriptionKm(), SUMMARY_LENGTH), words) : hit;
                 })
                 .toList();

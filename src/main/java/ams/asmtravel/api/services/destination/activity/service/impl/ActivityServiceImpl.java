@@ -18,14 +18,8 @@ import ams.asmtravel.api.services.destination.destination.domain.Slugs;
 import ams.asmtravel.api.services.destination.destination.service.DestinationService;
 import ams.asmtravel.api.services.location.province.domain.ProvinceDeletingEvent;
 import ams.asmtravel.api.services.location.province.service.ProvinceService;
-import ams.asmtravel.api.services.location.region.domain.RegionDeletingEvent;
-import ams.asmtravel.api.services.location.region.service.RegionService;
-import ams.asmtravel.api.services.taxonomy.category.domain.CategoryDeletingEvent;
-import ams.asmtravel.api.services.taxonomy.category.service.CategoryService;
 import ams.asmtravel.api.services.taxonomy.interest.domain.InterestDeletingEvent;
 import ams.asmtravel.api.services.taxonomy.interest.service.InterestService;
-import ams.asmtravel.api.services.taxonomy.tag.domain.TagDeletingEvent;
-import ams.asmtravel.api.services.taxonomy.tag.service.TagService;
 import ams.asmtravel.api.services.user.user.domain.UserDeletingEvent;
 import ams.asmtravel.api.services.user.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -54,10 +48,7 @@ public class ActivityServiceImpl implements ActivityService {
     private final ActivityRepository activityRepository;
     private final DestinationService destinationService;
     private final UserService userService;
-    private final CategoryService categoryService;
-    private final TagService tagService;
     private final InterestService interestService;
-    private final RegionService regionService;
     private final ProvinceService provinceService;
     private final ActivityPermissionEvaluator permission;
     private final ActivityMapper mapper;
@@ -239,21 +230,6 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @EventListener
-    public void onRegionDeleting(RegionDeletingEvent event) {
-        activityRepository.unlinkRegion(event.regionId());
-    }
-
-    @EventListener
-    public void onCategoryDeleting(CategoryDeletingEvent event) {
-        activityRepository.unlinkCategory(event.categoryId());
-    }
-
-    @EventListener
-    public void onTagDeleting(TagDeletingEvent event) {
-        activityRepository.unlinkTag(event.tagId());
-    }
-
-    @EventListener
     public void onInterestDeleting(InterestDeletingEvent event) {
         activityRepository.unlinkInterest(event.interestId());
     }
@@ -297,17 +273,9 @@ public class ActivityServiceImpl implements ActivityService {
         activity.setWhatsapp(blankToNull(request.whatsapp()));
         activity.setFacebookUrl(blankToNull(request.facebookUrl()));
         activity.setCoverKey(blankToNull(request.coverKey()));
-        if (request.categoryIds() != null || activity.getId() == null) {
-            activity.setCategories(new HashSet<>(categoryService.getEntities(nullToEmpty(request.categoryIds()))));
-        }
-        if (request.tagIds() != null || activity.getId() == null) {
-            activity.setTags(new HashSet<>(tagService.getEntities(nullToEmpty(request.tagIds()))));
-        }
+        /* Its type: the interests of the Activities & Experiences shelf; a null list keeps them, an empty one clears them. */
         if (request.interestIds() != null || activity.getId() == null) {
             activity.setInterests(new HashSet<>(interestService.getEntities(nullToEmpty(request.interestIds()))));
-        }
-        if (request.tourismRegionIds() != null || activity.getId() == null) {
-            activity.setTourismRegions(new HashSet<>(regionService.getTourismEntities(nullToEmpty(request.tourismRegionIds()))));
         }
     }
 

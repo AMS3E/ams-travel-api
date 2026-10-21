@@ -63,13 +63,12 @@ public interface SearchMapper {
                 food.priceFrom(), food.currency(), null, food.openNow(), food.todayHours(), null, null, null, List.of());
     }
 
-    /** An activity is written like an attraction: its categories and the tourism regions it is shelved in come along. */
-    default SearchHitResponse toHit(ActivityResponse activity, Map<UUID, String> provinceNames, Map<UUID, String> categoryNames,
-                                    ReviewSummaryResponse review, VerificationResponse verification) {
-        List<UUID> categoryIds = ids(activity.categoryIds());
+    /** An activity is classed by its interests alone, like a stay: no categories, no tourism regions on its card. */
+    default SearchHitResponse toHit(ActivityResponse activity, Map<UUID, String> provinceNames, ReviewSummaryResponse review,
+                                    VerificationResponse verification) {
         return new SearchHitResponse(SearchType.ACTIVITY, activity.id(), activity.name(), activity.slug(), activity.shortDescription(),
                 activity.coverUrl(), activity.provinceId(), provinceNames.get(activity.provinceId()), activity.latitude(), activity.longitude(),
-                categoryIds, names(categoryIds, categoryNames), ids(activity.interestIds()), ids(activity.tourismRegionIds()),
+                List.of(), List.of(), ids(activity.interestIds()), List.of(),
                 review == null ? null : review.averageRating(), review == null ? 0 : review.ratingCount(),
                 review == null ? 0 : review.reviewCount(),
                 verification != null && verification.verified(),

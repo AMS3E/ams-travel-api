@@ -38,10 +38,7 @@ public record ActivityResponse(
         Instant publishedAt,
         Instant createdAt,
         Instant updatedAt,
-        List<UUID> categoryIds,
-        List<UUID> tagIds,
         List<UUID> interestIds,
-        List<UUID> tourismRegionIds,
         /* Khmer twins of the English text, and those still empty while their English is filled. */
         String nameKm,
         String descriptionKm,

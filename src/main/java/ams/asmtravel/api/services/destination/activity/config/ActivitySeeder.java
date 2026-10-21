@@ -9,10 +9,7 @@ import ams.asmtravel.api.services.destination.activity.repository.ActivityReposi
 import ams.asmtravel.api.services.destination.destination.domain.Destination;
 import ams.asmtravel.api.services.destination.destination.domain.ListingStatus;
 import ams.asmtravel.api.services.location.province.domain.Province;
-import ams.asmtravel.api.services.location.region.domain.Region;
-import ams.asmtravel.api.services.taxonomy.category.domain.Category;
 import ams.asmtravel.api.services.taxonomy.interest.domain.Interest;
-import ams.asmtravel.api.services.taxonomy.tag.domain.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -25,7 +22,7 @@ import java.util.List;
 
 /**
  * Seeds the sample activities and experiences of the staging catalogue, published, each with its type,
- * its contact details and its Khmer. Tourism regions are named by code, as the region seed publishes them.
+ * its contact details and its Khmer; its interests are its type.
  */
 @Component
 @RequiredArgsConstructor
@@ -76,10 +73,7 @@ public class ActivitySeeder implements CatalogSeedContributor {
             activity.setCoverKey(context.imageKey(node));
             String near = SeedJson.text(node, "destinationSlug");
             activity.setDestination(near == null ? null : context.find(Destination.class, near));
-            activity.setCategories(new HashSet<>(context.resolve(Category.class, SeedJson.strings(node, "categorySlugs"))));
-            activity.setTags(new HashSet<>(context.resolve(Tag.class, SeedJson.strings(node, "tagSlugs"))));
             activity.setInterests(new HashSet<>(context.resolve(Interest.class, SeedJson.strings(node, "interestSlugs"))));
-            activity.setTourismRegions(new HashSet<>(context.resolve(Region.class, SeedJson.strings(node, "tourismRegionCodes"))));
             activity.setStatus(ListingStatus.PUBLISHED);
             activity.setPublishedAt(now);
             context.publish(Activity.class, activity.getSlug(), activityRepository.save(activity));
