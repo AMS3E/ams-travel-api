@@ -241,9 +241,27 @@ public class CorridorServiceImpl implements CorridorService {
         corridor.setName(request.name().trim());
         corridor.setShortDescription(blankToNull(request.shortDescription()));
         corridor.setDescription(blankToNull(request.description()));
+        /* Khmer twins: null keeps what is stored, blank clears it — as on the listings. */
+        if (request.nameKm() != null) {
+            corridor.setNameKm(blankToNull(request.nameKm()));
+        }
+        if (request.shortDescriptionKm() != null) {
+            corridor.setShortDescriptionKm(blankToNull(request.shortDescriptionKm()));
+        }
+        if (request.descriptionKm() != null) {
+            corridor.setDescriptionKm(blankToNull(request.descriptionKm()));
+        }
         corridor.setCoverKey(blankToNull(request.coverKey()));
         corridor.setEstimatedBudgetMin(request.estimatedBudgetMin());
         corridor.setEstimatedBudgetMax(request.estimatedBudgetMax());
+        /* Null keeps the stored labels; a list replaces them, in its order. */
+        if (request.expectations() != null) {
+            corridor.setExpectations(new ArrayList<>(request.expectations().stream()
+                    .map(String::trim)
+                    .filter(label -> !label.isEmpty())
+                    .distinct()
+                    .toList()));
+        }
     }
 
     private static String blankToNull(String value) {

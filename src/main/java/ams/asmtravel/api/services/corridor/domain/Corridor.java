@@ -20,7 +20,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -49,14 +51,26 @@ public class Corridor {
     @Column(nullable = false, length = 200)
     private String name;
 
+    /** Its Khmer name, typed by hand; null until written. */
+    @Column(length = 200)
+    private String nameKm;
+
     @Column(nullable = false, unique = true, length = 120)
     private String slug;
 
     @Column(length = 500)
     private String shortDescription;
 
+    /** The short description in Khmer; null until written. */
+    @Column(length = 500)
+    private String shortDescriptionKm;
+
     @Column(columnDefinition = "text")
     private String description;
+
+    /** The description in Khmer; null until written. */
+    @Column(columnDefinition = "text")
+    private String descriptionKm;
 
     @Column(length = 512)
     private String coverKey;
@@ -85,6 +99,10 @@ public class Corridor {
 
     @Column(precision = 10, scale = 2)
     private BigDecimal estimatedBudgetMax;
+
+    /** "What you expect" on its page: short labels typed by the editor, in the editor's order. */
+    @JdbcTypeCode(SqlTypes.JSON)
+    private List<String> expectations = new ArrayList<>();
 
     /** First and last stop's destination; derived from the itinerary. */
     private UUID startDestinationId;

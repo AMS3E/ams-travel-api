@@ -1,0 +1,15 @@
+# "What you expect" on a corridor's page in the app: short labels the editor
+# types by hand on the corridor form — Sunrise, Photography, Historic Site —
+# shown in the editor's order. Free text, not a taxonomy.
+databaseChangeLog:
+  - changeSet:
+      id: v2-taxonomy-corridor-expectations
+      author: ams-travel-v2
+      changes:
+        - addColumn:
+            schemaName: taxonomy
+            tableName: corridors
+            columns:
+              - column: {name: expectations, type: "${type.json}", defaultValue: '[]', constraints: {nullable: false}}
+      rollback:
+        - dropColumn: {schemaName: taxonomy, tableName: corridors, columnName: expectations}

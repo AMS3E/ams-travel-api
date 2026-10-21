@@ -1,6 +1,6 @@
 {
   "info": {
-    "_postman_id": "b5909745-3f1d-4c63-93fc-eae24e3a55c2",
+    "_postman_id": "9ce1abff-7125-4a36-b693-58ff133470da",
     "name": "AMS Travel Mobile",
     "description": "The AMS Travel API as the mobile app uses it, one folder per screen. Built by docs/mobile/postman/build-collection.py from the API's OpenAPI description on 2026-10-14. Reads marked public need no token; the rest send the traveller's bearer token from {{token}}. See docs/mobile/screens-to-api.md for what each screen needs.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"

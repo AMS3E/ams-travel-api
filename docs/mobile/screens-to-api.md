@@ -152,9 +152,10 @@ The fourth kind of destination: something a traveller does rather than visits (a
 | Element | Endpoint | State |
 | --- | --- | --- |
 | List: name, duration, cover, stops | `GET /search?type=CORRIDOR` → `name`, `durationDays`, `coverUrl`, `stopNames`, ratings | ✅ |
-| "What you expect" chips | `interestIds` → `GET /interests` | ✅ |
+| "What you expect" chips | `expectations` on the corridor (`GET /corridors/{id}`, or `corridor` inside `GET /corridors/{id}/itinerary`): short labels typed in the CMS, in the CMS's order — display them as plain text chips, no icons. Since 2026-10-21; before that this row said to build the chips from `interestIds`, which is no longer right | ✅ |
 | About, Route Overview (stops with description), Corridors Map | `GET /corridors/{id}/itinerary` → days, stops (sequence, destination, title, description, arrival, departure, distance, travel minutes, polyline) | ✅ |
 | Gallery | `GET /media?ownerType=CORRIDOR&ownerId=` (since 2026-10-14; photos attached in the CMS) | ✅ |
+| Corridor in Khmer | Since 2026-10-22 a corridor has Khmer twins like a listing: `nameKm`, `shortDescriptionKm`, `descriptionKm` on `GET /corridors/{id}` (and inside the itinerary's `corridor`); `?lang=km` on `/search`, `/search/cards` and `/search/suggest` speaks them on corridor cards and suggestions (`stopNames` stay English and `untranslated` says so); a search matches the Khmer name whatever the `lang`. Fall back to the English field when the Khmer one is null | ✅ |
 | Rating, reviews and the Traveler seal on a corridor | `GET /reviews?targetType=CORRIDOR&targetId=`, `POST /reviews` with `targetType: CORRIDOR`; the seal stays a destination thing | ✅ reviews; seal is filler |
 | Heart on a corridor | `POST /favorites` `{targetType: CORRIDOR, targetId}` | ✅ |
 
@@ -239,6 +240,21 @@ carries Khmer text beside the English. The stays, food places, activities, trave
 staging content; photos come from Wikimedia Commons, credited in each gallery caption. A reset reseeds all of
 it: nothing you create on the staging server is kept across one, and every id changes — the last reset ran on
 2026-10-21, so ids cached before that date are stale.
+
+## What changed on 2026-10-22
+
+- **"What you expect" on a corridor is its own field now.** The corridor carries `expectations`: short labels
+  typed in the CMS ("Sunrise", "Photography", "Historic Site"), at most 12, in the CMS's order, on
+  `GET /corridors`, `GET /corridors/{id}` and the `corridor` inside `GET /corridors/{id}/itinerary`. Render
+  them as plain text chips, no icons, and hide the row while the list is empty. The old advice to build this
+  row from `interestIds` no longer holds.
+- **Corridors speak Khmer.** A corridor has `nameKm`, `shortDescriptionKm` and `descriptionKm` beside the
+  English, like a listing; `?lang=km` on `/search`, `/search/cards` and `/search/suggest` speaks them on
+  corridor cards and suggestions (`stopNames` stay English and `untranslated` says so), and a search matches
+  the Khmer name whatever the `lang`. Fall back to the English field when the Khmer one is null.
+- **No reseed this time** — ids are unchanged. The five seeded corridors get their Khmer by a migration on
+  deploy; their "What you expect" labels may arrive a little later, so an empty `expectations` list stays a
+  normal state.
 
 ## What changed on 2026-10-21
 

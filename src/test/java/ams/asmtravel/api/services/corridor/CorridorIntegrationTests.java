@@ -418,6 +418,96 @@ class CorridorIntegrationTests {
                 .andExpect(jsonPath("$.interestIds", hasSize(0)));
     }
 
+    /**
+     * "What you expect" is typed by the editor: a save that says nothing keeps
+     * the labels, a list replaces them in its order, an empty list clears them,
+     * and a label is short — at most 40 characters.
+     */
+    @Test
+    void whatYouExpectIsTypedKeptAndCleared() throws Exception {
+        String body = mvc.perform(post("/api/v1/corridors").with(CURATOR).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"Expect trail\",\"slug\":\"ct-expect\",\"expectations\":[\"Sunrise\",\" Photography \",\"Sunrise\"]}"))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.expectations", hasSize(2)))
+                .andExpect(jsonPath("$.expectations[0]").value("Sunrise"))
+                .andExpect(jsonPath("$.expectations[1]").value("Photography"))
+                .andReturn().getResponse().getContentAsString();
+        String id = JsonPath.read(body, "$.id");
+
+        mvc.perform(put("/api/v1/corridors/" + id).with(CURATOR).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"Expect trail\",\"slug\":\"ct-expect\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.expectations", hasSize(2)));
+
+        mvc.perform(put("/api/v1/corridors/" + id).with(CURATOR).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"Expect trail\",\"slug\":\"ct-expect\",\"expectations\":[\"Historic Site\",\"Nature\"]}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.expectations[0]").value("Historic Site"))
+                .andExpect(jsonPath("$.expectations[1]").value("Nature"));
+
+        mvc.perform(put("/api/v1/corridors/" + id).with(CURATOR).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"Expect trail\",\"slug\":\"ct-expect\",\"expectations\":[]}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.expectations", hasSize(0)));
+
+        mvc.perform(post("/api/v1/corridors").with(CURATOR).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"Too wordy\",\"expectations\":[\"" + "x".repeat(41) + "\"]}"))
+                .andExpect(status().isBadRequest());
+    }
+
+    /** The Khmer is typed beside the English: an edit that leaves it out keeps it, a blank clears it. */
+    @Test
+    void aCorridorKeepsItsKhmerBesideTheEnglish() throws Exception {
+        String body = mvc.perform(post("/api/v1/corridors").with(CURATOR).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"Mekong loop\",\"slug\":\"ct-khmer\",\"shortDescription\":\"Up the river\","
+                                + "\"nameKm\":\"ដំណើរមេគង្គ\",\"shortDescriptionKm\":\"ឡើងតាមទន្លេ\",\"descriptionKm\":\"កោះមួយទៅកោះមួយ\"}"))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.nameKm").value("ដំណើរមេគង្គ"))
+                .andExpect(jsonPath("$.shortDescriptionKm").value("ឡើងតាមទន្លេ"))
+                .andExpect(jsonPath("$.descriptionKm").value("កោះមួយទៅកោះមួយ"))
+                .andReturn().getResponse().getContentAsString();
+        String id = JsonPath.read(body, "$.id");
+
+        mvc.perform(put("/api/v1/corridors/" + id).with(CURATOR).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"Mekong loop\",\"slug\":\"ct-khmer\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.nameKm").value("ដំណើរមេគង្គ"))
+                .andExpect(jsonPath("$.descriptionKm").value("កោះមួយទៅកោះមួយ"));
+
+        mvc.perform(put("/api/v1/corridors/" + id).with(CURATOR).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"Mekong loop\",\"slug\":\"ct-khmer\",\"shortDescriptionKm\":\" \"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.shortDescriptionKm").value(nullValue()))
+                .andExpect(jsonPath("$.nameKm").value("ដំណើរមេគង្គ"));
+    }
+
+    /** Asked in Khmer, a corridor's card and suggestion speak the Khmer written, and Khmer words find it. */
+    @Test
+    void aCorridorCardAndSuggestionSpeakKhmerWhenAsked() throws Exception {
+        String body = mvc.perform(post("/api/v1/corridors").with(CURATOR).contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"Mekong loop\",\"slug\":\"ct-khmer-card\",\"shortDescription\":\"Up the river\","
+                                + "\"nameKm\":\"ដំណើរមេគង្គ\",\"shortDescriptionKm\":\"ឡើងតាមទន្លេ\"}"))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+        String id = JsonPath.read(body, "$.id");
+        mvc.perform(patch("/api/v1/corridors/" + id + "/publish").with(CURATOR)).andExpect(status().isOk());
+
+        // Khmer words find it, and the card is Khmer throughout; it has no stops yet, so nothing stays English.
+        mvc.perform(get("/api/v1/search").param("type", "CORRIDOR").param("q", "មេគង្គ").param("lang", "km"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content", hasSize(1)))
+                .andExpect(jsonPath("$.content[0].name").value("ដំណើរមេគង្គ"))
+                .andExpect(jsonPath("$.content[0].shortDescription").value("ឡើងតាមទន្លេ"))
+                .andExpect(jsonPath("$.content[0].untranslated", hasSize(0)));
+
+        // In English nothing changes.
+        mvc.perform(get("/api/v1/search").param("type", "CORRIDOR").param("q", "Mekong loop"))
+                .andExpect(jsonPath("$.content[0].name").value("Mekong loop"));
+
+        mvc.perform(get("/api/v1/search/suggest").param("q", "ដំណើរ").param("lang", "km"))
+                .andExpect(jsonPath("$[?(@.kind == 'CORRIDOR' && @.name == 'ដំណើរមេគង្គ')]", hasSize(1)));
+    }
+
     /** What /corridor-destinations answered before days, it still answers. */
     @Test
     void theFlatRouteStillAnswers() throws Exception {

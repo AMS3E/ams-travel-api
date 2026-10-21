@@ -2,11 +2,21 @@
   {
     "slug": "khmer-civilization-trail",
     "name": "Khmer Civilization",
+    "nameKm": "អារ្យធម៌ខ្មែរ",
     "shortDescription": "The ancient capitals in sequence, from Angkor to the Chaktomuk river junction.",
+    "shortDescriptionKm": "រាជធានីបុរាណតាមលំដាប់ ពីអង្គររហូតដល់ទីប្រសព្វទន្លេចតុមុខ។",
     "description": "The ancient capitals in sequence, from Angkor to the Chaktomuk river junction.",
+    "descriptionKm": "រាជធានីបុរាណតាមលំដាប់ ពីអង្គររហូតដល់ទីប្រសព្វទន្លេចតុមុខ។",
     "image": "angkor-wat-2.jpg",
     "estimatedBudgetMin": 220,
     "estimatedBudgetMax": 450,
+    "expectations": [
+      "Sunrise",
+      "Photography",
+      "Historic Site",
+      "Tour Guide",
+      "Nature"
+    ],
     "interests": [
       "khmer-civilization"
     ]
@@ -14,11 +24,20 @@
   {
     "slug": "mekong-civilization",
     "name": "Mekong Civilization",
+    "nameKm": "អារ្យធម៌មេគង្គ",
     "shortDescription": "Floating villages, a silk island, river dolphins and the community trail upriver.",
+    "shortDescriptionKm": "ភូមិបណ្តែតទឹក កោះសូត្រ ផ្សោតទន្លេ និងផ្លូវទេសចរណ៍សហគមន៍តាមដងទន្លេ។",
     "description": "Life on the water from the Tonle Sap to the Mekong — floating villages, a silk island, river dolphins and the community trail upriver.",
+    "descriptionKm": "ជីវិតនៅលើទឹក ពីទន្លេសាបទៅទន្លេមេគង្គ — ភូមិបណ្តែតទឹក កោះសូត្រ ផ្សោតទន្លេ និងផ្លូវទេសចរណ៍សហគមន៍តាមដងទន្លេ។",
     "image": "tonle-sap-floating-village.jpg",
     "estimatedBudgetMin": 200,
     "estimatedBudgetMax": 380,
+    "expectations": [
+      "River Cruise",
+      "Floating Villages",
+      "Birdwatching",
+      "Local Life"
+    ],
     "interests": [
       "mekong-civilization"
     ]
@@ -26,11 +45,21 @@
   {
     "slug": "coastal-paradise-route",
     "name": "Coastal Discovery",
+    "nameKm": "ស្វែងយល់តំបន់ឆ្នេរ",
     "shortDescription": "Pepper country, crab markets, and the gulf islands in one coastal run.",
+    "shortDescriptionKm": "ស្រុកម្រេច ផ្សារក្តាម និងកោះនានាក្នុងឈូងសមុទ្រ ក្នុងដំណើរឆ្នេរតែមួយ។",
     "description": "Pepper country, crab markets, and the gulf islands in one coastal run.",
+    "descriptionKm": "ស្រុកម្រេច ផ្សារក្តាម និងកោះនានាក្នុងឈូងសមុទ្រ ក្នុងដំណើរឆ្នេរតែមួយ។",
     "image": "koh-rong-2.jpg",
     "estimatedBudgetMin": 160,
     "estimatedBudgetMax": 340,
+    "expectations": [
+      "Beach",
+      "Island Hopping",
+      "Snorkelling",
+      "Seafood",
+      "Sunset"
+    ],
     "interests": [
       "coastal-discovery"
     ]
@@ -38,11 +67,21 @@
   {
     "slug": "cardamom-peaks-explorer",
     "name": "Mountain Adventure",
+    "nameKm": "ដំណើរផ្សងព្រេងលើភ្នំ",
     "shortDescription": "From the capital into the Cardamom rainforest, ending on the Bokor plateau.",
+    "shortDescriptionKm": "ពីរាជធានីចូលទៅព្រៃក្រវាញ បញ្ចប់នៅខ្ពង់រាបបូកគោ។",
     "description": "From the capital into the Cardamom rainforest, ending on the Bokor plateau.",
+    "descriptionKm": "ពីរាជធានីចូលទៅព្រៃក្រវាញ បញ្ចប់នៅខ្ពង់រាបបូកគោ។",
     "image": "bokor-mountain.jpg",
     "estimatedBudgetMin": 120,
     "estimatedBudgetMax": 240,
+    "expectations": [
+      "Trekking",
+      "Waterfalls",
+      "Wildlife",
+      "Camping",
+      "Viewpoints"
+    ],
     "interests": [
       "mountain-adventure"
     ]
@@ -50,11 +89,20 @@
   {
     "slug": "khmer-culinary",
     "name": "Khmer Culinary",
+    "nameKm": "ម្ហូបអាហារខ្មែរ",
     "shortDescription": "Cook, taste and shop from Siem Reap to the pepper coast.",
+    "shortDescriptionKm": "ចម្អិន ភ្លក្ស និងទិញទំនិញ ពីសៀមរាបដល់ឆ្នេរម្រេច។",
     "description": "Cook, taste and shop from Siem Reap to the pepper coast — a cooking class, noodle markets, a Phnom Penh kitchen, palm sugar, Kampot pepper and the Kep crab market.",
+    "descriptionKm": "ចម្អិន ភ្លក្ស និងទិញទំនិញ ពីសៀមរាបដល់ឆ្នេរម្រេច — ថ្នាក់រៀនធ្វើម្ហូប ផ្សារនំបញ្ចុក ផ្ទះបាយភ្នំពេញ ស្ករត្នោត ម្រេចកំពត និងផ្សារក្តាមកែប។",
     "image": "kampot-pepper-farm.jpg",
     "estimatedBudgetMin": 250,
     "estimatedBudgetMax": 480,
+    "expectations": [
+      "Street Food",
+      "Cooking Class",
+      "Markets",
+      "Local Dishes"
+    ],
     "interests": [
       "khmer-culinary"
     ]

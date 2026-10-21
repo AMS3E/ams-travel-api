@@ -15,6 +15,7 @@ import tools.jackson.databind.ObjectMapper;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -48,9 +49,13 @@ public class CorridorSeeder implements CatalogSeedContributor {
             corridor.setName(SeedJson.text(node, "name"));
             corridor.setShortDescription(SeedJson.text(node, "shortDescription"));
             corridor.setDescription(SeedJson.text(node, "description"));
+            corridor.setNameKm(SeedJson.text(node, "nameKm"));
+            corridor.setShortDescriptionKm(SeedJson.text(node, "shortDescriptionKm"));
+            corridor.setDescriptionKm(SeedJson.text(node, "descriptionKm"));
             corridor.setCoverKey(context.imageKey(node));
             corridor.setEstimatedBudgetMin(decimal(node, "estimatedBudgetMin"));
             corridor.setEstimatedBudgetMax(decimal(node, "estimatedBudgetMax"));
+            corridor.setExpectations(new ArrayList<>(SeedJson.strings(node, "expectations")));
             /* Keeps the curated file order. */
             corridor.setSortOrder(place++);
             corridor.setInterests(new HashSet<>(context.resolve(Interest.class, SeedJson.strings(node, "interests"))));
