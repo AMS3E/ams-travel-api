@@ -1,6 +1,6 @@
 {
   "info": {
-    "_postman_id": "a4611e3e-93f6-4f75-99e4-7eae86c8bc19",
+    "_postman_id": "8e0c1510-0476-4490-ab42-8e1205b7ef10",
     "name": "AMS Travel Mobile",
     "description": "The AMS Travel API as the mobile app uses it, one folder per screen. Built by docs/mobile/postman/build-collection.py from the API's OpenAPI description on 2026-10-14. Reads marked public need no token; the rest send the traveller's bearer token from {{token}}. See docs/mobile/screens-to-api.md for what each screen needs.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -236,6 +236,12 @@
                   "value": "{{destinationId}}",
                   "disabled": false,
                   "description": ""
+                },
+                {
+                  "key": "lang",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
                 }
               ]
             },
@@ -417,6 +423,12 @@
                   "value": "",
                   "disabled": true,
                   "description": ""
+                },
+                {
+                  "key": "lang",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
                 }
               ]
             },
@@ -515,6 +527,12 @@
                 },
                 {
                   "key": "radiusKm",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "lang",
                   "value": "",
                   "disabled": true,
                   "description": ""
@@ -619,6 +637,12 @@
                   "value": "",
                   "disabled": true,
                   "description": ""
+                },
+                {
+                  "key": "lang",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
                 }
               ]
             },
@@ -654,6 +678,12 @@
                   "key": "limit",
                   "value": "8",
                   "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "lang",
+                  "value": "",
+                  "disabled": true,
                   "description": ""
                 }
               ]
@@ -1047,6 +1077,12 @@
                   "value": "",
                   "disabled": true,
                   "description": ""
+                },
+                {
+                  "key": "lang",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
                 }
               ]
             },
@@ -1143,6 +1179,12 @@
                 },
                 {
                   "key": "type",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "lang",
                   "value": "",
                   "disabled": true,
                   "description": ""
@@ -1611,7 +1653,7 @@
       ]
     },
     {
-      "name": "6 · Stays and Food",
+      "name": "6 · Stays, Food and Activities",
       "item": [
         {
           "name": "A stay",
@@ -1718,6 +1760,12 @@
                 },
                 {
                   "key": "radiusKm",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "lang",
                   "value": "",
                   "disabled": true,
                   "description": ""
@@ -2053,6 +2101,12 @@
                   "value": "",
                   "disabled": true,
                   "description": ""
+                },
+                {
+                  "key": "lang",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
                 }
               ]
             },
@@ -2093,6 +2147,272 @@
                   "key": "slug",
                   "value": "",
                   "disabled": true,
+                  "description": ""
+                }
+              ]
+            },
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Activities & Experiences list (type=ACTIVITY; a chip is interestIds=)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/search?type=ACTIVITY&size=20",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "ACTIVITY",
+                  "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "size",
+                  "value": "20",
+                  "disabled": false,
+                  "description": "The size of the page to be returned"
+                },
+                {
+                  "key": "q",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "regionId",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "provinceId",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "regionIds",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "provinceIds",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "categoryIds",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "tagIds",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "interestIds",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "travelerRecommended",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "near",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "radiusKm",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "lang",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                }
+              ]
+            },
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "An activity (type, contact, Khmer)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/activities/{{id}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "activities",
+                "{{id}}"
+              ],
+              "query": []
+            },
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Activities near a destination, as cards nearest first",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/search?type=ACTIVITY&near={{destinationId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "type",
+                  "value": "ACTIVITY",
+                  "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "near",
+                  "value": "{{destinationId}}",
+                  "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "q",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "regionId",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "provinceId",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "regionIds",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "provinceIds",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "categoryIds",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "tagIds",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "interestIds",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "travelerRecommended",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "radiusKm",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "lang",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                }
+              ]
+            },
+            "description": "\n\nPublic: no token needed.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "An activity's gallery",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/media?ownerType=ACTIVITY&ownerId={{activityId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "media"
+              ],
+              "query": [
+                {
+                  "key": "ownerType",
+                  "value": "ACTIVITY",
+                  "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "ownerId",
+                  "value": "{{activityId}}",
+                  "disabled": false,
                   "description": ""
                 }
               ]
@@ -2192,6 +2512,12 @@
                 },
                 {
                   "key": "radiusKm",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "lang",
                   "value": "",
                   "disabled": true,
                   "description": ""
@@ -2359,6 +2685,12 @@
                   "value": "",
                   "disabled": true,
                   "description": ""
+                },
+                {
+                  "key": "lang",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
                 }
               ]
             },
@@ -2460,6 +2792,12 @@
                   "value": "",
                   "disabled": true,
                   "description": ""
+                },
+                {
+                  "key": "lang",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
                 }
               ]
             },
@@ -2552,6 +2890,12 @@
                 },
                 {
                   "key": "radiusKm",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "lang",
                   "value": "",
                   "disabled": true,
                   "description": ""
@@ -2742,6 +3086,12 @@
                   "value": "",
                   "disabled": true,
                   "description": ""
+                },
+                {
+                  "key": "lang",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
                 }
               ]
             },
@@ -2892,6 +3242,12 @@
                 },
                 {
                   "key": "radiusKm",
+                  "value": "",
+                  "disabled": true,
+                  "description": ""
+                },
+                {
+                  "key": "lang",
                   "value": "",
                   "disabled": true,
                   "description": ""
@@ -3122,6 +3478,12 @@
                   "key": "ids",
                   "value": "{{destinationId}}",
                   "disabled": false,
+                  "description": ""
+                },
+                {
+                  "key": "lang",
+                  "value": "",
+                  "disabled": true,
                   "description": ""
                 }
               ]

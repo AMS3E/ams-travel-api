@@ -1,8 +1,9 @@
 package ams.asmtravel.api.services.activity.stamp.domain;
 
-/** The kinds of destination a code is posted at and a stamp is collected for: all three are destinations alike. */
+/** The kinds of destination a code is posted at and a stamp is collected for: all four are destinations alike. */
 public enum StampTarget {
     DESTINATION,
     STAY,
-    FOOD
+    FOOD,
+    ACTIVITY
 }

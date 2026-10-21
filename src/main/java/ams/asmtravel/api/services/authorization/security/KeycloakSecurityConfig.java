@@ -180,6 +180,15 @@ public class KeycloakSecurityConfig {
                         .hasAnyAuthority(Permissions.LISTING_EDIT_OWN, Permissions.DESTINATION_EDIT_ANY,
                                 Permissions.FULL_CONTROL)
 
+                /* Activities and experiences: the same grants as a food listing. */
+                .requestMatchers(HttpMethod.GET, "/api/v1/activities", "/api/v1/activities/*").permitAll()
+                .requestMatchers(HttpMethod.DELETE, "/api/v1/activities/*")
+                        .hasAnyAuthority(Permissions.LISTING_DELETE_OWN, Permissions.DESTINATION_DELETE,
+                                Permissions.DESTINATION_EDIT_ANY, Permissions.FULL_CONTROL)
+                .requestMatchers("/api/v1/activities", "/api/v1/activities/*")
+                        .hasAnyAuthority(Permissions.LISTING_EDIT_OWN, Permissions.DESTINATION_EDIT_ANY,
+                                Permissions.FULL_CONTROL)
+
                 /* Food menu items: same editors as the listing. */
                 .requestMatchers(HttpMethod.GET, "/api/v1/food-menu-items", "/api/v1/food-menu-items/*").permitAll()
                 .requestMatchers("/api/v1/food-menu-items", "/api/v1/food-menu-items/*")
@@ -203,7 +212,7 @@ public class KeycloakSecurityConfig {
                         .hasAnyAuthority(Permissions.DESTINATION_VERIFY, Permissions.FULL_CONTROL)
                 .requestMatchers(HttpMethod.GET, "/api/v1/media/files/*/*/*").permitAll()
                 .requestMatchers("/api/v1/media/files", "/api/v1/media/files/**").authenticated()
-                /* Galleries (destination, stay, food): the service checks the owner's editors. */
+                /* Galleries (destination, stay, food, activity, corridor): the service checks the owner's editors. */
                 .requestMatchers(HttpMethod.GET, "/api/v1/media", "/api/v1/media/*").permitAll()
                 .requestMatchers("/api/v1/media", "/api/v1/media/*")
                         .hasAnyAuthority(Permissions.LISTING_EDIT_OWN, Permissions.DESTINATION_DRAFT_EDIT_OWN,

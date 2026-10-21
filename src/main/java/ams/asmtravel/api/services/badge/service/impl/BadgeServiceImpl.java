@@ -24,6 +24,7 @@ import ams.asmtravel.api.services.badge.service.BadgeService;
 import ams.asmtravel.api.services.destination.destination.domain.DestinationDeletingEvent;
 import ams.asmtravel.api.services.destination.destination.exception.DestinationNotFoundException;
 import ams.asmtravel.api.services.destination.destination.service.DestinationService;
+import ams.asmtravel.api.services.destination.activity.service.ActivityService;
 import ams.asmtravel.api.services.destination.food.service.FoodService;
 import ams.asmtravel.api.services.destination.stay.service.StayService;
 import ams.asmtravel.api.services.review.review.service.ReviewService;
@@ -76,6 +77,7 @@ public class BadgeServiceImpl implements BadgeService {
     private final DestinationService destinationService;
     private final StayService stayService;
     private final FoodService foodService;
+    private final ActivityService activityService;
     private final UserService userService;
     // A provider: the stamp service asks this one what a stamp earned.
     private final ObjectProvider<StampService> stampService;
@@ -86,7 +88,7 @@ public class BadgeServiceImpl implements BadgeService {
     public BadgeServiceImpl(BadgeRepository badgeRepository, UserBadgeRepository userBadgeRepository, BadgeMapper mapper,
                             SeasonService seasonService, ReviewService reviewService,
                             PopularService popularService, DestinationService destinationService,
-                            StayService stayService, FoodService foodService, UserService userService,
+                            StayService stayService, FoodService foodService, ActivityService activityService, UserService userService,
                             ObjectProvider<StampService> stampService, ApplicationEventPublisher events,
                             PlatformTransactionManager transactionManager, BadgeProperties properties) {
         this.properties = properties;
@@ -99,6 +101,7 @@ public class BadgeServiceImpl implements BadgeService {
         this.destinationService = destinationService;
         this.stayService = stayService;
         this.foodService = foodService;
+        this.activityService = activityService;
         this.userService = userService;
         this.stampService = stampService;
         this.events = events;
@@ -198,6 +201,7 @@ public class BadgeServiceImpl implements BadgeService {
         BrowseTarget kind = destinationService.isPublished(destinationId) ? BrowseTarget.DESTINATION
                 : stayService.isPublished(destinationId) ? BrowseTarget.STAY
                 : foodService.isPublished(destinationId) ? BrowseTarget.FOOD
+                : activityService.isPublished(destinationId) ? BrowseTarget.ACTIVITY
                 : null;
         if (kind == null) {
             throw new DestinationNotFoundException();

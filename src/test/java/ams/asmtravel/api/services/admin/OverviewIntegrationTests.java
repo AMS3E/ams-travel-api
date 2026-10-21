@@ -50,6 +50,7 @@ class OverviewIntegrationTests {
                 .andExpect(jsonPath("$.counts.corridors").value(notNullValue()))
                 .andExpect(jsonPath("$.counts.stays").value(notNullValue()))
                 .andExpect(jsonPath("$.counts.foods").value(notNullValue()))
+                .andExpect(jsonPath("$.counts.activities").value(notNullValue()))
                 .andExpect(jsonPath("$.counts.partners").value(notNullValue()))
                 .andExpect(jsonPath("$.counts.users").value(greaterThanOrEqualTo(1)))
                 .andExpect(jsonPath("$.counts.favorites").value(notNullValue()))

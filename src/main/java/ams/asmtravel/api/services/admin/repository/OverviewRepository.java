@@ -9,6 +9,7 @@ import ams.asmtravel.api.services.authorization.role.domain.RoleCode;
 import ams.asmtravel.api.services.destination.destination.domain.DestinationSummary;
 import ams.asmtravel.api.services.user.user.service.UserService;
 import ams.asmtravel.api.services.destination.destination.service.DestinationService;
+import ams.asmtravel.api.services.destination.activity.service.ActivityService;
 import ams.asmtravel.api.services.destination.food.service.FoodService;
 import ams.asmtravel.api.services.destination.stay.service.StayService;
 import ams.asmtravel.api.services.review.review.service.ReviewService.ReviewTotals;
@@ -54,6 +55,7 @@ public class OverviewRepository {
     private final CorridorService corridorService;
     private final StayService stayService;
     private final FoodService foodService;
+    private final ActivityService activityService;
     private final UserService userService;
     private final ReviewService reviewService;
     private final FavoriteService favoriteService;
@@ -74,6 +76,7 @@ public class OverviewRepository {
         counts.put("corridors", corridorService.count());
         counts.put("stays", stayService.count());
         counts.put("foods", foodService.count());
+        counts.put("activities", activityService.count());
         /* A partner is an account with the PARTNER role, not a table. */
         counts.put("partners", (long) userService.findUserIdsHoldingAny(Set.of(RoleCode.PARTNER)).size());
         counts.put("users", userService.count());
@@ -103,7 +106,7 @@ public class OverviewRepository {
         return destinationService.findAllSummaries();
     }
 
-    /** One place of any kind as of today, found by its id among the attractions, the stays and the food places. */
+    /** One place of any kind as of today, found by its id among the attractions, the stays, the food places and the activities. */
     public Optional<PlaceSummary> place(UUID id) {
         if (id == null) {
             return Optional.empty();
@@ -117,6 +120,9 @@ public class OverviewRepository {
         }
         if (foodService.exists(id)) {
             return Optional.of(PlaceSummary.of(foodService.findById(id)));
+        }
+        if (activityService.exists(id)) {
+            return Optional.of(PlaceSummary.of(activityService.findById(id)));
         }
         return Optional.empty();
     }
@@ -178,6 +184,7 @@ public class OverviewRepository {
             case DESTINATION -> BrowseTarget.DESTINATION;
             case STAY -> BrowseTarget.STAY;
             case FOOD -> BrowseTarget.FOOD;
+            case ACTIVITY -> BrowseTarget.ACTIVITY;
         };
     }
 
@@ -186,6 +193,7 @@ public class OverviewRepository {
             case DESTINATION -> ReviewTargetType.DESTINATION;
             case STAY -> ReviewTargetType.STAY;
             case FOOD -> ReviewTargetType.FOOD;
+            case ACTIVITY -> ReviewTargetType.ACTIVITY;
         };
     }
 }

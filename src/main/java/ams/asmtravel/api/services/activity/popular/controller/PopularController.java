@@ -35,7 +35,7 @@ public class PopularController {
     private final UserService userService;
 
     /**
-     * {@code ?type=DESTINATION|STAY|FOOD|CORRIDOR} (destinations when left out); {@code ?regionIds=} and
+     * {@code ?type=DESTINATION|STAY|FOOD|ACTIVITY|CORRIDOR} (destinations when left out); {@code ?regionIds=} and
      * {@code ?provinceIds=} for any of several ({@code regionId} and {@code provinceId} still take one);
      * {@code ?interestIds=} for any of some interests; {@code ?limit=} for how many, 10 when left out.
      */

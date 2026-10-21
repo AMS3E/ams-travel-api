@@ -2,6 +2,7 @@ package ams.asmtravel.api.services.admin.domain;
 
 import ams.asmtravel.api.services.destination.destination.domain.DestinationSummary;
 import ams.asmtravel.api.services.destination.destination.domain.ListingStatus;
+import ams.asmtravel.api.services.destination.activity.dto.response.ActivityResponse;
 import ams.asmtravel.api.services.destination.food.dto.response.FoodResponse;
 import ams.asmtravel.api.services.destination.stay.dto.response.StayResponse;
 
@@ -23,5 +24,10 @@ public record PlaceSummary(PlaceType type, UUID id, String name, String slug, UU
     public static PlaceSummary of(FoodResponse food) {
         return new PlaceSummary(PlaceType.FOOD, food.id(), food.name(), food.slug(), food.provinceId(), food.status(),
                 food.viewCount() == null ? 0 : food.viewCount());
+    }
+
+    public static PlaceSummary of(ActivityResponse activity) {
+        return new PlaceSummary(PlaceType.ACTIVITY, activity.id(), activity.name(), activity.slug(), activity.provinceId(),
+                activity.status(), activity.viewCount() == null ? 0 : activity.viewCount());
     }
 }

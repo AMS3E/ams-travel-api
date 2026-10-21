@@ -20,7 +20,7 @@ until launch, when the traveller data is wiped.
 
 ## 2. Guest and signed-in
 
-A guest needs no token: every read the app makes is public (search, places, stays, food, corridors,
+A guest needs no token: every read the app makes is public (search, places, stays, food, activities, corridors,
 regions, provinces, interests, popular, nearby, the price quote, galleries). Browses can be reported
 without signing in too.
 

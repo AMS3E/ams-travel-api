@@ -56,7 +56,7 @@ SCREENS = [
         ("GET", "/api/v1/popular", "Popular stays (type=STAY, FOOD or CORRIDOR)", {"type": "STAY", "limit": "10"}, None),
         ("POST", "/api/v1/popular/events", "Report a stay, food or corridor page opened", {}, {"targetType": "STAY", "targetId": "{{stayId}}", "eventType": "STAY_VIEW", "sessionId": "device-session"}),
     ]),
-    ("6 · Stays and Food", [
+    ("6 · Stays, Food and Activities", [
         ("GET", "/api/v1/stays/{id}", "A stay", {}, None),
         ("GET", "/api/v1/search", "Stays near a destination, as cards nearest first", {"type": "STAY", "near": "{{destinationId}}"}, None),
         ("GET", "/api/v1/stays", "Stays near a destination (full details)", {"near": "{{destinationId}}"}, None),
@@ -67,6 +67,10 @@ SCREENS = [
         ("GET", "/api/v1/foods/{id}", "A food place", {}, None),
         ("GET", "/api/v1/search", "Food near a destination, as cards nearest first (openNow, todayHours)", {"type": "FOOD", "near": "{{destinationId}}"}, None),
         ("GET", "/api/v1/foods", "Food near a destination (full details)", {"near": "{{destinationId}}"}, None),
+        ("GET", "/api/v1/search", "Activities & Experiences list (type=ACTIVITY; a chip is interestIds=)", {"type": "ACTIVITY", "size": "20"}, None),
+        ("GET", "/api/v1/activities/{id}", "An activity (type, contact, Khmer)", {}, None),
+        ("GET", "/api/v1/search", "Activities near a destination, as cards nearest first", {"type": "ACTIVITY", "near": "{{destinationId}}"}, None),
+        ("GET", "/api/v1/media", "An activity's gallery", {"ownerType": "ACTIVITY", "ownerId": "{{activityId}}"}, None),
         ("GET", "/api/v1/search", "Recommend panel: the interest's Traveler seal holders", {"interestIds": "", "travelerRecommended": "true", "size": "5"}, None),
         ("GET", "/api/v1/media", "A stay's gallery", {"ownerType": "STAY", "ownerId": "{{stayId}}"}, None),
     ]),
@@ -128,7 +132,7 @@ SCREENS = [
     ]),
 ]
 
-PUBLIC_GET_PREFIXES = ("/api/v1/search", "/api/v1/destinations", "/api/v1/stays", "/api/v1/stay-rooms", "/api/v1/foods", "/api/v1/corridors",
+PUBLIC_GET_PREFIXES = ("/api/v1/search", "/api/v1/destinations", "/api/v1/stays", "/api/v1/stay-rooms", "/api/v1/foods", "/api/v1/activities", "/api/v1/corridors",
                        "/api/v1/regions", "/api/v1/provinces", "/api/v1/categories", "/api/v1/tags", "/api/v1/interests", "/api/v1/amenities",
                        "/api/v1/media", "/api/v1/popular", "/api/v1/reviews", "/api/v1/ratings", "/api/v1/destination-verifications/status",
                        "/api/v1/badges", "/api/v1/seasons")
@@ -235,6 +239,7 @@ environment = {
         {"key": "regionId", "value": "", "enabled": True},
         {"key": "provinceId", "value": "", "enabled": True},
         {"key": "stayId", "value": "", "enabled": True},
+        {"key": "activityId", "value": "", "enabled": True},
         {"key": "corridorId", "value": "", "enabled": True},
         {"key": "id", "value": "", "enabled": True},
         {"key": "userBadgeId", "value": "", "enabled": True},

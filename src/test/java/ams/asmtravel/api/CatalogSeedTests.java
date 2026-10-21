@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import ams.asmtravel.api.services.verification.config.VerificationSeeder;
 import ams.asmtravel.api.services.review.review.config.ReviewSeeder;
 import ams.asmtravel.api.services.user.user.config.TravellerSeeder;
+import ams.asmtravel.api.services.destination.activity.config.ActivitySeeder;
 import ams.asmtravel.api.services.destination.food.config.FoodSeeder;
 import ams.asmtravel.api.services.destination.stayroom.config.StayRoomSeeder;
 import ams.asmtravel.api.services.destination.stay.config.StaySeeder;
@@ -151,6 +152,12 @@ class CatalogSeedTests {
         assertThat(count("destination.destination_stay_rooms")).isEqualTo(nested(StayRoomSeeder.class, "stay-rooms.json", "rooms"));
         assertThat(count("destination.destination_foods")).isEqualTo(rows(FoodSeeder.class, "foods.json").size());
         assertThat(count("destination.destination_foods where status <> 'PUBLISHED' or cover_key is null")).isZero();
+        // Activities & Experiences (2026-10-21): five, each with its type (its interests), its contact and its Khmer.
+        assertThat(count("destination.destination_activities")).isEqualTo(5).isEqualTo(rows(ActivitySeeder.class, "activities.json").size());
+        assertThat(count("destination.destination_activities where status <> 'PUBLISHED' or cover_key is null")).isZero();
+        assertThat(count("destination.destination_activities where name_km is null or description_km is null or phone is null")).isZero();
+        assertThat(count("destination.destination_activity_interests")).isEqualTo(nested(ActivitySeeder.class, "activities.json", "interestSlugs"));
+        assertThat(count("engagement.reviews where target_type = 'ACTIVITY'")).isEqualTo(10);
         assertThat(count("auth.users where email like '%" + TravellerSeeder.SEED_DOMAIN + "'"))
                 .isEqualTo(rows(TravellerSeeder.class, "travellers.json").size() + 1);
         assertThat(count("publishing.destination_verifications v join auth.users u on u.id = v.decided_by "

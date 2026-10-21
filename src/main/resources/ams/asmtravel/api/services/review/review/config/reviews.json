@@ -2121,5 +2121,115 @@
     "visitType": "SOLO",
     "visitedOn": "2026-04",
     "daysAgo": 52
+  },
+  {
+    "traveller": "emma-lindqvist",
+    "targetType": "ACTIVITY",
+    "target": "koh-rong-sanloem-reef-dive",
+    "rating": 5,
+    "title": "Clear water and a patient guide",
+    "content": "I had not dived in six years and said so. The guide took me through the skills again in the bay before the boat went out, and by the second dive I had stopped thinking about my gauge and was watching a bamboo shark under a ledge. Four of us to one guide, no rush, and the briefing drawn in the sand was better than any whiteboard.",
+    "visitType": "SOLO",
+    "visitedOn": "2026-03",
+    "daysAgo": 60
+  },
+  {
+    "traveller": "diego-ramos",
+    "targetType": "ACTIVITY",
+    "target": "koh-rong-sanloem-reef-dive",
+    "rating": 4,
+    "title": "Good reef, choppy ride out",
+    "content": "The coral at Corner Bar is in better shape than I expected for the gulf, with seahorses in the seagrass if you are patient. The ride out was rough that morning and two of our group were sick over the side, which is nobody's fault but worth knowing. Equipment was clean and the night dive is the one to book.",
+    "visitType": "FRIENDS",
+    "visitedOn": "2026-04",
+    "daysAgo": 45
+  },
+  {
+    "traveller": "lucas-moreau",
+    "targetType": "ACTIVITY",
+    "target": "kampong-phluk-flooded-forest-kayak",
+    "rating": 5,
+    "title": "Silence in the treetops",
+    "content": "We have done the long-tail boat through the flooded forest before and this is a different thing entirely. In the kayak you are at water level between the trunks, the guide stays far enough ahead that you hear only birds, and the lagoon at the end is somewhere the motor boats never go. Sunset on the open lake afterwards was the best hour of our trip.",
+    "visitType": "COUPLES",
+    "visitedOn": "2025-12",
+    "daysAgo": 120
+  },
+  {
+    "traveller": "nary-tep",
+    "targetType": "ACTIVITY",
+    "target": "kampong-phluk-flooded-forest-kayak",
+    "rating": 4,
+    "title": "Sunset on the open lake",
+    "content": "Took my parents and my son, which the guide handled well, putting the two of them in a kayak with him in the lead boat close by. Two hours is about right for older paddlers. The dry bags kept the phones safe and the village fund is a good reason to pick this over the cheaper boats at the landing.",
+    "visitType": "FAMILY",
+    "visitedOn": "2026-01",
+    "daysAgo": 100
+  },
+  {
+    "traveller": "priya-nair",
+    "targetType": "ACTIVITY",
+    "target": "prek-toal-bird-safari",
+    "rating": 5,
+    "title": "Worth the five o'clock start",
+    "content": "A proper birding trip, not a tourist boat with a bird thrown in. The ranger knew every colony, had a scope and a list, and the paddle boat under the canopy got us close to painted storks on the nest without disturbing them. Rice soup on the water as the sun came up. I counted eleven species I had never seen.",
+    "visitType": "SOLO",
+    "visitedOn": "2026-02",
+    "daysAgo": 90
+  },
+  {
+    "traveller": "tom-becker",
+    "targetType": "ACTIVITY",
+    "target": "prek-toal-bird-safari",
+    "rating": 4,
+    "title": "Thousands of birds, one small boat",
+    "content": "The scale of the colonies is hard to describe, trees bending under pelicans. The long transfer to the core area is the price of it, nearly an hour each way in the covered boat, and the morning is cold on the water in February. Bring a jacket. The ranger's English was good and the entrance fee being included saved the usual argument at the gate.",
+    "visitType": "COUPLES",
+    "visitedOn": "2026-03",
+    "daysAgo": 70
+  },
+  {
+    "traveller": "hannah-oneill",
+    "targetType": "ACTIVITY",
+    "target": "mondulkiri-jungle-trek-bou-sra",
+    "rating": 5,
+    "title": "Long, hot and completely worth it",
+    "content": "Fourteen kilometres is honest; it is a real day. The guide grew up in the villages we walked through and stopped to show us resin trees, a pepper garden and a view off the ridge that none of the car tours get. Lunch in banana leaf above the top fall and a swim below the lower one. The pickup back was welcome.",
+    "visitType": "FRIENDS",
+    "visitedOn": "2026-01",
+    "daysAgo": 110
+  },
+  {
+    "traveller": "rithy-chhun",
+    "targetType": "ACTIVITY",
+    "target": "mondulkiri-jungle-trek-bou-sra",
+    "rating": 4,
+    "title": "A real walk, not a stroll",
+    "content": "Good shoes matter: the red earth turns to clay after rain and one of us went down twice. The forest stretch is the best part, and the guide's stories about the Bunong villages were worth the trip on their own. Four stars only because the last two kilometres are on a dirt road with trucks passing.",
+    "visitType": "FRIENDS",
+    "visitedOn": "2026-02",
+    "daysAgo": 80
+  },
+  {
+    "traveller": "bopha-sam",
+    "targetType": "ACTIVITY",
+    "target": "kampi-dolphin-sunset-cruise",
+    "rating": 5,
+    "title": "They came right up to the boat",
+    "content": "The boatman cut the engine and within five minutes we had three dolphins blowing a few metres off the bow, then one surfaced close enough to see its face. The children were silent, which never happens. The run through the rapids on the way back was the second highlight and the sunset behind Koh Trong the third.",
+    "visitType": "FAMILY",
+    "visitedOn": "2026-04",
+    "daysAgo": 35
+  },
+  {
+    "traveller": "wei-zhang",
+    "targetType": "ACTIVITY",
+    "target": "kampi-dolphin-sunset-cruise",
+    "rating": 4,
+    "title": "Peaceful evening, dolphins kept their distance",
+    "content": "We saw dolphins, perhaps six, but all of them thirty metres away; the boatman said the water was high and they spread out. The river itself was lovely at that hour and the boat small and quiet. Pay the conservation levy gladly; the pool only exists because the nets are gone.",
+    "visitType": "COUPLES",
+    "visitedOn": "2026-05",
+    "daysAgo": 25
   }
 ]

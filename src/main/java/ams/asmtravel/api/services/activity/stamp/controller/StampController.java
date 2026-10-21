@@ -54,7 +54,7 @@ public class StampController {
         return stampService.findMine(userService.requireUserId(authentication));
     }
 
-    /** A place's codes, current first: {@code ?targetType=DESTINATION|STAY|FOOD&targetId=}. */
+    /** A place's codes, current first: {@code ?targetType=DESTINATION|STAY|FOOD|ACTIVITY&targetId=}. */
     @GetMapping("/codes")
     public List<StampCodeResponse> getCodes(@RequestParam StampTarget targetType, @RequestParam UUID targetId) {
         return stampService.findCodes(targetType, targetId);

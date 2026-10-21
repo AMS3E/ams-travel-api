@@ -48,9 +48,11 @@ class LiquibaseChangelogTests {
         // season progress are three more, and six badge tables became three. The history
         // schema and its ten tables went with the History & Heritage module (2026-10-08);
         // the amenities taxonomy is one more; system.seed_runs (2026-10-14) another; the check-in codes
-        // (engagement.stamp_codes, 2026-10-20) one more.
-        assertThat(tables).hasSize(41 - 2 + 1 + 1 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 - 4 + 1 + 1 + 3 - 3 + 1 + 1 + 1);
-        assertThat(tables).contains("taxonomy.region_interests", "taxonomy.corridor_interests", "taxonomy.amenities");
+        // (engagement.stamp_codes, 2026-10-20) one more; Activities & Experiences (2026-10-21) are a
+        // table and its interests link.
+        assertThat(tables).hasSize(41 - 2 + 1 + 1 + 2 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 - 4 + 1 + 1 + 3 - 3 + 1 + 1 + 1 + 2);
+        assertThat(tables).contains("taxonomy.region_interests", "taxonomy.corridor_interests", "taxonomy.amenities",
+                "destination.destination_activities", "destination.destination_activity_interests");
         assertThat(tables).doesNotContain("history.destination_history", "history.destination_periods");
         assertThat(tables).contains("publishing.destination_verifications", "gamification.seasons",
                 "system.audit_logs", "engagement.digital_stamps", "engagement.stamp_codes",
