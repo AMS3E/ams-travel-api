@@ -24,6 +24,7 @@ public record DestinationStatsResponse(LocalDate from, LocalDate to, List<Place>
      * @param type                an attraction, a stay or a food place; this list holds attractions only
      * @param browses             different signed-in visitors who opened it in the period
      * @param viewCount           first opens of a day, all time, signed in or not
+     * @param checkIns            travellers who scanned its code on site in the period; one per traveller, place and season
      * @param ratingCount         star ratings given in the period; every review carries one
      * @param averageRating       their average, one decimal; null when there are none
      * @param reviewCount         published reviews written in the period
@@ -40,6 +41,7 @@ public record DestinationStatsResponse(LocalDate from, LocalDate to, List<Place>
             ListingStatus status,
             long browses,
             long viewCount,
+            long checkIns,
             long ratingCount,
             BigDecimal averageRating,
             long reviewCount,

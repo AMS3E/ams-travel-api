@@ -46,6 +46,20 @@ public interface StampRepository extends JpaRepository<DigitalStamp, UUID> {
         long getCheckIns();
     }
 
+    /** How many check-ins each of these places collected in a window; places never stamped are absent. */
+    @Query("""
+            select s.destinationId as destinationId, count(s) as checkIns from DigitalStamp s
+            where s.destinationId in :destinationIds and s.collectedAt >= :from and s.collectedAt < :to
+            group by s.destinationId
+            """)
+    List<PlaceCheckIns> countByDestinationIds(Collection<UUID> destinationIds, Instant from, Instant to);
+
+    interface PlaceCheckIns {
+        UUID getDestinationId();
+
+        long getCheckIns();
+    }
+
     @Modifying
     @Query("delete from DigitalStamp s where s.userId = :userId")
     int deleteByUserId(UUID userId);
