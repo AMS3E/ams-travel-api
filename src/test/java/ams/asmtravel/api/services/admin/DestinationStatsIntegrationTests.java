@@ -1,5 +1,8 @@
 package ams.asmtravel.api.services.admin;
 
+import ams.asmtravel.api.services.activity.stamp.domain.DigitalStamp;
+import ams.asmtravel.api.services.activity.stamp.domain.StampTarget;
+import ams.asmtravel.api.services.activity.stamp.repository.StampRepository;
 import ams.asmtravel.api.services.destination.destination.domain.Destination;
 import ams.asmtravel.api.services.destination.destination.domain.ListingStatus;
 import ams.asmtravel.api.services.destination.food.domain.Food;
@@ -50,6 +53,7 @@ class DestinationStatsIntegrationTests {
     @Autowired EntityManager entityManager;
     @Autowired StayRepository stayRepository;
     @Autowired FoodRepository foodRepository;
+    @Autowired StampRepository stampRepository;
 
     @Test
     void everyPlacesRatingsBrowsesAndStandingInOneRead() throws Exception {
@@ -63,9 +67,12 @@ class DestinationStatsIntegrationTests {
                 .andExpect(jsonPath(row + ".name").value("Phnom Bakheng"))
                 .andExpect(jsonPath(row + ".ratingCount").value(0))
                 .andExpect(jsonPath(row + ".browses").value(0))
+                .andExpect(jsonPath(row + ".checkIns").value(0))
                 .andExpect(jsonPath(row + ".verified").value(false));
 
-        // A review with its stars, a browse, and an official site's verification all show up.
+        // A review with its stars, a browse, two travellers' check-ins and an official site's verification all show up.
+        stampRepository.save(new DigitalStamp(UUID.randomUUID(), StampTarget.DESTINATION, bakheng.getId(), null));
+        stampRepository.save(new DigitalStamp(UUID.randomUUID(), StampTarget.DESTINATION, bakheng.getId(), null));
         mvc.perform(post("/api/v1/reviews").with(customer("a@visit.test")).contentType(MediaType.APPLICATION_JSON)
                         .content("{\"targetType\":\"DESTINATION\",\"targetId\":\"" + id + "\",\"rating\":4,\"content\":\"Sunset crowds\"}"))
                 .andExpect(status().isCreated());
@@ -85,6 +92,7 @@ class DestinationStatsIntegrationTests {
                 .andExpect(jsonPath(row + ".reviewCount").value(1))
                 .andExpect(jsonPath(row + ".browses").value(1))
                 .andExpect(jsonPath(row + ".viewCount").value(1))
+                .andExpect(jsonPath(row + ".checkIns").value(2))
                 .andExpect(jsonPath(row + ".verified").value(true))
                 .andExpect(jsonPath(row + ".basis").value("OFFICIAL_SITE"))
                 .andExpect(jsonPath(row + ".travelerRecommended").value(false));
@@ -96,13 +104,15 @@ class DestinationStatsIntegrationTests {
                 .andExpect(jsonPath("$.from").value(today.toString()))
                 .andExpect(jsonPath(row + ".ratingCount").value(1))
                 .andExpect(jsonPath(row + ".reviewCount").value(1))
-                .andExpect(jsonPath(row + ".browses").value(1));
+                .andExpect(jsonPath(row + ".browses").value(1))
+                .andExpect(jsonPath(row + ".checkIns").value(2));
         mvc.perform(get("/api/v1/admin/destination-stats").with(editor())
                         .param("from", today.plusDays(1).toString()).param("to", today.plusDays(1).toString()))
                 .andExpect(jsonPath(row + ".ratingCount").value(0))
                 .andExpect(jsonPath(row + ".averageRating", hasItem(nullValue())))
                 .andExpect(jsonPath(row + ".reviewCount").value(0))
                 .andExpect(jsonPath(row + ".browses").value(0))
+                .andExpect(jsonPath(row + ".checkIns").value(0))
                 .andExpect(jsonPath(row + ".viewCount").value(1))
                 .andExpect(jsonPath(row + ".verified").value(true));
         mvc.perform(get("/api/v1/admin/destination-stats").with(editor())
@@ -140,7 +150,8 @@ class DestinationStatsIntegrationTests {
                 .andExpect(jsonPath("$.place.name").value("Phnom Bakheng"))
                 .andExpect(jsonPath("$.place.verified").value(false));
 
-        // A review of the stay, and a visitor opening its page, count on it; the open is its first view.
+        // A review of the stay, a visitor opening its page, and a check-in count on it; the open is its first view.
+        stampRepository.save(new DigitalStamp(UUID.randomUUID(), StampTarget.STAY, stay.getId(), null));
         mvc.perform(post("/api/v1/reviews").with(customer("a@visit.test")).contentType(MediaType.APPLICATION_JSON)
                         .content("{\"targetType\":\"STAY\",\"targetId\":\"" + stayId + "\",\"rating\":5,\"content\":\"Quiet rooms\"}"))
                 .andExpect(status().isCreated());
@@ -160,6 +171,7 @@ class DestinationStatsIntegrationTests {
                 .andExpect(jsonPath("$.place.reviewCount").value(1))
                 .andExpect(jsonPath("$.place.browses").value(1))
                 .andExpect(jsonPath("$.place.viewCount").value(1))
+                .andExpect(jsonPath("$.place.checkIns").value(1))
                 .andExpect(jsonPath("$.place.verified").value(false))
                 .andExpect(jsonPath("$.place.basis").value(nullValue()));
         mvc.perform(get("/api/v1/stays/" + stayId).with(editor())).andExpect(jsonPath("$.viewCount").value(1));
@@ -177,6 +189,7 @@ class DestinationStatsIntegrationTests {
                         .param("from", today.plusDays(1).toString()).param("to", today.plusDays(1).toString()))
                 .andExpect(jsonPath("$.place.ratingCount").value(0))
                 .andExpect(jsonPath("$.place.browses").value(0))
+                .andExpect(jsonPath("$.place.checkIns").value(0))
                 .andExpect(jsonPath("$.place.viewCount").value(1));
 
         mvc.perform(get("/api/v1/admin/destination-stats/" + UUID.randomUUID()).with(editor())).andExpect(status().isNotFound());

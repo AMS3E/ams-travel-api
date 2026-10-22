@@ -19,13 +19,14 @@ public interface AdminMapper {
 
     /**
      * @param browses      null when nobody signed in opened it in the window
+     * @param checkIns     null when nobody scanned its code on site in the window
      * @param review       null when it has no reviews and no stars
      * @param verification null when the verification service did not answer for it
      */
-    default DestinationStatsResponse.Place toPlace(PlaceSummary place, Long browses, ReviewSummaryResponse review,
+    default DestinationStatsResponse.Place toPlace(PlaceSummary place, Long browses, Long checkIns, ReviewSummaryResponse review,
                                                   VerificationResponse verification) {
         return new DestinationStatsResponse.Place(place.id(), place.type(), place.name(), place.slug(), place.provinceId(), place.status(),
-                browses == null ? 0 : browses, place.viewCount(),
+                browses == null ? 0 : browses, place.viewCount(), checkIns == null ? 0 : checkIns,
                 review == null ? 0 : review.ratingCount(), review == null ? null : review.averageRating(),
                 review == null ? 0 : review.reviewCount(),
                 verification != null && verification.verified(), verification == null ? null : verification.basis(),
