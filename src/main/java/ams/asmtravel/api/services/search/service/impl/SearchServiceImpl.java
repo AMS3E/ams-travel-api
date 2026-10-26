@@ -148,8 +148,10 @@ public class SearchServiceImpl implements SearchService {
                 .forEach(region -> found.add(suggestion(SuggestionKind.REGION, region.id(), region.name(), region.nameKm(),
                         region.code() == null ? null : region.code().toLowerCase(Locale.ROOT), khmer)));
         corridorService.getAll(null).stream()
-                .filter(corridor -> corridor.status() == CorridorStatus.PUBLISHED && contains(corridor.name(), needle))
-                .forEach(corridor -> found.add(suggestion(SuggestionKind.CORRIDOR, corridor.id(), corridor.name(), null, corridor.slug(), khmer)));
+                .filter(corridor -> corridor.status() == CorridorStatus.PUBLISHED
+                        && (contains(corridor.name(), needle) || contains(corridor.nameKm(), needle)))
+                .forEach(corridor -> found.add(suggestion(SuggestionKind.CORRIDOR, corridor.id(), corridor.name(), corridor.nameKm(),
+                        corridor.slug(), khmer)));
         stayService.getAll(null).stream()
                 .filter(stay -> stay.status() == ListingStatus.PUBLISHED && (contains(stay.name(), needle) || contains(stay.nameKm(), needle)))
                 .forEach(stay -> found.add(suggestion(SuggestionKind.STAY, stay.id(), stay.name(), stay.nameKm(), null, khmer)));
@@ -305,7 +307,8 @@ public class SearchServiceImpl implements SearchService {
         }
         return corridorService.getAll(null).stream()
                 .filter(corridor -> corridor.status() == CorridorStatus.PUBLISHED)
-                .filter(corridor -> matches(request.q(), corridor.name(), corridor.shortDescription()))
+                .filter(corridor -> matches(request.q(), corridor.name(), corridor.shortDescription(), corridor.nameKm(),
+                        corridor.shortDescriptionKm()))
                 .filter(corridor -> request.near() == null || corridor.stopDestinationIds().contains(request.near()))
                 .filter(corridor -> anyOf(request.provinces(), corridor.stopProvinceIds()))
                 .filter(corridor -> anyOf(request.regions(), corridor.stopRegionIds()))
@@ -411,16 +414,13 @@ public class SearchServiceImpl implements SearchService {
             return List.of();
         }
         Map<UUID, ReviewSummaryResponse> reviews = reviews(ReviewTargetType.CORRIDOR, corridors.stream().map(CorridorResponse::id).toList());
-        return english(corridors.stream().map(corridor -> mapper.toHit(corridor, reviews.get(corridor.id()))).toList(), khmer);
-    }
-
-    /** Corridors have no Khmer text of their own: asked in Khmer, only their province and category names change. */
-    private List<SearchHitResponse> english(List<SearchHitResponse> hits, boolean khmer) {
-        if (!khmer || hits.isEmpty()) {
-            return hits;
-        }
-        KhmerNames words = names.khmerNames();
-        return hits.stream().map(hit -> mapper.inKhmer(hit, null, null, words)).toList();
+        KhmerNames words = khmer ? names.khmerNames() : null;
+        return corridors.stream()
+                .map(corridor -> {
+                    SearchHitResponse hit = mapper.toHit(corridor, reviews.get(corridor.id()));
+                    return khmer ? mapper.inKhmer(hit, corridor.nameKm(), corridor.shortDescriptionKm(), words) : hit;
+                })
+                .toList();
     }
 
     private static SuggestionResponse suggestion(SuggestionKind kind, UUID id, String name, String nameKm, String slug, boolean khmer) {

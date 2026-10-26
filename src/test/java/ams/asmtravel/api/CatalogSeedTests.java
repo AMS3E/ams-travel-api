@@ -97,6 +97,7 @@ class CatalogSeedTests {
         // The real data: no interest outside the six groups, and five tourism corridors.
         assertThat(count("taxonomy.interests where group_name is null")).isZero();
         assertThat(count("taxonomy.corridors")).isEqualTo(5);
+        assertThat(count("taxonomy.corridors where name_km is null or short_description_km is null or description_km is null")).isZero();
         // In the curators' order, which the seed files keep: the regions 1 to 9, each region's own
         // categories and filters, the interests within their group, and the corridors.
         assertThat(jdbc.queryForList("select code from taxonomy.regions where kind = 'TOURISM' order by sort_order", String.class))
