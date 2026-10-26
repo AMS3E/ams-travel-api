@@ -1,6 +1,6 @@
 # Mobile app screens → API
 
-Written 2026-10-12 after the server search, the price preview, the region cover and the review visit fields were built; updated 2026-10-14 for the hosted API. The seed for the Postman collection (`postman/`). Source: the Figma "High Fidelity Version 3" screens (ask Kimleng for them), checked against the API on branch `kimleng`. Base URL `https://api.travel.ams.com.kh/api/v1`; the paths below are relative to it. "Public" means no token. Everything else needs a Keycloak access token from the `amstravel` realm (public client `amstravel-mobile`, PKCE; see `README.md`). The Menu screen is out of scope by Kimleng's decision.
+Written 2026-10-12 after the server search, the price preview, the region cover and the review visit fields were built; updated 2026-10-14 for the hosted API and 2026-10-26 for the one Verified badge (no more Recommended by AMS or by Traveler: regions carry no badge, cards lose `travelerRecommended`, and the search filter is `verified=true`). The seed for the Postman collection (`postman/`). Source: the Figma "High Fidelity Version 3" screens (ask Kimleng for them), checked against the API on branch `kimleng`. Base URL `https://api.travel.ams.com.kh/api/v1`; the paths below are relative to it. "Public" means no token. Everything else needs a Keycloak access token from the `amstravel` realm (public client `amstravel-mobile`, PKCE; see `README.md`). The Menu screen is out of scope by Kimleng's decision.
 
 Paged answers look like `{"content": [...], "page": {"size": 20, "number": 0, "totalElements": 61, "totalPages": 4}}`.
 
@@ -22,15 +22,15 @@ Legend: ✅ exists and fits · ⚠️ exists with a gap · ❌ nothing behind it
 Three small additions, ported from the developer's branch: `GET /search?type=DESTINATION&near=` takes `radiusKm`
 (0.1 to 50; 25 when left out) and every attraction card found that way carries `distanceMeters`; an interest has
 a picture (`coverUrl`, folder `interest`; `iconKey` stays until the app draws pictures); a tourism region has a
-map picture (`mapUrl`: one image in the Map panel of its page, where the interactive map of its places used to be)
-and an `amsRecommended` flag for the Recommended by AMS Travel badge. A destination's `theme` may be the code of
+map picture (`mapUrl`: one image in the Map panel of its page, where the interactive map of its places used to be).
+A destination's `theme` may be the code of
 any tourism region, not only the nine first ones. History & Heritage stays out: there is no `history` schema and
 no historical-coverage endpoint.
 
 ## What changed on 2026-10-14 (the answers to API-REQUESTS.md)
 
 Every entry of `API-REQUESTS.md` has its Status line; the rows below are updated to match. In short: several
-regions or provinces per search (`regionIds`, `provinceIds`), the Traveler seal filter (`travelerRecommended=true`),
+regions or provinces per search (`regionIds`, `provinceIds`), the verified filter (`verified=true`),
 cards around a destination (`near=`), the Provinces page in one answer (`GET /search/by-province`), the Popular
 row filled and typed (`type=`, `items[].reason`), provinces with a picture, a centre, bounds and counts, regions
 with a centre and bounds, regions and provinces as favourites, corridor cards with `stopNames` and
@@ -41,14 +41,14 @@ first/last name split (one Full name stays).
 
 ## The one card every list is made of
 
-`GET /search`, `GET /search/cards` and the filtered lists all return the same **card**: `type`, `id`, `name`, `slug`, `shortDescription`, `coverUrl`, `provinceId`, `provinceName`, `latitude`, `longitude`, `categoryIds`, `categoryNames`, `interestIds`, `tourismRegionIds`, `averageRating`, `ratingCount`, `reviewCount`, `verified`, `basis`, `travelerRecommended`, `priceFrom`, `currency`, `durationDays`, `openNow`, `todayHours` (food: open at this moment in Cambodia, null when no hours are known; today's line), `stopNames`, `encodedPolyline` (corridors: the stops in travel order; the whole route, Google encoded, null until calculated), `distanceMeters` (attractions searched `near=` a destination: metres from it; null otherwise). A row in the app needs nothing else. Fields a kind does not have are null (a stay has no slug, a corridor no pin or province, only a stay or food a price, only a corridor a duration).
+`GET /search`, `GET /search/cards` and the filtered lists all return the same **card**: `type`, `id`, `name`, `slug`, `shortDescription`, `coverUrl`, `provinceId`, `provinceName`, `latitude`, `longitude`, `categoryIds`, `categoryNames`, `interestIds`, `tourismRegionIds`, `averageRating`, `ratingCount`, `reviewCount`, `verified`, `basis`, `priceFrom`, `currency`, `durationDays`, `openNow`, `todayHours` (food: open at this moment in Cambodia, null when no hours are known; today's line), `stopNames`, `encodedPolyline` (corridors: the stops in travel order; the whole route, Google encoded, null until calculated), `distanceMeters` (attractions searched `near=` a destination: metres from it; null otherwise). A row in the app needs nothing else. Fields a kind does not have are null (a stay has no slug, a corridor no pin or province, only a stay or food a price, only a corridor a duration).
 
 ## Explore
 
 | Element | Endpoint | State |
 | --- | --- | --- |
 | Chip row: Attraction Site, Stays, Food, Water, Activities, Corridors | `GET /interests` (public) grouped by `groupName`: the six groups are exactly these | ✅ |
-| Explore by Tourism Region cards | `GET /regions?kind=TOURISM` (public) → `name`, `coverUrl`, `description`, `latitude`, `longitude` (an editor's centre when `centreSet`, else the middle of its places), `bounds`, `amsRecommended` (the Recommended by AMS Travel badge); the heart: `POST /favorites` `{targetType: REGION, targetId}` | ✅ |
+| Explore by Tourism Region cards | `GET /regions?kind=TOURISM` (public) → `name`, `coverUrl`, `description`, `latitude`, `longitude` (an editor's centre when `centreSet`, else the middle of its places), `bounds`; the heart: `POST /favorites` `{targetType: REGION, targetId}` | ✅ |
 | Explore by Provinces cards | `GET /provinces` (public) → `name`, `coverUrl`, `averageRating`, `reviewCount`, `placeCount`; the heart: `POST /favorites` `{targetType: PROVINCE, targetId}` | ✅ |
 | "Recommend by Traveler" on a region card | nothing: the seal is per destination | design filler |
 | Explore by Popular | `GET /popular?limit=10` (public; `type`, `regionIds`, `provinceIds`, `interestIds` optional) → `items[{type, id, browses, reason}]`, filled up to `limit` (MOST_BROWSED, then VERIFIED, TOP_RATED, CATALOGUE), then `GET /search/cards?type=&ids=` for the rows | ✅ |
@@ -62,7 +62,7 @@ first/last name split (one Full name stays).
 | Keyword search | `GET /search?q=angkor&page=0&size=20` (public): published places only, name order, size ≤ 100 | ✅ |
 | Kind chips (All, Stays, Food, Activities, Corridors) | `GET /search?type=DESTINATION|STAY|FOOD|ACTIVITY|CORRIDOR` | ✅ |
 | Filters: Tourism Regions, Provinces, Interests, Categories, Tags | `GET /search?regionIds=a,b&provinceIds=c,d&interestIds=&categoryIds=&tagIds=` (several of each; `regionId`/`provinceId` still take one; a region id may be a zone or a tourism region); the chips come from `GET /regions?kind=TOURISM`, `GET /provinces`, `GET /interests`, `GET /categories`, `GET /tags` (all public) | ✅ |
-| Only the Traveler seal holders | `GET /search?travelerRecommended=true` (destinations; the bar is 10,000 ratings at 4.5, so empty until a place reaches it: hide the panel while `content` is empty) | ✅ |
+| Only the verified places | `GET /search?verified=true` (every kind of destination; verified is a paid decision or 10,000 ratings at 4.5, so hide the panel while `content` is empty) | ✅ |
 | Typing suggestions ("Angkor Wat", "Battambang") | `GET /search/suggest?q=ang&limit=8` (public) → `kind` (DESTINATION, STAY, FOOD, ACTIVITY, CORRIDOR, PROVINCE, REGION), `id`, `name`, `slug`; names starting with the text first | ✅ |
 | Recent keywords | on the device | ✅ |
 | Explore by Nearby | `GET /destinations/nearby?latitude=&longitude=&radiusKm=25&limit=20` (public) → ids, then `GET /search/cards?ids=` | ✅ |
@@ -74,10 +74,10 @@ first/last name split (one Full name stays).
 | Element | Endpoint | State |
 | --- | --- | --- |
 | Region list with three places each | `GET /regions?kind=TOURISM` + `GET /search?regionId=&size=3` per region | ✅ |
-| Region detail: banner, name, overview, map picture | `GET /regions/{id}` → `coverUrl`, `name`, `description` (HTML), `mapUrl` (the Map panel: one picture of the region's map, where the interactive map was; null until staff upload one), `amsRecommended` | ✅ |
+| Region detail: banner, name, overview, map picture | `GET /regions/{id}` → `coverUrl`, `name`, `description` (HTML), `mapUrl` (the Map panel: one picture of the region's map, where the interactive map was; null until staff upload one) | ✅ |
 | Historical Map | the cards' `latitude`/`longitude` from `GET /search?regionId=&size=100`; the region's own `bounds` to frame it | ✅ |
 | Categories and Tags chips | `GET /regions/{id}` → `categoryIds`, `tagIds` resolved against `GET /categories`, `GET /tags` | ✅ flat lists, no values |
-| Destination list with category line and seal | `GET /search?regionId=` → `categoryNames`, `verified`, `travelerRecommended` on every card | ✅ |
+| Destination list with category line and badge | `GET /search?regionId=` → `categoryNames` and `verified` on every card | ✅ |
 
 ## Destination detail (attraction)
 
@@ -106,7 +106,7 @@ first/last name split (one Full name stays).
 | Element | Endpoint | State |
 | --- | --- | --- |
 | Interest chips and grid | `GET /interests` (public) → `coverUrl` (its picture, null until staff choose one; `iconKey` stays for now); `GET /search?interestIds=` | ✅ |
-| "Recommend" panel (Traveler seal holders of the interest) | `GET /search?interestIds=&travelerRecommended=true&size=5`; hidden while empty | ✅ |
+| "Recommend" panel (verified places of the interest) | `GET /search?interestIds=&verified=true&size=5`; hidden while empty | ✅ |
 | Stay detail: cover, gallery, name, star rating, slogan, description, policies, check-in/out, phone, website, amenities | `GET /stays/{id}` (public) → `starRating`, `slogan`, `description`, `policies`, `checkInFrom`, `checkOutUntil`, `phone`, `website`, `amenities` (slugs → `GET /amenities` for label, icon, group), `weekendNights`; gallery `GET /media?ownerType=STAY&ownerId=` | ✅ |
 | "Open 24h" on a stay | nothing: stays have check-in hours, not opening hours | design filler |
 | Stays near a destination | `GET /search?type=STAY&near={destinationId}` (public) → cards, nearest first; `GET /stays?near=` still answers the full details | ✅ |
@@ -123,7 +123,7 @@ The fourth kind of destination: something a traveller does rather than visits (a
 
 | Element | Endpoint | State |
 | --- | --- | --- |
-| Activities list and the chips Diving, Kayak, Bird Sanctuary, Wildlife, Hiking/Trekking, Fishing, Camping, Viewpoint, Cruise, Shopping | `GET /search?type=ACTIVITY` (public; `q`, `regionIds`, `provinceIds`, `categoryIds`, `tagIds`, `interestIds`, `travelerRecommended`, `lang=km` as for any kind) → the same card, `type` ACTIVITY, classed by its `interestIds` alone like a stay (`categoryIds` and `tourismRegionIds` are empty; a region filter reaches it through its province); the ten chips are the interests of the "Activities & Experiences" group (`GET /interests`), so a chip is `interestIds=`. `GET /activities/{id}` answers `type` (DIVING, KAYAK, BIRD_SANCTUARY, WILDLIFE, HIKING_TREKKING, FISHING, CAMPING, VIEWPOINT, CRUISE, SHOPPING, OTHER) | ✅ |
+| Activities list and the chips Diving, Kayak, Bird Sanctuary, Wildlife, Hiking/Trekking, Fishing, Camping, Viewpoint, Cruise, Shopping | `GET /search?type=ACTIVITY` (public; `q`, `regionIds`, `provinceIds`, `categoryIds`, `tagIds`, `interestIds`, `verified`, `lang=km` as for any kind) → the same card, `type` ACTIVITY, classed by its `interestIds` alone like a stay (`categoryIds` and `tourismRegionIds` are empty; a region filter reaches it through its province); the ten chips are the interests of the "Activities & Experiences" group (`GET /interests`), so a chip is `interestIds=`. `GET /activities/{id}` answers `type` (DIVING, KAYAK, BIRD_SANCTUARY, WILDLIFE, HIKING_TREKKING, FISHING, CAMPING, VIEWPOINT, CRUISE, SHOPPING, OTHER) | ✅ |
 | Activity detail: cover, gallery, name, type, slogan, description, address, map, contact | `GET /activities/{id}` (public) → `type`, `slogan`, `sloganBy`, `description`, `address`, `latitude`, `longitude`, `phone`, `contactEmail`, `website`, `telegram`, `whatsapp`, `facebookUrl`, `provinceId`, `interestIds`, `viewCount`, the Khmer twins (`nameKm`, `descriptionKm`, `sloganKm`, `sloganByKm`, `addressKm`); gallery `GET /media?ownerType=ACTIVITY&ownerId=` | ✅ |
 | Activities near a destination | `GET /search?type=ACTIVITY&near={destinationId}` (public) → cards, nearest first; `GET /activities?near=` still answers the full details | ✅ |
 | Rating, reviews, the heart, check-in, the Browser badge | `GET /ratings/summary?targetType=ACTIVITY`, `GET /reviews?targetType=ACTIVITY&targetId=`, `POST /reviews` `{targetType: ACTIVITY, …}`, `POST /favorites` `{targetType: ACTIVITY, targetId}`, the QR code posted on site (`POST /stamps`), `PUT /badges/me/explorations/{id}`, `POST /popular/events` `{targetType: ACTIVITY, …}` | ✅ |
@@ -269,4 +269,4 @@ it: nothing you create on the staging server is kept across one, and every id ch
 - **Every kind is a destination.** Stays and food places (and, since 2026-10-21, activities) are stamped (their own codes), browsed for the Browser badge (`PUT /badges/me/explorations/{id}` takes any kind's id) and viewed (`viewCount` on `GET /stays/{id}`, `GET /foods/{id}` and `GET /activities/{id}`) exactly like attractions.
 - **The Explorer (POINTS) ladder is retired.** `GET /badges` and `GET /badges/me/progress` answer three ladders. Points stay as season totals (`GET /points/me`, `GET /seasons/me/progress`).
 - **Destination Detail in the CMS** reads one place's standing by id: `GET /admin/destination-stats/{id}` (staff only; not for the app).
-- **Verified for every kind.** `verified`, `basis` and `travelerRecommended` on stay and food cards are real now (they were always false before): a stay or a food place is verified by a desk like an attraction, and its reviews earn the Traveler seal. `GET /destination-verifications/status?destinationIds=` takes any kind's id and answers `targetType`; a `travelerRecommended=true` search keeps sealed stays and food places too.
+- **Verified for every kind.** `verified` and `basis` on stay and food cards are real now (they were always false before): a stay or a food place is verified by a paid decision like an attraction, or its reviews verify it on their own. `GET /destination-verifications/status?destinationIds=` takes any kind's id and answers `targetType`; a `verified=true` search keeps verified stays and food places too.

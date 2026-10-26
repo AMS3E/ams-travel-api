@@ -89,10 +89,6 @@ public class Region {
     @Column(nullable = false)
     private Boolean isActive = true;
 
-    /** Staff mark it Recommended by AMS Travel: the badge on its card and its page in the app. */
-    @Column(nullable = false)
-    private Boolean amsRecommended = false;
-
     @CreationTimestamp
     @Column(nullable = false, updatable = false)
     private Instant createdAt;

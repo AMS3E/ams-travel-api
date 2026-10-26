@@ -51,8 +51,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * evidence are the verifying desks' only.
  */
 @SpringBootTest(properties = {"app.security.oauth2.enabled=true",
-        // Two five-star reviews earn the travellers' seal here; the boss's real number is 10,000.
-        "app.verification.traveler-seal.min-ratings=2", "app.verification.traveler-seal.min-average=4.5"})
+        // Two five-star reviews verify a place here; the boss's real number is 10,000.
+        "app.verification.traveler-score.min-ratings=2", "app.verification.traveler-score.min-average=4.5"})
 @AutoConfigureMockMvc
 @Transactional
 class VerificationIntegrationTests {
@@ -189,65 +189,34 @@ class VerificationIntegrationTests {
                 .andExpect(jsonPath("$[*].destinationId", hasItem(staffPlace.getId().toString())));
     }
 
-    /** An official site is verified on its standing: no invoice, no agreement, a note at most. */
+    /** Verification rests on two ways only: a desk's paid decision, or the travellers' score. */
     @Test
-    void anOfficialSiteNeedsNoPaperwork() throws Exception {
+    void verificationRestsOnAPaymentOrTheTravellersScore() throws Exception {
         String place = "\"destinationId\":\"" + staffPlace.getId() + "\"";
         mvc.perform(post("/api/v1/destination-verifications").with(owner()).contentType(MediaType.APPLICATION_JSON)
                         .content("{" + place + ",\"verified\":true,\"reference\":\"INV-2026-020\"}"))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.detail").value("Say what the verification rests on: an official site, a partnership, or a payment"));
-        mvc.perform(post("/api/v1/destination-verifications").with(owner()).contentType(MediaType.APPLICATION_JSON)
-                        .content("{" + place + ",\"verified\":true,\"basis\":\"OFFICIAL_SITE\",\"note\":\"On the Ministry of Tourism's list\"}"))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.verified").value(true))
-                .andExpect(jsonPath("$.basis").value("OFFICIAL_SITE"));
-        mvc.perform(get("/api/v1/destination-verifications/status").param("destinationIds", staffPlace.getId().toString()))
-                .andExpect(jsonPath("$[0].verified").value(true))
-                .andExpect(jsonPath("$[0].basis").value("OFFICIAL_SITE"))
-                .andExpect(jsonPath("$[0].travelerRecommended").value(false));
-        // The travellers' seal is theirs to earn, not a desk's to file.
+                .andExpect(jsonPath("$.detail").value("Say what the verification rests on: a payment to AMS Travel"));
+        // The retired bases are gone: an official site's standing or a partnership no longer verifies a place.
+        for (String retired : new String[] {"OFFICIAL_SITE", "PARTNER"}) {
+            mvc.perform(post("/api/v1/destination-verifications").with(owner()).contentType(MediaType.APPLICATION_JSON)
+                            .content("{" + place + ",\"verified\":true,\"basis\":\"" + retired + "\",\"reference\":\"AGR-2026-07\"}"))
+                    .andExpect(status().isBadRequest());
+        }
+        // The travellers' score is theirs to earn, not a desk's to file.
         mvc.perform(post("/api/v1/destination-verifications").with(owner()).contentType(MediaType.APPLICATION_JSON)
                         .content("{" + place + ",\"verified\":true,\"basis\":\"TRAVELER_SCORE\"}"))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.detail").value("Recommended by Traveler is earned from reviews; it cannot be filed"));
+                .andExpect(jsonPath("$.detail").value("The traveller score is earned from reviews; it cannot be filed"));
     }
 
-    /** A partner's verification rests on the agreement, and only a partner's own listing can carry it. */
-    @Test
-    void aPartnersVerificationIsForAPartnersOwnListing() throws Exception {
-        RequestPostProcessor host = staff("host@verify.test", "PARTNER", "PERM_LISTING_EDIT_OWN");
-        UUID hostId = UUID.fromString(JsonPath.read(mvc.perform(get("/api/v1/users/me").with(host))
-                .andReturn().getResponse().getContentAsString(), "$.id"));
-        Destination partnersPlace = catalogue.place(province, "Sala Lodges", 13.3622, 103.8597, ListingStatus.PUBLISHED, hostId, Set.of());
-        String ours = "\"destinationId\":\"" + staffPlace.getId() + "\"";
-        String theirs = "\"destinationId\":\"" + partnersPlace.getId() + "\"";
-
-        mvc.perform(post("/api/v1/destination-verifications").with(owner()).contentType(MediaType.APPLICATION_JSON)
-                        .content("{" + ours + ",\"verified\":true,\"basis\":\"PARTNER\",\"reference\":\"AGR-2026-07\"}"))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.detail").value("Only a partner's own listing is verified as a partner's; this one was written by our team"));
-        mvc.perform(post("/api/v1/destination-verifications").with(owner()).contentType(MediaType.APPLICATION_JSON)
-                        .content("{" + theirs + ",\"verified\":true,\"basis\":\"PARTNER\"}"))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.detail").value("Attach the partnership agreement, or give its reference, to verify"));
-        mvc.perform(post("/api/v1/destination-verifications").with(owner()).contentType(MediaType.APPLICATION_JSON)
-                        .content("{" + theirs + ",\"verified\":true,\"basis\":\"PARTNER\",\"reference\":\"AGR-2026-07\"}"))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.basis").value("PARTNER"));
-        mvc.perform(get("/api/v1/destination-verifications/queue").with(owner()))
-                .andExpect(jsonPath("$[?(@.destinationId=='" + partnersPlace.getId() + "')].basis").value("PARTNER"))
-                .andExpect(jsonPath("$[?(@.destinationId=='" + partnersPlace.getId() + "')].verified").value(true));
-    }
-
-    /** Enough reviews at a high enough average verify a place on their own: Recommended by Traveler. */
+    /** Enough reviews at a high enough average verify a place on their own: the traveller score. */
     @Test
     void theTravellersVerifyAPlaceWithTheirReviews() throws Exception {
         String status = "/api/v1/destination-verifications/status";
         String id = staffPlace.getId().toString();
         mvc.perform(get(status).param("destinationIds", id))
                 .andExpect(jsonPath("$[0].verified").value(false))
-                .andExpect(jsonPath("$[0].travelerRecommended").value(false))
                 .andExpect(jsonPath("$[0].ratingCount").value(0));
         for (String visitor : new String[] {"a@visit.test", "b@visit.test"}) {
             mvc.perform(post("/api/v1/reviews").with(customer(visitor)).contentType(MediaType.APPLICATION_JSON)
@@ -257,26 +226,25 @@ class VerificationIntegrationTests {
         mvc.perform(get(status).param("destinationIds", id))
                 .andExpect(jsonPath("$[0].verified").value(true))
                 .andExpect(jsonPath("$[0].basis").value("TRAVELER_SCORE"))
-                .andExpect(jsonPath("$[0].travelerRecommended").value(true))
                 .andExpect(jsonPath("$[0].ratingCount").value(2));
         // Among the verified places, and on the queue as the travellers' doing; nothing for a desk to revoke.
         mvc.perform(get(status)).andExpect(jsonPath("$[*].destinationId", hasItem(id)));
         mvc.perform(get("/api/v1/destination-verifications/queue").with(owner()))
                 .andExpect(jsonPath("$[?(@.destinationId=='" + id + "')].basis").value("TRAVELER_SCORE"))
-                .andExpect(jsonPath("$[?(@.destinationId=='" + id + "')].travelerRecommended").value(true));
+                .andExpect(jsonPath("$[?(@.destinationId=='" + id + "')].verified").value(true));
         mvc.perform(post("/api/v1/destination-verifications").with(owner()).contentType(MediaType.APPLICATION_JSON)
                         .content("{\"destinationId\":\"" + id + "\",\"verified\":false,\"note\":\"Not ours to take away\"}"))
                 .andExpect(status().isConflict());
-        // A paid verification on top: the badge rests on the invoice, and the seal stays the travellers'.
+        // A paid verification on top: the badge now rests on the invoice.
         mvc.perform(post("/api/v1/destination-verifications").with(owner()).contentType(MediaType.APPLICATION_JSON)
                         .content("{\"destinationId\":\"" + id + "\",\"verified\":true,\"basis\":\"PAID\",\"reference\":\"INV-2026-050\"}"))
                 .andExpect(status().isCreated());
         mvc.perform(get(status).param("destinationIds", id))
                 .andExpect(jsonPath("$[0].basis").value("PAID"))
-                .andExpect(jsonPath("$[0].travelerRecommended").value(true));
+                .andExpect(jsonPath("$[0].ratingCount").value(2));
     }
 
-    /** A stay and a food place are verified like attractions: a partner's stay on its agreement, a food place on its invoice, and the seal from reviews. */
+    /** A stay and a food place are verified like attractions: the desk on an invoice, or the travellers' score from reviews. */
     @Test
     void staysAndFoodPlacesAreVerifiedLikeAttractions() throws Exception {
         RequestPostProcessor host = staff("host2@verify.test", "PARTNER", "PERM_LISTING_EDIT_OWN");
@@ -306,41 +274,36 @@ class VerificationIntegrationTests {
                 .andExpect(jsonPath("$[?(@.destinationId=='" + foodId + "')].targetType").value(contains("FOOD")))
                 .andExpect(jsonPath("$[?(@.destinationId=='" + foodId + "')].desk").value(contains("STAFF")));
         mvc.perform(post("/api/v1/destination-verifications").with(owner()).contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"destinationId\":\"" + stayId + "\",\"verified\":true,\"basis\":\"PARTNER\",\"reference\":\"AGR-2026-09\"}"))
+                        .content("{\"destinationId\":\"" + stayId + "\",\"verified\":true,\"basis\":\"PAID\",\"reference\":\"INV-2026-009\"}"))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.targetType").value("STAY"))
                 .andExpect(jsonPath("$.destinationName").value("Sala Lodges"))
-                .andExpect(jsonPath("$.basis").value("PARTNER"));
-        mvc.perform(post("/api/v1/destination-verifications").with(owner()).contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"destinationId\":\"" + foodId + "\",\"verified\":true,\"basis\":\"PAID\",\"reference\":\"INV-2026-077\"}"))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.targetType").value("FOOD"));
+                .andExpect(jsonPath("$.basis").value("PAID"));
         mvc.perform(get("/api/v1/destination-verifications").with(owner()).param("destinationId", stayId.toString()))
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].destinationSlug").value(nullValue()));
 
-        // The public status and the search cards say so, for the app.
-        mvc.perform(get("/api/v1/destination-verifications/status").param("destinationIds", stayId.toString(), foodId.toString()))
-                .andExpect(jsonPath("$[0].verified").value(true))
-                .andExpect(jsonPath("$[0].basis").value("PARTNER"))
-                .andExpect(jsonPath("$[1].verified").value(true))
-                .andExpect(jsonPath("$[1].basis").value("PAID"));
-        mvc.perform(get("/api/v1/search/cards").param("type", "STAY").param("ids", stayId.toString()))
-                .andExpect(jsonPath("$[0].verified").value(true))
-                .andExpect(jsonPath("$[0].basis").value("PARTNER"));
-        mvc.perform(get("/api/v1/destination-verifications/status"))
-                .andExpect(jsonPath("$[*].destinationId", hasItem(foodId.toString())));
-
-        // The travellers' seal is earned by a food place's reviews too.
+        // The travellers' score verifies the food place on its reviews alone; no desk files anything for it.
         for (String visitor : new String[] {"c@visit.test", "d@visit.test"}) {
             mvc.perform(post("/api/v1/reviews").with(customer(visitor)).contentType(MediaType.APPLICATION_JSON)
                             .content("{\"targetType\":\"FOOD\",\"targetId\":\"" + foodId + "\",\"rating\":5,\"content\":\"Best noodles in town\"}"))
                     .andExpect(status().isCreated());
         }
-        mvc.perform(get("/api/v1/destination-verifications/status").param("destinationIds", foodId.toString()))
-                .andExpect(jsonPath("$[0].travelerRecommended").value(true))
-                .andExpect(jsonPath("$[0].ratingCount").value(2));
+
+        // The public status and the search cards say so, for the app.
+        mvc.perform(get("/api/v1/destination-verifications/status").param("destinationIds", stayId.toString(), foodId.toString()))
+                .andExpect(jsonPath("$[0].verified").value(true))
+                .andExpect(jsonPath("$[0].basis").value("PAID"))
+                .andExpect(jsonPath("$[1].verified").value(true))
+                .andExpect(jsonPath("$[1].basis").value("TRAVELER_SCORE"))
+                .andExpect(jsonPath("$[1].ratingCount").value(2));
+        mvc.perform(get("/api/v1/search/cards").param("type", "STAY").param("ids", stayId.toString()))
+                .andExpect(jsonPath("$[0].verified").value(true))
+                .andExpect(jsonPath("$[0].basis").value("PAID"));
         mvc.perform(get("/api/v1/search/cards").param("type", "FOOD").param("ids", foodId.toString()))
-                .andExpect(jsonPath("$[0].travelerRecommended").value(true));
+                .andExpect(jsonPath("$[0].verified").value(true))
+                .andExpect(jsonPath("$[0].basis").value("TRAVELER_SCORE"));
+        mvc.perform(get("/api/v1/destination-verifications/status"))
+                .andExpect(jsonPath("$[*].destinationId", hasItem(foodId.toString())));
     }
 }

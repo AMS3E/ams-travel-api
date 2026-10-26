@@ -1,7 +1,6 @@
 package ams.asmtravel.api.services.verification.service;
 
 import ams.asmtravel.api.services.verification.dto.request.VerificationRequest;
-import ams.asmtravel.api.services.verification.domain.TravelerSealBar;
 import ams.asmtravel.api.services.verification.dto.response.VerificationResponse;
 import org.springframework.security.core.Authentication;
 
@@ -10,9 +9,9 @@ import java.util.UUID;
 
 /**
  * Destination verification, for attractions, stays and food places alike: a
- * desk's decision on what it rests on, or the travellers' seal earned from
- * reviews. Status is public; decisions and evidence are for verifying desks.
- * A {@code destinationId} is the id of a place of any kind.
+ * desk's decision on what it rests on, or the travellers' reviews verifying a
+ * place on their own. Status is public; decisions and evidence are for
+ * verifying desks. A {@code destinationId} is the id of a place of any kind.
  */
 public interface VerificationService {
 
@@ -25,13 +24,10 @@ public interface VerificationService {
     /**
      * Verifies, renews or revokes. Verifying names its basis and brings what that
      * basis needs; revoking needs a note and a decision to revoke — the travellers'
-     * seal is not one.
+     * score is not one.
      */
     VerificationResponse record(VerificationRequest request, UUID deciderId, Authentication authentication);
 
     /** Public status; without ids, all verified published places. */
     List<VerificationResponse> findStatuses(List<UUID> destinationIds);
-
-    /** The Traveler seal's bar, for a search that keeps only the places carrying it. */
-    TravelerSealBar travelerSeal();
 }

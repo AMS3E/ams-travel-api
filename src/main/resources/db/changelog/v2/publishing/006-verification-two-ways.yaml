@@ -1,0 +1,16 @@
+# Verification now rests on two ways only: a payment to AMS Travel, filed by a
+# desk, or the travellers' score earned from reviews. Decisions filed on the
+# retired bases (an official site's standing, a partnership) become paid ones,
+# so every stored basis is one the code still knows.
+databaseChangeLog:
+  - changeSet:
+      id: v2-publishing-verification-two-ways
+      author: ams-travel-v2
+      changes:
+        - update:
+            schemaName: publishing
+            tableName: destination_verifications
+            columns:
+              - column: {name: basis, value: PAID}
+            where: basis IN ('OFFICIAL_SITE', 'PARTNER')
+      rollback: []

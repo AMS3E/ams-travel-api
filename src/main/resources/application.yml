@@ -117,12 +117,12 @@ app:
     # The homepage's Recommended list: how many places it shows.
     size: ${RECOMMENDATION_SIZE:10}
   verification:
-    # Recommended by Traveler, and with it the Verified badge, is earned from
-    # reviews on their own: this many star ratings (every review carries one)
-    # at this average or better. The boss's numbers; change them here, not in code.
-    traveler-seal:
-      min-ratings: ${TRAVELER_SEAL_MIN_RATINGS:10000}
-      min-average: ${TRAVELER_SEAL_MIN_AVERAGE:4.5}
+    # The traveller score: reviews verify a place on their own at this many
+    # star ratings (every review carries one) at this average or better.
+    # The boss's numbers; change them here, not in code.
+    traveler-score:
+      min-ratings: ${TRAVELER_SCORE_MIN_RATINGS:10000}
+      min-average: ${TRAVELER_SCORE_MIN_AVERAGE:4.5}
   keycloak:
     admin:
       # Accounts and roles live in Keycloak, not in this database, so creating a

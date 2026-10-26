@@ -21,7 +21,6 @@ import java.util.UUID;
  * @param categoryIds  a tourism region's shelves, in order; null keeps them
  * @param tagIds       its filter chips, in order; null keeps them
  * @param isActive     null keeps it (new: active)
- * @param amsRecommended Recommended by AMS Travel; null keeps it (new: not recommended)
  * @param sortOrder    its place within its kind, 0 first; null puts a new one last and keeps an edited one in place
  */
 public record RegionRequest(
@@ -37,7 +36,6 @@ public record RegionRequest(
         List<UUID> tagIds,
         List<UUID> interestIds,
         Boolean isActive,
-        Boolean amsRecommended,
         @PositiveOrZero Integer sortOrder,
         /** Its centre on the Map screen, with {@code longitude}: both or neither; neither keeps the current one. */
         @DecimalMin("-90") @DecimalMax("90") BigDecimal latitude,

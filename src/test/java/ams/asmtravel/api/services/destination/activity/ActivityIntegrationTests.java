@@ -122,7 +122,7 @@ class ActivityIntegrationTests {
                         .content("{\"targetType\":\"ACTIVITY\",\"targetId\":\"" + id + "\"}"))
                 .andExpect(status().is2xxSuccessful());
         mvc.perform(post("/api/v1/destination-verifications").with(owner()).contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"destinationId\":\"" + id + "\",\"verified\":true,\"basis\":\"OFFICIAL_SITE\",\"reference\":\"Kratie tourism office\"}"))
+                        .content("{\"destinationId\":\"" + id + "\",\"verified\":true,\"basis\":\"PAID\",\"reference\":\"INV-2026-300\"}"))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.targetType").value("ACTIVITY"))
                 .andExpect(jsonPath("$.destinationName").value("Kampi Dolphin Cruise"));
@@ -135,7 +135,7 @@ class ActivityIntegrationTests {
                 .andExpect(jsonPath("$[0].reviewCount").value(1))
                 .andExpect(jsonPath("$[0].averageRating").value(5.0))
                 .andExpect(jsonPath("$[0].verified").value(true))
-                .andExpect(jsonPath("$[0].basis").value("OFFICIAL_SITE"));
+                .andExpect(jsonPath("$[0].basis").value("PAID"));
         mvc.perform(get("/api/v1/admin/destination-stats/" + id).with(owner()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.place.type").value("ACTIVITY"));

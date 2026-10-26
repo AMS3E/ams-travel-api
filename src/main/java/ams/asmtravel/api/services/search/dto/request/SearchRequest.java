@@ -21,7 +21,7 @@ import java.util.UUID;
  * @param categoryIds         any of these categories (destinations, food)
  * @param tagIds              any of these tags (destinations)
  * @param interestIds         any of these interests (all kinds)
- * @param travelerRecommended true keeps only places carrying the Traveler seal (destinations; the other kinds carry none)
+ * @param verified            true keeps only the verified places, of any kind of destination; corridors carry no badge and answer empty
  * @param near                a destination's id: what lies around it, nearest first, instead of A to Z. Stays and food
  *                            within the Nearby radius, attractions within 25 km, corridors stopping there
  * @param radiusKm            how far {@code near} reaches for attractions, 0.1 to 50 km; 25 when left out
@@ -37,7 +37,7 @@ public record SearchRequest(
         @Size(max = 20) Set<UUID> categoryIds,
         @Size(max = 20) Set<UUID> tagIds,
         @Size(max = 20) Set<UUID> interestIds,
-        Boolean travelerRecommended,
+        Boolean verified,
         UUID near,
         @DecimalMin("0.1") @DecimalMax("50") Double radiusKm,
         @Pattern(regexp = "^(en|km)?$", message = "Use en or km") String lang
@@ -64,8 +64,8 @@ public record SearchRequest(
         return "km".equals(lang);
     }
 
-    public boolean sealOnly() {
-        return Boolean.TRUE.equals(travelerRecommended);
+    public boolean verifiedOnly() {
+        return Boolean.TRUE.equals(verified);
     }
 
     private static Set<UUID> together(UUID one, Set<UUID> several) {

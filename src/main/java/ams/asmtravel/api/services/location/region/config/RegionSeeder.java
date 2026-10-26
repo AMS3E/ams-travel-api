@@ -51,9 +51,8 @@ public class RegionSeeder implements CatalogSeedContributor {
             region.setNameKm(SeedJson.text(node, "nameKm"));
             region.setDescriptionKm(SeedJson.text(node, "descriptionKm"));
             region.setCoverKey(context.imageKey(node));
-            /* The Map panel picture (a tourism region's places on an OpenStreetMap base) and the AMS Travel badge. */
+            /* The Map panel picture: a tourism region's places on an OpenStreetMap base. */
             region.setMapKey(context.imageKey(SeedJson.text(node, "map")));
-            region.setAmsRecommended(SeedJson.bool(node, "amsRecommended", false));
             String kind = SeedJson.text(node, "kind");
             region.setKind(kind == null ? RegionKind.ZONE : RegionKind.valueOf(kind));
             region.setSortOrder(numbered.merge(region.getKind(), 1, Integer::sum) - 1);

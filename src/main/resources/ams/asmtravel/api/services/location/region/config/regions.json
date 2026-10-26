@@ -75,8 +75,7 @@
       "viewpoint"
     ],
     "image": "bayon-temple.jpg",
-    "map": "map-ancient-capitals.jpg",
-    "amsRecommended": true
+    "map": "map-ancient-capitals.jpg"
   },
   {
     "code": "NORTHEASTERN",
@@ -116,8 +115,7 @@
       "viewpoint"
     ],
     "image": "bou-sra-waterfall.jpg",
-    "map": "map-northeastern.jpg",
-    "amsRecommended": false
+    "map": "map-northeastern.jpg"
   },
   {
     "code": "MEKONG-TONLE-SAP",
@@ -157,8 +155,7 @@
       "cruise"
     ],
     "image": "tonle-sap-floating-village.jpg",
-    "map": "map-mekong-tonle-sap.jpg",
-    "amsRecommended": true
+    "map": "map-mekong-tonle-sap.jpg"
   },
   {
     "code": "MOUNTAIN-WATERFALL",
@@ -197,8 +194,7 @@
       "viewpoint"
     ],
     "image": "phnom-kulen.jpg",
-    "map": "map-mountain-waterfall.jpg",
-    "amsRecommended": false
+    "map": "map-mountain-waterfall.jpg"
   },
   {
     "code": "COASTAL-ISLAND",
@@ -234,8 +230,7 @@
       "cruise"
     ],
     "image": "koh-rong-sanloem-3.jpg",
-    "map": "map-coastal-island.jpg",
-    "amsRecommended": true
+    "map": "map-coastal-island.jpg"
   },
   {
     "code": "URBAN-LIFESTYLE",
@@ -272,8 +267,7 @@
       "shopping"
     ],
     "image": "phnom-penh-riverside.jpg",
-    "map": "map-urban-lifestyle.jpg",
-    "amsRecommended": false
+    "map": "map-urban-lifestyle.jpg"
   },
   {
     "code": "KHMER-CULINARY",
@@ -307,8 +301,7 @@
       "skybar"
     ],
     "image": "kep-crab-market.jpg",
-    "map": "map-khmer-culinary.jpg",
-    "amsRecommended": false
+    "map": "map-khmer-culinary.jpg"
   },
   {
     "code": "ECO-COMMUNITY",
@@ -348,8 +341,7 @@
       "camping"
     ],
     "image": "chi-phat-3.jpg",
-    "map": "map-eco-community.jpg",
-    "amsRecommended": false
+    "map": "map-eco-community.jpg"
   },
   {
     "code": "LUXURY-TOURISM",
@@ -388,7 +380,6 @@
       "cruise"
     ],
     "image": "song-saa-private-island.jpg",
-    "map": "map-luxury-tourism.jpg",
-    "amsRecommended": false
+    "map": "map-luxury-tourism.jpg"
   }
 ]

@@ -33,8 +33,6 @@ public record RegionResponse(
         List<UUID> tagIds,
         List<UUID> interestIds,
         Boolean isActive,
-        /** Recommended by AMS Travel: staff chose it, and the app shows the badge on its card. */
-        boolean amsRecommended,
         Integer sortOrder,
         BigDecimal latitude,
         BigDecimal longitude,
