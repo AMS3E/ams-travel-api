@@ -207,6 +207,11 @@ public class KeycloakSecurityConfig {
                         .hasAnyAuthority(Permissions.TAXONOMY_MANAGE, Permissions.FULL_CONTROL)
                 .requestMatchers(HttpMethod.DELETE, "/api/v1/interests/*").hasAuthority(Permissions.FULL_CONTROL)
 
+                /* Interest groups: fixed rows, only their pictures change. */
+                .requestMatchers(HttpMethod.GET, "/api/v1/interest-groups").permitAll()
+                .requestMatchers(HttpMethod.PUT, "/api/v1/interest-groups/*")
+                        .hasAnyAuthority(Permissions.TAXONOMY_MANAGE, Permissions.FULL_CONTROL)
+
                 /* Media files first (the private verification/ folder before the public read), then galleries. */
                 .requestMatchers(HttpMethod.GET, "/api/v1/media/files/verification/*/*")
                         .hasAnyAuthority(Permissions.DESTINATION_VERIFY, Permissions.FULL_CONTROL)

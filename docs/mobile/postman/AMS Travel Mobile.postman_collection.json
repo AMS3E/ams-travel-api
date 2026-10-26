@@ -1,6 +1,6 @@
 {
   "info": {
-    "_postman_id": "720c8936-ce51-4467-bf50-9cc38a17d2a8",
+    "_postman_id": "b1f2210f-cb98-4acc-8e92-152aebedf127",
     "name": "AMS Travel Mobile",
     "description": "The AMS Travel API as the mobile app uses it, one folder per screen. Built by docs/mobile/postman/build-collection.py from the API's OpenAPI description on 2026-10-14. Reads marked public need no token; the rest send the traveller's bearer token from {{token}}. See docs/mobile/screens-to-api.md for what each screen needs.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -113,6 +113,25 @@
             "auth": {
               "type": "noauth"
             }
+          },
+          "response": []
+        },
+        {
+          "name": "The six groups' pictures",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/interest-groups",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "interest-groups"
+              ],
+              "query": []
+            },
+            "description": "\n\nNeeds the traveller's token."
           },
           "response": []
         },
