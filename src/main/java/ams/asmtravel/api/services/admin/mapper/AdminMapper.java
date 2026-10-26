@@ -29,7 +29,6 @@ public interface AdminMapper {
                 browses == null ? 0 : browses, place.viewCount(), checkIns == null ? 0 : checkIns,
                 review == null ? 0 : review.ratingCount(), review == null ? null : review.averageRating(),
                 review == null ? 0 : review.reviewCount(),
-                verification != null && verification.verified(), verification == null ? null : verification.basis(),
-                verification != null && Boolean.TRUE.equals(verification.travelerRecommended()));
+                verification != null && verification.verified(), verification == null ? null : verification.basis());
     }
 }

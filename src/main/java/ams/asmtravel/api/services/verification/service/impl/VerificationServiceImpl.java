@@ -23,7 +23,6 @@ import ams.asmtravel.api.services.user.user.service.UserService;
 import ams.asmtravel.api.services.verification.config.VerificationProperties;
 import ams.asmtravel.api.services.verification.domain.DestinationVerification;
 import ams.asmtravel.api.services.verification.domain.Standing;
-import ams.asmtravel.api.services.verification.domain.TravelerSealBar;
 import ams.asmtravel.api.services.verification.domain.VerificationBasis;
 import ams.asmtravel.api.services.verification.domain.VerifiedPlace;
 import ams.asmtravel.api.services.verification.dto.request.VerificationRequest;
@@ -125,7 +124,6 @@ public class VerificationServiceImpl implements VerificationService {
     public VerificationResponse record(VerificationRequest request, UUID deciderId, Authentication authentication) {
         UUID destinationId = request.destinationId();
         Reach reach = requireReach(destinationId, authentication);
-        Desk desk = reach.desk();
         boolean verified = request.verified();
         VerificationBasis basis = verified ? request.basis() : null;
         String note = trimmedOrNull(request.note());
@@ -134,22 +132,16 @@ public class VerificationServiceImpl implements VerificationService {
 
         if (verified && basis == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    "Say what the verification rests on: an official site, a partnership, or a payment");
+                    "Say what the verification rests on: a payment to AMS Travel");
         }
         if (verified && !basis.filed()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    "Recommended by Traveler is earned from reviews; it cannot be filed");
+                    "The traveller score is earned from reviews; it cannot be filed");
         }
-        // A paid or partner verification needs the paperwork, or at least its number.
+        // A paid verification needs the paperwork, or at least its number.
         if (verified && basis.needsPaperwork() && reference == null && evidenceKey == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, basis == VerificationBasis.PAID
-                    ? "Attach the invoice or receipt, or give its number, to verify"
-                    : "Attach the partnership agreement, or give its reference, to verify");
-        }
-        if (verified && basis == VerificationBasis.PARTNER && desk != Desk.PARTNER) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    "Only a partner's own listing is verified as a partner's; this one was written by "
-                            + (desk == Desk.CONTRIBUTOR ? "a contributor" : "our team"));
+                    "Attach the invoice or receipt, or give its number, to verify");
         }
         DestinationVerification last = latestOf(List.of(destinationId)).get(destinationId);
         if (!verified && (last == null || !last.getVerified())) {
@@ -197,11 +189,6 @@ public class VerificationServiceImpl implements VerificationService {
                 .map(place -> mapper.publicStatus(place.id(), latest.get(place.id()), standings.getOrDefault(place.id(), Standing.NONE)))
                 .filter(VerificationResponse::verified)
                 .toList();
-    }
-
-    @Override
-    public TravelerSealBar travelerSeal() {
-        return new TravelerSealBar(properties.travelerSeal().minRatings(), properties.travelerSeal().minAverage());
     }
 
     // A place's decisions go with it; a decider's outlive them.
@@ -287,7 +274,7 @@ public class VerificationServiceImpl implements VerificationService {
         return places;
     }
 
-    /** Each place's star ratings and whether they earn the travellers' seal, read per kind; the review service answers 100 at a time. */
+    /** Each place's star ratings and whether they verify it on their own, read per kind; the review service answers 100 at a time. */
     private Map<UUID, Standing> standingsOf(Collection<VerifiedPlace> places) {
         Map<PublishingTargetType, List<UUID>> byKind = new EnumMap<>(PublishingTargetType.class);
         for (VerifiedPlace place : places) {
@@ -313,12 +300,12 @@ public class VerificationServiceImpl implements VerificationService {
 
     private Map<UUID, Standing> standingsOf(PublishingTargetType kind, List<UUID> ids) {
         Map<UUID, Standing> standings = new HashMap<>();
-        VerificationProperties.TravelerSeal seal = properties.travelerSeal();
+        VerificationProperties.TravelerScore score = properties.travelerScore();
         for (int from = 0; from < ids.size(); from += SUMMARY_BATCH) {
             List<UUID> chunk = ids.subList(from, Math.min(from + SUMMARY_BATCH, ids.size()));
             for (ReviewSummaryResponse summary : reviewService.summaries(reviewTarget(kind), chunk)) {
                 standings.put(summary.targetId(), new Standing(summary.ratingCount(), summary.averageRating(),
-                        seal.earned(summary.ratingCount(), summary.averageRating())));
+                        score.earned(summary.ratingCount(), summary.averageRating())));
             }
         }
         return standings;

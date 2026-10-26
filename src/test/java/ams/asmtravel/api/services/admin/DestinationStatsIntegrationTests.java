@@ -80,7 +80,7 @@ class DestinationStatsIntegrationTests {
                         .content("{\"destinationId\":\"" + id + "\",\"eventType\":\"DESTINATION_VIEW\"}"))
                 .andExpect(status().isAccepted());
         mvc.perform(post("/api/v1/destination-verifications").with(owner()).contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"destinationId\":\"" + id + "\",\"verified\":true,\"basis\":\"OFFICIAL_SITE\"}"))
+                        .content("{\"destinationId\":\"" + id + "\",\"verified\":true,\"basis\":\"PAID\",\"reference\":\"INV-2026-200\"}"))
                 .andExpect(status().isCreated());
         // The view count is bumped by a bulk update; read the place afresh, as a later request would.
         entityManager.flush();
@@ -94,8 +94,7 @@ class DestinationStatsIntegrationTests {
                 .andExpect(jsonPath(row + ".viewCount").value(1))
                 .andExpect(jsonPath(row + ".checkIns").value(2))
                 .andExpect(jsonPath(row + ".verified").value(true))
-                .andExpect(jsonPath(row + ".basis").value("OFFICIAL_SITE"))
-                .andExpect(jsonPath(row + ".travelerRecommended").value(false));
+                .andExpect(jsonPath(row + ".basis").value("PAID"));
 
         // A period narrows what travellers did; views, the badge and the status stay as of today.
         LocalDate today = LocalDate.now(ZoneId.of("Asia/Phnom_Penh"));

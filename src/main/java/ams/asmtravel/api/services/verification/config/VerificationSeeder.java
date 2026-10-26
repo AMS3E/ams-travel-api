@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-/** Seeds the Verified decisions on the official sites, filed under the seed's editorial desk. */
+/** Seeds the paid Verified decisions, filed under the seed's editorial desk. */
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -55,7 +55,7 @@ public class VerificationSeeder implements CatalogSeedContributor {
             decision.setTargetId(place.getId());
             decision.setVerified(true);
             VerificationBasis basis = SeedJson.enumValue(node, "basis", VerificationBasis.class);
-            decision.setBasis(basis == null ? VerificationBasis.OFFICIAL_SITE : basis);
+            decision.setBasis(basis == null ? VerificationBasis.PAID : basis);
             decision.setReference(SeedJson.text(node, "reference"));
             decision.setNote(SeedJson.text(node, "note"));
             decision.setDecidedBy(desk.getId());

@@ -8,8 +8,8 @@ import java.util.UUID;
 
 /**
  * Verify, on what the verification rests on, or revoke (needs a note). A paid
- * or partner verification needs the paperwork, the file or its number; an
- * official site needs nothing; the travellers' seal cannot be filed.
+ * verification needs the paperwork, the file or its number; the travellers'
+ * score cannot be filed.
  *
  * @param basis       what it rests on; required to verify, ignored to revoke
  * @param evidenceKey key from {@code POST /medias?category=verification}; image or PDF only

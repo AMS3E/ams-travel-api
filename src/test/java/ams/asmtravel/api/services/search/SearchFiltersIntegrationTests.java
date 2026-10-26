@@ -32,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * provinces at once, only the Traveler seal holders, the whole catalogue grouped by province, and the
  * open-now line on a food card. The seal's bar is lowered to one rating so a test can reach it.
  */
-@SpringBootTest(properties = {"app.security.oauth2.enabled=true", "app.verification.traveler-seal.min-ratings=1"})
+@SpringBootTest(properties = {"app.security.oauth2.enabled=true", "app.verification.traveler-score.min-ratings=1"})
 @AutoConfigureMockMvc
 @Transactional
 class SearchFiltersIntegrationTests {
@@ -73,7 +73,7 @@ class SearchFiltersIntegrationTests {
     }
 
     @Test
-    void onlyTheTravelerSealHoldersWhenAsked() throws Exception {
+    void onlyTheVerifiedPlacesWhenAsked() throws Exception {
         Province province = catalogue.province();
         Destination angkor = catalogue.published(province, "Angkor Wat S", 13.4125, 103.8670);
         catalogue.published(province, "Bayon S", 13.4413, 103.8590);
@@ -82,13 +82,14 @@ class SearchFiltersIntegrationTests {
 
         mvc.perform(get("/api/v1/search").param("provinceId", province.getId().toString()))
                 .andExpect(jsonPath("$.content", hasSize(2)));
-        mvc.perform(get("/api/v1/search").param("provinceId", province.getId().toString()).param("travelerRecommended", "true"))
+        mvc.perform(get("/api/v1/search").param("provinceId", province.getId().toString()).param("verified", "true"))
                 .andExpect(jsonPath("$.content", hasSize(1)))
                 .andExpect(jsonPath("$.content[0].name").value("Angkor Wat S"))
-                .andExpect(jsonPath("$.content[0].travelerRecommended").value(true))
+                .andExpect(jsonPath("$.content[0].verified").value(true))
+                .andExpect(jsonPath("$.content[0].basis").value("TRAVELER_SCORE"))
                 .andExpect(jsonPath("$.page.totalElements").value(1));
-        // A kind with no seal holder answers none (stays and food places earn the seal since 2026-10-20).
-        mvc.perform(get("/api/v1/search").param("type", "STAY").param("travelerRecommended", "true"))
+        // A kind with no verified place answers none; a corridor can never be one.
+        mvc.perform(get("/api/v1/search").param("type", "STAY").param("verified", "true"))
                 .andExpect(jsonPath("$.content", hasSize(0)));
     }
 

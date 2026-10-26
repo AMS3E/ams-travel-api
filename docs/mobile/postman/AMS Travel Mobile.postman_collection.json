@@ -1,6 +1,6 @@
 {
   "info": {
-    "_postman_id": "9ce1abff-7125-4a36-b693-58ff133470da",
+    "_postman_id": "720c8936-ce51-4467-bf50-9cc38a17d2a8",
     "name": "AMS Travel Mobile",
     "description": "The AMS Travel API as the mobile app uses it, one folder per screen. Built by docs/mobile/postman/build-collection.py from the API's OpenAPI description on 2026-10-14. Reads marked public need no token; the rest send the traveller's bearer token from {{token}}. See docs/mobile/screens-to-api.md for what each screen needs.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -407,7 +407,7 @@
                   "description": ""
                 },
                 {
-                  "key": "travelerRecommended",
+                  "key": "verified",
                   "value": "",
                   "disabled": true,
                   "description": ""
@@ -514,7 +514,7 @@
                   "description": ""
                 },
                 {
-                  "key": "travelerRecommended",
+                  "key": "verified",
                   "value": "",
                   "disabled": true,
                   "description": ""
@@ -547,12 +547,12 @@
           "response": []
         },
         {
-          "name": "Only the Traveler seal holders",
+          "name": "Only the verified places",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/search?travelerRecommended=true&size=20",
+              "raw": "{{baseUrl}}/search?verified=true&size=20",
               "host": [
                 "{{baseUrl}}"
               ],
@@ -561,7 +561,7 @@
               ],
               "query": [
                 {
-                  "key": "travelerRecommended",
+                  "key": "verified",
                   "value": "true",
                   "disabled": false,
                   "description": ""
@@ -776,7 +776,7 @@
                   "description": ""
                 },
                 {
-                  "key": "travelerRecommended",
+                  "key": "verified",
                   "value": "",
                   "disabled": true,
                   "description": ""
@@ -1061,7 +1061,7 @@
                   "description": ""
                 },
                 {
-                  "key": "travelerRecommended",
+                  "key": "verified",
                   "value": "",
                   "disabled": true,
                   "description": ""
@@ -1753,7 +1753,7 @@
                   "description": ""
                 },
                 {
-                  "key": "travelerRecommended",
+                  "key": "verified",
                   "value": "",
                   "disabled": true,
                   "description": ""
@@ -2091,7 +2091,7 @@
                   "description": ""
                 },
                 {
-                  "key": "travelerRecommended",
+                  "key": "verified",
                   "value": "",
                   "disabled": true,
                   "description": ""
@@ -2233,7 +2233,7 @@
                   "description": ""
                 },
                 {
-                  "key": "travelerRecommended",
+                  "key": "verified",
                   "value": "",
                   "disabled": true,
                   "description": ""
@@ -2363,7 +2363,7 @@
                   "description": ""
                 },
                 {
-                  "key": "travelerRecommended",
+                  "key": "verified",
                   "value": "",
                   "disabled": true,
                   "description": ""
@@ -2425,12 +2425,12 @@
           "response": []
         },
         {
-          "name": "Recommend panel: the interest's Traveler seal holders",
+          "name": "Recommend panel: the interest's verified places",
           "request": {
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{baseUrl}}/search?travelerRecommended=true&size=5",
+              "raw": "{{baseUrl}}/search?verified=true&size=5",
               "host": [
                 "{{baseUrl}}"
               ],
@@ -2445,7 +2445,7 @@
                   "description": ""
                 },
                 {
-                  "key": "travelerRecommended",
+                  "key": "verified",
                   "value": "true",
                   "disabled": false,
                   "description": ""
@@ -2669,7 +2669,7 @@
                   "description": ""
                 },
                 {
-                  "key": "travelerRecommended",
+                  "key": "verified",
                   "value": "",
                   "disabled": true,
                   "description": ""
@@ -2776,7 +2776,7 @@
                   "description": ""
                 },
                 {
-                  "key": "travelerRecommended",
+                  "key": "verified",
                   "value": "",
                   "disabled": true,
                   "description": ""
@@ -2877,7 +2877,7 @@
                   "description": ""
                 },
                 {
-                  "key": "travelerRecommended",
+                  "key": "verified",
                   "value": "",
                   "disabled": true,
                   "description": ""
@@ -3070,7 +3070,7 @@
                   "description": ""
                 },
                 {
-                  "key": "travelerRecommended",
+                  "key": "verified",
                   "value": "",
                   "disabled": true,
                   "description": ""
@@ -3229,7 +3229,7 @@
                   "description": ""
                 },
                 {
-                  "key": "travelerRecommended",
+                  "key": "verified",
                   "value": "",
                   "disabled": true,
                   "description": ""

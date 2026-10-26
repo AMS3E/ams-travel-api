@@ -211,7 +211,7 @@ The backend writes only the Status line: `built YYYY-MM-DD, <endpoint or field>`
 - **Needed:** a `travelerRecommended=true` parameter on `GET /search` (and `/search/cards`), e.g. `GET /search?interestIds=a,b&travelerRecommended=true&size=5`
 - **Why:** the panel cannot be filled
 - **Blocks the screen:** no, the panel is hidden
-- **Status:** built 2026-10-14, `travelerRecommended=true` on `GET /search` (destinations; stays, food and corridors carry no seal and answer empty); the bar stays 10,000 ratings at 4.5 (Kimleng, 2026-10-14), so the panel is empty until a place reaches it: hide it while `content` is empty
+- **Status:** built 2026-10-14, `travelerRecommended=true` on `GET /search` (destinations; stays, food and corridors carry no seal and answer empty); the bar stays 10,000 ratings at 4.5 (Kimleng, 2026-10-14), so the panel is empty until a place reaches it: hide it while `content` is empty; reshaped 2026-10-26 with the one Verified badge: the parameter is now `verified=true` (keeps verified places of every kind of destination; corridors answer empty) and the card field `travelerRecommended` is gone — read `verified` and `basis`
 
 ### R-020 · Search · several regions or provinces in the filters
 - **Screen:** Search, Filters sheet (guest and signed-in), opened from Explore or from Search

@@ -177,7 +177,7 @@ public class OverviewRepository {
         return summaries;
     }
 
-    /** Verified, on what, and the travellers' seal, per place. */
+    /** Verified and on what, per place. */
     public Map<UUID, VerificationResponse> verificationStatuses(List<UUID> destinationIds) {
         Map<UUID, VerificationResponse> statuses = new LinkedHashMap<>();
         if (!destinationIds.isEmpty()) {

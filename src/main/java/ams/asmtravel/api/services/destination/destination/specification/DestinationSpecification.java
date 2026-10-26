@@ -3,12 +3,7 @@ package ams.asmtravel.api.services.destination.destination.specification;
 import ams.asmtravel.api.services.destination.destination.domain.Destination;
 import ams.asmtravel.api.services.destination.destination.domain.DestinationSearch;
 import ams.asmtravel.api.services.destination.destination.domain.ListingStatus;
-import ams.asmtravel.api.services.review.rating.domain.Rating;
-import ams.asmtravel.api.services.review.rating.domain.RatingStatus;
-import ams.asmtravel.api.services.review.rating.domain.RatingTargetType;
 import jakarta.persistence.criteria.JoinType;
-import jakarta.persistence.criteria.Root;
-import jakarta.persistence.criteria.Subquery;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.Collection;
@@ -29,8 +24,7 @@ public final class DestinationSpecification {
                 inRegions(search.regionIds()),
                 anyOf("categories", search.categoryIds()),
                 anyOf("tags", search.tagIds()),
-                anyOf("interests", search.interestIds()),
-                travelerSeal(search.seal()));
+                anyOf("interests", search.interestIds()));
     }
 
     private static Specification<Destination> words(String q) {
@@ -76,27 +70,4 @@ public final class DestinationSpecification {
         };
     }
 
-    /** Enough active star ratings at a high enough average: the same bar the Verified standing reads. */
-    private static Specification<Destination> travelerSeal(DestinationSearch.Seal seal) {
-        return (root, query, builder) -> {
-            if (seal == null) {
-                return null;
-            }
-            Subquery<Long> count = query.subquery(Long.class);
-            Root<Rating> counted = count.from(Rating.class);
-            count.select(builder.count(counted)).where(
-                    builder.equal(counted.get("targetType"), RatingTargetType.DESTINATION),
-                    builder.equal(counted.get("targetId"), root.get("id")),
-                    builder.equal(counted.get("status"), RatingStatus.ACTIVE));
-            Subquery<Double> average = query.subquery(Double.class);
-            Root<Rating> averaged = average.from(Rating.class);
-            average.select(builder.avg(averaged.<Short>get("stars"))).where(
-                    builder.equal(averaged.get("targetType"), RatingTargetType.DESTINATION),
-                    builder.equal(averaged.get("targetId"), root.get("id")),
-                    builder.equal(averaged.get("status"), RatingStatus.ACTIVE));
-            return builder.and(
-                    builder.greaterThanOrEqualTo(count, seal.minRatings()),
-                    builder.greaterThanOrEqualTo(average, seal.minAverage().doubleValue()));
-        };
-    }
 }

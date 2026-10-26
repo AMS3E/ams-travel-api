@@ -11,9 +11,8 @@ import java.util.UUID;
  * whether it is verified (any kind of destination). Fields a kind does not have are null: a stay has no slug, a corridor no province
  * and no pin, only a stay or a food place has a price, only a corridor a duration.
  *
- * @param basis               OFFICIAL_SITE, PARTNER, PAID or TRAVELER_SCORE when verified
- * @param travelerRecommended the "Recommended by Traveler" seal
- * @param untranslated        asked in Khmer: the fields still in English because no Khmer is written; empty otherwise
+ * @param basis        PAID or TRAVELER_SCORE when verified
+ * @param untranslated asked in Khmer: the fields still in English because no Khmer is written; empty otherwise
  */
 public record SearchHitResponse(
         SearchType type,
@@ -35,7 +34,6 @@ public record SearchHitResponse(
         long reviewCount,
         boolean verified,
         String basis,
-        boolean travelerRecommended,
         BigDecimal priceFrom,
         String currency,
         Integer durationDays,
@@ -54,7 +52,7 @@ public record SearchHitResponse(
     public SearchHitResponse withDistanceMeters(Integer metres) {
         return new SearchHitResponse(type, id, name, slug, shortDescription, coverUrl, provinceId, provinceName, latitude, longitude,
                 categoryIds, categoryNames, interestIds, tourismRegionIds, averageRating, ratingCount, reviewCount, verified, basis,
-                travelerRecommended, priceFrom, currency, durationDays, openNow, todayHours, stopNames, encodedPolyline, metres, untranslated);
+                priceFrom, currency, durationDays, openNow, todayHours, stopNames, encodedPolyline, metres, untranslated);
     }
 
     /** The same card with its words swapped for Khmer ones. */
@@ -62,7 +60,7 @@ public record SearchHitResponse(
                                       List<String> untranslated) {
         return new SearchHitResponse(type, id, name, slug, shortDescription, coverUrl, provinceId, provinceName, latitude, longitude,
                 categoryIds, categoryNames, interestIds, tourismRegionIds, averageRating, ratingCount, reviewCount, verified, basis,
-                travelerRecommended, priceFrom, currency, durationDays, openNow, todayHours, stopNames, encodedPolyline, distanceMeters,
+                priceFrom, currency, durationDays, openNow, todayHours, stopNames, encodedPolyline, distanceMeters,
                 untranslated);
     }
 }

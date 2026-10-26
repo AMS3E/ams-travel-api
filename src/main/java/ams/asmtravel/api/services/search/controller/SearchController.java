@@ -38,7 +38,7 @@ public class SearchController {
     /**
      * {@code ?type=DESTINATION|STAY|FOOD|ACTIVITY|CORRIDOR} (destinations when left out), {@code ?q=} words, then
      * {@code regionIds}, {@code provinceIds}, {@code categoryIds}, {@code tagIds}, {@code interestIds} (ids, comma-separated;
-     * {@code regionId} and {@code provinceId} still take one), {@code travelerRecommended=true} for the seal holders,
+     * {@code regionId} and {@code provinceId} still take one), {@code verified=true} for the verified places,
      * {@code near=} a destination's id for what lies around it, nearest first;
      * {@code ?page=&size=} with 20 a page and at most 100. Name order. {@code ?lang=km} (here and on every search URL)
      * gives the cards' words in Khmer where written, naming what is still English in {@code untranslated}.
