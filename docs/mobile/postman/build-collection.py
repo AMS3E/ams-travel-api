@@ -16,6 +16,7 @@ SCREENS = [
     ("0 · Sign in (Keycloak)", []),
     ("1 · Explore", [
         ("GET", "/api/v1/interests", "Interest chips (the six groups)", {}, None),
+        ("GET", "/api/v1/interest-groups", "The six groups' pictures", {}, None),
         ("GET", "/api/v1/regions", "Tourism region cards", {"kind": "TOURISM"}, None),
         ("GET", "/api/v1/popular", "Explore by Popular (ids)", {"limit": "10"}, None),
         ("GET", "/api/v1/search/cards", "Cards for ids (rows)", {"type": "DESTINATION", "ids": "{{destinationId}}"}, None),

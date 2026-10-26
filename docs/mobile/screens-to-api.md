@@ -47,7 +47,7 @@ first/last name split (one Full name stays).
 
 | Element | Endpoint | State |
 | --- | --- | --- |
-| Chip row: Attraction Site, Stays, Food, Water, Activities, Corridors | `GET /interests` (public) grouped by `groupName`: the six groups are exactly these | ✅ |
+| Chip row: Attraction Site, Stays, Food, Water, Activities, Corridors | `GET /interests` (public) grouped by `groupName`: the six groups are exactly these. Since 2026-10-26 each group has a picture: `GET /interest-groups` (public) → `name`, `coverUrl`, `sortOrder`, matched to interests by `groupName` | ✅ |
 | Explore by Tourism Region cards | `GET /regions?kind=TOURISM` (public) → `name`, `coverUrl`, `description`, `latitude`, `longitude` (an editor's centre when `centreSet`, else the middle of its places), `bounds`; the heart: `POST /favorites` `{targetType: REGION, targetId}` | ✅ |
 | Explore by Provinces cards | `GET /provinces` (public) → `name`, `coverUrl`, `averageRating`, `reviewCount`, `placeCount`; the heart: `POST /favorites` `{targetType: PROVINCE, targetId}` | ✅ |
 | "Recommend by Traveler" on a region card | nothing: the seal is per destination | design filler |
@@ -105,7 +105,7 @@ first/last name split (one Full name stays).
 
 | Element | Endpoint | State |
 | --- | --- | --- |
-| Interest chips and grid | `GET /interests` (public) → `coverUrl` (its picture, null until staff choose one; `iconKey` stays for now); `GET /search?interestIds=` | ✅ |
+| Interest chips and grid | `GET /interests` (public) → `coverUrl` (its picture, null until staff choose one; `iconKey` stays for now); the group headers' pictures from `GET /interest-groups`; `GET /search?interestIds=` | ✅ |
 | "Recommend" panel (verified places of the interest) | `GET /search?interestIds=&verified=true&size=5`; hidden while empty | ✅ |
 | Stay detail: cover, gallery, name, star rating, slogan, description, policies, check-in/out, phone, website, amenities | `GET /stays/{id}` (public) → `starRating`, `slogan`, `description`, `policies`, `checkInFrom`, `checkOutUntil`, `phone`, `website`, `amenities` (slugs → `GET /amenities` for label, icon, group), `weekendNights`; gallery `GET /media?ownerType=STAY&ownerId=` | ✅ |
 | "Open 24h" on a stay | nothing: stays have check-in hours, not opening hours | design filler |

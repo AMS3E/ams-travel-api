@@ -125,3 +125,4 @@ databaseChangeLog:
   - include: { file: v2/taxonomy/030-corridor-khmer-rows.yaml, relativeToChangelogFile: true }
   - include: { file: v2/taxonomy/031-region-ams-recommended-retired.yaml, relativeToChangelogFile: true }
   - include: { file: v2/publishing/006-verification-two-ways.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/taxonomy/032-interest-groups.yaml, relativeToChangelogFile: true }

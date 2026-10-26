@@ -1,0 +1,39 @@
+# The six groups the Interests tab lists interests under, each with the picture
+# the app and the dashboard show for it. An interest still names its group by
+# name; this table only holds the group's picture and its place in the row, so
+# an editor can change the picture without a release (Kimleng, 2026-10-26).
+databaseChangeLog:
+  - changeSet:
+      id: v2-taxonomy-interest-groups
+      author: ams-travel-v2
+      changes:
+        - createTable:
+            schemaName: taxonomy
+            tableName: interest_groups
+            columns:
+              - column: {name: id, type: uuid, defaultValueComputed: "${fn.uuid}", constraints: {primaryKey: true, primaryKeyName: interest_groups_pkey, nullable: false}}
+              - column: {name: name, type: varchar(60), constraints: {nullable: false, unique: true, uniqueConstraintName: uk_interest_groups_name}}
+              - column: {name: cover_key, type: varchar(512)}
+              - column: {name: sort_order, type: integer, defaultValueNumeric: 0, constraints: {nullable: false}}
+              - column: {name: created_at, type: timestamp with time zone, defaultValueComputed: CURRENT_TIMESTAMP, constraints: {nullable: false}}
+      rollback:
+        - dropTable: {schemaName: taxonomy, tableName: interest_groups}
+  # The pictures are seed images (media/config/images), published to MinIO under
+  # general/ with the system uploader. Every column is spelled out: the test run
+  # replays these statements against tables Hibernate made, which have no defaults.
+  - changeSet:
+      id: v2-taxonomy-interest-groups-rows
+      author: ams-travel-v2
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              INSERT INTO taxonomy.interest_groups (id, name, cover_key, sort_order, created_at) VALUES
+                (${fn.uuid}, 'Attraction Sites', 'general/00000000-0000-0000-0000-000000000000/interest-group-attraction-sites.png', 0, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'Stays', 'general/00000000-0000-0000-0000-000000000000/interest-group-stays.png', 1, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'Food', 'general/00000000-0000-0000-0000-000000000000/interest-group-food.png', 2, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'Water', 'general/00000000-0000-0000-0000-000000000000/interest-group-water.png', 3, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'Activities & Experiences', 'general/00000000-0000-0000-0000-000000000000/interest-group-activities.png', 4, CURRENT_TIMESTAMP),
+                (${fn.uuid}, 'Tourism Corridors', 'general/00000000-0000-0000-0000-000000000000/interest-group-corridors.png', 5, CURRENT_TIMESTAMP);
+      rollback:
+        - sql: {sql: "DELETE FROM taxonomy.interest_groups"}
