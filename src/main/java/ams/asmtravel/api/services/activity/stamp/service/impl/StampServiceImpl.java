@@ -219,6 +219,16 @@ public class StampServiceImpl implements StampService {
                 : stampRepository.countPlacesStamped(userId, destinationIds, from, until);
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public Map<UUID, Long> countByPlaces(Collection<UUID> destinationIds, Instant from, Instant until) {
+        return destinationIds == null || destinationIds.isEmpty()
+                ? Map.of()
+                : stampRepository.countByDestinationIds(destinationIds, from, until).stream()
+                        .collect(Collectors.toMap(StampRepository.PlaceCheckIns::getDestinationId,
+                                StampRepository.PlaceCheckIns::getCheckIns));
+    }
+
     /** A person's stamps go with them. Runs in the delete's own transaction. */
     @EventListener
     public void onUserDeleting(UserDeletingEvent event) {

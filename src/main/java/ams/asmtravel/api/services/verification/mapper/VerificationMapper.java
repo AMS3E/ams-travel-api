@@ -26,7 +26,7 @@ public class VerificationMapper {
     public VerificationResponse toResponse(DestinationVerification decision, VerifiedPlace place, Desk desk, String decidedByName) {
         return new VerificationResponse(decision.getId(), place.type(), place.id(), place.name(), place.slug(),
                 mediaService.url(place.coverKey()), place.status(), desk,
-                Boolean.TRUE.equals(decision.getVerified()), decision.getBasis(), null, null, null,
+                Boolean.TRUE.equals(decision.getVerified()), decision.getBasis(), null, null,
                 decision.getReference(), decision.getNote(), decision.getEvidenceKey(), mediaService.url(decision.getEvidenceKey()),
                 decision.getDecidedBy(), decidedByName, decision.getCreatedAt());
     }
@@ -34,34 +34,34 @@ public class VerificationMapper {
     /** Queue row for a place with no decision yet. */
     public VerificationResponse undecided(VerifiedPlace place, Desk desk) {
         return new VerificationResponse(null, place.type(), place.id(), place.name(), place.slug(), mediaService.url(place.coverKey()),
-                place.status(), desk, false, null, null, null, null, null, null, null, null, null, null, null);
+                place.status(), desk, false, null, null, null, null, null, null, null, null, null, null);
     }
 
     /**
      * A queue row as the place stands now: the latest decision, and on top of
-     * it the travellers' seal, which verifies the place on its own.
+     * it the travellers' score, which verifies the place on its own.
      */
     public VerificationResponse standing(VerificationResponse latest, Standing standing) {
         boolean decided = latest.verified();
         return new VerificationResponse(latest.id(), latest.targetType(), latest.destinationId(), latest.destinationName(),
                 latest.destinationSlug(), latest.destinationCoverUrl(), latest.destinationStatus(), latest.desk(),
-                decided || standing.travelerRecommended(), basisOf(decided, latest.basis(), standing),
-                standing.travelerRecommended(), standing.ratingCount(), standing.averageRating(),
+                decided || standing.scoreVerified(), basisOf(decided, latest.basis(), standing),
+                standing.ratingCount(), standing.averageRating(),
                 latest.reference(), latest.note(), latest.evidenceKey(), latest.evidenceUrl(),
                 latest.decidedBy(), latest.decidedByName(), latest.createdAt());
     }
 
-    /** Public status only: verified, on what, the travellers' seal, and since when. */
+    /** Public status only: verified, on what, and since when. */
     public VerificationResponse publicStatus(UUID destinationId, DestinationVerification latest, Standing standing) {
         boolean decided = latest != null && Boolean.TRUE.equals(latest.getVerified());
         return new VerificationResponse(null, latest == null ? null : latest.getTargetType(), destinationId, null, null, null, null, null,
-                decided || standing.travelerRecommended(), basisOf(decided, latest == null ? null : latest.getBasis(), standing),
-                standing.travelerRecommended(), standing.ratingCount(), standing.averageRating(),
+                decided || standing.scoreVerified(), basisOf(decided, latest == null ? null : latest.getBasis(), standing),
+                standing.ratingCount(), standing.averageRating(),
                 null, null, null, null, null, null, latest == null ? null : latest.getCreatedAt());
     }
 
     /** A desk's basis while its decision stands; the travellers' when only their reviews verify the place. */
     private static VerificationBasis basisOf(boolean decided, VerificationBasis filed, Standing standing) {
-        return decided ? filed : standing.travelerRecommended() ? VerificationBasis.TRAVELER_SCORE : null;
+        return decided ? filed : standing.scoreVerified() ? VerificationBasis.TRAVELER_SCORE : null;
     }
 }

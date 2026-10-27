@@ -59,10 +59,12 @@ public class AdminServiceImpl implements AdminService {
         List<DestinationSummary> places = overviewRepository.destinations();
         List<UUID> ids = places.stream().map(DestinationSummary::id).toList();
         Map<UUID, Long> browses = overviewRepository.browses(window.start(), window.end());
+        Map<UUID, Long> checkIns = overviewRepository.checkIns(ids, window.start(), window.end());
         Map<UUID, ReviewSummaryResponse> reviews = overviewRepository.reviewSummaries(ids, window.reviewFrom(), window.reviewTo());
         Map<UUID, VerificationResponse> standing = overviewRepository.verificationStatuses(ids);
         return new DestinationStatsResponse(from, to, places.stream()
-                .map(place -> mapper.toPlace(PlaceSummary.of(place), browses.get(place.id()), reviews.get(place.id()), standing.get(place.id())))
+                .map(place -> mapper.toPlace(PlaceSummary.of(place), browses.get(place.id()), checkIns.get(place.id()),
+                        reviews.get(place.id()), standing.get(place.id())))
                 .toList());
     }
 
@@ -72,9 +74,10 @@ public class AdminServiceImpl implements AdminService {
         PlaceSummary place = overviewRepository.place(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "No attraction, stay or food place has this id"));
         Long browses = overviewRepository.browses(place.type(), window.start(), window.end()).get(id);
+        Long checkIns = overviewRepository.checkIns(List.of(id), window.start(), window.end()).get(id);
         ReviewSummaryResponse review = overviewRepository.reviewSummaries(place.type(), List.of(id), window.reviewFrom(), window.reviewTo()).get(id);
         VerificationResponse verification = overviewRepository.verificationStatuses(List.of(id)).get(id);
-        return new PlaceStatsResponse(from, to, mapper.toPlace(place, browses, review, verification));
+        return new PlaceStatsResponse(from, to, mapper.toPlace(place, browses, checkIns, review, verification));
     }
 
     /** The period as instants, {@code end} exclusive; reviews are read all time when neither day is given. */

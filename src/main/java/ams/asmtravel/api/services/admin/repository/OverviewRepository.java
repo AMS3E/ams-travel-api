@@ -5,6 +5,7 @@ import ams.asmtravel.api.services.activity.popular.domain.BrowseTotal;
 import ams.asmtravel.api.services.admin.domain.PlaceSummary;
 import ams.asmtravel.api.services.admin.domain.PlaceType;
 import ams.asmtravel.api.services.activity.popular.service.PopularService;
+import ams.asmtravel.api.services.activity.stamp.service.StampService;
 import ams.asmtravel.api.services.authorization.role.domain.RoleCode;
 import ams.asmtravel.api.services.destination.destination.domain.DestinationSummary;
 import ams.asmtravel.api.services.user.user.service.UserService;
@@ -62,6 +63,7 @@ public class OverviewRepository {
     private final BadgeService badgeService;
     private final SeasonService seasonService;
     private final PopularService popularService;
+    private final StampService stampService;
     private final VerificationService verificationService;
 
     /** Rows per table, keyed as the dashboard names them. */
@@ -146,6 +148,11 @@ public class OverviewRepository {
         return browses;
     }
 
+    /** Check-ins per place in a window, any kind of place alike; {@code to} exclusive. */
+    public Map<UUID, Long> checkIns(List<UUID> ids, Instant from, Instant to) {
+        return stampService.countByPlaces(ids, from, to);
+    }
+
     /**
      * Review count and stars per place, all time or in a window; the review
      * service answers 100 at a time.
@@ -170,7 +177,7 @@ public class OverviewRepository {
         return summaries;
     }
 
-    /** Verified, on what, and the travellers' seal, per place. */
+    /** Verified and on what, per place. */
     public Map<UUID, VerificationResponse> verificationStatuses(List<UUID> destinationIds) {
         Map<UUID, VerificationResponse> statuses = new LinkedHashMap<>();
         if (!destinationIds.isEmpty()) {

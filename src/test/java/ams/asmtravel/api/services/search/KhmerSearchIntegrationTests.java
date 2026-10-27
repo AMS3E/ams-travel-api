@@ -1,7 +1,5 @@
 package ams.asmtravel.api.services.search;
 
-import ams.asmtravel.api.services.corridor.domain.Corridor;
-import ams.asmtravel.api.services.corridor.domain.CorridorStatus;
 import ams.asmtravel.api.services.destination.destination.domain.Destination;
 import ams.asmtravel.api.services.destination.destination.domain.ListingStatus;
 import ams.asmtravel.api.services.location.province.domain.Province;
@@ -82,39 +80,5 @@ class KhmerSearchIntegrationTests {
                 .andExpect(jsonPath("$[0].name").value("Phnom Bakheng"))
                 .andExpect(jsonPath("$[0].untranslated", contains("name")));
         mvc.perform(get("/api/v1/search").param("lang", "fr")).andExpect(status().isBadRequest());
-    }
-
-    /** A corridor is found by its own Khmer and, asked in Khmer, shows it; one without names what is still English. */
-    @Test
-    void aCorridorCardUsesItsOwnKhmer() throws Exception {
-        corridor("Lotus River Loop", "lotus-river-loop", "Boats between temples.", "ផ្លូវទន្លេផ្កាឈូក", "ទូករវាងប្រាសាទ");
-        corridor("Pepper Coast Run", "pepper-coast-run", "Crab and pepper.", null, null);
-        entityManager.flush();
-        entityManager.clear();
-
-        mvc.perform(get("/api/v1/search").param("type", "CORRIDOR").param("q", "ផ្កាឈូក").param("lang", "km"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content", hasSize(1)))
-                .andExpect(jsonPath("$.content[0].name").value("ផ្លូវទន្លេផ្កាឈូក"))
-                .andExpect(jsonPath("$.content[0].shortDescription").value("ទូករវាងប្រាសាទ"))
-                .andExpect(jsonPath("$.content[0].untranslated", hasSize(0)));
-        mvc.perform(get("/api/v1/search").param("type", "CORRIDOR").param("q", "pepper").param("lang", "km"))
-                .andExpect(jsonPath("$.content[0].name").value("Pepper Coast Run"))
-                .andExpect(jsonPath("$.content[0].untranslated", contains("name", "shortDescription")));
-        mvc.perform(get("/api/v1/search").param("type", "CORRIDOR").param("q", "lotus"))
-                .andExpect(jsonPath("$.content[0].name").value("Lotus River Loop"));
-        mvc.perform(get("/api/v1/search/suggest").param("q", "ផ្កាឈូក").param("lang", "km"))
-                .andExpect(jsonPath("$[?(@.kind == 'CORRIDOR' && @.name == 'ផ្លូវទន្លេផ្កាឈូក')]", hasSize(1)));
-    }
-
-    private void corridor(String name, String slug, String summary, String nameKm, String summaryKm) {
-        Corridor corridor = new Corridor();
-        corridor.setName(name);
-        corridor.setSlug(slug);
-        corridor.setShortDescription(summary);
-        corridor.setNameKm(nameKm);
-        corridor.setShortDescriptionKm(summaryKm);
-        corridor.setStatus(CorridorStatus.PUBLISHED);
-        entityManager.persist(corridor);
     }
 }

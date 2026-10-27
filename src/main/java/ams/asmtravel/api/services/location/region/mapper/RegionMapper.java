@@ -32,7 +32,6 @@ public abstract class RegionMapper {
     @Mapping(target = "interestIds", expression = "java(ids(region.getInterests(), Interest::getId))")
     @Mapping(target = "latitude", expression = "java(region.getLatitude() != null || bounds == null ? region.getLatitude() : bounds.centreLatitude())")
     @Mapping(target = "longitude", expression = "java(region.getLongitude() != null || bounds == null ? region.getLongitude() : bounds.centreLongitude())")
-    @Mapping(target = "amsRecommended", expression = "java(Boolean.TRUE.equals(region.getAmsRecommended()))")
     @Mapping(target = "centreSet", expression = "java(region.getLatitude() != null && region.getLongitude() != null)")
     @Mapping(target = "bounds", source = "bounds")
     public abstract RegionResponse toRegionResponse(Region region, GeoBounds bounds);

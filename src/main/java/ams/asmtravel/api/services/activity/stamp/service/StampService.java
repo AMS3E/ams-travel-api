@@ -9,6 +9,7 @@ import ams.asmtravel.api.services.activity.stamp.dto.response.StampResponse;
 import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -51,4 +52,7 @@ public interface StampService {
 
     /** How many of these places were stamped in a window: what a collection badge counts. */
     long countPlacesStamped(UUID userId, Collection<UUID> destinationIds, Instant from, Instant until);
+
+    /** Check-ins per place in a window, for the dashboard's stats; places never stamped are absent. */
+    Map<UUID, Long> countByPlaces(Collection<UUID> destinationIds, Instant from, Instant until);
 }

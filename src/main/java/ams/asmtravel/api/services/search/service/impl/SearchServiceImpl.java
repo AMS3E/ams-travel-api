@@ -33,7 +33,6 @@ import ams.asmtravel.api.services.search.dto.response.SuggestionResponse;
 import ams.asmtravel.api.services.search.mapper.SearchMapper;
 import ams.asmtravel.api.services.search.repository.NameLookupRepository;
 import ams.asmtravel.api.services.search.service.SearchService;
-import ams.asmtravel.api.services.verification.domain.TravelerSealBar;
 import ams.asmtravel.api.services.verification.dto.response.VerificationResponse;
 import ams.asmtravel.api.services.verification.service.VerificationService;
 import lombok.RequiredArgsConstructor;
@@ -98,6 +97,12 @@ public class SearchServiceImpl implements SearchService {
                 if (request.near() != null) {
                     yield paged(destinationsNear(request), page, rows -> nearHits(rows, khmer));
                 }
+                if (request.verifiedOnly()) {
+                    /* Verified rests on decisions and reviews, not on the destination row, so the page is cut after the filter. */
+                    yield paged(verifiedRows(destinationService.searchPublished(criteria(request),
+                            Pageable.unpaged(Sort.by("name").ascending())).getContent(), DestinationResponse::id),
+                            page, rows -> destinationHits(rows, khmer));
+                }
                 Page<DestinationResponse> found = destinationService.searchPublished(criteria(request),
                         page.withSort(Sort.by("name").ascending()));
                 yield new PageImpl<>(destinationHits(found.getContent(), khmer), page, found.getTotalElements());
@@ -118,7 +123,8 @@ public class SearchServiceImpl implements SearchService {
             case DESTINATION -> request.near() != null
                     ? grouped(destinationsNear(request), near -> one(near.place().provinceId()), rows -> nearHits(rows, khmer),
                             perProvince, provinceNames, provinceNamesKm)
-                    : grouped(destinationService.searchPublished(criteria(request), Pageable.unpaged(Sort.by("name").ascending())).getContent(),
+                    : grouped(verifiedIfAsked(request, destinationService.searchPublished(criteria(request),
+                            Pageable.unpaged(Sort.by("name").ascending())).getContent()),
                             place -> one(place.provinceId()), rows -> destinationHits(rows, khmer), perProvince, provinceNames, provinceNamesKm);
             case STAY -> grouped(stays(request), stay -> one(stay.provinceId()), rows -> stayHits(rows, khmer), perProvince,
                     provinceNames, provinceNamesKm);
@@ -150,8 +156,7 @@ public class SearchServiceImpl implements SearchService {
         corridorService.getAll(null).stream()
                 .filter(corridor -> corridor.status() == CorridorStatus.PUBLISHED
                         && (contains(corridor.name(), needle) || contains(corridor.nameKm(), needle)))
-                .forEach(corridor -> found.add(suggestion(SuggestionKind.CORRIDOR, corridor.id(), corridor.name(), corridor.nameKm(),
-                        corridor.slug(), khmer)));
+                .forEach(corridor -> found.add(suggestion(SuggestionKind.CORRIDOR, corridor.id(), corridor.name(), corridor.nameKm(), corridor.slug(), khmer)));
         stayService.getAll(null).stream()
                 .filter(stay -> stay.status() == ListingStatus.PUBLISHED && (contains(stay.name(), needle) || contains(stay.nameKm(), needle)))
                 .forEach(stay -> found.add(suggestion(SuggestionKind.STAY, stay.id(), stay.name(), stay.nameKm(), null, khmer)));
@@ -195,13 +200,13 @@ public class SearchServiceImpl implements SearchService {
     // Destinations: the database query, or the ring around one of them.
 
     private DestinationSearch criteria(SearchRequest request) {
-        DestinationSearch.Seal seal = null;
-        if (request.sealOnly()) {
-            TravelerSealBar bar = verificationService.travelerSeal();
-            seal = new DestinationSearch.Seal(bar.minRatings(), bar.minAverage());
-        }
         return new DestinationSearch(request.q(), request.regions(), request.provinces(), request.categoryIds(),
-                request.tagIds(), request.interestIds(), seal);
+                request.tagIds(), request.interestIds());
+    }
+
+    /** The published destinations found, cut to the verified ones when the filter asks. */
+    private List<DestinationResponse> verifiedIfAsked(SearchRequest request, List<DestinationResponse> rows) {
+        return request.verifiedOnly() ? verifiedRows(rows, DestinationResponse::id) : rows;
     }
 
     /** Published attractions within the radius, nearest first with their distances, the centre itself left out; the chips then narrow them. */
@@ -223,17 +228,17 @@ public class SearchServiceImpl implements SearchService {
                 .filter(near -> anyOf(request.tagIds(), near.place().tagIds()))
                 .filter(near -> anyOf(request.interestIds(), near.place().interestIds()))
                 .toList();
-        if (!request.sealOnly() || around.isEmpty()) {
+        if (!request.verifiedOnly() || around.isEmpty()) {
             return around;
         }
-        Set<UUID> sealed = verificationService.findStatuses(around.stream().map(near -> near.place().id()).toList()).stream()
-                .filter(status -> Boolean.TRUE.equals(status.travelerRecommended()))
+        Set<UUID> verified = verificationService.findStatuses(around.stream().map(near -> near.place().id()).toList()).stream()
+                .filter(VerificationResponse::verified)
                 .map(VerificationResponse::destinationId)
                 .collect(Collectors.toSet());
-        return around.stream().filter(near -> sealed.contains(near.place().id())).toList();
+        return around.stream().filter(near -> verified.contains(near.place().id())).toList();
     }
 
-    // The lists of the few kinds, filtered here; the Traveler seal is read for every kind.
+    // The lists of the few kinds, filtered here; the verified standing is read for every kind.
 
     private List<StayResponse> stays(SearchRequest request) {
         Map<UUID, UUID> zones = zones();
@@ -245,7 +250,7 @@ public class SearchServiceImpl implements SearchService {
                 .filter(stay -> anyOf(request.interestIds(), stay.interestIds()));
         List<StayResponse> stays = request.near() != null ? kept.toList()
                 : kept.sorted(Comparator.comparing(StayResponse::name, String.CASE_INSENSITIVE_ORDER)).toList();
-        return request.sealOnly() ? sealed(stays, StayResponse::id) : stays;
+        return request.verifiedOnly() ? verifiedRows(stays, StayResponse::id) : stays;
     }
 
     private List<FoodResponse> foods(SearchRequest request) {
@@ -259,7 +264,7 @@ public class SearchServiceImpl implements SearchService {
                 .filter(food -> anyOf(request.interestIds(), food.interestIds()));
         List<FoodResponse> foods = request.near() != null ? kept.toList()
                 : kept.sorted(Comparator.comparing(FoodResponse::name, String.CASE_INSENSITIVE_ORDER)).toList();
-        return request.sealOnly() ? sealed(foods, FoodResponse::id) : foods;
+        return request.verifiedOnly() ? verifiedRows(foods, FoodResponse::id) : foods;
     }
 
     /** An activity is classed by its interests alone, like a stay: a region filter reaches it through its province's zone. */
@@ -275,22 +280,22 @@ public class SearchServiceImpl implements SearchService {
                 .filter(activity -> anyOf(request.interestIds(), activity.interestIds()));
         List<ActivityResponse> activities = request.near() != null ? kept.toList()
                 : kept.sorted(Comparator.comparing(ActivityResponse::name, String.CASE_INSENSITIVE_ORDER)).toList();
-        return request.sealOnly() ? sealed(activities, ActivityResponse::id) : activities;
+        return request.verifiedOnly() ? verifiedRows(activities, ActivityResponse::id) : activities;
     }
 
-    /** The rows whose reviews have earned them the Traveler seal. */
-    private <T> List<T> sealed(List<T> rows, Function<T, UUID> idOf) {
+    /** The rows that stand verified now, by a desk's decision or the travellers' reviews. */
+    private <T> List<T> verifiedRows(List<T> rows, Function<T, UUID> idOf) {
         if (rows.isEmpty()) {
             return rows;
         }
-        Set<UUID> sealed = standings(rows.stream().map(idOf).toList()).values().stream()
-                .filter(status -> Boolean.TRUE.equals(status.travelerRecommended()))
+        Set<UUID> verified = standings(rows.stream().map(idOf).toList()).values().stream()
+                .filter(VerificationResponse::verified)
                 .map(VerificationResponse::destinationId)
                 .collect(Collectors.toSet());
-        return rows.stream().filter(row -> sealed.contains(idOf.apply(row))).toList();
+        return rows.stream().filter(row -> verified.contains(idOf.apply(row))).toList();
     }
 
-    /** Verified, on what, and the Traveler seal, per place of any kind; the verification service answers 100 at a time. */
+    /** Verified and on what, per place of any kind; the verification service answers 100 at a time. */
     private Map<UUID, VerificationResponse> standings(List<UUID> ids) {
         Map<UUID, VerificationResponse> standing = new HashMap<>();
         for (int from = 0; from < ids.size(); from += SUMMARY_BATCH) {
@@ -302,13 +307,12 @@ public class SearchServiceImpl implements SearchService {
 
     /** A corridor is in a province or a region through its stops; "near" a destination means stopping there. */
     private List<CorridorResponse> corridors(SearchRequest request) {
-        if (request.sealOnly()) {
+        if (request.verifiedOnly()) {
             return List.of();
         }
         return corridorService.getAll(null).stream()
                 .filter(corridor -> corridor.status() == CorridorStatus.PUBLISHED)
-                .filter(corridor -> matches(request.q(), corridor.name(), corridor.shortDescription(), corridor.nameKm(),
-                        corridor.shortDescriptionKm()))
+                .filter(corridor -> matches(request.q(), corridor.name(), corridor.shortDescription(), corridor.nameKm()))
                 .filter(corridor -> request.near() == null || corridor.stopDestinationIds().contains(request.near()))
                 .filter(corridor -> anyOf(request.provinces(), corridor.stopProvinceIds()))
                 .filter(corridor -> anyOf(request.regions(), corridor.stopRegionIds()))
@@ -418,7 +422,11 @@ public class SearchServiceImpl implements SearchService {
         return corridors.stream()
                 .map(corridor -> {
                     SearchHitResponse hit = mapper.toHit(corridor, reviews.get(corridor.id()));
-                    return khmer ? mapper.inKhmer(hit, corridor.nameKm(), corridor.shortDescriptionKm(), words) : hit;
+                    /* The Khmer short description when written, else the first words of the Khmer description. */
+                    String summaryKm = corridor.shortDescriptionKm() != null && !corridor.shortDescriptionKm().isBlank()
+                            ? corridor.shortDescriptionKm()
+                            : KhmerText.excerpt(corridor.descriptionKm(), SUMMARY_LENGTH);
+                    return khmer ? mapper.inKhmer(hit, corridor.nameKm(), summaryKm, words) : hit;
                 })
                 .toList();
     }

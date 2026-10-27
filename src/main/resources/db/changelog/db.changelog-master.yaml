@@ -120,7 +120,10 @@ databaseChangeLog:
   - include: { file: v2/taxonomy/027-khmer-text-fixes.yaml, relativeToChangelogFile: true }
   - include: { file: v2/destination/034-stay-food-khmer-text-rows.yaml, relativeToChangelogFile: true }
   - include: { file: v2/destination/035-activities.yaml, relativeToChangelogFile: true }
-  - include: { file: v2/taxonomy/028-corridor-khmer.yaml, relativeToChangelogFile: true }
-  - include: { file: v2/taxonomy/029-corridor-khmer-text-rows.yaml, relativeToChangelogFile: true }
-  - include: { file: v2/taxonomy/030-interest-groups.yaml, relativeToChangelogFile: true }
-  - include: { file: v2/taxonomy/031-category-cover.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/taxonomy/028-corridor-expectations.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/taxonomy/029-corridor-khmer.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/taxonomy/030-corridor-khmer-rows.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/taxonomy/031-region-ams-recommended-retired.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/publishing/006-verification-two-ways.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/taxonomy/032-interest-groups.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/taxonomy/033-category-cover.yaml, relativeToChangelogFile: true }

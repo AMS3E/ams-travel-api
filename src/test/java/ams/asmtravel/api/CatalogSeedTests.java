@@ -85,10 +85,9 @@ class CatalogSeedTests {
                 + "(select 1 from taxonomy.region_interests ri where ri.interest_id = i.id)")).isZero();
         // A Tourism Corridors interest is a corridor's instead: each corridor is under its own.
         assertThat(count("taxonomy.interests where group_name = 'Tourism Corridors'")).isEqualTo(5);
-        // Every interest has its picture (2026-10-16); every tourism region its map picture, and three carry the AMS Travel badge.
+        // Every interest has its picture (2026-10-16); every tourism region its map picture.
         assertThat(count("taxonomy.interests where cover_key is null")).isZero();
         assertThat(count("taxonomy.regions where kind = 'TOURISM' and map_key is null")).isZero();
-        assertThat(count("taxonomy.regions where ams_recommended")).isEqualTo(3);
         assertThat(count("taxonomy.corridor_interests")).isEqualTo(nested(CorridorSeeder.class, "corridors.json", "interests")).isEqualTo(5);
         assertThat(count("taxonomy.interests i where i.group_name = 'Tourism Corridors' and not exists "
                 + "(select 1 from taxonomy.corridor_interests ci where ci.interest_id = i.id)")).isZero();
@@ -97,6 +96,9 @@ class CatalogSeedTests {
         // The real data: no interest outside the six groups, and five tourism corridors.
         assertThat(count("taxonomy.interests where group_name is null")).isZero();
         assertThat(count("taxonomy.corridors")).isEqualTo(5);
+        // Every corridor says what to expect (free labels, not a taxonomy; 2026-10-21).
+        assertThat(count("taxonomy.corridors where expectations = '[]'")).isZero();
+        // And carries its Khmer twins (2026-10-22, ported from the developer's branch; text written in-house).
         assertThat(count("taxonomy.corridors where name_km is null or short_description_km is null or description_km is null")).isZero();
         // In the curators' order, which the seed files keep: the regions 1 to 9, each region's own
         // categories and filters, the interests within their group, and the corridors.

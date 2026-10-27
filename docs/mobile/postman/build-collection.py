@@ -16,6 +16,7 @@ SCREENS = [
     ("0 · Sign in (Keycloak)", []),
     ("1 · Explore", [
         ("GET", "/api/v1/interests", "Interest chips (the six groups)", {}, None),
+        ("GET", "/api/v1/interest-groups", "The six groups' pictures", {}, None),
         ("GET", "/api/v1/regions", "Tourism region cards", {"kind": "TOURISM"}, None),
         ("GET", "/api/v1/popular", "Explore by Popular (ids)", {"limit": "10"}, None),
         ("GET", "/api/v1/search/cards", "Cards for ids (rows)", {"type": "DESTINATION", "ids": "{{destinationId}}"}, None),
@@ -25,7 +26,7 @@ SCREENS = [
     ("2 · Search", [
         ("GET", "/api/v1/search", "Search places", {"type": "DESTINATION", "q": "angkor", "page": "0", "size": "20"}, None),
         ("GET", "/api/v1/search", "Filter by regions, provinces, category, tag, interest (several ids comma-separated)", {"regionIds": "{{regionId}}", "provinceIds": "", "categoryIds": "", "tagIds": "", "interestIds": "", "size": "20"}, None),
-        ("GET", "/api/v1/search", "Only the Traveler seal holders", {"travelerRecommended": "true", "size": "20"}, None),
+        ("GET", "/api/v1/search", "Only the verified places", {"verified": "true", "size": "20"}, None),
         ("GET", "/api/v1/search/suggest", "Suggestions while typing", {"q": "ang", "limit": "8"}, None),
         ("GET", "/api/v1/search", "The same in Khmer: cards in Khmer where written, `untranslated` names the rest (also on by-province, suggest, cards)", {"type": "DESTINATION", "q": "អង្គរ", "lang": "km", "size": "20"}, None),
         ("GET", "/api/v1/search/suggest", "Suggestions in Khmer", {"q": "អង្គ", "limit": "8", "lang": "km"}, None),
@@ -71,7 +72,7 @@ SCREENS = [
         ("GET", "/api/v1/activities/{id}", "An activity (type, contact, Khmer)", {}, None),
         ("GET", "/api/v1/search", "Activities near a destination, as cards nearest first", {"type": "ACTIVITY", "near": "{{destinationId}}"}, None),
         ("GET", "/api/v1/media", "An activity's gallery", {"ownerType": "ACTIVITY", "ownerId": "{{activityId}}"}, None),
-        ("GET", "/api/v1/search", "Recommend panel: the interest's Traveler seal holders", {"interestIds": "", "travelerRecommended": "true", "size": "5"}, None),
+        ("GET", "/api/v1/search", "Recommend panel: the interest's verified places", {"interestIds": "", "verified": "true", "size": "5"}, None),
         ("GET", "/api/v1/media", "A stay's gallery", {"ownerType": "STAY", "ownerId": "{{stayId}}"}, None),
     ]),
     ("7 · Provinces", [

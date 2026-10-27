@@ -64,6 +64,36 @@ public class MinioConfig {
         };
     }
 
+    /**
+     * The interest groups' pictures ride with the release: the changelog's rows
+     * name them, and a server that never reseeds its catalogue must still hold
+     * the files. Published at startup, skipping any already stored; if MinIO is
+     * down it only logs and the API still starts.
+     */
+    @Bean
+    @Order(1)
+    ApplicationRunner interestGroupImages(MediaServiceImpl mediaService) {
+        return args -> {
+            try {
+                int published = 0;
+                Resource[] files = new PathMatchingResourcePatternResolver()
+                        .getResources("classpath:ams/asmtravel/api/services/media/config/images/interest-group-*.png");
+                for (Resource file : files) {
+                    if (file.getFilename() == null) {
+                        continue;
+                    }
+                    try (InputStream content = file.getInputStream()) {
+                        mediaService.storeSeedImage(file.getFilename(), content.readAllBytes());
+                        published += 1;
+                    }
+                }
+                log.info("Interest group pictures ready ({} of {})", published, files.length);
+            } catch (IOException | RuntimeException exception) {
+                log.warn("Interest group pictures not published — storage is unreachable: {}", exception.getMessage());
+            }
+        };
+    }
+
     /** Seed photos under {@code general/} with readable names; empty when MinIO is unreachable. */
     @Bean
     SeedImages seedImages(MediaServiceImpl mediaService) {

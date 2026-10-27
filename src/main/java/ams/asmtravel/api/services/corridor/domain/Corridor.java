@@ -20,7 +20,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.type.SqlTypes;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -97,6 +99,10 @@ public class Corridor {
 
     @Column(precision = 10, scale = 2)
     private BigDecimal estimatedBudgetMax;
+
+    /** "What you expect" on its page: short labels typed by the editor, in the editor's order. */
+    @JdbcTypeCode(SqlTypes.JSON)
+    private List<String> expectations = new ArrayList<>();
 
     /** First and last stop's destination; derived from the itinerary. */
     private UUID startDestinationId;

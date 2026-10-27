@@ -10,6 +10,7 @@ import jakarta.validation.constraints.PositiveOrZero;
 import jakarta.validation.constraints.Size;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -18,6 +19,7 @@ import java.util.UUID;
  *
  * @param slug               null or empty: made from the name
  * @param estimatedBudgetMin per person, in US dollars
+ * @param expectations       "What you expect" labels, in the order the page shows them; null keeps them on edit
  * @param interestIds        Tourism Corridors interests; null keeps them on edit
  * @param sortOrder          0 is first; null puts a new one last and keeps an edited one in place
  */
@@ -31,6 +33,8 @@ public record CorridorRequest(
         String coverKey,
         @DecimalMin("0") @DecimalMax("99999999") BigDecimal estimatedBudgetMin,
         @DecimalMin("0") @DecimalMax("99999999") BigDecimal estimatedBudgetMax,
+        @Size(max = 12, message = "At most 12 expectations")
+        List<@NotBlank @Size(max = 40) String> expectations,
         Set<UUID> interestIds,
         @PositiveOrZero Integer sortOrder,
         /** Khmer twins: null keeps what is stored, blank clears it. */

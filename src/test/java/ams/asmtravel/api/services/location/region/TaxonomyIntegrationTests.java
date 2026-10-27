@@ -226,22 +226,6 @@ class TaxonomyIntegrationTests {
     }
 
     @Test
-    void aTourismRegionCanBeRecommendedByAmsTravel() throws Exception {
-        String region = create("/api/v1/regions", "{\"name\":\"Marked Region\",\"code\":\"MARKED-1\",\"kind\":\"TOURISM\"}");
-        mvc.perform(get("/api/v1/regions/" + region)).andExpect(jsonPath("$.amsRecommended").value(false));
-        mvc.perform(put("/api/v1/regions/" + region).with(manager()).contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"Marked Region\",\"code\":\"MARKED-1\",\"amsRecommended\":true}"))
-                .andExpect(jsonPath("$.amsRecommended").value(true));
-        // A save that says nothing about it keeps it; false takes it off.
-        mvc.perform(put("/api/v1/regions/" + region).with(manager()).contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"Marked Region\",\"code\":\"MARKED-1\"}"))
-                .andExpect(jsonPath("$.amsRecommended").value(true));
-        mvc.perform(put("/api/v1/regions/" + region).with(manager()).contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"Marked Region\",\"code\":\"MARKED-1\",\"amsRecommended\":false}"))
-                .andExpect(jsonPath("$.amsRecommended").value(false));
-    }
-
-    @Test
     void aNewRegionWithoutACodeIsGivenOneFromItsName() throws Exception {
         String spa = create("/api/v1/regions", "{\"name\":\"Wellness & Spa\",\"kind\":\"TOURISM\"}");
         mvc.perform(get("/api/v1/regions/" + spa))

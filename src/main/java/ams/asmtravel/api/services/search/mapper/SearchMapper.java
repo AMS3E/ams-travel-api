@@ -32,7 +32,6 @@ public interface SearchMapper {
                 review == null ? 0 : review.reviewCount(),
                 verification != null && verification.verified(),
                 verification == null || verification.basis() == null ? null : verification.basis().name(),
-                verification != null && Boolean.TRUE.equals(verification.travelerRecommended()),
                 null, null, null, null, null, null, null, null, List.of());
     }
 
@@ -45,7 +44,6 @@ public interface SearchMapper {
                 review == null ? 0 : review.reviewCount(),
                 verification != null && verification.verified(),
                 verification == null || verification.basis() == null ? null : verification.basis().name(),
-                verification != null && Boolean.TRUE.equals(verification.travelerRecommended()),
                 stay.priceFrom(), stay.currency(), null, null, null, null, null, null, List.of());
     }
 
@@ -59,7 +57,6 @@ public interface SearchMapper {
                 review == null ? 0 : review.reviewCount(),
                 verification != null && verification.verified(),
                 verification == null || verification.basis() == null ? null : verification.basis().name(),
-                verification != null && Boolean.TRUE.equals(verification.travelerRecommended()),
                 food.priceFrom(), food.currency(), null, food.openNow(), food.todayHours(), null, null, null, List.of());
     }
 
@@ -73,7 +70,6 @@ public interface SearchMapper {
                 review == null ? 0 : review.reviewCount(),
                 verification != null && verification.verified(),
                 verification == null || verification.basis() == null ? null : verification.basis().name(),
-                verification != null && Boolean.TRUE.equals(verification.travelerRecommended()),
                 null, null, null, null, null, null, null, null, List.of());
     }
 
@@ -82,13 +78,13 @@ public interface SearchMapper {
                 corridor.coverUrl(), null, null, null, null,
                 List.of(), List.of(), ids(corridor.interestIds()), List.of(),
                 review == null ? null : review.averageRating(), review == null ? 0 : review.ratingCount(),
-                review == null ? 0 : review.reviewCount(), false, null, false,
+                review == null ? 0 : review.reviewCount(), false, null,
                 null, null, corridor.durationDays(), null, null, corridor.stopNames(), corridor.encodedPolyline(), null, List.of());
     }
 
     /**
      * The card in Khmer: each word swapped where a Khmer one is written, the rest left in English and named in
-     * {@code untranslated}.
+     * {@code untranslated}. A corridor's stop names stay English and say so.
      */
     default SearchHitResponse inKhmer(SearchHitResponse hit, String nameKm, String summaryKm, KhmerNames names) {
         List<String> untranslated = new ArrayList<>();

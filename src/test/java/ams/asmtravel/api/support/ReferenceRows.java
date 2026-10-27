@@ -42,7 +42,7 @@ public class ReferenceRows implements ApplicationRunner {
             "db/changelog/v2/gamification/009-season-rows.yaml",
             "db/changelog/v2/gamification/010-retire-points-ladder.yaml",
             "db/changelog/v2/taxonomy/013-amenities.yaml",
-            "db/changelog/v2/taxonomy/030-interest-groups.yaml");
+            "db/changelog/v2/taxonomy/032-interest-groups.yaml");
 
     private final JdbcTemplate jdbc;
 

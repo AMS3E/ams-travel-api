@@ -1,5 +1,6 @@
 # A tourism corridor's Khmer text, typed by hand beside the English as for
 # attractions and regions. Null until an editor writes it; English untouched.
+# Ported from the developer's visal branch on 2026-10-22.
 databaseChangeLog:
   - changeSet:
       id: v2-corridor-khmer

@@ -208,9 +208,6 @@ public class RegionServiceImpl implements RegionService {
         if (request.kind() != null) {
             region.setKind(request.kind());
         }
-        if (request.amsRecommended() != null) {
-            region.setAmsRecommended(request.amsRecommended());
-        }
         /* Null keeps the links, so a client that does not send them cannot empty them. */
         if (request.categoryIds() != null || region.getId() == null) {
             List<UUID> ids = request.categoryIds() == null ? List.of() : request.categoryIds();
