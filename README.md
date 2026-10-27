@@ -71,7 +71,7 @@ Endpoints for the signed-in user's own data are under `/me` in the service that 
 
 Keycloak lives with this project too:
 - `src/main/resources/login` holds the CSS-only `amstravel` login theme. Compose mounts it into Keycloak.
-- The `keycloak` stage of the `Dockerfile` builds the image with the staff email-code step, using the source in `src/main/keycloak`.
+- The `keycloak` stage of the `Dockerfile` builds the image with the staff email-code step, from the ready-built `deploy/keycloak/providers/ams-email-code.jar`.
 
 ## Data
 
