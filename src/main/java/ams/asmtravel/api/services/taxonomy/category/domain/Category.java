@@ -43,6 +43,10 @@ public class Category {
     @Column(length = 512)
     private String iconKey;
 
+    /** Its uploaded icon picture (folder {@code category}); null until one is chosen. */
+    @Column(length = 512)
+    private String coverKey;
+
     @Column(nullable = false)
     private Integer sortOrder = 0;
 

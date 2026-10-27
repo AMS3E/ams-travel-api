@@ -38,7 +38,8 @@ RUN chmod +x gradlew
 
 COPY src ./src
 
-RUN ./gradlew clean bootJar --no-daemon
+# Gradle and the libraries are kept in a build cache, so a code change does not download them again.
+RUN --mount=type=cache,target=/root/.gradle ./gradlew clean bootJar --no-daemon
 
 FROM eclipse-temurin:25-jre-jammy AS runtime
 
