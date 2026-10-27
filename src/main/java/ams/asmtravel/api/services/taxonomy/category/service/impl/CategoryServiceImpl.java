@@ -103,6 +103,9 @@ public class CategoryServiceImpl implements CategoryService {
         }
         category.setDescription(request.description());
         category.setIconKey(request.iconKey() == null || request.iconKey().isBlank() ? null : request.iconKey().trim());
+        if (request.coverKey() != null) {
+            category.setCoverKey(request.coverKey().isBlank() ? null : request.coverKey().trim());
+        }
     }
 
     private Category find(UUID id) {

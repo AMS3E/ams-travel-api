@@ -1,0 +1,92 @@
+# A category's icon picture, beside its icon name: the line icons the design team drew,
+# one per category (Kimleng, 2026-10-26). The pictures are seed images published to MinIO
+# under general/ with the system uploader; a new database gets them from the category seed.
+databaseChangeLog:
+  - changeSet:
+      id: v2-taxonomy-category-cover
+      author: ams-travel-v2
+      changes:
+        - addColumn:
+            schemaName: taxonomy
+            tableName: categories
+            columns:
+              - column: {name: cover_key, type: varchar(512)}
+      rollback:
+        - dropColumn:
+            schemaName: taxonomy
+            tableName: categories
+            columns:
+              - column: {name: cover_key}
+  # The seeded categories already in a database get their icon; one an editor gave a picture keeps it.
+  - changeSet:
+      id: v2-taxonomy-category-cover-rows
+      author: ams-travel-v2
+      changes:
+        - sql:
+            splitStatements: true
+            sql: |
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-adventure.png' WHERE slug = 'adventure' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-agriculture.png' WHERE slug = 'agriculture' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-ancient-cities.png' WHERE slug = 'ancient-cities' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-ancient-roads.png' WHERE slug = 'ancient-roads' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-archaeological-sites.png' WHERE slug = 'archaeological-sites' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-art-gallery.png' WHERE slug = 'art-gallery' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-beach.png' WHERE slug = 'beach' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-bird-sanctuary.png' WHERE slug = 'bird-sanctuary' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-bird-watching.png' WHERE slug = 'bird-watching' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-boat-trip.png' WHERE slug = 'boat-trip' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-bridges.png' WHERE slug = 'bridges' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-camping.png' WHERE slug = 'camping' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-cave.png' WHERE slug = 'cave' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-city-walk.png' WHERE slug = 'city-walk' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-coffee.png' WHERE slug = 'coffee' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-community.png' WHERE slug = 'community' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-cooking-class.png' WHERE slug = 'cooking-class' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-coral.png' WHERE slug = 'coral' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-craft.png' WHERE slug = 'craft' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-cruise.png' WHERE slug = 'cruise' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-cycling.png' WHERE slug = 'cycling' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-diving.png' WHERE slug = 'diving' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-eco-lodge.png' WHERE slug = 'eco-lodge' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-farm.png' WHERE slug = 'farm' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-fine-dining.png' WHERE slug = 'fine-dining' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-fishing.png' WHERE slug = 'fishing' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-floating-village.png' WHERE slug = 'floating-village' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-forest.png' WHERE slug = 'forest' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-golf.png' WHERE slug = 'golf' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-helicopter.png' WHERE slug = 'helicopter' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-homestay.png' WHERE slug = 'homestay' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-hospitals.png' WHERE slug = 'hospitals' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-indigenous-culture.png' WHERE slug = 'indigenous-culture' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-island.png' WHERE slug = 'island' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-local-guide.png' WHERE slug = 'local-guide' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-luxury-hotel.png' WHERE slug = 'luxury-hotel' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-mangrove.png' WHERE slug = 'mangrove' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-michelin.png' WHERE slug = 'michelin' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-mountain.png' WHERE slug = 'mountain' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-museums.png' WHERE slug = 'museums' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-national-parks.png' WHERE slug = 'national-parks' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-night-market.png' WHERE slug = 'night-market' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-photography.png' WHERE slug = 'photography' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-private-island.png' WHERE slug = 'private-island' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-rice.png' WHERE slug = 'rice' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-river-island.png' WHERE slug = 'river-island' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-sacred-mountain.png' WHERE slug = 'sacred-mountain' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-seafood.png' WHERE slug = 'seafood' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-shopping.png' WHERE slug = 'shopping' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-sky-bar.png' WHERE slug = 'sky-bar' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-snorkeling.png' WHERE slug = 'snorkeling' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-spa.png' WHERE slug = 'spa' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-street-food.png' WHERE slug = 'street-food' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-sunset.png' WHERE slug = 'sunset' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-temples.png' WHERE slug = 'temples' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-traditional-food.png' WHERE slug = 'traditional-food' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-viewpoint.png' WHERE slug = 'viewpoint' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-village.png' WHERE slug = 'village' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-vip-tour.png' WHERE slug = 'vip-tour' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-volcano-lake.png' WHERE slug = 'volcano-lake' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-waterfalls.png' WHERE slug = 'waterfalls' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-wildlife.png' WHERE slug = 'wildlife' AND cover_key IS NULL;
+              UPDATE taxonomy.categories SET cover_key = 'general/00000000-0000-0000-0000-000000000000/category-yacht.png' WHERE slug = 'yacht' AND cover_key IS NULL;
+      rollback:
+        - sql: {sql: "UPDATE taxonomy.categories SET cover_key = NULL WHERE cover_key LIKE 'general/00000000-0000-0000-0000-000000000000/category-%'"}

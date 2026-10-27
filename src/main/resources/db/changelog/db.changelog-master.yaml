@@ -123,3 +123,4 @@ databaseChangeLog:
   - include: { file: v2/taxonomy/028-corridor-khmer.yaml, relativeToChangelogFile: true }
   - include: { file: v2/taxonomy/029-corridor-khmer-text-rows.yaml, relativeToChangelogFile: true }
   - include: { file: v2/taxonomy/030-interest-groups.yaml, relativeToChangelogFile: true }
+  - include: { file: v2/taxonomy/031-category-cover.yaml, relativeToChangelogFile: true }

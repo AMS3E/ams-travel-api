@@ -3,156 +3,182 @@
     "slug": "ancient-cities",
     "name": "Ancient Cities",
     "nameKm": "ទីក្រុងបុរាណ",
+    "image": "category-ancient-cities.png",
     "sortOrder": 1
   },
   {
     "slug": "temples",
     "name": "Temples",
     "nameKm": "ប្រាសាទ",
+    "image": "category-temples.png",
     "sortOrder": 2
   },
   {
     "slug": "archaeological-sites",
     "name": "Archaeological Sites",
     "nameKm": "តំបន់បុរាណវិទ្យា",
+    "image": "category-archaeological-sites.png",
     "sortOrder": 3
   },
   {
     "slug": "ancient-roads",
     "name": "Ancient Roads",
     "nameKm": "ផ្លូវបុរាណ",
+    "image": "category-ancient-roads.png",
     "sortOrder": 4
   },
   {
     "slug": "bridges",
     "name": "Bridges",
     "nameKm": "ស្ពាន",
+    "image": "category-bridges.png",
     "sortOrder": 5
   },
   {
     "slug": "hospitals",
     "name": "Hospitals",
     "nameKm": "អារោគ្យសាលា",
+    "image": "category-hospitals.png",
     "sortOrder": 6
   },
   {
     "slug": "museums",
     "name": "Museums",
     "nameKm": "សារមន្ទីរ",
+    "image": "category-museums.png",
     "sortOrder": 7
   },
   {
     "slug": "indigenous-culture",
     "name": "Indigenous Culture",
     "nameKm": "វប្បធម៌ជនជាតិដើមភាគតិច",
+    "image": "category-indigenous-culture.png",
     "sortOrder": 8
   },
   {
     "slug": "volcano-lake",
     "name": "Volcano Lake",
     "nameKm": "បឹងភ្នំភ្លើង",
+    "image": "category-volcano-lake.png",
     "sortOrder": 9
   },
   {
     "slug": "forest",
     "name": "Forest",
     "nameKm": "ព្រៃឈើ",
+    "image": "category-forest.png",
     "sortOrder": 10
   },
   {
     "slug": "wildlife",
     "name": "Wildlife",
     "nameKm": "សត្វព្រៃ",
+    "image": "category-wildlife.png",
     "sortOrder": 11
   },
   {
     "slug": "waterfalls",
     "name": "Waterfall",
     "nameKm": "ទឹកធ្លាក់",
+    "image": "category-waterfalls.png",
     "sortOrder": 12
   },
   {
     "slug": "sacred-mountain",
     "name": "Sacred Mountain",
     "nameKm": "ភ្នំពិសិដ្ឋ",
+    "image": "category-sacred-mountain.png",
     "sortOrder": 13
   },
   {
     "slug": "adventure",
     "name": "Adventure",
     "nameKm": "ការផ្សងព្រេង",
+    "image": "category-adventure.png",
     "sortOrder": 14
   },
   {
     "slug": "coffee",
     "name": "Coffee",
     "nameKm": "កាហ្វេ",
+    "image": "category-coffee.png",
     "sortOrder": 15
   },
   {
     "slug": "floating-village",
     "name": "Floating Village",
     "nameKm": "ភូមិបណ្ដែតទឹក",
+    "image": "category-floating-village.png",
     "sortOrder": 16
   },
   {
     "slug": "fishing",
     "name": "Fishing",
     "nameKm": "ការនេសាទ",
+    "image": "category-fishing.png",
     "sortOrder": 17
   },
   {
     "slug": "bird-sanctuary",
     "name": "Bird Sanctuary",
     "nameKm": "ជម្រកសត្វស្លាប",
+    "image": "category-bird-sanctuary.png",
     "sortOrder": 18
   },
   {
     "slug": "river-island",
     "name": "River Island",
     "nameKm": "កោះកណ្ដាលទន្លេ",
+    "image": "category-river-island.png",
     "sortOrder": 19
   },
   {
     "slug": "rice",
     "name": "Rice",
     "nameKm": "ស្រូវ",
+    "image": "category-rice.png",
     "sortOrder": 20
   },
   {
     "slug": "community",
     "name": "Community",
     "nameKm": "សហគមន៍",
+    "image": "category-community.png",
     "sortOrder": 21
   },
   {
     "slug": "boat-trip",
     "name": "Boat Trip",
     "nameKm": "ការជិះទូកកម្សាន្ត",
+    "image": "category-boat-trip.png",
     "sortOrder": 22
   },
   {
     "slug": "sunset",
     "name": "Sunset",
     "nameKm": "ថ្ងៃលិច",
+    "image": "category-sunset.png",
     "sortOrder": 23
   },
   {
     "slug": "mountain",
     "name": "Mountain",
     "nameKm": "ភ្នំ",
+    "image": "category-mountain.png",
     "sortOrder": 24
   },
   {
     "slug": "national-parks",
     "name": "National Park",
     "nameKm": "ឧទ្យានជាតិ",
+    "image": "category-national-parks.png",
     "sortOrder": 25
   },
   {
     "slug": "cave",
     "name": "Cave",
     "nameKm": "រូងភ្នំ",
+    "image": "category-cave.png",
     "sortOrder": 26
   },
   {
@@ -165,210 +191,245 @@
     "slug": "camping",
     "name": "Camping",
     "nameKm": "ការបោះជំរុំ",
+    "image": "category-camping.png",
     "sortOrder": 28
   },
   {
     "slug": "cycling",
     "name": "Cycling",
     "nameKm": "ការជិះកង់",
+    "image": "category-cycling.png",
     "sortOrder": 29
   },
   {
     "slug": "viewpoint",
     "name": "Viewpoint",
     "nameKm": "ចំណុចមើលទេសភាព",
+    "image": "category-viewpoint.png",
     "sortOrder": 30
   },
   {
     "slug": "photography",
     "name": "Photography",
     "nameKm": "ការថតរូប",
+    "image": "category-photography.png",
     "sortOrder": 31
   },
   {
     "slug": "beach",
     "name": "Beach",
     "nameKm": "ឆ្នេរខ្សាច់",
+    "image": "category-beach.png",
     "sortOrder": 32
   },
   {
     "slug": "island",
     "name": "Island",
     "nameKm": "កោះ",
+    "image": "category-island.png",
     "sortOrder": 33
   },
   {
     "slug": "coral",
     "name": "Coral",
     "nameKm": "ផ្កាថ្មសមុទ្រ",
+    "image": "category-coral.png",
     "sortOrder": 34
   },
   {
     "slug": "diving",
     "name": "Diving",
     "nameKm": "ការមុជទឹក",
+    "image": "category-diving.png",
     "sortOrder": 35
   },
   {
     "slug": "seafood",
     "name": "Seafood",
     "nameKm": "អាហារសមុទ្រ",
+    "image": "category-seafood.png",
     "sortOrder": 36
   },
   {
     "slug": "mangrove",
     "name": "Mangrove",
     "nameKm": "ព្រៃកោងកាង",
+    "image": "category-mangrove.png",
     "sortOrder": 37
   },
   {
     "slug": "cruise",
     "name": "Cruise",
     "nameKm": "ការជិះនាវាកម្សាន្ត",
+    "image": "category-cruise.png",
     "sortOrder": 38
   },
   {
     "slug": "snorkeling",
     "name": "Snorkeling",
     "nameKm": "ការមុជទឹកមើលផ្កាថ្ម",
+    "image": "category-snorkeling.png",
     "sortOrder": 39
   },
   {
     "slug": "city-walk",
     "name": "City Walk",
     "nameKm": "ដើរលេងក្នុងទីក្រុង",
+    "image": "category-city-walk.png",
     "sortOrder": 40
   },
   {
     "slug": "night-market",
     "name": "Night Market",
     "nameKm": "ផ្សាររាត្រី",
+    "image": "category-night-market.png",
     "sortOrder": 41
   },
   {
     "slug": "sky-bar",
     "name": "Sky Bar",
     "nameKm": "បារលើដំបូល",
+    "image": "category-sky-bar.png",
     "sortOrder": 42
   },
   {
     "slug": "shopping",
     "name": "Shopping",
     "nameKm": "ការដើរទិញឥវ៉ាន់",
+    "image": "category-shopping.png",
     "sortOrder": 43
   },
   {
     "slug": "art-gallery",
     "name": "Art Gallery",
     "nameKm": "វិចិត្រសាល",
+    "image": "category-art-gallery.png",
     "sortOrder": 44
   },
   {
     "slug": "street-food",
     "name": "Street Food",
     "nameKm": "អាហារតាមផ្លូវ",
+    "image": "category-street-food.png",
     "sortOrder": 45
   },
   {
     "slug": "traditional-food",
     "name": "Traditional Food",
     "nameKm": "ម្ហូបប្រពៃណី",
+    "image": "category-traditional-food.png",
     "sortOrder": 46
   },
   {
     "slug": "michelin",
     "name": "Michelin",
     "nameKm": "ផ្កាយ Michelin",
+    "image": "category-michelin.png",
     "sortOrder": 47
   },
   {
     "slug": "fine-dining",
     "name": "Fine Dining",
     "nameKm": "ភោជនីយដ្ឋានលំដាប់ខ្ពស់",
+    "image": "category-fine-dining.png",
     "sortOrder": 48
   },
   {
     "slug": "cooking-class",
     "name": "Cooking Class",
     "nameKm": "ថ្នាក់ធ្វើម្ហូប",
+    "image": "category-cooking-class.png",
     "sortOrder": 49
   },
   {
     "slug": "farm",
     "name": "Farm",
     "nameKm": "កសិដ្ឋាន",
+    "image": "category-farm.png",
     "sortOrder": 50
   },
   {
     "slug": "homestay",
     "name": "Homestay",
     "nameKm": "ស្នាក់នៅផ្ទះអ្នកភូមិ",
+    "image": "category-homestay.png",
     "sortOrder": 51
   },
   {
     "slug": "village",
     "name": "Village",
     "nameKm": "ភូមិ",
+    "image": "category-village.png",
     "sortOrder": 52
   },
   {
     "slug": "craft",
     "name": "Craft",
     "nameKm": "សិប្បកម្ម",
+    "image": "category-craft.png",
     "sortOrder": 53
   },
   {
     "slug": "agriculture",
     "name": "Agriculture",
     "nameKm": "កសិកម្ម",
+    "image": "category-agriculture.png",
     "sortOrder": 54
   },
   {
     "slug": "eco-lodge",
     "name": "Eco Lodge",
     "nameKm": "ផ្ទះសំណាក់បែបអេកូ",
+    "image": "category-eco-lodge.png",
     "sortOrder": 55
   },
   {
     "slug": "bird-watching",
     "name": "Bird Watching",
     "nameKm": "ការមើលសត្វស្លាប",
+    "image": "category-bird-watching.png",
     "sortOrder": 56
   },
   {
     "slug": "local-guide",
     "name": "Local Guide",
     "nameKm": "មគ្គុទ្ទេសក៍ក្នុងស្រុក",
+    "image": "category-local-guide.png",
     "sortOrder": 57
   },
   {
     "slug": "luxury-hotel",
     "name": "Luxury Hotel",
     "nameKm": "សណ្ឋាគារប្រណីត",
+    "image": "category-luxury-hotel.png",
     "sortOrder": 58
   },
   {
     "slug": "private-island",
     "name": "Private Island",
     "nameKm": "កោះឯកជន",
+    "image": "category-private-island.png",
     "sortOrder": 59
   },
   {
     "slug": "golf",
     "name": "Golf",
     "nameKm": "កីឡាវាយកូនហ្គោល",
+    "image": "category-golf.png",
     "sortOrder": 60
   },
   {
     "slug": "helicopter",
     "name": "Helicopter",
     "nameKm": "ឧទ្ធម្ភាគចក្រ",
+    "image": "category-helicopter.png",
     "sortOrder": 61
   },
   {
     "slug": "yacht",
     "name": "Yacht",
     "nameKm": "ទូកយ៉ុត",
+    "image": "category-yacht.png",
     "sortOrder": 62
   },
   {
@@ -381,12 +442,14 @@
     "slug": "spa",
     "name": "Spa",
     "nameKm": "ស្ប៉ា",
+    "image": "category-spa.png",
     "sortOrder": 64
   },
   {
     "slug": "vip-tour",
     "name": "VIP Tour",
     "nameKm": "ដំណើរកម្សាន្ត VIP",
+    "image": "category-vip-tour.png",
     "sortOrder": 65
   }
 ]

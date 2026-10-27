@@ -9,6 +9,10 @@ public record CategoryResponse(
         String slug,
         String description,
         String iconKey,
+        /** Its uploaded icon picture's key, or null. */
+        String coverKey,
+        /** The icon picture's link, or null. */
+        String coverUrl,
         Integer sortOrder,
         Boolean isActive,
         /** Who made it; null for the ones the seed wrote. */

@@ -14,6 +14,7 @@ public enum MediaType {
     REGION,
     PROVINCE,
     INTEREST,
+    CATEGORY,
     PARTNER,
     VERIFICATION,
     GENERAL;
