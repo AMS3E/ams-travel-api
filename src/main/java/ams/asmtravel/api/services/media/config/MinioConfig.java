@@ -73,25 +73,34 @@ public class MinioConfig {
     @Bean
     @Order(1)
     ApplicationRunner interestGroupImages(MediaServiceImpl mediaService) {
-        return args -> {
-            try {
-                int published = 0;
-                Resource[] files = new PathMatchingResourcePatternResolver()
-                        .getResources("classpath:ams/asmtravel/api/services/media/config/images/interest-group-*.png");
-                for (Resource file : files) {
-                    if (file.getFilename() == null) {
-                        continue;
-                    }
-                    try (InputStream content = file.getInputStream()) {
-                        mediaService.storeSeedImage(file.getFilename(), content.readAllBytes());
-                        published += 1;
-                    }
+        return args -> publishReleaseImages(mediaService, "interest-group-*.png", "Interest group pictures");
+    }
+
+    /** The categories' icons, named by taxonomy/033's rows, ride with the release the same way. */
+    @Bean
+    @Order(1)
+    ApplicationRunner categoryIcons(MediaServiceImpl mediaService) {
+        return args -> publishReleaseImages(mediaService, "category-*.png", "Category icons");
+    }
+
+    private static void publishReleaseImages(MediaServiceImpl mediaService, String pattern, String what) {
+        try {
+            int published = 0;
+            Resource[] files = new PathMatchingResourcePatternResolver()
+                    .getResources("classpath:ams/asmtravel/api/services/media/config/images/" + pattern);
+            for (Resource file : files) {
+                if (file.getFilename() == null) {
+                    continue;
                 }
-                log.info("Interest group pictures ready ({} of {})", published, files.length);
-            } catch (IOException | RuntimeException exception) {
-                log.warn("Interest group pictures not published — storage is unreachable: {}", exception.getMessage());
+                try (InputStream content = file.getInputStream()) {
+                    mediaService.storeSeedImage(file.getFilename(), content.readAllBytes());
+                    published += 1;
+                }
             }
-        };
+            log.info("{} ready ({} of {})", what, published, files.length);
+        } catch (IOException | RuntimeException exception) {
+            log.warn("{} not published — storage is unreachable: {}", what, exception.getMessage());
+        }
     }
 
     /** Seed photos under {@code general/} with readable names; empty when MinIO is unreachable. */
